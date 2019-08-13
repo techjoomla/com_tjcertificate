@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="filter">
+		<field
+			name="search"
+			type="text"
+			filter="string"
+			label="COM_TJCERTIFICATE_CERTIFICATE_FILTER_SEARCH_LABEL"
+			description="COM_TJCERTIFICATE_CERTIFICATE_FILTER_SEARCH_LABEL_DESC"
+			hint="JSEARCH_FILTER"
+		/>
+		<field
+			name="certificate_template_id"
+			type="sql"
+			query="SELECT id, title FROM `#__tj_certificate_templates` ORDER BY id DESC" key_field="id" value_field="title"
+			translate="false"
+			header="Select Certificate Template"
+			filter="int"
+			label="COM_TJCERTIFICATE_CERTIFICATE_FILTER_CERTIFICATE_TEMPLATE"
+			description="COM_TJCERTIFICATE_CERTIFICATE_FILTER_DESC_CERTIFICATE_TEMPLATE"
+		/>
+
+		<field name="client"
+			type="sql"
+			query="SELECT DISTINCT (`client`) FROM `#__tj_certificate_issue` ORDER BY client ASC" key_field="client" value_field="client"
+			filter="safehtml"
+			label="COM_TJCERTIFICATE_CERTIFICATE_FILTER_CERTIFICATE_CLIENT"
+			description="COM_TJCERTIFICATE_CERTIFICATE_FILTER_DESC_CERTIFICATE_CLIENT"
+		/>
+
+		<field
+			name="user_id"
+			type="sql"
+			query="SELECT DISTINCT (`ci`.`user_id`), u.name FROM `#__tj_certificate_issue` AS ci LEFT JOIN `#__users` AS u ON (ci.user_id = u.id)" key_field="ci.user_id" value_field="u.name"
+			filter="safehtml"
+			label="COM_TJCERTIFICATE_CERTIFICATE_FILTER_ISSUED_USER"
+			description="COM_TJCERTIFICATE_CERTIFICATE_FILTER_ISSUED_USER"
+		/>
+
+		<field
+			name="state"
+			type="status"
+			label="COM_TJCERTIFICATE_CERTIFICATE_FILTER_PUBLISHED"
+			description="COM_TJCERTIFICATE_CERTIFICATE_FILTER_PUBLISHED_DESC"
+			onchange="this.form.submit();"
+			>
+			<option value="">JOPTION_SELECT_PUBLISHED</option>
+		</field>
+		<input type="hidden" name="form_submited" value="1"/>
+	</fields>
+
+	<fields name="list">
+		<field
+			name="limit"
+			type="limitbox"
+			class="input-mini"
+			default="25"
+			onchange="this.form.submit();"
+		/>
+	</fields>
+</form>

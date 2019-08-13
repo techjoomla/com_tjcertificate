@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <fieldset name="component" label="COM_TJCERTIFICATE_GENEARAL_SETINGS" description="" >
+		<field
+			name="certificate_prefix"
+			type="text"
+			default="CERT"
+			maxlength="10"
+			label="COM_TJCERTIFICATE_CERTIFICATE_PREFIX_LABEL"
+			description="COM_TJCERTIFICATE_CERTIFICATE_PREFIX_DESC"
+		/>
+	</fieldset>
+</config>
