@@ -32,27 +32,43 @@ Factory::getDocument()->addScriptDeclaration('
 	};
 ');
 ?>
-<div class="">
+<div class="tj-page">
+	<div class="row-fluid">
 	<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate&layout=edit&id=' . (int) $this->item->id, false);?>"
 	 method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
+	 <?php if (!empty( $this->sidebar))
+		{
+		?>
+			<div id="j-sidebar-container" class="span2">
+				<?php echo $this->sidebar; ?>
+			</div>
+			<div id="j-main-container" class="span10">
+		<?php
+		}
+		else
+		{
+			?>
+			<div id="j-main-container">
+		<?php
+		}
+		?>
 		<div class="form-horizontal">
 
 		<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', JText::_('COM_TJCERTIFICATE_TITLE_CERTIFICATE')); ?>
 		<div class="row-fluid">
-			<div class="span9">
-				<?php echo $this->form->renderField('unique_certificate_id'); ?>
-				<?php echo $this->form->renderField('certificate_template_id'); ?>
-				<?php echo $this->form->renderField('generated_body'); ?>
-				<?php echo $this->form->renderField('client'); ?>
-				<?php echo $this->form->renderField('client_id'); ?>
-				<?php echo $this->form->renderField('user_id'); ?>
-				<?php echo $this->form->renderField('issued_on'); ?>
-				<?php echo $this->form->renderField('expired_on'); ?>
-				<?php echo $this->form->renderField('state'); ?>
-			</div>
+			<?php echo $this->form->renderField('unique_certificate_id'); ?>
+			<?php echo $this->form->renderField('certificate_template_id'); ?>
+			<?php echo $this->form->renderField('generated_body'); ?>
+			<?php echo $this->form->renderField('client'); ?>
+			<?php echo $this->form->renderField('client_id'); ?>
+			<?php echo $this->form->renderField('user_id'); ?>
+			<?php echo $this->form->renderField('issued_on'); ?>
+			<?php echo $this->form->renderField('expired_on'); ?>
+			<?php echo $this->form->renderField('state'); ?>
 		</div>
 		<input type="hidden" name="task" value="" />
 		<?php echo HTMLHelper::_('form.token'); ?>
 	</div>
 	</form>
+</div>
 </div>

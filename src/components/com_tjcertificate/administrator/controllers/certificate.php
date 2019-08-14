@@ -18,6 +18,6 @@ use Joomla\CMS\MVC\Controller\FormController;
  *
  * @since  1.0.0
  */
-class CertificateControllerCertificate extends FormController
+class TjCertificateControllerCertificate extends FormController
 {
 }

@@ -19,7 +19,7 @@ use Joomla\CMS\MVC\View\HtmlView;
  *
  * @since  1.0.0
  */
-class CertificateViewCertificateTemplate extends HtmlView
+class TjCertificateViewCertificate extends HtmlView
 {
 	/**
 	 * The JForm object
@@ -71,7 +71,7 @@ class CertificateViewCertificateTemplate extends HtmlView
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
 		$this->input = Factory::getApplication()->input;
-		$this->canDo = JHelperContent::getActions('com_tjcertificate', 'certificatetemplate', $this->item->id);
+		$this->canDo = JHelperContent::getActions('com_tjcertificate', 'certificate', $this->item->id);
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -93,58 +93,55 @@ class CertificateViewCertificateTemplate extends HtmlView
 	 */
 	protected function addToolbar()
 	{
-		$app    = Factory::getApplication();
-		$user   = Factory::getUser();
-		$userId = $user->id;
-		$isNew  = ($this->item->id == 0);
-		JLoader::import('administrator.components.com_tjcertificate.helpers.certificate', JPATH_SITE);
+		$user       = Factory::getUser();
+		$userId     = $user->id;
+		$isNew      = empty($this->item->id);
+		JLoader::import('administrator.components.com_tjcertificate.helpers.tjcertificate', JPATH_SITE);
 
-		$this->certificateHelper = new CertificateHelper;
-		$checkedOut = $this->isCheckedOut($userId);
+		$this->certificateHelper = new TjCertificateHelper;
 
 		// Built the actions for new and existing records.
 		$canDo = $this->canDo;
-		$layout = $app->input->get("layout");
+		$layout = Factory::getApplication()->input->get("layout");
 
-		$this->sidebar = JHtmlSidebar::render();
+		JToolbarHelper::title(
+			JText::_('COM_TJCERTIFICATE_PAGE_VIEW_CERTIFICATE')
+		);
+
+		$app = Factory::getApplication();
+
+		JLoader::import('administrator.components.com_tjcertificate.helpers.tjcertificate', JPATH_SITE);
+		TjCertificateHelper::addSubmenu('certificates');
+
+		if ($app->isAdmin())
+		{
+			$this->sidebar = JHtmlSidebar::render();
+		}
 
 		// For new records, check the create permission.
 		if ($layout != "default")
 		{
-			$app->input->set('hidemainmenu', true);
+			Factory::getApplication()->input->set('hidemainmenu', true);
 
 			JToolbarHelper::title(
-				JText::_('COM_TJCERTIFICATE_PAGE_' . ($checkedOut ? 'VIEW_CERTIFICATE_TEMPLATE' :
-					($isNew ? 'ADD_CERTIFICATE_TEMPLATE' : 'EDIT_CERTIFICATE_TEMPLATE'))
-			), 'pencil-2 certificatetemplate-add'
+				JText::_('COM_TJCERTIFICATE_PAGE_' . ($isNew ? 'ADD_CERTIFICATE' : 'EDIT_CERTIFICATE')),
+				'pencil-2 certificate-add'
 			);
 
 			if ($isNew)
 			{
-				JToolbarHelper::save('certificatetemplate.save');
-				JToolbarHelper::cancel('certificatetemplate.cancel');
+				JToolbarHelper::apply('certificate.apply');
+				JToolbarHelper::save('certificate.save');
+				JToolbarHelper::save2new('certificate.save2new');
+				JToolbarHelper::cancel('certificate.cancel');
 			}
 			else
 			{
 				$itemEditable = $this->isEditable($canDo, $userId);
 
 				// Can't save the record if it's checked out and editable
-				$this->canSave($checkedOut, $itemEditable);
-				JToolbarHelper::cancel('certificatetemplate.cancel', 'JTOOLBAR_CLOSE');
-			}
-		}
-		else
-		{
-			JToolbarHelper::title(
-				JText::_('COM_TJCERTIFICATE_PAGE_VIEW_CERTIFICATE_TEMPLATE')
-			);
-
-			JLoader::import('administrator.components.com_tjcertificate.helpers.certificate', JPATH_SITE);
-			CertificateHelper::addSubmenu('certificatetemplates');
-
-			if ($app->isAdmin())
-			{
-				$this->sidebar = JHtmlSidebar::render();
+				$this->canSave($itemEditable);
+				JToolbarHelper::cancel('certificate.cancel', 'JTOOLBAR_CLOSE');
 			}
 		}
 
@@ -154,17 +151,16 @@ class CertificateViewCertificateTemplate extends HtmlView
 	/**
 	 * Can't save the record if it's checked out and editable
 	 *
-	 * @param   boolean  $checkedOut    Checked Out
-	 *
 	 * @param   boolean  $itemEditable  Item editable
 	 *
 	 * @return void
 	 */
-	protected function canSave($checkedOut, $itemEditable)
+	protected function canSave($itemEditable)
 	{
-		if (!$checkedOut && $itemEditable)
+		if ($itemEditable)
 		{
-			JToolbarHelper::save('certificatetemplate.save');
+			JToolbarHelper::apply('certificate.apply');
+			JToolbarHelper::save('certificate.save');
 		}
 	}
 
@@ -181,17 +177,5 @@ class CertificateViewCertificateTemplate extends HtmlView
 	{
 		// Since it's an existing record, check the edit permission, or fall back to edit own if the owner.
 		return $canDo->get('core.edit') || ($canDo->get('core.edit.own') && $this->item->created_by == $userId);
-	}
-
-	/**
-	 * Is Checked Out
-	 *
-	 * @param   integer  $userId  User ID
-	 *
-	 * @return boolean
-	 */
-	protected function isCheckedOut($userId)
-	{
-		return !($this->item->checked_out == 0 || $this->item->checked_out == $userId);
 	}
 }

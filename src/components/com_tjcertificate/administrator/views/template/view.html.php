@@ -19,7 +19,7 @@ use Joomla\CMS\MVC\View\HtmlView;
  *
  * @since  1.0.0
  */
-class CertficateViewCertficate extends HtmlView
+class TjCertificateViewTemplate extends HtmlView
 {
 	/**
 	 * The JForm object
@@ -29,11 +29,11 @@ class CertficateViewCertficate extends HtmlView
 	protected $form;
 
 	/**
-	 * The certficate helper
+	 * The certificate helper
 	 *
 	 * @var  object
 	 */
-	protected $certficateHelper;
+	protected $TjCertificateHelper;
 
 	/**
 	 * The active item
@@ -71,7 +71,7 @@ class CertficateViewCertficate extends HtmlView
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
 		$this->input = Factory::getApplication()->input;
-		$this->canDo = JHelperContent::getActions('com_tjcertificate', 'certficate', $this->item->id);
+		$this->canDo = JHelperContent::getActions('com_tjcertificate', 'template', $this->item->id);
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -93,34 +93,48 @@ class CertficateViewCertficate extends HtmlView
 	 */
 	protected function addToolbar()
 	{
-		$user       = Factory::getUser();
-		$userId     = $user->id;
-		$isNew      = ($this->item->id == 0);
-		JLoader::import('administrator.components.com_tjcertificate.helpers.certficate', JPATH_SITE);
+		$app    = Factory::getApplication();
+		$user   = Factory::getUser();
+		$userId = $user->id;
+		$isNew  = ($this->item->id == 0);
+		JLoader::import('administrator.components.com_tjcertificate.helpers.tjcertificate', JPATH_SITE);
 
-		$this->certficateHelper = new CertficateHelper;
+		$this->TjCertificateHelper = new TjCertificateHelper;
 		$checkedOut = $this->isCheckedOut($userId);
 
 		// Built the actions for new and existing records.
 		$canDo = $this->canDo;
-		$layout = Factory::getApplication()->input->get("layout");
+		$layout = $app->input->get("layout");
 
-		$this->sidebar = JHtmlSidebar::render();
+		JToolbarHelper::title(
+			JText::_('COM_TJCERTIFICATE_PAGE_VIEW_CERTIFICATE_TEMPLATE')
+		);
+
+		JLoader::import('administrator.components.com_tjcertificate.helpers.tjcertificate', JPATH_SITE);
+		TjCertificateHelper::addSubmenu('templates');
+
+		if ($app->isAdmin())
+		{
+			$this->sidebar = JHtmlSidebar::render();
+		}
 
 		// For new records, check the create permission.
 		if ($layout != "default")
 		{
-			Factory::getApplication()->input->set('hidemainmenu', true);
+			$app->input->set('hidemainmenu', true);
 
 			JToolbarHelper::title(
-				JText::_('COM_TJCERTIFICATE_PAGE_' . ($checkedOut ? 'VIEW_CERTIFICATE' : ($isNew ? 'ADD_CERTIFICATE' : 'EDIT_CERTIFICATE'))),
-				'pencil-2 certficate-add'
+				JText::_('COM_TJCERTIFICATE_PAGE_' . ($checkedOut ? 'VIEW_CERTIFICATE_TEMPLATE' :
+					($isNew ? 'ADD_CERTIFICATE_TEMPLATE' : 'EDIT_CERTIFICATE_TEMPLATE'))
+			), 'pencil-2 template-add'
 			);
 
 			if ($isNew)
 			{
-				JToolbarHelper::save('certficate.save');
-				JToolbarHelper::cancel('certficate.cancel');
+				JToolbarHelper::apply('template.apply');
+				JToolbarHelper::save('template.save');
+				JToolbarHelper::save2new('template.save2new');
+				JToolbarHelper::cancel('template.cancel');
 			}
 			else
 			{
@@ -128,23 +142,8 @@ class CertficateViewCertficate extends HtmlView
 
 				// Can't save the record if it's checked out and editable
 				$this->canSave($checkedOut, $itemEditable);
-				JToolbarHelper::cancel('certficate.cancel', 'JTOOLBAR_CLOSE');
-			}
-		}
-		else
-		{
-			JToolbarHelper::title(
-				JText::_('COM_TJCERTIFICATE_PAGE_VIEW_CERTIFICATE')
-			);
 
-			$app = Factory::getApplication();
-
-			JLoader::import('administrator.components.com_tjcertificate.helpers.certficate', JPATH_SITE);
-			CertficateHelper::addSubmenu('certficate');
-
-			if ($app->isAdmin())
-			{
-				$this->sidebar = JHtmlSidebar::render();
+				JToolbarHelper::cancel('template.cancel', 'JTOOLBAR_CLOSE');
 			}
 		}
 
@@ -164,7 +163,10 @@ class CertficateViewCertficate extends HtmlView
 	{
 		if (!$checkedOut && $itemEditable)
 		{
-			JToolbarHelper::save('certficate.save');
+			JToolbarHelper::apply('template.apply');
+			JToolbarHelper::save('template.save');
+			JToolbarHelper::save2new('template.save2new');
+			JToolbarHelper::save2copy('template.save2copy');
 		}
 	}
 

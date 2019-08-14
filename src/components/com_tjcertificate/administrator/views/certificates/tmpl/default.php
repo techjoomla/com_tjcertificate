@@ -155,7 +155,16 @@ if ( $saveOrder )
 								<td><?php echo $this->escape($item->client); ?></td>
 								<td><?php echo $this->escape($item->uname); ?></td>
 								<td><?php echo HTMLHelper::date($item->issued_on, Text::_('DATE_FORMAT_FILTER_DATETIME')); ?></td>
-								<td><?php echo HTMLHelper::date($item->expired_on, Text::_('DATE_FORMAT_FILTER_DATETIME')); ?></td>
+								<td><?php
+									if (!empty($item->expired_on) && $item->expired_on != '0000-00-00 00:00:00')
+									{
+										echo HTMLHelper::date($item->expired_on, Text::_('DATE_FORMAT_FILTER_DATETIME'));
+									}
+									else
+									{
+										echo '-';
+									}
+									?></td>
 								<td><?php echo (int) $item->id; ?></td>
 							</tr>
 							<?php

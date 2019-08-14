@@ -16,11 +16,11 @@ use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Object\CMSObject;
 
 /**
- * CertificateTemplates view
+ * Templates view
  *
  * @since  1.0.0
  */
-class CertificateViewCertificateTemplates extends HtmlView
+class TjCertificateViewTemplates extends HtmlView
 {
 	/**
 	 * An array of items
@@ -105,7 +105,7 @@ class CertificateViewCertificateTemplates extends HtmlView
 		$this->canDo = JHelperContent::getActions('com_tjcertificate');
 
 		// Add submenu
-		CertificateHelper::addSubmenu('certificatetemplates');
+		TjCertificateHelper::addSubmenu('templates');
 
 		// Add Toolbar
 		$this->addToolbar();
@@ -131,26 +131,26 @@ class CertificateViewCertificateTemplates extends HtmlView
 
 		if ($canDo->get('core.create'))
 		{
-			JToolbarHelper::addNew('certificatetemplate.add');
+			JToolbarHelper::addNew('template.add');
 		}
 
 		if ($canDo->get('core.edit'))
 		{
-			JToolbarHelper::editList('certificatetemplate.edit');
+			JToolbarHelper::editList('template.edit');
 		}
 
 		if ($canDo->get('core.edit.state'))
 		{
 			JToolbarHelper::divider();
-			JToolbarHelper::publish('certificatetemplates.publish', 'JTOOLBAR_PUBLISH', true);
-			JToolbarHelper::unpublish('certificatetemplates.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-			JToolBarHelper::archiveList('certificatetemplates.archive', 'JTOOLBAR_ARCHIVE');
+			JToolbarHelper::publish('templates.publish', 'JTOOLBAR_PUBLISH', true);
+			JToolbarHelper::unpublish('templates.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+			JToolBarHelper::archiveList('templates.archive', 'JTOOLBAR_ARCHIVE');
 			JToolbarHelper::divider();
 		}
 
 		if ($canDo->get('core.delete'))
 		{
-			JToolbarHelper::deleteList('JGLOBAL_CONFIRM_DELETE', 'certificatetemplates.delete', 'JTOOLBAR_DELETE');
+			JToolbarHelper::deleteList('JGLOBAL_CONFIRM_DELETE', 'templates.delete', 'JTOOLBAR_DELETE');
 			JToolbarHelper::divider();
 		}
 

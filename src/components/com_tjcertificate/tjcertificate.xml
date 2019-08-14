@@ -21,10 +21,10 @@
         </sql>
     </uninstall>
     <update> <!-- Runs on Update -->
-		<schemas>
-			<schemapath type="mysql">sql/updates/mysql</schemapath>
-		</schemas>
-	</update>
+        <schemas>
+            <schemapath type="mysql">sql/updates/mysql</schemapath>
+        </schemas>
+    </update>
 
     <files folder="site">
         <filename>index.html</filename>
@@ -38,12 +38,12 @@
     </files>
 
     <languages folder="site">
-			<language tag="en-GB">languages/en-GB/en-GB.com_tjcertificate.ini</language>
+            <language tag="en-GB">languages/en-GB/en-GB.com_tjcertificate.ini</language>
     </languages>
     <administration>
         <menu>COM_TJCERTIFICATE</menu>
         <submenu>
-			<menu link="option=com_tjcertificate&amp;view=certificatetemplates" view="certificatetemplates" alt="Certificate Templates">COM_TJCERTIFICATE_TITLE_CERTIFICATES</menu>
+            <menu link="option=com_tjcertificate&amp;view=templates" view="templates" alt="Templates">COM_TJCERTIFICATE_TITLE_CERTIFICATES</menu>
             <menu link="option=com_tjcertificate&amp;view=certificatetes" view="certificatetes" alt="Issued Certificates">COM_TJCERTIFICATE_TITLE_ISSUED_CERTIFICATES</menu>
         </submenu>
         <files folder="administrator">

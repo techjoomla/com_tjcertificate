@@ -16,16 +16,20 @@
 			filter="safehtml"
 			label="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FILTER_CERTIFICATE_CLIENT"
 			description="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FILTER_DESC_CERTIFICATE_CLIENT"
-		/>
+			onchange="this.form.submit();">
+			<option value="">COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FILTER_CERTIFICATE_SELECT_CLIENT</option>
+		</field>
 
 		<field
 			name="created_by"
 			type="sql"
-			query="SELECT DISTINCT (`ct`.`user_id`), u.name FROM `#__tj_certificate_templates` AS ct LEFT JOIN `#__users` AS u ON (ct.created_by = u.id)" key_field="ct.user_id" value_field="u.name"
+			query="SELECT DISTINCT (`ct`.`created_by`) as tmpl_created_by, u.name FROM `#__tj_certificate_templates` AS ct LEFT JOIN `#__users` AS u ON (ct.created_by = u.id)" key_field="tmpl_created_by" value_field="name"
 			filter="safehtml"
 			label="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FILTER_ISSUED_USER"
 			description="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FILTER_ISSUED_USER"
-		/>
+			onchange="this.form.submit();">
+			<option value="">COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FILTER_ISSUED_SELECT_USER</option>
+		</field>
 
 		<field
 			name="is_public"
@@ -34,6 +38,7 @@
 			description="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FILTER_PUBLIC_DESC"
 			onchange="this.form.submit();"
 			>
+			<option value="">- Select Access -</option>
 			<option value="1">COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_PRIVATE</option>
 			<option value="2">COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_PUBLIC</option>
 		</field>

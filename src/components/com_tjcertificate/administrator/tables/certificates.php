@@ -16,7 +16,7 @@ defined('_JEXEC') or die('Restricted access');
  *
  * @since  1.0.0
  */
-class CertificateTableCertificates extends JTable
+class TjCertificateTableCertificates extends JTable
 {
 	/**
 	 * Constructor

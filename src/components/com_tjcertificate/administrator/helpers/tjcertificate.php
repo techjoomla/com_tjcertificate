@@ -16,7 +16,7 @@ defined('_JEXEC') or die('Restricted access');
  *
  * @since  1.0.0
  */
-class CertificateHelper
+class TjCertificateHelper
 {
 	/**
 	 * Configure the Linkbar.
@@ -33,8 +33,8 @@ class CertificateHelper
 		{
 			JHtmlSidebar::addEntry(
 				JText::_('COM_TJCERTIFICATE_VIEW_CERTIFICATE_TEMPLATES'),
-				'index.php?option=com_tjcertificate&view=certificatetemplates',
-				$vName == 'certificatetemplates'
+				'index.php?option=com_tjcertificate&view=templates',
+				$vName == 'templates'
 			);
 
 			JHtmlSidebar::addEntry(

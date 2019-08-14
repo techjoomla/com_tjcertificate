@@ -14,7 +14,7 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
 
-JLoader::discover("Certificate", JPATH_ADMINISTRATOR . '/components/com_tjcertificate/libraries');
+JLoader::discover("TjCertificate", JPATH_ADMINISTRATOR . '/components/com_tjcertificate/libraries');
 
 /**
  * Certificate factory class.
@@ -23,7 +23,7 @@ JLoader::discover("Certificate", JPATH_ADMINISTRATOR . '/components/com_tjcertif
  *
  * @since  1.0.0
  */
-class CertificateFactory
+class TjCertificateFactory
 {
 	/**
 	 * Retrieves a table from the table folder
@@ -38,7 +38,7 @@ class CertificateFactory
 	{
 		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjcertificate/tables');
 
-		return Table::getInstance($name, 'CertificateTable');
+		return Table::getInstance($name, 'TjCertificateTable');
 	}
 
 	/**
@@ -55,6 +55,6 @@ class CertificateFactory
 	{
 		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjcertificate/models');
 
-		return BaseDatabaseModel::getInstance($name, 'CertificateModel', $config);
+		return BaseDatabaseModel::getInstance($name, 'TjCertificateModel', $config);
 	}
 }

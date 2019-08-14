@@ -13,11 +13,11 @@ defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\MVC\Controller\AdminController;
 /**
- * Certificate template list controller class.
+ * Template list controller class.
  *
  * @since  1.0.0
  */
-class CertificateControllerCertificateTemplates extends AdminController
+class TjCertificateControllerTemplates extends AdminController
 {
 	/**
 	 * Proxy for getModel.
@@ -29,7 +29,7 @@ class CertificateControllerCertificateTemplates extends AdminController
 	 *
 	 * @since  1.0.0
 	 */
-	public function getModel($name = 'CertificateTemplate', $prefix = 'CertificateModel')
+	public function getModel($name = 'Template', $prefix = 'TjCertificateModel')
 	{
 		return parent::getModel($name, $prefix, array('ignore_request' => true));
 	}

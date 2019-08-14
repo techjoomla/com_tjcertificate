@@ -27,14 +27,14 @@ $saveOrder = $listOrder == 'ct.ordering';
 
 if ( $saveOrder )
 {
-	$saveOrderingUrl = 'index.php?option=com_tjcertificate&task=certificatetemplates.saveOrderAjax';
-	HTMLHelper::_('sortablelist.sortable', 'certificatetemplateList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
+	$saveOrderingUrl = 'index.php?option=com_tjcertificate&task=templates.saveOrderAjax';
+	HTMLHelper::_('sortablelist.sortable', 'templateList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }
 ?>
 
 <div class="tj-page">
 	<div class="row-fluid">
-		<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificatetemplates'); ?>" method="post" name="adminForm" id="adminForm">
+		<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=templates'); ?>" method="post" name="adminForm" id="adminForm">
 
 			<?php if (!empty( $this->sidebar))
 			{
@@ -66,7 +66,7 @@ if ( $saveOrder )
 			else
 			{
 				?>
-					<table class="table table-striped" id="certificatetemplateList">
+					<table class="table table-striped" id="templateList">
 						<thead>
 							<tr>
 								<th width="1%" class="nowrap center hidden-phone"></th>
@@ -90,6 +90,9 @@ if ( $saveOrder )
 								</th>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_LIST_VIEW_ACCESS', 'ct.is_public', $listDirn, $listOrder); ?>
+								</th>
+								<th>
+									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_LIST_VIEW_CREATED_BY', 'ct.created_by', $listDirn, $listOrder); ?>
 								</th>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_LIST_VIEW_ID', 'ct.id', $listDirn, $listOrder); ?>
@@ -148,14 +151,14 @@ if ( $saveOrder )
 									<?php echo HTMLHelper::_('grid.id', $i, $item->id); ?>
 								</td>
 								<td class="center">
-									<?php echo HTMLHelper::_('jgrid.published', $item->state, $i, 'certificatetemplates.', $canChange, 'cb'); ?>
+									<?php echo HTMLHelper::_('jgrid.published', $item->state, $i, 'templates.', $canChange, 'cb'); ?>
 								</td>
 								<td class="has-context">
 									<div class="pull-left break-word">
 										<?php if ($item->checked_out)
 										{
 											?>
-										<?php echo HTMLHelper::_('jgrid.checkedout', $i, $item->checked_out, $item->checked_out_time, 'certificatetemplates.', $canCheckin); ?>
+										<?php echo HTMLHelper::_('jgrid.checkedout', $i, $item->checked_out, $item->checked_out_time, 'templates.', $canCheckin); ?>
 										<?php
 										}
 										?>
@@ -163,7 +166,7 @@ if ( $saveOrder )
 										{
 											?>
 											<a class="hasTooltip" href="
-											<?php echo Route::_('index.php?option=com_tjcertificate&task=batchlocation.edit&id=' . $item->id); ?>" title="
+											<?php echo Route::_('index.php?option=com_tjcertificate&task=template.edit&id=' . $item->id); ?>" title="
 											<?php echo Text::_('JACTION_EDIT'); ?>">
 											<?php echo $this->escape($item->title); ?></a>
 											<?php
@@ -180,6 +183,7 @@ if ( $saveOrder )
 								</td>
 								<td><?php echo $this->escape($item->client); ?></td>
 								<td><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_LIST_VIEW_ACCESS_' . $item->is_public); ?></td>
+								<td><?php echo $this->escape($item->uname); ?></td>
 								<td><?php echo (int) $item->id; ?></td>
 							</tr>
 							<?php

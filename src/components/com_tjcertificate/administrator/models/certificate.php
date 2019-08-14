@@ -20,7 +20,7 @@ use Joomla\CMS\Table\Table;
  *
  * @since  1.0.0
  */
-class CertificateModelCertificate extends AdminModel
+class TjCertificateModelCertificate extends AdminModel
 {
 	public $defaultCertificateIdPrefix = "CERT";
 
@@ -51,7 +51,7 @@ class CertificateModelCertificate extends AdminModel
 	 *
 	 * @return  JTable    A database object
 	 */
-	public function getTable($type = 'Certificates', $prefix = 'CertificateTable', $config = array())
+	public function getTable($type = 'Certificates', $prefix = 'TjCertificateTable', $config = array())
 	{
 		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjcertificate/tables');
 
@@ -91,7 +91,7 @@ class CertificateModelCertificate extends AdminModel
 	public function save($data)
 	{
 		$pk   = (!empty($data['id'])) ? $data['id'] : (int) $this->getState('certificate.id');
-		$certificate = CertificateCertificate::getInstance($pk);
+		$certificate = TjCertificateCertificate::getInstance($pk);
 
 		$params = JComponentHelper::getParams('com_tjcertificate');
 
@@ -116,7 +116,7 @@ class CertificateModelCertificate extends AdminModel
 		$this->setState('certificate.id', $certificate->id);
 
 		// Generate unique certificate Id
-		if (emty($pk))
+		if (empty($pk))
 		{
 			// Check if prefix is passed by the client
 			if (!empty($data['prefix']))
@@ -173,16 +173,16 @@ class CertificateModelCertificate extends AdminModel
 
 		$characters = '0123456789';
 		$charactersLength = strlen($characters);
-		$randomString = '';
+		$certificateString = '';
 
 		for ($i = 0; $i < $length; $i++)
 		{
-			$randomString .= $characters[rand(0, $charactersLength - 1)];
+			$certificateString .= $characters[rand(0, $charactersLength - 1)];
 		}
 
 		// Check if random string exists
-		$randomString = $this->defaultCertificateIdPrefix . '-' . $randomString . '-' . $certificateId;
-		$table = CertificateFactory::table("certificates");
+		$certificateString = $this->defaultCertificateIdPrefix . '-' . $certificateString . '-' . $certificateId;
+		$table = TjCertificateFactory::table("certificates");
 
 		$table->load(array('unique_certificate_id' => $checkString));
 
@@ -191,6 +191,6 @@ class CertificateModelCertificate extends AdminModel
 			$this->generateUniqueCertId($certificateId, $length);
 		}
 
-		return $randomString;
+		return $certificateString;
 	}
 }

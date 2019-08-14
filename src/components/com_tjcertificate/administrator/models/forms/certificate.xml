@@ -50,7 +50,7 @@
 
 		<field
 			name="client_id"
-			type="integer"
+			type="text"
 			required="true"
 			filter="int"
 			label="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_CLIENT_ID"
@@ -62,14 +62,12 @@
 			type="user"
 			label="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_ISSUED_USER"
 			description="COM_TJCERTIFICATE_CERTIFICATE_FORM_DESC_CERTIFICATE_ISSUED_USER"
-			class="readonly"
-			readonly="true"
-			filter="unset"
 		/>
 
 		<field
 			name="issued_on"
 			type="calendar"
+			required="true"
 			default=""
 			filter="user_utc"
 			format="%Y-%m-%d %H:%M:%S"

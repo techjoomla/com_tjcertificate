@@ -18,7 +18,7 @@ use Joomla\CMS\MVC\Model\ListModel;
  *
  * @since  1.0.0
  */
-class CertificateModelCertificates extends ListModel
+class TjCertificateModelCertificates extends ListModel
 {
 	/**
 	 * Constructor.

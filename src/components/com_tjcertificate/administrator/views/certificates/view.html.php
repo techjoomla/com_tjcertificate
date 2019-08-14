@@ -20,7 +20,7 @@ use Joomla\CMS\Object\CMSObject;
  *
  * @since  1.0.0
  */
-class CertificateViewCertificates extends HtmlView
+class TjCertificateViewCertificates extends HtmlView
 {
 	/**
 	 * An array of items
@@ -105,7 +105,7 @@ class CertificateViewCertificates extends HtmlView
 		$this->canDo = JHelperContent::getActions('com_tjcertificate');
 
 		// Add submenu
-		CertificateHelper::addSubmenu('certificates');
+		TjCertificateHelper::addSubmenu('certificates');
 
 		// Add Toolbar
 		$this->addToolbar();

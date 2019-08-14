@@ -20,7 +20,7 @@ use Joomla\CMS\Table\Table;
  *
  * @since  1.0.0
  */
-class CertificateCertificate extends CMSObject
+class TjCertificateCertificate extends CMSObject
 {
 	public $id = null;
 
@@ -68,7 +68,7 @@ class CertificateCertificate extends CMSObject
 	 *
 	 * @param   integer  $id  The primary key of the certificate to load (optional).
 	 *
-	 * @return  CertificateCertificate  The Certificate object.
+	 * @return  TjCertificateCertificate  The Certificate object.
 	 *
 	 * @since   1.0.0
 	 */
@@ -76,12 +76,12 @@ class CertificateCertificate extends CMSObject
 	{
 		if (!$id)
 		{
-			return new CertificateCertificate;
+			return new TjCertificateCertificate;
 		}
 
 		if (empty(self::$certificateObj[$id]))
 		{
-			$certificate = new CertificateCertificate($id);
+			$certificate = new TjCertificateCertificate($id);
 			self::$certificateObj[$id] = $certificate;
 		}
 
@@ -99,7 +99,7 @@ class CertificateCertificate extends CMSObject
 	 */
 	public function load($id)
 	{
-		$table = CertificateFactory::table("certificates");
+		$table = TjCertificateFactory::table("certificates");
 
 		if (!$table->load($id))
 		{
@@ -122,7 +122,7 @@ class CertificateCertificate extends CMSObject
 	public function save()
 	{
 		// Create the widget table object
-		$table = CertificateFactory::table("certificates");
+		$table = TjCertificateFactory::table("certificates");
 		$table->bind($this->getProperties());
 
 		// Allow an exception to be thrown.
@@ -199,5 +199,62 @@ class CertificateCertificate extends CMSObject
 		$this->id = (int) $this->id;
 
 		return true;
+	}
+
+	/**
+	 * Method to issue certificate.
+	 *
+	 * @param   integer     $userId        User Id.
+	 * @param   integer     $templateId    Template Id.
+	 * @param   Array       $replacements  Array contains replacement.
+	 * @param   JParameter  $options       Object contains Jparameters like prefix, expiry_date.
+	 *
+	 * @return  boolean|object Certificate Object.
+	 *
+	 * @since 1.0
+	 */
+	public function issueCertificate($userId, $templateId, $replacements, $options)
+	{
+		if (empty($userId) || empty($templateId))
+		{
+			return false;
+		}
+
+		// Get template details
+		$template = TjCertificateTemplate::getInstance($templateId);
+
+		if (empty($template->id))
+		{
+			return false;
+		}
+
+		// Generate certificate body
+		$certificateBody = $this->generateCertificateBody($template->body, $replacements);
+
+		// Save certificate
+
+		// Generate unique certficate id
+	}
+
+	/**
+	 * Method to generate certificate body.
+	 *
+	 * @param   String  $templateBody  Template Body.
+	 * @param   Array   $replacements  Array contains replacement.
+	 *
+	 * @return  string Certificate body.
+	 *
+	 * @since 1.0
+	 */
+	public function generateCertificateBody($templateBody, $replacements)
+	{
+		$templateBody = stripslashes($templateBody);
+
+		foreach ($replacements as $index => $data)
+		{
+			$templateBody = str_ireplace('[' . $index . ']', $data, $templateBody);
+		}
+
+		return $templateBody;
 	}
 }

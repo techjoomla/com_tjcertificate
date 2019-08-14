@@ -14,15 +14,15 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\BaseController;
 
-\JLoader::load(JPATH_COMPONENT_ADMINISTRATOR . '/includes/certificate');
-\JLoader::register('CertificateHelper', __DIR__ . '/helpers/certificate.php');
+\JLoader::load(JPATH_COMPONENT_ADMINISTRATOR . '/includes/tjcertificate');
+\JLoader::register('TjCertificateHelper', __DIR__ . '/helpers/tjcertificate.php');
 
 /**
  * Class CertificateController
  *
  * @since  1.0.0
  */
-class CertificateController extends BaseController
+class TjCertificateController extends BaseController
 {
 	/**
 	 * Method to display a view.
@@ -37,7 +37,7 @@ class CertificateController extends BaseController
 	public function display($cachable = false, $urlparams = false)
 	{
 		$app  = Factory::getApplication();
-		$view = $app->input->getCmd('view', 'certificatetemplates');
+		$view = $app->input->getCmd('view', 'templates');
 		$app->input->set('view', $view);
 
 		return parent::display($cachable, $urlparams);

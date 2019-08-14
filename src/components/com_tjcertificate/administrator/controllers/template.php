@@ -14,10 +14,10 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\MVC\Controller\FormController;
 
 /**
- * The certificate template controller
+ * The template controller
  *
  * @since  1.0.0
  */
-class CertificateControllerCertificateTemplate extends FormController
+class TjCertificateControllerTemplate extends FormController
 {
 }

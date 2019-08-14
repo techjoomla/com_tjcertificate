@@ -12,6 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
@@ -20,7 +21,7 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
  *
  * @since  1.0.0
  */
-class CertificateCertificateTemplate extends CMSObject
+class TjCertificateTemplate extends CMSObject
 {
 	public $id = null;
 
@@ -49,6 +50,8 @@ class CertificateCertificateTemplate extends CMSObject
 	public $modified_by = 0;
 
 	public $is_public = 1;
+
+	public $params = "";
 
 	protected static $certificateTemplateObj = array();
 
@@ -84,12 +87,12 @@ class CertificateCertificateTemplate extends CMSObject
 	{
 		if (!$id)
 		{
-			return new CertificateCertificateTemplate;
+			return new TjCertificateTemplate;
 		}
 
 		if (empty(self::$certificateTemplateObj[$id]))
 		{
-			$certificateTemplate = new CertificateCertificateTemplate($id);
+			$certificateTemplate = new TjCertificateTemplate($id);
 			self::$certificateTemplateObj[$id] = $certificateTemplate;
 		}
 
@@ -107,7 +110,7 @@ class CertificateCertificateTemplate extends CMSObject
 	 */
 	public function load($id)
 	{
-		$table = CertificateFactory::table("certificatetemplates");
+		$table = TjCertificateFactory::table("templates");
 
 		if (!$table->load($id))
 		{
@@ -130,7 +133,7 @@ class CertificateCertificateTemplate extends CMSObject
 	public function save()
 	{
 		// Create the certificate template table object
-		$table = CertificateFactory::table("certificatetemplates");
+		$table = TjCertificateFactory::table("templates");
 		$table->bind($this->getProperties());
 
 		$currentDateTime = Factory::getDate()->toSql();
@@ -200,7 +203,7 @@ class CertificateCertificateTemplate extends CMSObject
 	{
 		if (empty ($array))
 		{
-			$this->setError(JText::_('COM_TJCERTIFICATE_EMPTY_DATA'));
+			$this->setError(Text::_('COM_TJCERTIFICATE_EMPTY_DATA'));
 
 			return false;
 		}
@@ -208,7 +211,7 @@ class CertificateCertificateTemplate extends CMSObject
 		// Bind the array
 		if (!$this->setProperties($array))
 		{
-			$this->setError(JText::_('COM_TJCERTIFICATE_BINDING_ERROR'));
+			$this->setError(Text::_('COM_TJCERTIFICATE_BINDING_ERROR'));
 
 			return false;
 		}

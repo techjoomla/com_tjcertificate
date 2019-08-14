@@ -18,7 +18,7 @@ use Joomla\CMS\MVC\Controller\AdminController;
  *
  * @since  1.0.0
  */
-class CertificateControllerCertificates extends AdminController
+class TjCertificateControllerCertificates extends AdminController
 {
 	/**
 	 * Proxy for getModel.
@@ -30,7 +30,7 @@ class CertificateControllerCertificates extends AdminController
 	 *
 	 * @since  1.0.0
 	 */
-	public function getModel($name = 'Certificate', $prefix = 'CertificateModel')
+	public function getModel($name = 'Certificate', $prefix = 'TjCertificateModel')
 	{
 		return parent::getModel($name, $prefix, array('ignore_request' => true));
 	}
