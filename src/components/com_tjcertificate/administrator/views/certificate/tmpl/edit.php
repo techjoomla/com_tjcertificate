@@ -12,6 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
 
@@ -54,7 +55,7 @@ Factory::getDocument()->addScriptDeclaration('
 		?>
 		<div class="form-horizontal">
 
-		<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', JText::_('COM_TJCERTIFICATE_TITLE_CERTIFICATE')); ?>
+		<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', Text::_('COM_TJCERTIFICATE_TITLE_CERTIFICATE')); ?>
 		<div class="row-fluid">
 			<?php echo $this->form->renderField('unique_certificate_id'); ?>
 			<?php echo $this->form->renderField('certificate_template_id'); ?>

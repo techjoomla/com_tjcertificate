@@ -18,7 +18,7 @@ use Joomla\CMS\MVC\Controller\BaseController;
 \JLoader::register('TjCertificateHelper', __DIR__ . '/helpers/tjcertificate.php');
 
 /**
- * Class CertificateController
+ * Class TjCertificateController
  *
  * @since  1.0.0
  */

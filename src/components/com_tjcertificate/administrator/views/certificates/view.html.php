@@ -12,6 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Object\CMSObject;
 
@@ -126,7 +127,7 @@ class TjCertificateViewCertificates extends HtmlView
 	 */
 	protected function addToolbar()
 	{
-		JToolBarHelper::title(JText::_('COM_TJCERTIFICATE_VIEW_CERTIFICATES'), '');
+		JToolBarHelper::title(Text::_('COM_TJCERTIFICATE_VIEW_CERTIFICATES'), '');
 		$canDo = $this->canDo;
 
 		if ($canDo->get('core.create'))
@@ -169,13 +170,13 @@ class TjCertificateViewCertificates extends HtmlView
 	protected function getSortFields()
 	{
 		return array(
-			'ci.id' => JText::_('JGRID_HEADING_ID'),
-			'ci.certificate_template_id' => JText::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_CERTIFICATE_TEMPLATE'),
-			'ci.client' => JText::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_CLIENT'),
-			'ci.user_id' => JText::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_USER'),
-			'ci.state' => JText::_('JSTATUS'),
-			'ci.issued_on' => JText::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_ISSUED_DATE'),
-			'ci.expired_on' => JText::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_EXPIRY_DATE'),
+			'ci.id' => Text::_('JGRID_HEADING_ID'),
+			'ci.certificate_template_id' => Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_CERTIFICATE_TEMPLATE'),
+			'ci.client' => Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_CLIENT'),
+			'ci.user_id' => Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_USER'),
+			'ci.state' => Text::_('JSTATUS'),
+			'ci.issued_on' => Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_ISSUED_DATE'),
+			'ci.expired_on' => Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_EXPIRY_DATE'),
 		);
 	}
 }

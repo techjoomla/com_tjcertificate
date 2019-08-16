@@ -12,6 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Object\CMSObject;
 
@@ -126,7 +127,7 @@ class TjCertificateViewTemplates extends HtmlView
 	 */
 	protected function addToolbar()
 	{
-		JToolBarHelper::title(JText::_('COM_TJCERTIFICATE_VIEW_CERTIFICATE_TEMPLATES'), '');
+		JToolBarHelper::title(Text::_('COM_TJCERTIFICATE_VIEW_CERTIFICATE_TEMPLATES'), '');
 		$canDo = $this->canDo;
 
 		if ($canDo->get('core.create'))
@@ -169,13 +170,13 @@ class TjCertificateViewTemplates extends HtmlView
 	protected function getSortFields()
 	{
 		return array(
-			'ct.id' => JText::_('JGRID_HEADING_ID'),
-			'ct.title' => JText::_('COM_TJCERTIFICATE_LIST_CERTIFICATE_TEMPLATE_TITLE'),
-			'ct.client' => JText::_('COM_TJCERTIFICATE_LIST_CERTIFICATE_TEMPLATE_CLIENT'),
-			'ct.is_public' => JText::_('COM_TJCERTIFICATE_LIST_CERTIFICATE_TEMPLATE_ACCESS'),
-			'ct.ordering' => JText::_('JGRID_HEADING_ORDERING'),
-			'ct.state' => JText::_('JSTATUS'),
-			'ct.created_by' => JText::_('COM_TJCERTIFICATE_LIST_CERTIFICATE_TEMPLATE_CREATED_BY'),
+			'ct.id' => Text::_('JGRID_HEADING_ID'),
+			'ct.title' => Text::_('COM_TJCERTIFICATE_LIST_CERTIFICATE_TEMPLATE_TITLE'),
+			'ct.client' => Text::_('COM_TJCERTIFICATE_LIST_CERTIFICATE_TEMPLATE_CLIENT'),
+			'ct.is_public' => Text::_('COM_TJCERTIFICATE_LIST_CERTIFICATE_TEMPLATE_ACCESS'),
+			'ct.ordering' => Text::_('JGRID_HEADING_ORDERING'),
+			'ct.state' => Text::_('JSTATUS'),
+			'ct.created_by' => Text::_('COM_TJCERTIFICATE_LIST_CERTIFICATE_TEMPLATE_CREATED_BY'),
 		);
 	}
 }

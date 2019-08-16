@@ -63,8 +63,8 @@
             <folder>languages</folder>
         </files>
         <languages folder="administrator">
-			<language tag="en-GB">languages/en-GB/en-GB.com_tjcertificate.ini</language>
-			<language tag="en-GB">languages/en-GB/en-GB.com_tjcertificate.sys.ini</language>
+            <language tag="en-GB">languages/en-GB/en-GB.com_tjcertificate.ini</language>
+            <language tag="en-GB">languages/en-GB/en-GB.com_tjcertificate.sys.ini</language>
         </languages>
     </administration>
 </extension>

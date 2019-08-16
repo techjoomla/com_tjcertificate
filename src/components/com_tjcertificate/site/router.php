@@ -11,14 +11,14 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-JLoader::registerPrefix('Certificate', JPATH_SITE . '/components/com_tjcertificate/');
+JLoader::registerPrefix('TjCertificate', JPATH_SITE . '/components/com_tjcertificate/');
 
 /**
- * Class CertificateRouter
+ * Class TjCertificateRouter
  *
  * @since  1.0.0
  */
-class CertificateRouter extends JComponentRouterBase
+class TjCertificateRouter extends JComponentRouterBase
 {
 	/**
 	 * Build method for URLs

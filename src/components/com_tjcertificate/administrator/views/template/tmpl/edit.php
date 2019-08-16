@@ -12,6 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Router\Route;
@@ -46,7 +47,7 @@ Factory::getDocument()->addScriptDeclaration('
 		?>" method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
 			<div class="form-horizontal">
 				<?php echo HTMLHelper::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
-				<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', JText::_('COM_TJCERTIFICATE_VIEW_CERTIFICATE_TEMPLATES')); ?>
+				<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', Text::_('COM_TJCERTIFICATE_VIEW_CERTIFICATE_TEMPLATES')); ?>
 				<div class="row-fluid">
 					<div class="span8">
 						<?php echo $this->form->renderField('title'); ?>
@@ -65,13 +66,13 @@ Factory::getDocument()->addScriptDeclaration('
 					</div>
 					<div class="span4">
 						<div class="alert alert-info">
-							<?php echo JText::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_REPLACEMENT_TAG_INFO'); ?>
+							<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_REPLACEMENT_TAG_INFO'); ?>
 						</div>
 						<table class="table table-bordered">
 							<thead class="thead-default">
 								<tr>
-									<th><?php echo JText::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_REPLACEMENT_TAG_TITLE'); ?></th>
-									<th><?php echo JText::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_REPLACEMENT_TAG_DESC'); ?></th>
+									<th><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_REPLACEMENT_TAG_TITLE'); ?></th>
+									<th><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_REPLACEMENT_TAG_DESC'); ?></th>
 								</tr>
 							</thead>
 							<tbody>

@@ -22,8 +22,6 @@ use Joomla\CMS\Table\Table;
  */
 class TjCertificateModelCertificate extends AdminModel
 {
-	public $defaultCertificateIdPrefix = "CERT";
-
 	/**
 	 * Method to get the record form.
 	 *
@@ -93,8 +91,6 @@ class TjCertificateModelCertificate extends AdminModel
 		$pk   = (!empty($data['id'])) ? $data['id'] : (int) $this->getState('certificate.id');
 		$certificate = TjCertificateCertificate::getInstance($pk);
 
-		$params = JComponentHelper::getParams('com_tjcertificate');
-
 		// Bind the data.
 		if (!$certificate->bind($data))
 		{
@@ -115,24 +111,6 @@ class TjCertificateModelCertificate extends AdminModel
 
 		$this->setState('certificate.id', $certificate->id);
 
-		// Generate unique certificate Id
-		if (empty($pk))
-		{
-			// Check if prefix is passed by the client
-			if (!empty($data['prefix']))
-			{
-				$this->defaultCertificateIdPrefix = $data['prefix'];
-			}
-			else
-			{
-				$this->defaultCertificateIdPrefix = $params->get('certificate_prefix', $this->defaultCertificateIdPrefix);
-			}
-
-			$data['unique_certificate_id'] = $this->generateUniqueCertId($certificate->id);
-
-			$this->save($data);
-		}
-
 		return true;
 	}
 
@@ -151,46 +129,5 @@ class TjCertificateModelCertificate extends AdminModel
 		$jinput = Factory::getApplication()->input;
 		$id = ($jinput->get('id'))?$jinput->get('id'):$jinput->get('id');
 		$this->setState('certificate.id', $id);
-	}
-
-	/**
-	 * Method to generate unique certificate Id.
-	 *
-	 * @param   integer  $certificateId  Generated Certificate Id
-	 *
-	 * @param   integer  $length         The length of unique string
-	 *
-	 * @return   string
-	 *
-	 * @since    1.0.0
-	 */
-	protected function generateUniqueCertId($certificateId, $length = 0)
-	{
-		if (empty($length) || $length > 30)
-		{
-			$length = rand(5, 30);
-		}
-
-		$characters = '0123456789';
-		$charactersLength = strlen($characters);
-		$certificateString = '';
-
-		for ($i = 0; $i < $length; $i++)
-		{
-			$certificateString .= $characters[rand(0, $charactersLength - 1)];
-		}
-
-		// Check if random string exists
-		$certificateString = $this->defaultCertificateIdPrefix . '-' . $certificateString . '-' . $certificateId;
-		$table = TjCertificateFactory::table("certificates");
-
-		$table->load(array('unique_certificate_id' => $checkString));
-
-		if (!empty($table->unique_certificate_id))
-		{
-			$this->generateUniqueCertId($certificateId, $length);
-		}
-
-		return $certificateString;
 	}
 }

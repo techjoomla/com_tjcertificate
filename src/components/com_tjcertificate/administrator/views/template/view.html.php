@@ -12,6 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 
 /**
@@ -73,6 +74,13 @@ class TjCertificateViewTemplate extends HtmlView
 		$this->input = Factory::getApplication()->input;
 		$this->canDo = JHelperContent::getActions('com_tjcertificate', 'template', $this->item->id);
 
+		if ($this->item->id && !$this->isEditable($this->canDo, Factory::getUser()->id))
+		{
+			JError::raiseNotice(403, JText::_('COM_TJCERTIFICATE_ERROR_CANNOT_ACCESS_PRIVATE_TEMPLATE'));
+
+			return false;
+		}
+
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
@@ -107,7 +115,7 @@ class TjCertificateViewTemplate extends HtmlView
 		$layout = $app->input->get("layout");
 
 		JToolbarHelper::title(
-			JText::_('COM_TJCERTIFICATE_PAGE_VIEW_CERTIFICATE_TEMPLATE')
+			Text::_('COM_TJCERTIFICATE_PAGE_VIEW_CERTIFICATE_TEMPLATE')
 		);
 
 		JLoader::import('administrator.components.com_tjcertificate.helpers.tjcertificate', JPATH_SITE);
@@ -124,7 +132,7 @@ class TjCertificateViewTemplate extends HtmlView
 			$app->input->set('hidemainmenu', true);
 
 			JToolbarHelper::title(
-				JText::_('COM_TJCERTIFICATE_PAGE_' . ($checkedOut ? 'VIEW_CERTIFICATE_TEMPLATE' :
+				Text::_('COM_TJCERTIFICATE_PAGE_' . ($checkedOut ? 'VIEW_CERTIFICATE_TEMPLATE' :
 					($isNew ? 'ADD_CERTIFICATE_TEMPLATE' : 'EDIT_CERTIFICATE_TEMPLATE'))
 			), 'pencil-2 template-add'
 			);

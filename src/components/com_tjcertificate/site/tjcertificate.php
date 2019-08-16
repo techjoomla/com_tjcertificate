@@ -14,10 +14,10 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\BaseController;
 
-JLoader::registerPrefix('Certificate', JPATH_COMPONENT);
-JLoader::register('CertificateController', JPATH_COMPONENT . '/controller.php');
+JLoader::registerPrefix('TjCertificate', JPATH_COMPONENT);
+JLoader::register('TjCertificateController', JPATH_COMPONENT . '/controller.php');
 
 // Execute the task.
-$controller = BaseController::getInstance('Certificate');
+$controller = BaseController::getInstance('TjCertificate');
 $controller->execute(Factory::getApplication()->input->get('task'));
 $controller->redirect();

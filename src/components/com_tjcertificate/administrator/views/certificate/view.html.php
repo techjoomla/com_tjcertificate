@@ -12,6 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 
 /**
@@ -105,7 +106,7 @@ class TjCertificateViewCertificate extends HtmlView
 		$layout = Factory::getApplication()->input->get("layout");
 
 		JToolbarHelper::title(
-			JText::_('COM_TJCERTIFICATE_PAGE_VIEW_CERTIFICATE')
+			Text::_('COM_TJCERTIFICATE_PAGE_VIEW_CERTIFICATE')
 		);
 
 		$app = Factory::getApplication();
@@ -124,7 +125,7 @@ class TjCertificateViewCertificate extends HtmlView
 			Factory::getApplication()->input->set('hidemainmenu', true);
 
 			JToolbarHelper::title(
-				JText::_('COM_TJCERTIFICATE_PAGE_' . ($isNew ? 'ADD_CERTIFICATE' : 'EDIT_CERTIFICATE')),
+				Text::_('COM_TJCERTIFICATE_PAGE_' . ($isNew ? 'ADD_CERTIFICATE' : 'EDIT_CERTIFICATE')),
 				'pencil-2 certificate-add'
 			);
 

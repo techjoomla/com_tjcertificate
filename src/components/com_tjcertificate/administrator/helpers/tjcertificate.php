@@ -10,6 +10,7 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\Language\Text;
 
 /**
  * Certificate helper.
@@ -32,13 +33,13 @@ class TjCertificateHelper
 		if ($layout != "default")
 		{
 			JHtmlSidebar::addEntry(
-				JText::_('COM_TJCERTIFICATE_VIEW_CERTIFICATE_TEMPLATES'),
+				Text::_('COM_TJCERTIFICATE_VIEW_CERTIFICATE_TEMPLATES'),
 				'index.php?option=com_tjcertificate&view=templates',
 				$vName == 'templates'
 			);
 
 			JHtmlSidebar::addEntry(
-				JText::_('COM_TJCERTIFICATE_VIEW_CERTIFICATES'),
+				Text::_('COM_TJCERTIFICATE_VIEW_CERTIFICATES'),
 				'index.php?option=com_tjcertificate&view=certificates',
 				$vName == 'certificates'
 			);
