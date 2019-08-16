@@ -26,6 +26,8 @@ class TjCertificateViewCertificate extends JViewLegacy
 {
 	public $certificate = null;
 
+	public $uniqueCertificateId = null;
+
 	/**
 	 * Display the view
 	 *
@@ -38,20 +40,20 @@ class TjCertificateViewCertificate extends JViewLegacy
 	public function display($tpl = null)
 	{
 		$input = Factory::getApplication()->input;
-		$uniqueCertificateId = $input->get('certificate', '', 'STRING');
+		$this->uniqueCertificateId = $input->get('certificate', '', 'STRING');
 
-		if (!empty($uniqueCertificateId))
+		if (!empty($this->uniqueCertificateId))
 		{
-			$certificateObj = TjCertificateCertificate::validateCertificate($uniqueCertificateId);
+			$certificateObj = TjCertificateCertificate::validateCertificate($this->uniqueCertificateId);
 
 			if (!$certificateObj->id)
 			{
 				JError::raiseWarning(500, JText::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EXPIRED'));
-
-				return false;
 			}
-
-			$this->certificate = $certificateObj;
+			else
+			{
+				$this->certificate = $certificateObj;
+			}
 		}
 
 		parent::display($tpl);

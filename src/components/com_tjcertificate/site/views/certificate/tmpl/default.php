@@ -18,7 +18,7 @@ use Joomla\CMS\Router\Route;
 <form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate'); ?>" method="post" name="adminForm" id="adminForm">
 	<div class="btn-wrapper input-append">
 		<input type="text" name="certificate" id="certificate"
-		value="<?php echo $this->certificate->unique_certificate_id; ?>" placeholder="Enter Cerficate Id">
+		value="<?php echo $this->uniqueCertificateId; ?>" placeholder="Enter Cerficate Id">
 		<button type="submit" class="btn hasTooltip" title="" aria-label="Search" data-original-title="Search">
 			<span class="icon-search" aria-hidden="true"></span>
 		</button>
