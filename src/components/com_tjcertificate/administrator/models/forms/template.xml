@@ -16,16 +16,7 @@
 			label="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_LBL_BODY"
 			description="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_DESC_BODY"
 			required="true"
-			menu_published="0"
 			filter="raw"
-			directory_stripext="true"
-			directory_hidenode="true"
-			directory_hidedefault="true"
-			heading="h4"
-			close="true"
-			option_on="Yes"
-			option_off="Yes"
-			toggle_default_value="0"
 		/>
 
 		<field name="replacement_tags"
