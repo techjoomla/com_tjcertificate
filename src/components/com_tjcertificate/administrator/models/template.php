@@ -17,7 +17,7 @@ use \Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Table\Table;
 
 /**
- * Item Model for an Certificate template.
+ * Model for Certificate template.
  *
  * @since  1.0.0
  */

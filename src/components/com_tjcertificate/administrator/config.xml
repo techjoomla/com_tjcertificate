@@ -9,6 +9,26 @@
 			label="COM_TJCERTIFICATE_CERTIFICATE_PREFIX_LABEL"
 			description="COM_TJCERTIFICATE_CERTIFICATE_PREFIX_DESC"
 		/>
+		<field
+			name="certificate_random_string_length"
+			type="text"
+			default="30"
+			hint="Maxlength is 50"
+			label="COM_TJCERTIFICATE_CERTIFICATE_RANDOM_STRING_LENTGH_LABEL"
+			description="COM_TJCERTIFICATE_CERTIFICATE_RANDOM_STRING_LENTGH_DESC"
+		/>
+		<field
+			name="certificate_fixed_random_string_length"
+			type="radio"
+			label="COM_TJCERTIFICATE_CERTIFICATE_FIXED_RANDOM_STRING_LENTGH_LABEL"
+			description="COM_TJCERTIFICATE_CERTIFICATE_FIXED_RANDOM_STRING_LENTGH_DESC"
+			class="btn-group btn-group-yesno"
+			default="1"
+			filter="integer"
+			>
+			<option value="1">COM_TJCERTIFICATE_CERTIFICATE_FIXED_RANDOM_STRING_LENTGH_FIXED</option>
+			<option value="0">COM_TJCERTIFICATE_CERTIFICATE_FIXED_RANDOM_STRING_LENTGH_RANDOM</option>
+		</field>
 	</fieldset>
 
 	<!-- Permission setting  -->

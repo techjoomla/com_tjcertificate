@@ -33,18 +33,18 @@
         <filename>router.php</filename>
         <folder>views</folder>
         <folder>models</folder>
-        <folder>assets</folder>
         <folder>languages</folder>
     </files>
 
     <languages folder="site">
-            <language tag="en-GB">languages/en-GB/en-GB.com_tjcertificate.ini</language>
+        <language tag="en-GB">languages/en-GB/en-GB.com_tjcertificate.ini</language>
     </languages>
+
     <administration>
         <menu>COM_TJCERTIFICATE</menu>
         <submenu>
             <menu link="option=com_tjcertificate&amp;view=templates" view="templates" alt="Templates">COM_TJCERTIFICATE_TITLE_CERTIFICATES</menu>
-            <menu link="option=com_tjcertificate&amp;view=certificatetes" view="certificatetes" alt="Issued Certificates">COM_TJCERTIFICATE_TITLE_ISSUED_CERTIFICATES</menu>
+            <menu link="option=com_tjcertificate&amp;view=certificates" view="certificates" alt="Issued Certificates">COM_TJCERTIFICATE_TITLE_ISSUED_CERTIFICATES</menu>
         </submenu>
         <files folder="administrator">
             <filename>access.xml</filename>

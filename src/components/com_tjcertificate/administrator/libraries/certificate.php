@@ -17,6 +17,10 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Router\Route;
+use Joomla\Filesystem\File;
+use Joomla\Registry\Registry;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 /**
  * Certificate class.  Handles all application interaction with a Certificate
@@ -45,7 +49,7 @@ class TjCertificateCertificate extends CMSObject
 
 	public $expired_on = null;
 
-	public $defaultCertificateIdPrefix = "CERT";
+	public $defaultCertPrefix = "CERT";
 
 	protected static $certificateObj = array();
 
@@ -226,15 +230,91 @@ class TjCertificateCertificate extends CMSObject
 	/**
 	 * Method to get certificate download url.
 	 *
-	 * @return  string Certificate download url.
+	 * @return  boolean|string Certificate download url.
 	 *
 	 * @since 1.0
 	 */
 	public function getDownloadUrl()
 	{
-		$url = 'index.php?option=com_tjcertificate&view=certificate&layout=pdfdownload&certificate=' . $this->unique_certificate_id;
+		if (JFile::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
+		{
+			$url = 'index.php?option=com_tjcertificate&view=certificate&layout=pdfdownload&certificate=' . $this->unique_certificate_id;
 
-		return Route::_($url);
+			return Route::_($url);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Method to get certificate download url.
+	 *
+	 * @return  boolean|string Certificate pdf url.
+	 *
+	 * @since 1.0
+	 */
+	public function pdfDownload()
+	{
+		if (JFile::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
+		{
+			jimport('joomla.filesystem.file');
+			jimport('joomla.filesystem.folder');
+
+			$html = $this->generated_body;
+
+			// Get template details
+			$template = TjCertificateTemplate::getInstance($this->certificate_template_id);
+
+			$templateParams = new Registry($template->params);
+			$pageSize       = $templateParams->get('certifcate_page_size', 'A4');
+			$orientation    = $templateParams->get('orientation', 'portrait');
+			$font           = $templateParams->get('certificate_font', 'DeJaVu Sans');
+
+			// If the pagesize is custom then get the correct size and width.
+			if ($pageSize === 'custom')
+			{
+				$height   = $templateParams->get('certificate_pdf_width', '80') * 28.3465;
+				$width    = $templateParams->get('certificate_pdf_height', '80') * 28.3465;
+				$pageSize = array(0, 0, $width, $height);
+			}
+
+			// If the font is custom then get the custmized font.
+			if ($font === 'custom')
+			{
+				$font = $templateParams->get('certificate_custom_font', 'DeJaVu Sans');
+			}
+
+			require_once JPATH_SITE . "/libraries/techjoomla/dompdf/autoload.inc.php";
+
+			$html = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/></head><body>' . $html . '</body></html>';
+
+			if (get_magic_quotes_gpc())
+			{
+				$html = stripslashes($html);
+			}
+
+			// Set font for the pdf download.
+			$options = new Options;
+			$options->setDefaultFont($font);
+
+			$domPDF = new DOMPDF($options);
+			$domPDF->loadHTML($html);
+
+			// Set the page size and oriendtation.
+			$domPDF->setPaper($pageSize, $orientation);
+
+			// Render PDF
+			$domPDF->render();
+
+			// Certificate name
+			$certificatePdfName = File::makeSafe(Text::sprintf("COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_FILE_NAME", $this->unique_certificate_id) . ".pdf");
+
+			$domPDF->stream($certificatePdfName, array("Attachment" => 1));
+
+			jexit();
+		}
+
+		return false;
 	}
 
 	/**
@@ -260,10 +340,10 @@ class TjCertificateCertificate extends CMSObject
 		// Check if certificate expired
 		if ($table->expired_on != '0000-00-00 00:00:00')
 		{
-			$now                 = new DateTime(Factory::getDate('now', 'UTC')->format('Y-m-d'));
-			$cerficateExpiryDate = new DateTime(Factory::getDate($table->expired_on, 'UTC')->format('Y-m-d'));
+			$now                   = new DateTime(Factory::getDate('now', 'UTC')->format('Y-m-d'));
+			$certificateExpiryDate = new DateTime(Factory::getDate($table->expired_on, 'UTC')->format('Y-m-d'));
 
-			if ($now > $cerficateExpiryDate)
+			if ($now > $certificateExpiryDate)
 			{
 				return false;
 			}
@@ -275,23 +355,23 @@ class TjCertificateCertificate extends CMSObject
 	/**
 	 * Method to issue certificate.
 	 *
-	 * @param   Array       $certificateDetails  Array contains certificate details.
-	 * @param   Array       $replacements        Array contains replacement.
-	 * @param   JParameter  $options             Object contains Jparameters like prefix, expiry_date.
+	 * @param   Array       $replacements  Array contains replacement.
+	 * @param   JParameter  $options       Object contains Jparameters like prefix, expiry_date.
 	 *
 	 * @return  boolean|object Certificate Object.
 	 *
 	 * @since 1.0
 	 */
-	public static function issueCertificate($certificateDetails, $replacements, $options)
+	public function issueCertificate($replacements, $options)
 	{
-		if (empty($certificateDetails['user_id']) || empty($certificateDetails['certificate_template_id']))
+		// Check user_id or certificate_template_id (this is needed to generate certificate body) is empty
+		if (empty($this->user_id) || empty($this->certificate_template_id))
 		{
 			return false;
 		}
 
 		// Get template details
-		$template = TjCertificateTemplate::getInstance($certificateDetails['certificate_template_id']);
+		$template = TjCertificateTemplate::getInstance($this->certificate_template_id);
 
 		if (empty($template->id))
 		{
@@ -299,40 +379,28 @@ class TjCertificateCertificate extends CMSObject
 		}
 
 		// Generate certificate body
-		$certificateBody = self::generateCertificateBody($template->body, $replacements);
+		$this->generated_body = $this->generateCertificateBody($template->body, $replacements);
 
-		// Create array to store issued cerficate
-		$issueCertificate                            = array ();
-		$issueCertificate['certificate_template_id'] = $template->id;
-		$issueCertificate['generated_body']          = $certificateBody;
-		$issueCertificate['client']                  = $certificateDetails['client'];
-		$issueCertificate['client_id']               = $certificateDetails['client_id'];
-		$issueCertificate['user_id']                 = $certificateDetails['user_id'];
-		$issueCertificate['state']                   = 1;
+		// Get expiry date option if available
+		$db               = Factory::getDbo();
+		$this->expired_on = $options->get('expiry_date', $db->getNullDate());
 
-		// Get extra options if available
-		$params     = ComponentHelper::getParams('com_tjcertificate');
-		$db         = Factory::getDbo();
-		$prefix     = $options->get('prefix', $params->get('certificate_prefix', $cerficateInstance->defaultCertificateIdPrefix));
-		$expiryDate = $options->get('expiry_date', $db->getNullDate());
+		// Save certificate first to generate certificate Id
+		$this->save();
 
-		if (!empty($expiryDate))
-		{
-			$issueCertificate['expired_on'] = $expiryDate;
-		}
+		// Get prefix option if available
+		$params = ComponentHelper::getParams('com_tjcertificate');
+		$this->defaultCertPrefix = $options->get('prefix', $params->get('certificate_prefix', $this->defaultCertPrefix));
 
-		// Save certificate
-		$model = TjCertificateFactory::model("Certificate", array('ignore_request' => true));
-		$model->save($issueCertificate);
-
-		$cerficateInstance = self::getInstance($model->getState('certificate.id'));
+		// Get certificate random string config
+		$stringLength = $options->get('certificate_random_string_length', $params->get('certificate_random_string_length', 30));
+		$fixedLength  = $options->get('certificate_fixed_random_string_length', $params->get('certificate_fixed_random_string_length', true));
 
 		// Generate unique certficate id - start
-		$uniqueCertificateId = $cerficateInstance->generateUniqueCertId($cerficateInstance->id, $prefix);
+		$this->unique_certificate_id = $this->generateUniqueCertId($stringLength, $fixedLength);
 
-		$cerficateInstance->unique_certificate_id = $uniqueCertificateId;
-
-		$cerficateInstance->save();
+		// Save certificate again with unique certificate Id
+		$this->save();
 	}
 
 	/**
@@ -345,7 +413,7 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @since 1.0
 	 */
-	public static function generateCertificateBody($templateBody, $replacements)
+	protected function generateCertificateBody($templateBody, $replacements)
 	{
 		$templateBody = stripslashes($templateBody);
 
@@ -360,15 +428,15 @@ class TjCertificateCertificate extends CMSObject
 	/**
 	 * Method to generate unique certificate Id.
 	 *
-	 * @param   integer  $certificateId       Generated Certificate Id
-	 * @param   String   $prefix              Certificate prefix
 	 * @param   integer  $randomStringLength  The length of unique string
+	 *
+	 * @param   boolean  $fixedLength         Generate fixed length random string
 	 *
 	 * @return   string
 	 *
 	 * @since    1.0.0
 	 */
-	protected function generateUniqueCertId($certificateId, $prefix, $randomStringLength = 0)
+	protected function generateUniqueCertId($randomStringLength = 0, $fixedLength = false)
 	{
 		if (empty($randomStringLength) || $randomStringLength > 30 || $randomStringLength < 0)
 		{
@@ -376,7 +444,7 @@ class TjCertificateCertificate extends CMSObject
 		}
 		else
 		{
-			$randomStringLength = rand(5, $randomStringLength);
+			$randomStringLength = $fixedLength ? $randomStringLength : rand(5, $randomStringLength);
 		}
 
 		$characters = '0123456789';
@@ -389,15 +457,14 @@ class TjCertificateCertificate extends CMSObject
 		}
 
 		// Check if random string exists
-		$cerficateInstance = self::getInstance();
-		$certificateString = $prefix . '-' . $certificateString . '-' . $certificateId;
+		$certificateString = $this->defaultCertPrefix . '-' . $certificateString . '-' . $this->id;
 		$table = TjCertificateFactory::table("certificates");
 
 		$table->load(array('unique_certificate_id' => $certificateString));
 
 		if (!empty($table->unique_certificate_id))
 		{
-			$cerficateInstance->generateUniqueCertId($certificateId, $prefix, $randomStringLength);
+			$this->generateUniqueCertId($randomStringLength, $fixedLength);
 		}
 
 		return $certificateString;

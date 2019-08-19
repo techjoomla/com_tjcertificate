@@ -12,18 +12,19 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
 
 ?>
-
 <form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate'); ?>" method="post" name="adminForm" id="adminForm">
 	<div class="btn-wrapper input-append">
 		<input type="text" name="certificate" id="certificate"
-		value="<?php echo $this->uniqueCertificateId; ?>" placeholder="Enter Cerficate Id">
+		value="<?php echo $this->uniqueCertificateId; ?>" placeholder="Enter Certificate Id">
 		<button type="submit" class="btn hasTooltip" title="" aria-label="Search" data-original-title="Search">
 			<span class="icon-search" aria-hidden="true"></span>
 		</button>
 	</div>
 </form>
+
 <?php
 if ($this->certificate)
 {
@@ -33,27 +34,43 @@ if ($this->certificate)
 		<table cellpadding="5">
 			<tr>
 				<td>
-					<?php
-					$printlink = 'index.php?option=com_tjlms&view=certificate&layout=pdf_gen&user_id=' . $this->userid . '&course_id=' . $this->course_id;
+					<input type="button" class="btn btn-blue" onclick="printCertificate('certificateContent')"
+					value="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_PRINT');?>" />
+				</td>
+				<?php
+				if ($this->certificate->getDownloadUrl())
+				{
 					?>
-					<input type="button" class="btn btn-blue" onclick="printcertificate('certificatrediv')" value="<?php echo JText::_('COM_TJLMS_PRINT');?>" />
-				</td>
-				<td>
-					<a  class="btn btn-primary btn-medium" href="<?php // @echo $this->comtjlmsHelper->tjlmsRoute($printlink, false);?>">
-						<?php
-							echo JText::_('COM_TJLMS_PRINT_PDF');
-						?>
-					</a>
-				</td>
+					<td>
+						<a class="btn btn-primary btn-medium" href="<?php echo $this->certificate->getDownloadUrl();?>">
+							<?php
+								echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_PDF');
+							?>
+						</a>
+					</td>
+					<?php
+				}
+				?>
 			</tr>
 		</table>
 	</div>
 <div>
 
-<div id="certificatrediv">
+<div id="certificateContent">
 <?php
 	echo $this->certificate->generated_body;
 ?>
 </div>
 <?php
 }
+?>
+
+<script type="text/javascript">
+function printCertificate(elementId) {
+	var printContent        = document.getElementById(elementId).innerHTML;
+	var originalContent     = document.body.innerHTML;
+	document.body.innerHTML = printContent;
+	window.print();
+	document.body.innerHTML = originalContent;
+}
+</script>
