@@ -19,8 +19,14 @@
 			filter="raw"
 		/>
 
-		<field name="replacement_tags"
+		<field name="template_css"
 			type="textarea"
+			cols="45"
+			rows="10"
+		/>
+
+		<field name="replacement_tags"
+			type="hidden"
 			label="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_LBL_REPLACEMENT_TAGS"
 			description="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_DESC_REPLACEMENT_TAGS"
 			rows="10"

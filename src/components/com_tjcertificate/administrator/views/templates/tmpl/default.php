@@ -11,6 +11,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
@@ -113,13 +114,14 @@ if ( $saveOrder )
 								$item->max_ordering = 0;
 								$ordering   = ($listOrder == 'ct.ordering');
 
-								$canEdit    = $this->canDo->get('core.edit');
+								$canEdit    = ($this->canDo->get('core.edit') && $this->canDo->get('template.edit'));
 
-								$canCheckin = $this->canDo->get('core.edit.state');
+								$canEditOwn = ($this->canDo->get('template.edit.own') && ($item->created_by == Factory::getUser()->id));
 
-								$canChange  = $this->canDo->get('core.edit.state');
+								$canCheckin = ($this->canDo->get('core.edit.state') && $canEditOwn) || $this->canDo->get('template.edit');
 
-								$canEditOwn = $this->canDo->get('core.edit.own');
+								$canChange = ($this->canDo->get('core.edit.state') && $canEditOwn) || $this->canDo->get('template.edit');
+
 								?>
 								<tr class="row <?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->id; ?>">
 								<td class="order nowrap center hidden-phone">

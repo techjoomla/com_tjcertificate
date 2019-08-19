@@ -72,7 +72,7 @@ class TjCertificateViewTemplate extends HtmlView
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
 		$this->input = Factory::getApplication()->input;
-		$this->canDo = JHelperContent::getActions('com_tjcertificate', 'template', $this->item->id);
+		$this->canDo = JHelperContent::getActions('com_tjcertificate');
 
 		if ($this->item->id && !$this->isEditable($this->canDo, Factory::getUser()->id))
 		{
@@ -185,7 +185,7 @@ class TjCertificateViewTemplate extends HtmlView
 	protected function isEditable($canDo, $userId)
 	{
 		// Since it's an existing record, check the edit permission, or fall back to edit own if the owner.
-		return $canDo->get('core.edit') || ($canDo->get('core.edit.own') && $this->item->created_by == $userId);
+		return $canDo->get('template.edit') || ($canDo->get('template.edit.own') && $this->item->created_by == $userId);
 	}
 
 	/**

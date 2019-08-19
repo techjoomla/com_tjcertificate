@@ -29,6 +29,8 @@ class TjCertificateTemplate extends CMSObject
 
 	public $body = "";
 
+	public $template_css = "";
+
 	public $replacement_tags = "";
 
 	public $client = "";
@@ -220,5 +222,29 @@ class TjCertificateTemplate extends CMSObject
 		$this->id = (int) $this->id;
 
 		return true;
+	}
+
+	/**
+	 * Function to get the inline css html code from the emogrifier
+	 *
+	 * @param   string  $html  html
+	 * @param   string  $css   css
+	 *
+	 * @return  boolean|string
+	 */
+	public function getEmogrify($html, $css)
+	{
+		jimport('techjoomla.emogrifier.tjemogrifier');
+
+		if (class_exists('InitEmogrifier'))
+		{
+			InitEmogrifier::initTjEmogrifier();
+
+			$emogrify = new TJEmogrifier($html, $css);
+
+			return $emogrify->emogrify();
+		}
+
+		return false;
 	}
 }

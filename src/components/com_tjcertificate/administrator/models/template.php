@@ -162,6 +162,8 @@ class TjCertificateModelTemplate extends AdminModel
 			$return = false;
 		}
 
+		$data['template_css'] = trim($data['template_css']);
+
 		return $return;
 	}
 

@@ -45,7 +45,7 @@ Factory::getDocument()->addScriptDeclaration('
 	<div class="row-fluid">
 		<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=template&layout=edit&id=' . (int) $this->item->id, false);
 		?>" method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
-			<div class="form-horizontal">
+			<div class="form-vertical">
 				<?php echo HTMLHelper::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
 				<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', Text::_('COM_TJCERTIFICATE_VIEW_CERTIFICATE_TEMPLATES')); ?>
 				<div class="row-fluid">
@@ -63,6 +63,20 @@ Factory::getDocument()->addScriptDeclaration('
 						<?php echo $this->form->getInput('ordering'); ?>
 						<?php echo $this->form->getInput('checked_out'); ?>
 						<?php echo $this->form->getInput('checked_out_time'); ?>
+					</div>
+					<div class="span4">
+						<div class="alert alert-info">
+							<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_CSS_EDITOR_INFO'); ?>
+						</div>
+						<table class="table">
+							<thead class="thead-default">
+								<tr>
+									<th>
+										<?php echo $this->form->getInput('template_css');?>
+									</th>
+								</tr>
+							</thead>
+						</table>
 					</div>
 					<div class="span4">
 						<div class="alert alert-info">
