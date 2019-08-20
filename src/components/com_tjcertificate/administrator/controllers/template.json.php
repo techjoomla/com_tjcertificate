@@ -33,7 +33,7 @@ class TjCertificateControllerTemplate extends FormController
 	{
 		if (!JSession::checkToken('get'))
 		{
-			echo new JResponseJson(null, JText::_('JINVALID_TOKEN'), true);
+			echo new JResponseJson(null, Text::_('JINVALID_TOKEN'), true);
 		}
 		else
 		{
@@ -41,6 +41,13 @@ class TjCertificateControllerTemplate extends FormController
 			$input = $app->input;
 
 			$defaultTemplate = $input->get('defaultTemplate', "");
+
+			if (empty($defaultTemplate))
+			{
+				echo new JResponseJson(null, Text::_('COM_TJCERTIFICATE_ERROR_SOMETHING_WENT_WRONG'), true);
+
+				return;
+			}
 
 			$templatePath = JPATH_SITE . "/components/com_tjcertificate/templates/" . $defaultTemplate;
 
