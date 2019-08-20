@@ -75,13 +75,11 @@ var template = {
 	{
 		var templateBody = response.data;
 
-		jQuery('#jform_body').empty().html(templateBody);
+		jQuery('#jform_body').empty().val(templateBody);
 
 		if (typeof tinyMCE != "undefined")
 		{
 			tinyMCE.get('jform_body').setContent(templateBody);
-			tinyMCE.execCommand('mceToggleEditor', false, 'jform_body');
-			tinyMCE.execCommand('mceToggleEditor', false, 'jform_body');
 		}
 		else if (typeof CodeMirror != "undefined")
 		{
