@@ -381,6 +381,14 @@ class TjCertificateCertificate extends CMSObject
 		// Generate certificate body
 		$this->generated_body = $this->generateCertificateBody($template->body, $replacements);
 
+		// Emogrify generated body with template css is available
+		$emogrData = $template->getEmogrify($this->generated_body, $template->template_css);
+
+		if (!empty($emogrData))
+		{
+			$this->generated_body = $emogrData;
+		}
+
 		// Get expiry date option if available
 		$db               = Factory::getDbo();
 		$this->expired_on = $options->get('expiry_date', $db->getNullDate());
