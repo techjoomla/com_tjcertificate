@@ -137,7 +137,6 @@ class TjCertificateViewTemplate extends HtmlView
 				JToolbarHelper::apply('template.apply');
 				JToolbarHelper::save('template.save');
 				JToolbarHelper::save2new('template.save2new');
-				JToolbarHelper::cancel('template.cancel');
 			}
 			else
 			{
@@ -145,9 +144,12 @@ class TjCertificateViewTemplate extends HtmlView
 
 				// Can't save the record if it's checked out and editable
 				$this->canSave($checkedOut, $itemEditable);
-
-				JToolbarHelper::cancel('template.cancel', 'JTOOLBAR_CLOSE');
 			}
+
+			// Add preview toolbar
+			JToolbarHelper::modal('templatePreview', 'icon-eye', 'COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_TOOLBAR_PREVIEW');
+
+			JToolbarHelper::cancel('template.cancel');
 		}
 
 		JToolbarHelper::divider();

@@ -11,6 +11,18 @@
 			filter="safehtml"
 		/>
 
+		<field
+			name="sample_template"
+			type="folderlist"
+			label="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_LBL_SAMPLE_TEMPLATE"
+			description="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_DESC_SAMPLE_TEMPLATE"
+			directory="components/com_tjcertificate/templates"
+			hide_none="true"
+			hide_default="true"
+			>
+			<option value="">COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_SELECT_SAMPLE_TEMPLATE</option>
+		</field>
+
 		<field name="body"
 			type="editor"
 			label="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_LBL_BODY"

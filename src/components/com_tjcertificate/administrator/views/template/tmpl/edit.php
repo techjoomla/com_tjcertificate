@@ -19,9 +19,15 @@ use Joomla\CMS\Router\Route;
 
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
+HTMLHelper::_('jquery.token');
 HTMLHelper::_('behavior.formvalidator');
 HTMLHelper::_('behavior.keepalive');
 HTMLHelper::_('formbehavior.chosen', 'select');
+
+$options['relative'] = true;
+JHtml::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
+JHtml::_('script', 'com_tjcertificate/template.min.js', $options);
+
 $app = Factory::getApplication();
 $input = $app->input;
 
@@ -51,6 +57,7 @@ Factory::getDocument()->addScriptDeclaration('
 				<div class="row-fluid">
 					<div class="span8">
 						<?php echo $this->form->renderField('title'); ?>
+						<?php echo $this->form->renderField('sample_template'); ?>
 						<?php echo $this->form->renderField('body'); ?>
 						<?php echo $this->form->renderField('replacement_tags'); ?>
 						<?php echo $this->form->renderField('client'); ?>
@@ -120,3 +127,38 @@ Factory::getDocument()->addScriptDeclaration('
 		</form>
 	</div>
 </div>
+
+<!-- Modal -->
+<style>
+	.modal-body {
+	    overflow-y: auto;
+	}
+</style>
+<div id="templatePreview" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+	<button type="button" class="close" data-dismiss="modal" style="width: 40px;opacity: 0.7;">&times;</button>
+	<!-- Modal content-->
+	<div class="modal-content">
+		<div class="modal-header">
+			<h4 class="modal-title"><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_MODAL_HEADER'); ?></h4>
+		</div>
+		<div class="modal-body" id="previewTempl">
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		</div>
+	</div>
+
+	</div>
+</div>
+
+<script type="text/javascript">
+	jQuery(document).ready(function () {
+
+		template.previewTemplate();
+
+		jQuery(document).on("change", "#jform_sample_template", function () {
+			template.loadDefaultTemplate(this.value);
+		});
+	});
+</script>
