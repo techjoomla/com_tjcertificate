@@ -34,6 +34,8 @@ class JFormFieldGetTemplateList extends JFormFieldList
 
 		$client = $this->getAttribute('client');
 
+		$options[] = JHtml::_('select.option', '', Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FIELD_SELECT'));
+
 		// Get Private/Created by logged-in user's templates
 		if ($user->id)
 		{
