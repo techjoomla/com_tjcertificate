@@ -32,6 +32,8 @@ class JFormFieldGetTemplateList extends JFormFieldList
 		$user = JFactory::getUser();
 		$db = JFactory::getDbo();
 
+		$client = $this->getAttribute('client');
+
 		// Get Private/Created by logged-in user's templates
 		if ($user->id)
 		{
@@ -43,6 +45,11 @@ class JFormFieldGetTemplateList extends JFormFieldList
 			$query->where($db->quoteName('state') . ' = ' . (int) 1);
 			$query->where($db->quoteName('is_public') . ' = ' . (int) 1);
 			$query->where($db->quoteName('created_by') . ' = ' . (int) $user->id);
+
+			if (!empty($client))
+			{
+				$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+			}
 
 			$db->setQuery($query);
 
@@ -67,6 +74,11 @@ class JFormFieldGetTemplateList extends JFormFieldList
 		$query->from('#__tj_certificate_templates');
 		$query->where($db->quoteName('state') . ' = ' . (int) 1);
 		$query->where($db->quoteName('is_public') . ' = ' . (int) 2);
+
+		if (!empty($client))
+		{
+			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		}
 
 		$db->setQuery($query);
 
