@@ -90,8 +90,16 @@ class TjCertificateViewTemplates extends HtmlView
 	 */
 	public function display($tpl = null)
 	{
+		$app  = Factory::getApplication();
+		$client = $app->input->get('client', "");
+
 		// Get state
 		$this->state = $this->get('State');
+
+		if (!empty($client))
+		{
+			$this->state->set('filter.client', $client);
+		}
 
 		// This calls model function getItems()
 		$this->items = $this->get('Items');

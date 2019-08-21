@@ -150,7 +150,12 @@ if ( $saveOrder )
 									?>
 								</td>
 								<td class="center">
-									<?php echo HTMLHelper::_('grid.id', $i, $item->id); ?>
+									<?php
+										if ($canEditOwn || $canEdit)
+										{
+											echo HTMLHelper::_('grid.id', $i, $item->id);
+										}
+									?>
 								</td>
 								<td class="center">
 									<?php echo HTMLHelper::_('jgrid.published', $item->state, $i, 'templates.', $canChange, 'cb'); ?>

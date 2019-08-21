@@ -12,6 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\Factory;
 
 /**
  * Methods supporting a list of records.
@@ -44,6 +45,28 @@ class TjCertificateModelTemplates extends ListModel
 		}
 
 		parent::__construct($config);
+	}
+
+	/**
+	 * Method to auto-populate the model state.
+	 *
+	 * Note. Calling getState in this method will result in recursion.
+	 *
+	 * @param   string  $ordering   Ordering
+	 * @param   string  $direction  Ordering dir
+	 *
+	 * @since    1.6
+	 *
+	 * @return  void
+	 */
+	protected function populateState($ordering = 'ct.ordering', $direction = 'desc')
+	{
+		$app = Factory::getApplication();
+
+		$client = $app->getUserStateFromRequest($this->context . '.filter.client', 'client');
+		$this->setState('filter.client', $client);
+
+		parent::populateState($ordering, $direction);
 	}
 
 	/**
