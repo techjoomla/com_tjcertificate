@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS `#__tj_certificate_templates` (
   `title` varchar(150) NOT NULL,
   `body` text NOT NULL,
   `template_css` text NULL,
-  `replacement_tags` text NULL,
   `client` varchar(100) NOT NULL COMMENT 'e.g. com_jticketing.event, com_tjlms.course',
   `ordering` int(11) NOT NULL DEFAULT '0',
   `state` tinyint(3) NOT NULL,

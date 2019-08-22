@@ -31,8 +31,6 @@ class TjCertificateTemplate extends CMSObject
 
 	public $template_css = "";
 
-	public $replacement_tags = "";
-
 	public $client = "";
 
 	public $ordering = 0;

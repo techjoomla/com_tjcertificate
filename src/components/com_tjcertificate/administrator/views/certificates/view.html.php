@@ -130,7 +130,7 @@ class TjCertificateViewCertificates extends HtmlView
 		JToolBarHelper::title(Text::_('COM_TJCERTIFICATE_VIEW_CERTIFICATES'), '');
 		$canDo = $this->canDo;
 
-		if ($canDo->get('core.create'))
+		/*if ($canDo->get('core.create'))
 		{
 			JToolbarHelper::addNew('certificate.add');
 		}
@@ -154,6 +154,7 @@ class TjCertificateViewCertificates extends HtmlView
 			JToolbarHelper::deleteList('JGLOBAL_CONFIRM_DELETE', 'certificates.delete', 'JTOOLBAR_DELETE');
 			JToolbarHelper::divider();
 		}
+		*/
 
 		if ($canDo->get('core.admin') || $canDo->get('core.options'))
 		{

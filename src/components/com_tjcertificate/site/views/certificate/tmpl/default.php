@@ -11,51 +11,66 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 
-?>
-<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate'); ?>" method="post" name="adminForm" id="adminForm">
-	<div class="btn-wrapper input-append">
-		<input type="text" name="certificate" id="certificate"
-		value="<?php echo $this->uniqueCertificateId; ?>" placeholder="Enter Certificate Id">
-		<button type="submit" class="btn hasTooltip" title="" aria-label="Search" data-original-title="Search">
-			<span class="icon-search" aria-hidden="true"></span>
-		</button>
-	</div>
-</form>
+if ($this->showSearchBox)
+{
+	?>
+	<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate'); ?>" method="post" name="adminForm" id="adminForm">
+		<div class="btn-wrapper input-append">
+			<input type="text" name="certificate" id="certificate"
+			value="<?php echo $this->uniqueCertificateId; ?>" placeholder="Enter Certificate Id">
+			<button type="submit" class="btn hasTooltip" title="" aria-label="Search" data-original-title="Search">
+				<span class="icon-search" aria-hidden="true"></span>
+			</button>
+		</div>
+	</form>
+	<?php
+}
 
-<?php
 if ($this->certificate)
 {
-?>
-<div class="techjoomla-bootstrap">
-	<div class="table-responsive">
-		<table cellpadding="5">
-			<tr>
-				<td>
-					<input type="button" class="btn btn-blue" onclick="printCertificate('certificateContent')"
-					value="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_PRINT');?>" />
-				</td>
-				<?php
-				if ($this->certificate->getDownloadUrl())
-				{
-					?>
-					<td>
-						<a class="btn btn-primary btn-medium" href="<?php echo $this->certificate->getDownloadUrl();?>">
-							<?php
-								echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_PDF');
+	if ($this->certificate->user_id == Factory::getUser()->id)
+	{
+		?>
+		<div class="techjoomla-bootstrap">
+			<div class="table-responsive">
+				<table cellpadding="5">
+					<tr>
+						<?php
+						if ($this->tmpl != 'component')
+						{
 							?>
-						</a>
-					</td>
-					<?php
-				}
-				?>
-			</tr>
-		</table>
-	</div>
-<div>
-
+							<td>
+								<input type="button" class="btn btn-blue" onclick="printCertificate('certificateContent')"
+								value="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_PRINT');?>" />
+							</td>
+							<?php
+						}
+						?>
+						<?php
+						if ($this->certificate->getDownloadUrl())
+						{
+							?>
+							<td>
+								<a class="btn btn-primary btn-medium" href="<?php echo $this->certificate->getDownloadUrl();?>">
+									<?php
+										echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_PDF');
+									?>
+								</a>
+							</td>
+							<?php
+						}
+						?>
+					</tr>
+				</table>
+			</div>
+		<div>
+		<?php
+	}
+?>
 <div id="certificateContent">
 <?php
 	echo $this->certificate->generated_body;

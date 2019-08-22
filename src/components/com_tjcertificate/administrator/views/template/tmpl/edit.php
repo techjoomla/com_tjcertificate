@@ -31,6 +31,13 @@ JHtml::_('script', 'com_tjcertificate/template.min.js', $options);
 $app = Factory::getApplication();
 $input = $app->input;
 
+$client = $input->getCmd('client', '');
+
+if (!empty($client))
+{
+	$client = '&client=' . $client;
+}
+
 // In case of modal
 $isModal = $input->get('layout') == 'modal' ? true : false;
 $layout  = $isModal ? 'modal' : 'edit';
@@ -49,7 +56,7 @@ Factory::getDocument()->addScriptDeclaration('
 ?>
 <div class="tj-page">
 	<div class="row-fluid">
-		<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=template&layout=edit&id=' . (int) $this->item->id, false);
+		<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=template&layout=edit&id=' . (int) $this->item->id . $client, false);
 		?>" method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
 			<div class="form-vertical">
 				<?php echo HTMLHelper::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
@@ -59,7 +66,6 @@ Factory::getDocument()->addScriptDeclaration('
 						<?php echo $this->form->renderField('title'); ?>
 						<?php echo $this->form->renderField('sample_template'); ?>
 						<?php echo $this->form->renderField('body'); ?>
-						<?php echo $this->form->renderField('replacement_tags'); ?>
 						<?php echo $this->form->renderField('client'); ?>
 						<?php echo $this->form->renderField('is_public'); ?>
 						<?php echo $this->form->renderField('state'); ?>
@@ -97,24 +103,7 @@ Factory::getDocument()->addScriptDeclaration('
 								</tr>
 							</thead>
 							<tbody>
-								<?php
 
-								$replacementTags = $this->form->getValue('replacement_tags');
-
-								if (!empty($replacementTags))
-								{
-									$replacementTags = json_decode($replacementTags);
-
-									foreach ($replacementTags as $tags)
-									{
-									?>
-									<tr>
-										<td scope="row"><?php echo $this->escape($tags->name); ?></td>
-										<td><?php echo $this->escape($tags->description); ?></td>
-									</tr>
-									<?php
-									}
-								} ?>
 							</tbody>
 						</table>
 					</div>

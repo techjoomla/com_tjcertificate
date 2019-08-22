@@ -37,15 +37,6 @@
 			rows="10"
 		/>
 
-		<field name="replacement_tags"
-			type="hidden"
-			label="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_LBL_REPLACEMENT_TAGS"
-			description="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_DESC_REPLACEMENT_TAGS"
-			rows="10"
-			cols="80"
-			filter="safehtml"
-		/>
-
 		<field name="client"
 			type="text"
 			label="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_LBL_CLIENT"
@@ -56,12 +47,14 @@
 
 		<field
 			name="is_public"
-			type="list"
+			type="radio"
 			filter="int"
 			label="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_LBL_PUBLIC"
 			description="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_DESC_PUBLIC"
 			default="1"
-			size="1">
+			size="1"
+			class="btn-group btn-group-yesno"
+			>
 				<option value="1">COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_PRIVATE</option>
 				<option value="2">COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_PUBLIC</option>
 		</field>

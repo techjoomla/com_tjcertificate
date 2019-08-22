@@ -31,6 +31,15 @@ if ( $saveOrder )
 	$saveOrderingUrl = 'index.php?option=com_tjcertificate&task=templates.saveOrderAjax';
 	HTMLHelper::_('sortablelist.sortable', 'templateList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }
+
+$client = $this->escape($this->state->get('filter.client'));
+
+$clientUrlAppend = '';
+
+if (!empty($client))
+{
+	$clientUrlAppend = '&client=' . $client;
+}
 ?>
 
 <div class="tj-page">
@@ -173,7 +182,7 @@ if ( $saveOrder )
 										{
 											?>
 											<a class="hasTooltip" href="
-											<?php echo Route::_('index.php?option=com_tjcertificate&task=template.edit&id=' . $item->id); ?>" title="
+											<?php echo Route::_('index.php?option=com_tjcertificate&task=template.edit&id=' . $item->id . $client); ?>" title="
 											<?php echo Text::_('JACTION_EDIT'); ?>">
 											<?php echo $this->escape($item->title); ?></a>
 											<?php
@@ -201,7 +210,7 @@ if ( $saveOrder )
 					<?php
 					}
 					?>
-
+					<input type="hidden" name="tmplClient" value="<?php echo $client; ?>" />
 					<input type="hidden" name="task" value="" />
 					<input type="hidden" name="boxchecked" value="0" />
 					<?php echo HTMLHelper::_('form.token'); ?>

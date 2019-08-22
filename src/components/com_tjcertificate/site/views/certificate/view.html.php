@@ -28,6 +28,8 @@ class TjCertificateViewCertificate extends JViewLegacy
 
 	public $uniqueCertificateId = null;
 
+	public $showSearchBox = null;
+
 	/**
 	 * Display the view
 	 *
@@ -40,7 +42,10 @@ class TjCertificateViewCertificate extends JViewLegacy
 	public function display($tpl = null)
 	{
 		$input = Factory::getApplication()->input;
+
 		$this->uniqueCertificateId = $input->get('certificate', '', 'STRING');
+		$this->showSearchBox       = $input->getInt('show_search', 1);
+		$this->tmpl                = $input->get('tmpl', '', 'STRING');
 
 		if (!empty($this->uniqueCertificateId))
 		{

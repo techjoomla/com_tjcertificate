@@ -209,13 +209,15 @@ class TjCertificateCertificate extends CMSObject
 	/**
 	 * Method to get certificate url.
 	 *
-	 * @param   boolean  $popUp  Url open in popup
+	 * @param   boolean  $popUp          Url open in popup
+	 *
+	 * @param   boolean  $showSearchBox  Show search box
 	 *
 	 * @return  string Certificate url.
 	 *
 	 * @since 1.0
 	 */
-	public function getUrl($popUp = false)
+	public function getUrl($popUp = false, $showSearchBox = true)
 	{
 		$url = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->unique_certificate_id;
 
@@ -223,6 +225,8 @@ class TjCertificateCertificate extends CMSObject
 		{
 			$url .= '&tmpl=component';
 		}
+
+		$url .= '&show_search=' . $showSearchBox;
 
 		return Route::_($url);
 	}
@@ -332,7 +336,7 @@ class TjCertificateCertificate extends CMSObject
 
 		$table->load(array('unique_certificate_id' => $uniqueCertificateId));
 
-		if (empty($table->id))
+		if (empty($table->id) || $table->state != 1)
 		{
 			return false;
 		}
@@ -444,7 +448,7 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @since    1.0.0
 	 */
-	protected function generateUniqueCertId($randomStringLength = 0, $fixedLength = false)
+	protected function generateUniqueCertId($randomStringLength = 0, $fixedLength = true)
 	{
 		if (empty($randomStringLength) || $randomStringLength > 30 || $randomStringLength < 0)
 		{

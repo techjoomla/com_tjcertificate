@@ -24,6 +24,29 @@ use Joomla\CMS\Table\Table;
 class TjCertificateModelTemplate extends AdminModel
 {
 	/**
+	 * Method to get a template.
+	 *
+	 * @param   integer  $pk  An optional id of the object to get, otherwise the id from the model state is used.
+	 *
+	 * @return  mixed    Template data object on success, false on failure.
+	 *
+	 * @since   1.6
+	 */
+	public function getItem($pk = null)
+	{
+		if ($result = parent::getItem($pk))
+		{
+			// Prime required properties.
+			if (empty($result->id))
+			{
+				$result->client = $this->getState('template.client');
+			}
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Method to get the record form.
 	 *
 	 * @param   array    $data      Data for the form.
@@ -138,6 +161,9 @@ class TjCertificateModelTemplate extends AdminModel
 		$jinput = Factory::getApplication()->input;
 		$id = ($jinput->get('id'))?$jinput->get('id'):$jinput->get('id');
 		$this->setState('template.id', $id);
+
+		$client = $jinput->get('client', '');
+		$this->setState('template.client', $client);
 	}
 
 	/**
@@ -155,27 +181,8 @@ class TjCertificateModelTemplate extends AdminModel
 		$return = true;
 		$return = parent::validate($form, $data);
 
-		// Check if the replacement_tags value is in json format.
-		if (!empty($data['replacement_tags']) && !$this->isJSON($data['replacement_tags']))
-		{
-			$this->setError(Text::_("COM_TJCERTIFICATE_ERROR_INVALID_JSON_FORMAT"));
-			$return = false;
-		}
-
 		$data['template_css'] = trim($data['template_css']);
 
 		return $return;
-	}
-
-	/**
-	 * Check if given string in JSON
-	 *
-	 * @param   Object  $string  string
-	 *
-	 * @return boolean
-	 */
-	public function isJSON($string)
-	{
-		return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
 	}
 }

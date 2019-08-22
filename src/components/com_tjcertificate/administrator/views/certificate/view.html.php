@@ -74,6 +74,15 @@ class TjCertificateViewCertificate extends HtmlView
 		$this->input = Factory::getApplication()->input;
 		$this->canDo = JHelperContent::getActions('com_tjcertificate', 'certificate', $this->item->id);
 
+		$layout = $this->input->get('layout', 'edit');
+
+		if ($layout == 'edit')
+		{
+			JError::raiseNotice(403, Text::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EDIT_NOT_PERMITTED'));
+
+			return false;
+		}
+
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
