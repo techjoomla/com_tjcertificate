@@ -5,4 +5,21 @@
 			<![CDATA[COM_TJCERTIFICATE_CERTIFICATE_MY_VIEW_DEFAULT_DESC]]>
 		</message>
 	</layout>
+	<!-- Add fields to the request variables for the layout. -->
+    <fields name="request">
+        <fieldset name="request"
+        >
+            <field
+                name="client"
+                type="text"
+                label="COM_TJCERTIFICATE_CERTIFICATE_FIELDSET_CLIENT_SELECT_LABEL"
+                description="COM_TJCERTIFICATE_CERTIFICATE_FIELDSET_CLIENT_SELECT_DESC"
+                required="false"
+                select="true"
+                new="true"
+                edit="true"
+                clear="true"
+            />
+        </fieldset>
+    </fields>
 </metadata>

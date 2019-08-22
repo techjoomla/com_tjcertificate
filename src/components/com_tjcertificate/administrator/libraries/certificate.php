@@ -253,11 +253,13 @@ class TjCertificateCertificate extends CMSObject
 	/**
 	 * Method to get certificate download url.
 	 *
+	 * @param   boolean  $download  Download as attachment for emails
+	 *
 	 * @return  boolean|string Certificate pdf url.
 	 *
 	 * @since 1.0
 	 */
-	public function pdfDownload()
+	public function pdfDownload($download = 0)
 	{
 		if (JFile::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
 		{
@@ -312,6 +314,24 @@ class TjCertificateCertificate extends CMSObject
 
 			// Certificate name
 			$certificatePdfName = File::makeSafe(Text::sprintf("COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_FILE_NAME", $this->unique_certificate_id) . ".pdf");
+
+			// Download as attachment for emails
+			if ($download == 1)
+			{
+				file_put_contents($certificatePdfName, $domPDF->output());
+
+				header('Content-Description: File Transfer');
+				header('Cache-Control: public');
+				header('Content-Type: application/pdf');
+				header("Content-Transfer-Encoding: binary");
+				header('Content-Disposition: attachment; filename="' . basename($certificatePdfName) . '"');
+				header('Content-Length: ' . filesize($certificatePdfName));
+
+				ob_clean();
+				flush();
+				readfile($certificatePdfName);
+				jexit();
+			}
 
 			$domPDF->stream($certificatePdfName, array("Attachment" => 1));
 

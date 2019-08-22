@@ -9,6 +9,16 @@
 			description="COM_TJCERTIFICATE_CERTIFICATE_FILTER_SEARCH_LABEL_DESC"
 			hint="JSEARCH_FILTER"
 		/>
+
+		<field name="client"
+			type="getclientlist"
+			filter="safehtml"
+			label="COM_TJCERTIFICATE_CERTIFICATE_FILTER_CERTIFICATE_CLIENT"
+			description="COM_TJCERTIFICATE_CERTIFICATE_FILTER_DESC_CERTIFICATE_CLIENT"
+			addfieldpath="/components/com_tjcertificate/models/fields"
+			clientByUser="1"
+			onchange="this.form.submit();" />
+
 		<input type="hidden" name="form_submited" value="1"/>
 	</fields>
 
@@ -22,3 +32,4 @@
 		/>
 	</fields>
 </form>
+
