@@ -49,7 +49,7 @@ class TjCertificateControllerTemplate extends FormController
 				return;
 			}
 
-			$templatePath = JPATH_SITE . "/components/com_tjcertificate/templates/" . $defaultTemplate;
+			$templatePath = JPATH_SITE . "/media/com_tjcertificate/templates/" . $defaultTemplate;
 
 			if (!JFolder::exists($templatePath))
 			{

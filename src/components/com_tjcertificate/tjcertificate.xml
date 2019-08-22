@@ -35,7 +35,6 @@
     <folder>views</folder>
     <folder>models</folder>
     <folder>languages</folder>
-    <folder>templates</folder>
   </files>
   <languages folder="site">
     <language tag="en-GB">languages/en-GB/en-GB.com_tjcertificate.ini</language>
@@ -69,6 +68,7 @@
   </administration>
   <media destination="com_tjcertificate" folder="media">
     <folder>js</folder>
+    <folder>templates</folder>
   </media>
   <scriptfile>script.tjcertificate.php</scriptfile>
 </extension>
