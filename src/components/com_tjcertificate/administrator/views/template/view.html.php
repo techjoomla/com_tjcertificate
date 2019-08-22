@@ -58,6 +58,13 @@ class TjCertificateViewTemplate extends HtmlView
 	protected $canDo;
 
 	/**
+	 * Replacement tags based on clients
+	 *
+	 * @var  JObject
+	 */
+	protected $replacementTags;
+
+	/**
 	 * Display the view
 	 *
 	 * @param   string  $tpl  Template name
@@ -79,6 +86,12 @@ class TjCertificateViewTemplate extends HtmlView
 			JError::raiseNotice(403, JText::_('COM_TJCERTIFICATE_ERROR_CANNOT_ACCESS_PRIVATE_TEMPLATE'));
 
 			return false;
+		}
+
+		if (!empty($this->item->client))
+		{
+			// Fetch replacement tags for the client
+			$this->replacementTags = TjCertificateTemplate::loadTemplateReplacementsByClient($this->item->client);
 		}
 
 		// Check for errors.

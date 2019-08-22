@@ -103,7 +103,22 @@ Factory::getDocument()->addScriptDeclaration('
 								</tr>
 							</thead>
 							<tbody>
+								<?php
 
+								if (!empty($this->replacementTags))
+								{
+									$this->replacementTags = json_decode($this->replacementTags);
+
+									foreach ($this->replacementTags as $tags)
+									{
+									?>
+									<tr>
+										<td scope="row"><?php echo $this->escape($tags->name); ?></td>
+										<td><?php echo $this->escape($tags->description); ?></td>
+									</tr>
+									<?php
+									}
+								} ?>
 							</tbody>
 						</table>
 					</div>

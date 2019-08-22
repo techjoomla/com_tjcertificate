@@ -245,4 +245,26 @@ class TjCertificateTemplate extends CMSObject
 
 		return false;
 	}
+
+	/**
+	 * Function to get the JSON formated template replacement tags
+	 *
+	 * @param   string  $client  Client
+	 *
+	 * @return  boolean|string
+	 */
+	public static function loadTemplateReplacementsByClient($client)
+	{
+		if (empty($client))
+		{
+			return false;
+		}
+
+		$component = explode(".", $client)[0];
+
+		if (JFile::exists(JPATH_ADMINISTRATOR . '/components/' . $component . '/certificateReplacements.json'))
+		{
+			return file_get_contents(JPATH_ADMINISTRATOR . '/components/' . $component . '/certificateReplacements.json');
+		}
+	}
 }

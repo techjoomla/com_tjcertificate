@@ -182,7 +182,7 @@ if (!empty($client))
 										{
 											?>
 											<a class="hasTooltip" href="
-											<?php echo Route::_('index.php?option=com_tjcertificate&task=template.edit&id=' . $item->id . $client); ?>" title="
+											<?php echo Route::_('index.php?option=com_tjcertificate&task=template.edit&id=' . $item->id . $clientUrlAppend); ?>" title="
 											<?php echo Text::_('JACTION_EDIT'); ?>">
 											<?php echo $this->escape($item->title); ?></a>
 											<?php
