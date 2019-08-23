@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
-	<fieldset>
+	<fieldset addfieldpath="/administrator/components/com_tjcertificate/models/fields">
 		<field name="id" type="hidden"/>
 
 		<field name="title"
@@ -13,15 +13,10 @@
 
 		<field
 			name="sample_template"
-			type="folderlist"
+			type="getsampletemplatelist"
 			label="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_LBL_SAMPLE_TEMPLATE"
 			description="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_DESC_SAMPLE_TEMPLATE"
-			directory="media/com_tjcertificate/templates"
-			hide_none="true"
-			hide_default="true"
-			>
-			<option value="">COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_SELECT_SAMPLE_TEMPLATE</option>
-		</field>
+		/>
 
 		<field name="body"
 			type="editor"

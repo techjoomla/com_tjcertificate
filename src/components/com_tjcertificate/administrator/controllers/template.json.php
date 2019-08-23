@@ -40,7 +40,7 @@ class TjCertificateControllerTemplate extends FormController
 			$app   = Factory::getApplication();
 			$input = $app->input;
 
-			$defaultTemplate = $input->get('defaultTemplate', "");
+			$defaultTemplate = $input->get('defaultTemplate', "", 'string');
 
 			if (empty($defaultTemplate))
 			{
@@ -49,7 +49,11 @@ class TjCertificateControllerTemplate extends FormController
 				return;
 			}
 
-			$templatePath = JPATH_SITE . "/media/com_tjcertificate/templates/" . $defaultTemplate;
+			$temlateDetails = explode(":", $defaultTemplate);
+			$component      = $temlateDetails[0];
+			$templateFolder = $temlateDetails[1];
+
+			$templatePath = JPATH_ROOT . "/media/" . $component . "/templates/" . $templateFolder;
 
 			if (!JFolder::exists($templatePath))
 			{

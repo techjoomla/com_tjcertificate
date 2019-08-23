@@ -38,7 +38,7 @@ $clientUrlAppend = '';
 
 if (!empty($client))
 {
-	$clientUrlAppend = '&client=' . $client;
+	$clientUrlAppend = '&tmplClient=' . $client;
 }
 ?>
 
