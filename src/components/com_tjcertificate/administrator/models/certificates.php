@@ -113,6 +113,14 @@ class TjCertificateModelCertificates extends ListModel
 			$query->where($db->quoteName('ci.client') . ' = ' . $db->quote($client));
 		}
 
+		// Filter by client id
+		$clientId = $this->getState('filter.client_id');
+
+		if (!empty($clientId))
+		{
+			$query->where($db->quoteName('ci.client_id') . ' = ' . $db->quote($clientId));
+		}
+
 		// Filter by user id
 		$userId = $this->getState('filter.user_id');
 

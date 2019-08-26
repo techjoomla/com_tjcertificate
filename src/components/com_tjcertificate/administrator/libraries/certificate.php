@@ -207,6 +207,60 @@ class TjCertificateCertificate extends CMSObject
 	}
 
 	/**
+	 * Method to get issued certificate list
+	 *
+	 * @param   integer  $templateId  Template Id
+	 *
+	 * @param   string   $client      Client e.g. com_tjlms.course
+	 *
+	 * @param   integer  $clientId    Specific client id
+	 *
+	 * @param   integer  $userId      User Id
+	 *
+	 * @param   integer  $limitStart  Limit start or page number
+	 *
+	 * @param   integer  $limit       Number of records
+	 *
+	 * @return  boolean|array Issued certificate array
+	 *
+	 * @since 1.0
+	 */
+	public static function getCertificate($templateId = 0, $client = '', $clientId = 0, $userId = 0, $limitStart = 0, $limit = 20)
+	{
+		if (empty($templateId) && empty($client))
+		{
+			return false;
+		}
+
+		$model = TjCertificateFactory::model('Certificates', array('ignore_request' => true));
+
+		if (!empty($templateId))
+		{
+			$model->setState('filter.certificate_template_id', $templateId);
+		}
+
+		if (!empty($client))
+		{
+			$model->setState('filter.client', $client);
+		}
+
+		if (!empty($clientId))
+		{
+			$model->setState('filter.client_id', $clientId);
+		}
+
+		if (!empty($userId))
+		{
+			$model->setState('filter.user_id', $userId);
+		}
+
+		$model->setState('list.limit', $limit);
+		$model->setState('list.start', $limitStart);
+
+		return $model->getItems();
+	}
+
+	/**
 	 * Method to get certificate url.
 	 *
 	 * @param   boolean  $popUp          Url open in popup
