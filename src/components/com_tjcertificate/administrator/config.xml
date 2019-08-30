@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <fieldset name="component" label="COM_TJCERTIFICATE_GENEARAL_SETINGS" description="" >
+		<field
+			name="certificate_prefix"
+			type="text"
+			default="CERT"
+			maxlength="10"
+			label="COM_TJCERTIFICATE_CERTIFICATE_PREFIX_LABEL"
+			description="COM_TJCERTIFICATE_CERTIFICATE_PREFIX_DESC"
+		/>
+		<field
+			name="certificate_random_string_length"
+			type="text"
+			default="30"
+			hint="Maxlength is 50"
+			label="COM_TJCERTIFICATE_CERTIFICATE_RANDOM_STRING_LENTGH_LABEL"
+			description="COM_TJCERTIFICATE_CERTIFICATE_RANDOM_STRING_LENTGH_DESC"
+		/>
+		<field
+			name="certificate_fixed_random_string_length"
+			type="hidden"
+			label="COM_TJCERTIFICATE_CERTIFICATE_FIXED_RANDOM_STRING_LENTGH_LABEL"
+			description="COM_TJCERTIFICATE_CERTIFICATE_FIXED_RANDOM_STRING_LENTGH_DESC"
+			class="btn-group btn-group-yesno"
+			default="1"
+			filter="integer"
+			>
+			<!-- <option value="1">COM_TJCERTIFICATE_CERTIFICATE_FIXED_RANDOM_STRING_LENTGH_FIXED</option>
+			<option value="0">COM_TJCERTIFICATE_CERTIFICATE_FIXED_RANDOM_STRING_LENTGH_RANDOM</option> -->
+		</field>
+	</fieldset>
+
+	<!-- Permission setting  -->
+	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
+		<field name="rules" type="rules" label="JCONFIG_PERMISSIONS_LABEL" class="inputbox" validate="rules" filter="rules" component="com_tjcertificate" section="component" />
+	</fieldset>
+</config>
