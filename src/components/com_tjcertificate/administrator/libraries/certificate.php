@@ -738,6 +738,8 @@ class TjCertificateCertificate extends CMSObject
 
 			// Save certificate
 			$this->save();
+
+			return self::getInstance($this->id);
 		}
 		catch (\Exception $e)
 		{
