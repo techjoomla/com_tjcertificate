@@ -40,16 +40,14 @@ class TjCertificateRouter extends JComponentRouterBase
 		{
 			$segments[] = 'action';
 			$taskParts  = explode('.', $query['task']);
-			$segments[] = implode('/', $taskParts);
 			$view       = $taskParts[0];
+			$segments[] = $view;
+			$segments[] = $taskParts[1];
 
 			if ($query['task'] == 'certificate.download')
 			{
 				$segments[] = $query['certificate'];
-				$segments[] = $query['store'];
-
 				unset($query['certificate']);
-				unset($query['store']);
 			}
 
 			unset($query['task']);
@@ -67,29 +65,9 @@ class TjCertificateRouter extends JComponentRouterBase
 					$segments[] = $query['certificate'];
 					unset($query['certificate']);
 				}
-
-				if (isset($query['tmpl']))
-				{
-					$segments[] = $query['tmpl'];
-					unset($query['tmpl']);
-				}
 			}
 
 			unset($query['view']);
-		}
-
-		if (isset($query['id']))
-		{
-			if ($view !== null)
-			{
-				$segments[] = $query['id'];
-			}
-			else
-			{
-				$segments[] = $query['id'];
-			}
-
-			unset($query['id']);
 		}
 
 		return $segments;
@@ -125,11 +103,6 @@ class TjCertificateRouter extends JComponentRouterBase
 					{
 						$vars['certificate'] = $segments[2];
 					}
-
-					if (isset($segments[3]))
-					{
-						$vars['store'] = true;
-					}
 				}
 
 			break;
@@ -137,11 +110,6 @@ class TjCertificateRouter extends JComponentRouterBase
 			case 'certificate':
 
 				$vars['certificate'] = $segments[0];
-
-				if (isset($segments[1]))
-				{
-					$vars['tmpl'] = $segments[1];
-				}
 
 			break;
 
