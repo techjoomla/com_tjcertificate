@@ -11,6 +11,6 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-echo $this->certificate->pdfDownload();
-
-die;
+use Joomla\Registry\Registry;
+use Joomla\Utilities\ArrayHelper;
+JLoader::import('components.com_tjcertificate.controllers.certificate', JPATH_ADMINISTRATOR);

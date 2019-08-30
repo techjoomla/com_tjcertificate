@@ -17,7 +17,7 @@ use Joomla\CMS\Factory;
  *
  * @since  1.0.0
  */
-class JFormFieldGetSampleTemplateList extends JFormFieldList
+class JFormFieldSampleTemplates extends JFormFieldList
 {
 	/**
 	 * Method to get a list of options for a list input.
@@ -46,7 +46,7 @@ class JFormFieldGetSampleTemplateList extends JFormFieldList
 			$component = explode(".", $client)[0];
 
 			// Get client based sample templates
-			$clientSampleTemplatePath = JPATH_ROOT . "/media/" . $component . "/templates";
+			$clientSampleTemplatePath = MEDIA_ROOT . '/' . $component . "/templates";
 
 			if (JFolder::exists($clientSampleTemplatePath))
 			{
@@ -67,14 +67,14 @@ class JFormFieldGetSampleTemplateList extends JFormFieldList
 						// Remove the root part and the leading /
 						$folder = trim(str_replace($clientSampleTemplatePath, '', $folder), '/');
 
-						$options[] = JHtml::_('select.option', $component . ':' . $folder, $folder);
+						$options[] = JHtml::_('select.option', $component . '.' . $folder, $folder);
 					}
 				}
 			}
 		}
 
 		// Get default sample templates
-		$defaultSampleTemplatePath = JPATH_ROOT . "/media/com_tjcertificate/templates";
+		$defaultSampleTemplatePath = TJ_CERTIFICATE_DEFAULT_TEMPLATE;
 
 		if (JFolder::exists($defaultSampleTemplatePath))
 		{
@@ -93,7 +93,7 @@ class JFormFieldGetSampleTemplateList extends JFormFieldList
 					// Remove the root part and the leading /
 					$folder = trim(str_replace($defaultSampleTemplatePath, '', $folder), '/');
 
-					$options[] = JHtml::_('select.option', 'com_tjcertificate:' . $folder, $folder);
+					$options[] = JHtml::_('select.option', 'com_tjcertificate.' . $folder, $folder);
 				}
 			}
 		}

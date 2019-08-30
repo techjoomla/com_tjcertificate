@@ -33,21 +33,23 @@ class TjCertificateCertificate extends CMSObject
 
 	public $unique_certificate_id = "";
 
-	public $certificate_template_id = 0;
+	private $certificate_template_id = 0;
 
 	public $generated_body = "";
 
-	public $client = "";
+	private $client = "";
 
-	public $client_id = 0;
+	private $client_id = 0;
 
-	public $user_id = 0;
+	private $user_id = 0;
 
 	public $state = 1;
 
 	public $issued_on = null;
 
-	public $expired_on = null;
+	private $expired_on = null;
+
+	private $comment = null;
 
 	public $defaultCertPrefix = "CERT";
 
@@ -66,6 +68,162 @@ class TjCertificateCertificate extends CMSObject
 		{
 			$this->load($id);
 		}
+	}
+
+	/**
+	 * Set certficate template id
+	 *
+	 * @param   integer  $value  Value to set certificate template.
+	 *
+	 * @return  void.
+	 *
+	 * @since   1.0.0
+	 */
+	public function _setCertificateTemplate($value = 0)
+	{
+		$this->certificate_template_id = $value;
+	}
+
+	/**
+	 * Get certficate template id
+	 *
+	 * @return  Integer Certificate template id.
+	 *
+	 * @since   1.0.0
+	 */
+	public function _getCertificateTemplate()
+	{
+		return $this->certificate_template_id;
+	}
+
+	/**
+	 * Set client
+	 *
+	 * @param   integer  $value  Value to set client.
+	 *
+	 * @return  void.
+	 *
+	 * @since   1.0.0
+	 */
+	public function _setClient($value = '')
+	{
+		$this->client = $value;
+	}
+
+	/**
+	 * Get client
+	 *
+	 * @return  string client
+	 *
+	 * @since   1.0.0
+	 */
+	public function _getClient()
+	{
+		return $this->client;
+	}
+
+	/**
+	 * Set client Id
+	 *
+	 * @param   integer  $value  Value to set client id.
+	 *
+	 * @return  void.
+	 *
+	 * @since   1.0.0
+	 */
+	public function _setClientId($value = 0)
+	{
+		$this->client_id = $value;
+	}
+
+	/**
+	 * Get client Id
+	 *
+	 * @return  string client id
+	 *
+	 * @since   1.0.0
+	 */
+	public function _getClientId()
+	{
+		return $this->client_id;
+	}
+
+	/**
+	 * Set User Id
+	 *
+	 * @param   integer  $value  Value to set user id.
+	 *
+	 * @return  void.
+	 *
+	 * @since   1.0.0
+	 */
+	public function _setUserId($value = 0)
+	{
+		$this->user_id = $value;
+	}
+
+	/**
+	 * Get user Id
+	 *
+	 * @return  string user id
+	 *
+	 * @since   1.0.0
+	 */
+	public function _getUserId()
+	{
+		return $this->user_id;
+	}
+
+	/**
+	 * Set expiry date
+	 *
+	 * @param   string  $value  expiry date.
+	 *
+	 * @return  void.
+	 *
+	 * @since   1.0.0
+	 */
+	public function _setExpiry($value = null)
+	{
+		$this->expired_on = $value;
+	}
+
+	/**
+	 * Get user Id
+	 *
+	 * @return  string user id
+	 *
+	 * @since   1.0.0
+	 */
+	public function _getExpiry()
+	{
+		return $this->expired_on;
+	}
+
+	/**
+	 * Set comment
+	 *
+	 * @param   string  $value  comment.
+	 *
+	 * @return  void.
+	 *
+	 * @since   1.0.0
+	 */
+	public function _setComment($value = null)
+	{
+		$this->comment = $value;
+	}
+
+	/**
+	 * Get comment
+	 *
+	 * @return  string comment
+	 *
+	 * @since   1.0.0
+	 */
+	public function _getComment()
+	{
+		return $this->comment;
 	}
 
 	/**
@@ -111,9 +269,61 @@ class TjCertificateCertificate extends CMSObject
 			return false;
 		}
 
-		$this->setProperties($table->getProperties());
+		$getPrivateProperties = $this->_getPrivateProperties();
+
+		$getPublicProperties  = $this->_getPublicProperties();
+
+		$publicProperties = array ();
+
+		foreach ($getPublicProperties as $key => $value)
+		{
+			$publicProperties[$value->name] = '';
+		}
+
+		$tableProperties = $table->getProperties();
+
+		$setPublicProperties = array_intersect_key($tableProperties, $publicProperties);
+
+		// Set public properties
+		$this->setProperties($setPublicProperties);
+
+		// Set private properties
+		foreach ($getPrivateProperties as $key => $value)
+		{
+			$this->{$value->name} = $tableProperties[$value->name];
+		}
 
 		return true;
+	}
+
+	/**
+	 * Get private properties
+	 *
+	 * @return  object Reflection class object
+	 *
+	 * @since   1.0.0
+	 */
+	private function _getPrivateProperties()
+	{
+		// Get reflection class object. This will give all the information about the class
+		$reflection = new ReflectionClass($this);
+
+		return $reflection->getProperties(ReflectionProperty::IS_PRIVATE);
+	}
+
+	/**
+	 * Get public properties
+	 *
+	 * @return  object Reflection class object
+	 *
+	 * @since   1.0.0
+	 */
+	private function _getPublicProperties()
+	{
+		// Get reflection class object. This will give all the information about the class
+		$reflection = new ReflectionClass($this);
+
+		return $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
 	}
 
 	/**
@@ -128,7 +338,20 @@ class TjCertificateCertificate extends CMSObject
 	{
 		// Create the widget table object
 		$table = TjCertificateFactory::table("certificates");
-		$table->bind($this->getProperties());
+
+		// Get public properties with data
+		$properties = $this->getProperties();
+
+		// Add private properties as getProperties() function only fetches public properties
+		$getPrivateProperties = $this->_getPrivateProperties();
+
+		// Set private properties with data
+		foreach ($getPrivateProperties as $key => $value)
+		{
+			$properties[$value->name] = $this->{$value->name};
+		}
+
+		$table->bind($properties);
 
 		// Allow an exception to be thrown.
 		try
@@ -263,7 +486,7 @@ class TjCertificateCertificate extends CMSObject
 	/**
 	 * Method to get certificate url.
 	 *
-	 * @param   boolean  $popUp          Url open in popup
+	 * @param   array    $options        Url options
 	 *
 	 * @param   boolean  $showSearchBox  Show search box
 	 *
@@ -271,16 +494,21 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @since 1.0
 	 */
-	public function getUrl($popUp = false, $showSearchBox = true)
+	public function getUrl($options, $showSearchBox = true)
 	{
 		$url = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->unique_certificate_id;
 
-		if ($popUp)
+		$url .= '&show_search=' . $showSearchBox;
+
+		if ($options['popup'])
 		{
 			$url .= '&tmpl=component';
 		}
 
-		$url .= '&show_search=' . $showSearchBox;
+		if ($options['absolute'])
+		{
+			return JUri::root() . substr(Route::_($url), strlen(JUri::base(true)) + 1);
+		}
 
 		return Route::_($url);
 	}
@@ -288,15 +516,27 @@ class TjCertificateCertificate extends CMSObject
 	/**
 	 * Method to get certificate download url.
 	 *
+	 * @param   array  $options  Url options
+	 *
 	 * @return  boolean|string Certificate download url.
 	 *
 	 * @since 1.0
 	 */
-	public function getDownloadUrl()
+	public function getDownloadUrl($options)
 	{
 		if (JFile::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
 		{
-			$url = 'index.php?option=com_tjcertificate&view=certificate&layout=pdfdownload&certificate=' . $this->unique_certificate_id;
+			$url = 'index.php?option=com_tjcertificate&task=certificate.download&certificate=' . $this->unique_certificate_id;
+
+			if ($options['email'])
+			{
+				$url .= '&email=email';
+			}
+
+			if ($options['absolute'])
+			{
+				return JUri::root() . substr(Route::_($url), strlen(JUri::base(true)) + 1);
+			}
 
 			return Route::_($url);
 		}
@@ -315,6 +555,15 @@ class TjCertificateCertificate extends CMSObject
 	 */
 	public function pdfDownload($download = 0)
 	{
+		$app  = Factory::getApplication();
+		$user = Factory::getUser();
+
+		if (!$user->id || ($user->id != $this->user_id))
+		{
+			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_ERROR_SOMETHING_WENT_WRONG'), 'error');
+			$app->redirect('index.php');
+		}
+
 		if (JFile::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
 		{
 			jimport('joomla.filesystem.file');
@@ -434,7 +683,7 @@ class TjCertificateCertificate extends CMSObject
 	 * Method to issue certificate.
 	 *
 	 * @param   Array       $replacements  Array contains replacement.
-	 * @param   JParameter  $options       Object contains Jparameters like prefix, expiry_date.
+	 * @param   JParameter  $options       Object contains Jparameters like prefix.
 	 *
 	 * @return  boolean|object Certificate Object.
 	 *
@@ -468,24 +717,17 @@ class TjCertificateCertificate extends CMSObject
 		}
 
 		// Get expiry date option if available
-		$db               = Factory::getDbo();
-		$this->expired_on = $options->get('expiry_date', $db->getNullDate());
+		$db = Factory::getDbo();
 
-		// Save certificate first to generate certificate Id
-		$this->save();
-
-		// Get prefix option if available
-		$params = ComponentHelper::getParams('com_tjcertificate');
-		$this->defaultCertPrefix = $options->get('prefix', $params->get('certificate_prefix', $this->defaultCertPrefix));
-
-		// Get certificate random string config
-		$stringLength = $options->get('certificate_random_string_length', $params->get('certificate_random_string_length', 30));
-		$fixedLength  = $options->get('certificate_fixed_random_string_length', $params->get('certificate_fixed_random_string_length', true));
+		if (empty($this->expired_on))
+		{
+			$this->expired_on = $db->getNullDate();
+		}
 
 		// Generate unique certficate id - start
-		$this->unique_certificate_id = $this->generateUniqueCertId($stringLength, $fixedLength);
+		$this->unique_certificate_id = $this->generateUniqueCertId($options);
 
-		// Save certificate again with unique certificate Id
+		// Save certificate
 		$this->save();
 	}
 
@@ -514,16 +756,22 @@ class TjCertificateCertificate extends CMSObject
 	/**
 	 * Method to generate unique certificate Id.
 	 *
-	 * @param   integer  $randomStringLength  The length of unique string
-	 *
-	 * @param   boolean  $fixedLength         Generate fixed length random string
+	 * @param   JParameter  $options  Object contains Jparameters like prefix.
 	 *
 	 * @return   string
 	 *
 	 * @since    1.0.0
 	 */
-	protected function generateUniqueCertId($randomStringLength = 0, $fixedLength = true)
+	protected function generateUniqueCertId($options)
 	{
+		// Get prefix option if available
+		$params = ComponentHelper::getParams('com_tjcertificate');
+		$this->defaultCertPrefix = $options->get('prefix', $params->get('certificate_prefix', $this->defaultCertPrefix));
+
+		// Get certificate random string config
+		$randomStringLength = $options->get('certificate_random_string_length', $params->get('certificate_random_string_length', 30));
+		$fixedLength  = $options->get('certificate_fixed_random_string_length', $params->get('certificate_fixed_random_string_length', true));
+
 		if (empty($randomStringLength) || $randomStringLength > 30 || $randomStringLength < 0)
 		{
 			$randomStringLength = rand(5, 30);
@@ -543,14 +791,14 @@ class TjCertificateCertificate extends CMSObject
 		}
 
 		// Check if random string exists
-		$certificateString = $this->defaultCertPrefix . '-' . $certificateString . '-' . $this->id;
+		$certificateString = $this->defaultCertPrefix . '-' . $certificateString;
 		$table = TjCertificateFactory::table("certificates");
 
 		$table->load(array('unique_certificate_id' => $certificateString));
 
 		if (!empty($table->unique_certificate_id))
 		{
-			$this->generateUniqueCertId($randomStringLength, $fixedLength);
+			$this->generateUniqueCertId($options);
 		}
 
 		return $certificateString;

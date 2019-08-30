@@ -24,6 +24,9 @@ jimport('joomla.filesystem.folder');
  */
 class TjCertificateControllerTemplate extends FormController
 {
+	protected $htmlTemplateFile = 'template.html';
+
+	protected $cssTemplateFile = 'template.css';
 	/**
 	 * Function to load default template
 	 *
@@ -40,7 +43,7 @@ class TjCertificateControllerTemplate extends FormController
 			$app   = Factory::getApplication();
 			$input = $app->input;
 
-			$defaultTemplate = $input->get('defaultTemplate', "", 'string');
+			$defaultTemplate = $input->get('defaultTemplate', "");
 
 			if (empty($defaultTemplate))
 			{
@@ -49,11 +52,11 @@ class TjCertificateControllerTemplate extends FormController
 				return;
 			}
 
-			$temlateDetails = explode(":", $defaultTemplate);
-			$component      = $temlateDetails[0];
-			$templateFolder = $temlateDetails[1];
+			$templateDetails = explode(".", $defaultTemplate);
+			$component       = $templateDetails[0];
+			$templateFolder  = $templateDetails[1];
 
-			$templatePath = JPATH_ROOT . "/media/" . $component . "/templates/" . $templateFolder;
+			$templatePath = MEDIA_ROOT . '/' . $component . "/templates/" . $templateFolder;
 
 			if (!JFolder::exists($templatePath))
 			{
@@ -62,11 +65,8 @@ class TjCertificateControllerTemplate extends FormController
 				return;
 			}
 
-			$htmlFile = $templatePath . '/template.html';
-			$htmlData = file_get_contents($htmlFile);
-
-			$cssFile = $templatePath . '/template.css';
-			$cssData = file_get_contents($cssFile);
+			$htmlData = file_get_contents($templatePath . '/' . $this->htmlTemplateFile);
+			$cssData  = file_get_contents($templatePath . '/' . $this->cssTemplateFile);
 
 			$TjCertificateTemplate = TjCertificateTemplate::getInstance();
 

@@ -99,6 +99,9 @@ if ( $saveOrder )
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_EXPIRY_DATE', 'ci.expired_on', $listDirn, $listOrder); ?>
 								</th>
 								<th>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_COMMENT'); ?>
+								</th>
+								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ID', 'ci.id', $listDirn, $listOrder); ?>
 								</th>
 							</tr>
@@ -166,6 +169,7 @@ if ( $saveOrder )
 										echo '-';
 									}
 									?></td>
+								<td><?php echo $this->escape($item->comment); ?></td>
 								<td><?php echo (int) $item->id; ?></td>
 							</tr>
 							<?php

@@ -16,7 +16,7 @@ use Joomla\CMS\Language\Text;
  *
  * @since  1.0.0
  */
-class JFormFieldGetTemplateList extends JFormFieldList
+class JFormFieldCertificateTemplates extends JFormFieldList
 {
 	/**
 	 * Method to get a list of options for a list input.
@@ -39,23 +39,19 @@ class JFormFieldGetTemplateList extends JFormFieldList
 		// Get Private/Created by logged-in user's templates
 		if ($user->id)
 		{
-			// Create a new query object.
-			$query = $db->getQuery(true);
-
-			$query->select('id, title');
-			$query->from('#__tj_certificate_templates');
-			$query->where($db->quoteName('state') . ' = ' . (int) 1);
-			$query->where($db->quoteName('is_public') . ' = ' . (int) 1);
-			$query->where($db->quoteName('created_by') . ' = ' . (int) $user->id);
+			// Get template model
+			$model = TjCertificateFactory::model('Templates', array('ignore_request' => true));
 
 			if (!empty($client))
 			{
-				$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+				$model->setState('filter.client', $client);
 			}
 
-			$db->setQuery($query);
+			$model->setState('filter.state', 1);
+			$model->setState('filter.is_public', 1);
+			$model->setState('filter.created_by', $user->id);
 
-			$certlist = $db->loadObjectList();
+			$certlist = $model->getItems();
 
 			if (!empty($certlist))
 			{
@@ -69,22 +65,18 @@ class JFormFieldGetTemplateList extends JFormFieldList
 		}
 
 		// Get Public templates
-		// Create a new query object.
-		$query = $db->getQuery(true);
-
-		$query->select('id, title');
-		$query->from('#__tj_certificate_templates');
-		$query->where($db->quoteName('state') . ' = ' . (int) 1);
-		$query->where($db->quoteName('is_public') . ' = ' . (int) 2);
+		// Get template model
+		$model = TjCertificateFactory::model('Templates', array('ignore_request' => true));
 
 		if (!empty($client))
 		{
-			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+			$model->setState('filter.client', $client);
 		}
 
-		$db->setQuery($query);
+		$model->setState('filter.state', 1);
+		$model->setState('filter.is_public', 2);
 
-		$certlist = $db->loadObjectList();
+		$certlist = $model->getItems();
 
 		if (!empty($certlist))
 		{

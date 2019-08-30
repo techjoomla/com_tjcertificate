@@ -92,8 +92,13 @@ class TjCertificateViewCertificates extends JViewLegacy
 		// Get state
 		$this->state = $this->get('State');
 
-		// Show only logged-in user certificates
-		$this->state->set('filter.user_id', $this->user->id);
+		$layout = $app->input->get('layout', "my");
+
+		if ($layout == 'my')
+		{
+			// Show only logged-in user certificates
+			$this->state->set('filter.user_id', $this->user->id);
+		}
 
 		// This calls model function getItems()
 		$this->items = $this->get('Items');

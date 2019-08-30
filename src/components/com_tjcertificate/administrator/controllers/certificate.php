@@ -12,6 +12,9 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\MVC\Controller\FormController;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
 
 /**
  * The certificate controller
@@ -20,4 +23,46 @@ use Joomla\CMS\MVC\Controller\FormController;
  */
 class TjCertificateControllerCertificate extends FormController
 {
+	/**
+	 * Method to download issued certificate.
+	 *
+	 * @return  boolean|string Certificate pdf url.
+	 *
+	 * @since 1.0
+	 */
+	public function download()
+	{
+		$user  = Factory::getUser();
+		$app   = Factory::getApplication();
+		$input = $app->input;
+
+		if (!$user->id)
+		{
+			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_ERROR_LOGIN_MESSAGE'), 'error');
+			$url      = base64_encode(JUri::getInstance()->toString());
+			$loginUrl = Route::_('index.php?option=com_users&view=login&return=' . $url, false);
+			$app->redirect($loginUrl);
+		}
+
+		$uniqueCertificateId = $input->get('certificate', '');
+
+		// Download for sending it in email
+		$downloadForEmail = $input->get('email', '');
+
+		if (empty($uniqueCertificateId))
+		{
+			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EMPTY'), 'error');
+			$app->redirect('index.php');
+		}
+
+		$certificateObj = TjCertificateCertificate::validateCertificate($uniqueCertificateId);
+
+		if (!$certificateObj->id)
+		{
+			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EXPIRED'), 'error');
+			$app->redirect('index.php');
+		}
+
+		echo $certificateObj->pdfDownload($downloadForEmail);
+	}
 }

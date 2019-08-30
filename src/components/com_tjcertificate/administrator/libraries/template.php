@@ -53,6 +53,8 @@ class TjCertificateTemplate extends CMSObject
 
 	public $params = "";
 
+	public static $replacementTagFile = "certificateReplacements.json";
+
 	protected static $certificateTemplateObj = array();
 
 	/**
@@ -240,7 +242,16 @@ class TjCertificateTemplate extends CMSObject
 
 			$emogrify = new TJEmogrifier($html, $css);
 
-			return $emogrify->emogrify();
+			try
+			{
+				return $emogrify->emogrify();
+			}
+			catch (\Exception $e)
+			{
+				$this->setError($e->getMessage());
+
+				return false;
+			}
 		}
 
 		return false;
@@ -260,11 +271,15 @@ class TjCertificateTemplate extends CMSObject
 			return false;
 		}
 
-		$component = explode(".", $client)[0];
+		$clientDetails = explode(".", $client);
+		$component     = $clientDetails[0];
+		$folder        = $clientDetails[1];
 
-		if (JFile::exists(JPATH_ADMINISTRATOR . '/components/' . $component . '/certificateReplacements.json'))
+		$replacementTagPath = TJ_CERTIFICATE_REPLACEMENT_TAG . '/' . $component . '/' . $folder . '/' . self::$replacementTagFile;
+
+		if (JFile::exists($replacementTagPath))
 		{
-			return file_get_contents(JPATH_ADMINISTRATOR . '/components/' . $component . '/certificateReplacements.json');
+			return file_get_contents($replacementTagPath);
 		}
 	}
 }

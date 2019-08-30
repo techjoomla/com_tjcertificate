@@ -32,7 +32,7 @@ if ($this->showSearchBox)
 
 if ($this->certificate)
 {
-	if ($this->certificate->user_id == Factory::getUser()->id)
+	if ($this->certificate->_getUserId() == Factory::getUser()->id)
 	{
 		?>
 		<div class="techjoomla-bootstrap">

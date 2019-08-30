@@ -41,6 +41,16 @@ class TjCertificateRouter extends JComponentRouterBase
 			$taskParts  = explode('.', $query['task']);
 			$segments[] = implode('/', $taskParts);
 			$view       = $taskParts[0];
+
+			if ($query['task'] == 'certificate.download')
+			{
+				$segments[] = $query['certificate'];
+				$segments[] = $query['email'];
+
+				unset($query['certificate']);
+				unset($query['email']);
+			}
+
 			unset($query['task']);
 		}
 
@@ -48,6 +58,21 @@ class TjCertificateRouter extends JComponentRouterBase
 		{
 			$segments[] = $query['view'];
 			$view = $query['view'];
+
+			if ($view == 'certificate')
+			{
+				if (isset($query['certificate']))
+				{
+					$segments[] = $query['certificate'];
+					unset($query['certificate']);
+				}
+
+				if (isset($query['tmpl']))
+				{
+					$segments[] = $query['tmpl'];
+					unset($query['tmpl']);
+				}
+			}
 
 			unset($query['view']);
 		}
@@ -87,9 +112,31 @@ class TjCertificateRouter extends JComponentRouterBase
 		// View is always the first element of the array
 		$vars['view'] = array_shift($segments);
 
+		$segmentCount = count($segments);
+
 		while (!empty($segments))
 		{
 			$segment = array_pop($segments);
+
+			if ($vars['view'] == 'certificate' && $segmentCount == 1)
+			{
+				$vars['certificate'] = $segment;
+			}
+			elseif ($vars['view'] == 'certificate' && $segmentCount > 1)
+			{
+				if ($segment != 'download' && $segment != 'email' && $segment != 'component')
+				{
+					$vars['certificate'] = $segment;
+				}
+				elseif ($segment == 'email')
+				{
+					$vars['email'] = true;
+				}
+				elseif ($segment == 'component')
+				{
+					$vars['tmpl'] = $segment;
+				}
+			}
 
 			// If it's the ID, let's put on the request
 			if (is_numeric($segment))

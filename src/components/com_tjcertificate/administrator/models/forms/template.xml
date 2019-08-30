@@ -13,7 +13,7 @@
 
 		<field
 			name="sample_template"
-			type="getsampletemplatelist"
+			type="sampletemplates"
 			label="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_LBL_SAMPLE_TEMPLATE"
 			description="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_DESC_SAMPLE_TEMPLATE"
 		/>

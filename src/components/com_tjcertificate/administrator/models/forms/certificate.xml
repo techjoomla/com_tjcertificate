@@ -55,6 +55,14 @@
 			description="COM_TJCERTIFICATE_CERTIFICATE_FORM_DESC_CERTIFICATE_ISSUED_USER"
 		/>
 
+		<field name="comment"
+			type="textarea"
+			label="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_COMMENT"
+			description="COM_TJCERTIFICATE_CERTIFICATE_FORM_DESC_CERTIFICATE_ISSUED_COMMENT"
+			cols="45"
+			rows="10"
+		/>
+
 		<field
 			name="issued_on"
 			type="calendar"

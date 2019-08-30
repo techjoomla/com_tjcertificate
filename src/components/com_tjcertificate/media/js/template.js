@@ -12,6 +12,8 @@ var template = {
 	previewTemplate: function () {
 		jQuery(document).on('click', 'button[data-target="#templatePreview"]', function () {
 
+			jQuery('#show-info').hide();
+
 			if (typeof tinyMCE != "undefined")
 			{
 			   tinyMCE.execCommand('mceToggleEditor', false, 'jform_body');
@@ -20,6 +22,10 @@ var template = {
 			{
 				var editor = document.querySelector('.CodeMirror').CodeMirror;
 				jQuery('#jform_body').html(editor.getValue());
+			}
+			else
+			{
+				jQuery('#show-info').show();
 			}
 
 			jQuery('#previewTempl').empty();

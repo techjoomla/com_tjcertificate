@@ -63,6 +63,9 @@ $saveOrder = $listOrder == 'ci.id';
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_EXPIRY_DATE', 'ci.expired_on', $listDirn, $listOrder); ?>
 								</th>
 								<th>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_COMMENT'); ?>
+								</th>
+								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ID', 'ci.id', $listDirn, $listOrder); ?>
 								</th>
 							</tr>
@@ -76,13 +79,16 @@ $saveOrder = $listOrder == 'ci.id';
 						</tfoot>
 						<tbody>
 							<?php
+							$urlOpts = array ();
+							$urlOpts['popup'] = true;
+
 							foreach ($this->items as $i => $item)
 							{
 								?>
 								<tr class="row <?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->id; ?>">
 								<td class="has-context">
 									<div class="pull-left break-word">
-										<a class="hasTooltip modal" href="<?php echo TjCertificateCertificate::getInstance($item->id)->getUrl(true, false); ?>" title="
+										<a class="hasTooltip modal" href="<?php echo TjCertificateCertificate::getInstance($item->id)->getUrl($urlOpts, false); ?>" title="
 											<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_PREVIEW'); ?>">
 											<?php echo $this->escape($item->unique_certificate_id); ?>
 										</a>
@@ -99,6 +105,7 @@ $saveOrder = $listOrder == 'ci.id';
 										echo '-';
 									}
 									?></td>
+								<td><?php echo $this->escape($item->comment); ?></td>
 								<td><?php echo (int) $item->id; ?></td>
 							</tr>
 							<?php

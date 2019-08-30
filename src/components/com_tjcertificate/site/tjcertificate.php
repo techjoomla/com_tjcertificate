@@ -14,6 +14,8 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\BaseController;
 
+JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
+
 JLoader::registerPrefix('TjCertificate', JPATH_COMPONENT);
 JLoader::register('TjCertificateController', JPATH_COMPONENT . '/controller.php');
 

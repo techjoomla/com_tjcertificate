@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS `#__tj_certificate_issue` (
   `client` varchar(100) NOT NULL,
   `client_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
+  `comment` text NULL,
   `state` tinyint(3) NOT NULL,
   `issued_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `expired_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',

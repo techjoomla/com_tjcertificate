@@ -42,17 +42,6 @@ if (!empty($client))
 $isModal = $input->get('layout') == 'modal' ? true : false;
 $layout  = $isModal ? 'modal' : 'edit';
 $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=component' : '';
-
-Factory::getDocument()->addScriptDeclaration('
-	Joomla.submitbutton = function(task)
-	{
-		if (task == "template.cancel" || document.formvalidator.isValid(document.getElementById("adminForm")))
-		{
-			jQuery("#permissions-sliders select").attr("disabled", "disabled");
-			Joomla.submitform(task, document.getElementById("adminForm"));
-		}
-	};
-');
 ?>
 <div class="tj-page">
 	<div class="row-fluid">
@@ -145,6 +134,7 @@ Factory::getDocument()->addScriptDeclaration('
 	<div class="modal-content">
 		<div class="modal-header">
 			<h4 class="modal-title"><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_MODAL_HEADER'); ?></h4>
+			<p class="alert alert-info hide" id="show-info"><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_MODAL_HEADER_INFO'); ?></p>
 		</div>
 		<div class="modal-body" id="previewTempl">
 		</div>
