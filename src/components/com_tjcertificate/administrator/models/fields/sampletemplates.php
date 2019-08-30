@@ -46,7 +46,7 @@ class JFormFieldSampleTemplates extends JFormFieldList
 			$component = explode(".", $client)[0];
 
 			// Get client based sample templates
-			$clientSampleTemplatePath = MEDIA_ROOT . '/' . $component . "/templates";
+			$clientSampleTemplatePath = MEDIA_ROOT . '/' . $component . "/" . TJ_CERTIFICATE_TEMPLATE_FOLDER;
 
 			if (JFolder::exists($clientSampleTemplatePath))
 			{

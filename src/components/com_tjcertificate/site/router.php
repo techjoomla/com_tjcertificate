@@ -38,6 +38,7 @@ class TjCertificateRouter extends JComponentRouterBase
 
 		if (isset($query['task']))
 		{
+			$segments[] = 'action';
 			$taskParts  = explode('.', $query['task']);
 			$segments[] = implode('/', $taskParts);
 			$view       = $taskParts[0];
@@ -45,10 +46,10 @@ class TjCertificateRouter extends JComponentRouterBase
 			if ($query['task'] == 'certificate.download')
 			{
 				$segments[] = $query['certificate'];
-				$segments[] = $query['email'];
+				$segments[] = $query['store'];
 
 				unset($query['certificate']);
-				unset($query['email']);
+				unset($query['store']);
 			}
 
 			unset($query['task']);
@@ -112,41 +113,39 @@ class TjCertificateRouter extends JComponentRouterBase
 		// View is always the first element of the array
 		$vars['view'] = array_shift($segments);
 
-		$segmentCount = count($segments);
-
-		while (!empty($segments))
+		switch ($vars['view'])
 		{
-			$segment = array_pop($segments);
+			case 'action':
 
-			if ($vars['view'] == 'certificate' && $segmentCount == 1)
-			{
-				$vars['certificate'] = $segment;
-			}
-			elseif ($vars['view'] == 'certificate' && $segmentCount > 1)
-			{
-				if ($segment != 'download' && $segment != 'email' && $segment != 'component')
-				{
-					$vars['certificate'] = $segment;
-				}
-				elseif ($segment == 'email')
-				{
-					$vars['email'] = true;
-				}
-				elseif ($segment == 'component')
-				{
-					$vars['tmpl'] = $segment;
-				}
-			}
+				$vars['task'] = $segments[0] . '.' . $segments[1];
 
-			// If it's the ID, let's put on the request
-			if (is_numeric($segment))
-			{
-				$vars['id'] = $segment;
-			}
-			else
-			{
-				$vars['task'] = $vars['view'] . '.' . $segment;
-			}
+				if ($vars['task'] = 'certificate.download')
+				{
+					if (isset($segments[2]))
+					{
+						$vars['certificate'] = $segments[2];
+					}
+
+					if (isset($segments[3]))
+					{
+						$vars['store'] = true;
+					}
+				}
+
+			break;
+
+			case 'certificate':
+
+				$vars['certificate'] = $segments[0];
+
+				if (isset($segments[1]))
+				{
+					$vars['tmpl'] = $segments[1];
+				}
+
+			break;
+
+			default:
 		}
 
 		return $vars;

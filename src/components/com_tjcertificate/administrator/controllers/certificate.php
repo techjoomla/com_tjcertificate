@@ -47,7 +47,7 @@ class TjCertificateControllerCertificate extends FormController
 		$uniqueCertificateId = $input->get('certificate', '');
 
 		// Download for sending it in email
-		$downloadForEmail = $input->get('email', '');
+		$store = $input->get('store', '');
 
 		if (empty($uniqueCertificateId))
 		{
@@ -63,6 +63,6 @@ class TjCertificateControllerCertificate extends FormController
 			$app->redirect('index.php');
 		}
 
-		echo $certificateObj->pdfDownload($downloadForEmail);
+		echo $certificateObj->pdfDownload($store);
 	}
 }

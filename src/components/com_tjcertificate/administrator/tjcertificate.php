@@ -20,7 +20,8 @@ JLoader::registerPrefix('TjCertificate', JPATH_ADMINISTRATOR);
 JLoader::register('TjCertificateController', JPATH_ADMINISTRATOR . '/controller.php');
 
 define('MEDIA_ROOT', JPATH_ROOT . '/media');
-define('TJ_CERTIFICATE_DEFAULT_TEMPLATE', MEDIA_ROOT . '/com_tjcertificate/templates');
+define('TJ_CERTIFICATE_TEMPLATE_FOLDER', 'certificate-templates');
+define('TJ_CERTIFICATE_DEFAULT_TEMPLATE', MEDIA_ROOT . '/com_tjcertificate/' . TJ_CERTIFICATE_TEMPLATE_FOLDER);
 define('TJ_CERTIFICATE_REPLACEMENT_TAG', JPATH_ADMINISTRATOR . '/components');
 
 // Execute the task.

@@ -56,7 +56,7 @@ class TjCertificateControllerTemplate extends FormController
 			$component       = $templateDetails[0];
 			$templateFolder  = $templateDetails[1];
 
-			$templatePath = MEDIA_ROOT . '/' . $component . "/templates/" . $templateFolder;
+			$templatePath = MEDIA_ROOT . '/' . $component . '/' . TJ_CERTIFICATE_TEMPLATE_FOLDER . '/' . $templateFolder;
 
 			if (!JFolder::exists($templatePath))
 			{

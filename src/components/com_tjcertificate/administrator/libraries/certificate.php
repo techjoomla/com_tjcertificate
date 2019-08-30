@@ -528,9 +528,9 @@ class TjCertificateCertificate extends CMSObject
 		{
 			$url = 'index.php?option=com_tjcertificate&task=certificate.download&certificate=' . $this->unique_certificate_id;
 
-			if ($options['email'])
+			if ($options['store'])
 			{
-				$url .= '&email=email';
+				$url .= '&store=store';
 			}
 
 			if ($options['absolute'])
@@ -547,13 +547,13 @@ class TjCertificateCertificate extends CMSObject
 	/**
 	 * Method to get certificate download url.
 	 *
-	 * @param   boolean  $download  Download as attachment for emails
+	 * @param   boolean  $store  Store as attachment for emails
 	 *
 	 * @return  boolean|string Certificate pdf url.
 	 *
 	 * @since 1.0
 	 */
-	public function pdfDownload($download = 0)
+	public function pdfDownload($store = 0)
 	{
 		$app  = Factory::getApplication();
 		$user = Factory::getUser();
@@ -619,7 +619,7 @@ class TjCertificateCertificate extends CMSObject
 			$certificatePdfName = File::makeSafe(Text::sprintf("COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_FILE_NAME", $this->unique_certificate_id) . ".pdf");
 
 			// Download as attachment for emails
-			if ($download == 1)
+			if ($store == 1)
 			{
 				file_put_contents($certificatePdfName, $domPDF->output());
 
@@ -691,44 +691,60 @@ class TjCertificateCertificate extends CMSObject
 	 */
 	public function issueCertificate($replacements, $options)
 	{
-		// Check user_id or certificate_template_id (this is needed to generate certificate body) is empty
-		if (empty($this->user_id) || empty($this->certificate_template_id))
+		try
 		{
-			return false;
+			// Check user_id or certificate_template_id (this is needed to generate certificate body) is empty
+			if (empty($this->user_id) || empty($this->certificate_template_id))
+			{
+				throw new Exception(Text::_('COM_TJCERTIFICATE_CERTIFICATE_EMPTY_DATA'));
+
+				return false;
+			}
+
+			// Get template details
+			$template = TjCertificateTemplate::getInstance($this->certificate_template_id);
+
+			if (empty($template->id))
+			{
+				throw new Exception(Text::_('COM_TJCERTIFICATE_TEMPLATE_INVALID'));
+			}
+
+			// Generate certificate body
+			$this->generated_body = $this->generateCertificateBody($template->body, $replacements);
+
+			// Emogrify generated body with template css is available
+			$emogrData = $template->getEmogrify($this->generated_body, $template->template_css);
+
+			if (!empty($emogrData))
+			{
+				$this->generated_body = $emogrData;
+			}
+
+			// Get expiry date option if available
+			$db = Factory::getDbo();
+
+			if (!empty($this->expired_on))
+			{
+				if (!(DateTime::createFromFormat('Y-m-d H:i:s', $this->expired_on) !== false))
+				{
+					throw new Exception(Text::_('COM_TJCERTIFICATE_TEMPLATE_INVALID_DATE'));
+				}
+			}
+			else
+			{
+				$this->expired_on = $db->getNullDate();
+			}
+
+			// Generate unique certficate id - start
+			$this->unique_certificate_id = $this->generateUniqueCertId($options);
+
+			// Save certificate
+			$this->save();
 		}
-
-		// Get template details
-		$template = TjCertificateTemplate::getInstance($this->certificate_template_id);
-
-		if (empty($template->id))
+		catch (\Exception $e)
 		{
-			return false;
+			return $e->getMessage();
 		}
-
-		// Generate certificate body
-		$this->generated_body = $this->generateCertificateBody($template->body, $replacements);
-
-		// Emogrify generated body with template css is available
-		$emogrData = $template->getEmogrify($this->generated_body, $template->template_css);
-
-		if (!empty($emogrData))
-		{
-			$this->generated_body = $emogrData;
-		}
-
-		// Get expiry date option if available
-		$db = Factory::getDbo();
-
-		if (empty($this->expired_on))
-		{
-			$this->expired_on = $db->getNullDate();
-		}
-
-		// Generate unique certficate id - start
-		$this->unique_certificate_id = $this->generateUniqueCertId($options);
-
-		// Save certificate
-		$this->save();
 	}
 
 	/**
