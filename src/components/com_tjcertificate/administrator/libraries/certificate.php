@@ -697,8 +697,6 @@ class TjCertificateCertificate extends CMSObject
 			if (empty($this->user_id) || empty($this->certificate_template_id))
 			{
 				throw new Exception(Text::_('COM_TJCERTIFICATE_CERTIFICATE_EMPTY_DATA'));
-
-				return false;
 			}
 
 			// Get template details
