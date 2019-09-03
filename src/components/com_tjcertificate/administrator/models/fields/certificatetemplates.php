@@ -11,6 +11,8 @@
 JFormHelper::loadFieldClass('list');
 use Joomla\CMS\Language\Text;
 
+JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
+
 /**
  * Custom field to list all public and logged-in user's private certificate templates
  *
