@@ -68,7 +68,7 @@
   </administration>
   <media destination="com_tjcertificate" folder="media">
     <folder>js</folder>
-    <folder>templates</folder>
+    <folder>certificate-templates</folder>
   </media>
   <scriptfile>script.tjcertificate.php</scriptfile>
 </extension>
