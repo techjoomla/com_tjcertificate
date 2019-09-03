@@ -14,6 +14,9 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
 
+$language = JFactory::getLanguage();
+$language->load('com_tjcertificate');
+
 JLoader::discover("TjCertificate", JPATH_ADMINISTRATOR . '/components/com_tjcertificate/libraries');
 
 /**
