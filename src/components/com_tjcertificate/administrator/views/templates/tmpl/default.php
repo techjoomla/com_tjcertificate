@@ -40,6 +40,10 @@ if (!empty($client))
 {
 	$clientUrlAppend = '&tmplClient=' . $client;
 }
+elseif ($this->component)
+{
+	$clientUrlAppend = '&extension=' . $this->component;
+}
 ?>
 
 <div class="tj-page">
@@ -211,6 +215,7 @@ if (!empty($client))
 					}
 					?>
 					<input type="hidden" name="tmplClient" value="<?php echo $client; ?>" />
+					<input type="hidden" name="extension" value="<?php echo $this->component; ?>" />
 					<input type="hidden" name="task" value="" />
 					<input type="hidden" name="boxchecked" value="0" />
 					<?php echo HTMLHelper::_('form.token'); ?>

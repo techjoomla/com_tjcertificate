@@ -82,6 +82,10 @@ class TjCertificateModelCertificates extends ListModel
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
 
+		$extension = Factory::getApplication()->input->get('extension', '', 'CMD');
+
+		$this->setState('filter.component', $extension);
+
 		// Create the base select statement.
 		$query->select(array('ci.*', 'ct.title', 'users.name as uname'));
 		$query->from($db->quoteName('#__tj_certificate_issue', 'ci'));
@@ -111,6 +115,10 @@ class TjCertificateModelCertificates extends ListModel
 		if (!empty($client))
 		{
 			$query->where($db->quoteName('ci.client') . ' = ' . $db->quote($client));
+		}
+		elseif (!empty($extension))
+		{
+			$query->where($db->quoteName('ci.client') . ' = ' . $db->quote($extension));
 		}
 
 		// Filter by client id

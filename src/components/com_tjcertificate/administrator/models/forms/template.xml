@@ -11,6 +11,14 @@
 			filter="safehtml"
 		/>
 
+		<field name="unique_code"
+			type="text"
+			label="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_LBL_UNIQUE_CODE"
+			description="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_DESC_UNIQUE_CODE"
+			required="true"
+			filter="CMD"
+		/>
+
 		<field
 			name="sample_template"
 			type="sampletemplates"

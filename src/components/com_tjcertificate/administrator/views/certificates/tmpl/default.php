@@ -181,6 +181,7 @@ if ( $saveOrder )
 					}
 					?>
 					<input type="hidden" name="task" value="" />
+					<input type="hidden" name="extension" value="<?php echo $this->component; ?>" />
 					<input type="hidden" name="boxchecked" value="0" />
 					<?php echo HTMLHelper::_('form.token'); ?>
 			</div>

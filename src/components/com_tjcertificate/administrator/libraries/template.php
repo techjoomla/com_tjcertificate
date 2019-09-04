@@ -27,6 +27,8 @@ class TjCertificateTemplate extends CMSObject
 
 	public $title = "";
 
+	public $unique_code = null;
+
 	public $body = "";
 
 	public $template_css = "";
@@ -73,7 +75,7 @@ class TjCertificateTemplate extends CMSObject
 
 		$db = Factory::getDbo();
 
-		$this->checked_out_time = $this->created_on = $this->modified_on = $db->getNullDate();
+		$this->checked_out_time = $this->modified_on = $db->getNullDate();
 	}
 
 	/**

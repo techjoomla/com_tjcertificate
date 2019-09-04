@@ -90,11 +90,13 @@ class TjCertificateViewCertificates extends HtmlView
 	 */
 	public function display($tpl = null)
 	{
+		// This calls model function getItems()
+		$this->items = $this->get('Items');
+
 		// Get state
 		$this->state = $this->get('State');
 
-		// This calls model function getItems()
-		$this->items = $this->get('Items');
+		$this->component = $this->state->get('filter.component');
 
 		// Get pagination
 		$this->pagination = $this->get('Pagination');

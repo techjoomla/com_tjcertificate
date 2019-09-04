@@ -31,11 +31,18 @@ JHtml::_('script', 'com_tjcertificate/template.min.js', $options);
 $app = Factory::getApplication();
 $input = $app->input;
 
-$client = $input->getCmd('client', '');
+$client    = $input->getCmd('client', '');
+$extension = $input->getCmd('extension', '');
 
-if (!empty($client))
+$clientUrlAppend = '';
+
+if (!empty($extension))
 {
-	$client = '&client=' . $client;
+	$clientUrlAppend = '&extension=' . $extension;
+}
+elseif (!empty($client))
+{
+	$clientUrlAppend = '&client=' . $client;
 }
 
 // In case of modal
@@ -45,7 +52,7 @@ $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=c
 ?>
 <div class="tj-page">
 	<div class="row-fluid">
-		<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=template&layout=edit&id=' . (int) $this->item->id . $client, false);
+		<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=template&layout=edit&id=' . (int) $this->item->id . $clientUrlAppend, false);
 		?>" method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
 			<div class="form-vertical">
 				<?php echo HTMLHelper::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
@@ -53,6 +60,7 @@ $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=c
 				<div class="row-fluid">
 					<div class="span8">
 						<?php echo $this->form->renderField('title'); ?>
+						<?php echo $this->form->renderField('unique_code'); ?>
 						<?php echo $this->form->renderField('sample_template'); ?>
 						<?php echo $this->form->renderField('body'); ?>
 						<?php echo $this->form->renderField('client'); ?>
@@ -115,6 +123,8 @@ $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=c
 				<?php echo HTMLHelper::_('bootstrap.endTab'); ?>
 				<?php echo LayoutHelper::render('joomla.edit.params', $this); ?>
 				<input type="hidden" name="task" value="" />
+				<input type="hidden" name="client" value="<?php echo $client; ?>" />
+				<input type="hidden" name="extension" value="<?php echo $extension; ?>" />
 				<?php echo HTMLHelper::_('form.token'); ?>
 			</div>
 		</form>
