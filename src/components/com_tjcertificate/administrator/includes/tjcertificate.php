@@ -13,11 +13,11 @@ defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
+use Joomla\String\StringHelper;
+use Joomla\CMS\Component\ComponentHelper;
 
 $language = JFactory::getLanguage();
 $language->load('com_tjcertificate');
-
-JLoader::discover("TjCertificate", JPATH_ADMINISTRATOR . '/components/com_tjcertificate/libraries');
 
 /**
  * Certificate factory class.
@@ -26,8 +26,24 @@ JLoader::discover("TjCertificate", JPATH_ADMINISTRATOR . '/components/com_tjcert
  *
  * @since  1.0.0
  */
-class TjCertificateFactory
+class TJCERT
 {
+	/**
+	 * Holds the record of the loaded TJCertificate classes
+	 *
+	 * @var    array
+	 * @since  2.4.0
+	 */
+	private static $loadedClass = array();
+
+	/**
+	 * Holds the record of the component config
+	 *
+	 * @var    Joomla\Registry\Registry
+	 * @since  2.5.0
+	 */
+	private static $config = null;
+
 	/**
 	 * Retrieves a table from the table folder
 	 *
@@ -59,5 +75,59 @@ class TjCertificateFactory
 		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjcertificate/models');
 
 		return BaseDatabaseModel::getInstance($name, 'TjCertificateModel', $config);
+	}
+
+	/**
+	 * Magic method to create instance of TJCertificate library
+	 *
+	 * @param   string  $name       The name of the class
+	 * @param   mixed   $arguments  Arguments of class
+	 *
+	 * @return  mixed   return the Object of the respective class if exist or return false
+	 *
+	 * @since   2.4.0
+	 **/
+	public static function __callStatic($name, $arguments)
+	{
+		self::loadClass($name);
+
+		$className = 'TJCertificate' . StringHelper::ucfirst($name);
+
+		if (class_exists($className))
+		{
+			if (method_exists($className, 'getInstance'))
+			{
+				return call_user_func_array(array($className, 'getInstance'), $arguments);
+			}
+
+			return new $className;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Load the class library if not loaded
+	 *
+	 * @param   string  $className  The name of the class which required to load
+	 *
+	 * @return  boolean True on success
+	 *
+	 * @since   2.4.0
+	 **/
+	public static function loadClass($className)
+	{
+		if (! isset(self::$loadedClass[$className]))
+		{
+			$className = (string) StringHelper::strtolower($className);
+
+			$path = JPATH_ADMINISTRATOR . '/components/com_tjcertificate/libraries/' . $className . '.php';
+
+			include_once $path;
+
+			self::$loadedClass[$className] = true;
+		}
+
+		return self::$loadedClass[$className];
 	}
 }

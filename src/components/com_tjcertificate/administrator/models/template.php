@@ -113,7 +113,7 @@ class TjCertificateModelTemplate extends AdminModel
 	public function save($data)
 	{
 		$pk   = (!empty($data['id'])) ? $data['id'] : (int) $this->getState('template.id');
-		$template = TjCertificateTemplate::getInstance($pk);
+		$template = TJCERT::Template($pk);
 
 		// PDF options
 		if (isset($data['params']) && is_array($data['params']))

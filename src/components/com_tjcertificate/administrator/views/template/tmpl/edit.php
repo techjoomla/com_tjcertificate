@@ -110,7 +110,7 @@ $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=c
 									{
 									?>
 									<tr>
-										<td scope="row"><?php echo $this->escape($tags->name); ?></td>
+										<td scope="row"><?php echo '[' . $this->escape($tags->name) . ']'; ?></td>
 										<td><?php echo $this->escape($tags->description); ?></td>
 									</tr>
 									<?php

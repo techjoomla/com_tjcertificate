@@ -165,6 +165,16 @@ class TjCertificateModelCertificates extends ListModel
 			$query->where('(ci.state = 0 OR ci.state = 1)');
 		}
 
+		// Filter by Expired certificates
+		$expired = $this->getState('filter.expired');
+
+		if ($expired)
+		{
+			$query->where($db->quoteName('ci.expired_on') . ' <> ""');
+			$query->where($db->quoteName('ci.expired_on') . ' <> ' . $db->quote('0000-00-00 00:00:00'));
+			$query->where($db->quoteName('ci.expired_on') . ' < ' . $db->quote(Factory::getDate()->toSql()));
+		}
+
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering', 'ci.id');
 		$orderDirn = $this->state->get('list.direction', 'desc');

@@ -89,7 +89,7 @@ class TjCertificateModelCertificate extends AdminModel
 	public function save($data)
 	{
 		$pk   = (!empty($data['id'])) ? $data['id'] : (int) $this->getState('certificate.id');
-		$certificate = TjCertificateCertificate::getInstance($pk);
+		$certificate = TJCERT::Certificate($pk);
 
 		// Bind the data.
 		if (!$certificate->bind($data))

@@ -79,7 +79,7 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @since   1.0.0
 	 */
-	public function _setCertificateTemplate($value = 0)
+	public function setCertificateTemplate($value = 0)
 	{
 		$this->certificate_template_id = $value;
 	}
@@ -91,7 +91,7 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @since   1.0.0
 	 */
-	public function _getCertificateTemplate()
+	public function getCertificateTemplate()
 	{
 		return $this->certificate_template_id;
 	}
@@ -105,7 +105,7 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @since   1.0.0
 	 */
-	public function _setClient($value = '')
+	public function setClient($value = '')
 	{
 		$this->client = $value;
 	}
@@ -117,7 +117,7 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @since   1.0.0
 	 */
-	public function _getClient()
+	public function getClient()
 	{
 		return $this->client;
 	}
@@ -131,7 +131,7 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @since   1.0.0
 	 */
-	public function _setClientId($value = 0)
+	public function setClientId($value = 0)
 	{
 		$this->client_id = $value;
 	}
@@ -143,7 +143,7 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @since   1.0.0
 	 */
-	public function _getClientId()
+	public function getClientId()
 	{
 		return $this->client_id;
 	}
@@ -157,7 +157,7 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @since   1.0.0
 	 */
-	public function _setUserId($value = 0)
+	public function setUserId($value = 0)
 	{
 		$this->user_id = $value;
 	}
@@ -169,7 +169,7 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @since   1.0.0
 	 */
-	public function _getUserId()
+	public function getUserId()
 	{
 		return $this->user_id;
 	}
@@ -183,7 +183,7 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @since   1.0.0
 	 */
-	public function _setExpiry($value = null)
+	public function setExpiry($value = null)
 	{
 		$this->expired_on = $value;
 	}
@@ -195,7 +195,7 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @since   1.0.0
 	 */
-	public function _getExpiry()
+	public function getExpiry()
 	{
 		return $this->expired_on;
 	}
@@ -209,7 +209,7 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @since   1.0.0
 	 */
-	public function _setComment($value = null)
+	public function setComment($value = null)
 	{
 		$this->comment = $value;
 	}
@@ -221,7 +221,7 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @since   1.0.0
 	 */
-	public function _getComment()
+	public function getComment()
 	{
 		return $this->comment;
 	}
@@ -262,7 +262,7 @@ class TjCertificateCertificate extends CMSObject
 	 */
 	public function load($id)
 	{
-		$table = TjCertificateFactory::table("certificates");
+		$table = TJCERT::table("certificates");
 
 		if (!$table->load($id))
 		{
@@ -337,7 +337,7 @@ class TjCertificateCertificate extends CMSObject
 	public function save()
 	{
 		// Create the widget table object
-		$table = TjCertificateFactory::table("certificates");
+		$table = TJCERT::table("certificates");
 
 		// Get public properties with data
 		$properties = $this->getProperties();
@@ -432,53 +432,35 @@ class TjCertificateCertificate extends CMSObject
 	/**
 	 * Method to get issued certificate list
 	 *
-	 * @param   integer  $templateId  Template Id
+	 * @param   string   $client    Client e.g. com_tjlms.course
 	 *
-	 * @param   string   $client      Client e.g. com_tjlms.course
+	 * @param   integer  $clientId  Specific client id
 	 *
-	 * @param   integer  $clientId    Specific client id
+	 * @param   integer  $userId    User Id
 	 *
-	 * @param   integer  $userId      User Id
-	 *
-	 * @param   integer  $limitStart  Limit start or page number
-	 *
-	 * @param   integer  $limit       Number of records
+	 * @param   boolean  $expired   Get expired certificates
 	 *
 	 * @return  boolean|array Issued certificate array
 	 *
 	 * @since 1.0
 	 */
-	public static function getCertificate($templateId = 0, $client = '', $clientId = 0, $userId = 0, $limitStart = 0, $limit = 20)
+	public static function getIssued($client, $clientId, $userId, $expired = false)
 	{
-		if (empty($templateId) && empty($client))
+		if (empty($client) || empty($clientId) || empty($userId))
 		{
 			return false;
 		}
 
-		$model = TjCertificateFactory::model('Certificates', array('ignore_request' => true));
+		$model = TJCERT::model('Certificates', array('ignore_request' => true));
 
-		if (!empty($templateId))
+		$model->setState('filter.client', $client);
+		$model->setState('filter.client_id', $clientId);
+		$model->setState('filter.user_id', $userId);
+
+		if ($expired)
 		{
-			$model->setState('filter.certificate_template_id', $templateId);
+			$model->setState('filter.expired', $expired);
 		}
-
-		if (!empty($client))
-		{
-			$model->setState('filter.client', $client);
-		}
-
-		if (!empty($clientId))
-		{
-			$model->setState('filter.client_id', $clientId);
-		}
-
-		if (!empty($userId))
-		{
-			$model->setState('filter.user_id', $userId);
-		}
-
-		$model->setState('list.limit', $limit);
-		$model->setState('list.start', $limitStart);
 
 		return $model->getItems();
 	}
@@ -572,7 +554,7 @@ class TjCertificateCertificate extends CMSObject
 			$html = $this->generated_body;
 
 			// Get template details
-			$template = TjCertificateTemplate::getInstance($this->certificate_template_id);
+			$template = TJCERT::Template($this->certificate_template_id);
 
 			$templateParams = new Registry($template->params);
 			$pageSize       = $templateParams->get('certifcate_page_size', 'A4');
@@ -655,7 +637,7 @@ class TjCertificateCertificate extends CMSObject
 	 */
 	public static function validateCertificate($uniqueCertificateId)
 	{
-		$table = TjCertificateFactory::table("certificates");
+		$table = TJCERT::table("certificates");
 
 		$table->load(array('unique_certificate_id' => $uniqueCertificateId));
 
@@ -700,7 +682,7 @@ class TjCertificateCertificate extends CMSObject
 			}
 
 			// Get template details
-			$template = TjCertificateTemplate::getInstance($this->certificate_template_id);
+			$template = TJCERT::Template($this->certificate_template_id);
 
 			if (empty($template->id))
 			{
@@ -808,7 +790,7 @@ class TjCertificateCertificate extends CMSObject
 
 		// Check if random string exists
 		$certificateString = $this->defaultCertPrefix . '-' . $certificateString;
-		$table = TjCertificateFactory::table("certificates");
+		$table = TJCERT::table("certificates");
 
 		$table->load(array('unique_certificate_id' => $certificateString));
 

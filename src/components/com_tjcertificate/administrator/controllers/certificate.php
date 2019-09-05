@@ -55,7 +55,7 @@ class TjCertificateControllerCertificate extends FormController
 			$app->redirect('index.php');
 		}
 
-		$certificateObj = TjCertificateCertificate::validateCertificate($uniqueCertificateId);
+		$certificateObj = TJCERT::Certificate()::validateCertificate($uniqueCertificateId);
 
 		if (!$certificateObj->id)
 		{
