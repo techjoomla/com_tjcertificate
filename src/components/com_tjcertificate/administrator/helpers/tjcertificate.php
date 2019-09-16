@@ -11,6 +11,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
 
 /**
  * Certificate helper.
@@ -28,7 +29,7 @@ class TjCertificateHelper
 	 */
 	public static function addSubmenu($vName = '')
 	{
-		$extension = JFactory::getApplication()->input->get('extension', '', 'STRING');
+		$extension = Factory::getApplication()->input->get('extension', '', 'STRING');
 
 		$parts = explode('.', $extension);
 

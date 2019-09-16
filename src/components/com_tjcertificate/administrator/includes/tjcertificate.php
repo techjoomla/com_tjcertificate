@@ -32,7 +32,7 @@ class TJCERT
 	 * Holds the record of the loaded TJCertificate classes
 	 *
 	 * @var    array
-	 * @since  2.4.0
+	 * @since  1.0.0
 	 */
 	private static $loadedClass = array();
 
@@ -40,7 +40,7 @@ class TJCERT
 	 * Holds the record of the component config
 	 *
 	 * @var    Joomla\Registry\Registry
-	 * @since  2.5.0
+	 * @since  1.0.0
 	 */
 	private static $config = null;
 
@@ -85,7 +85,7 @@ class TJCERT
 	 *
 	 * @return  mixed   return the Object of the respective class if exist or return false
 	 *
-	 * @since   2.4.0
+	 * @since   1.0.0
 	 **/
 	public static function __callStatic($name, $arguments)
 	{
@@ -113,7 +113,7 @@ class TJCERT
 	 *
 	 * @return  boolean True on success
 	 *
-	 * @since   2.4.0
+	 * @since   1.0.0
 	 **/
 	public static function loadClass($className)
 	{
