@@ -35,7 +35,7 @@ class Com_TjcertificateInstallerScript
 	{
 		JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
 
-		$dataBaseModel = TjCertificateFactory::model('Database', array('ignore_request' => true));
+		$dataBaseModel = TJCERT::model('Database', array('ignore_request' => true));
 
 		try
 		{

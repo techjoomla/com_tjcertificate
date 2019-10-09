@@ -742,13 +742,64 @@ class TjCertificateCertificate extends CMSObject
 	protected function generateCertificateBody($templateBody, $replacements)
 	{
 		$templateBody = stripslashes($templateBody);
+		$matches      = $this->getTags($templateBody);
 
-		foreach ($replacements as $index => $data)
+		$replacamentTags = $matches[0];
+		$tags            = $matches[1];
+		$index           = 0;
+
+		if (isset($replacements))
 		{
-			$templateBody = str_ireplace('[' . $index . ']', $data, $templateBody);
+			foreach ($replacamentTags as $ind => $replacamentTag)
+			{
+				// Explode e.g course.name with "." so $data[0]=course and $data[1]=name
+				$data = explode(".", $tags[$ind]);
+
+				if (isset($data))
+				{
+					$key   = $data[0];
+					$value = $data[1];
+
+					if (!empty($replacements->$key->$value) || $replacements->$key->$value == 0)
+					{
+						$replaceWith = $replacements->$key->$value;
+					}
+					else
+					{
+						$replaceWith = "";
+					}
+
+					if (isset ($replaceWith))
+					{
+						$templateBody = str_replace($replacamentTag, $replaceWith, $templateBody);
+						$index++;
+					}
+				}
+			}
 		}
 
 		return $templateBody;
+	}
+
+	/**
+	 * Method to get Tags.
+	 *
+	 * @param   String  $templateBody  Template Body.
+	 *
+	 * @return  array   $matches
+	 *
+	 * @since 1.0
+	 */
+	public static function getTags($templateBody)
+	{
+		//  Pattern for {text};
+		$pattern = "/{([^}]*)}/";
+
+		preg_match_all($pattern, $templateBody, $matches);
+
+		//  $matches[0] will store array like {course.name} and $matches[1] will store array like course.name.
+		//  Explode it and make it course->name
+		return $matches;
 	}
 
 	/**
