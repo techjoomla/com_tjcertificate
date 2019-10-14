@@ -260,13 +260,13 @@ class TjCertificateTemplate extends CMSObject
 	}
 
 	/**
-	 * Function to get the JSON formated template replacement tags
+	 * Function to get replacement tags file path
 	 *
 	 * @param   string  $client  Client
 	 *
 	 * @return  boolean|string
 	 */
-	public static function loadTemplateReplacementsByClient($client)
+	private function getReplacementTagFile($client)
 	{
 		if (empty($client))
 		{
@@ -277,7 +277,19 @@ class TjCertificateTemplate extends CMSObject
 		$component       = $clientDetails[0];
 		$replacementFile = $clientDetails[1];
 
-		$replacementTagPath = TJ_CERTIFICATE_REPLACEMENT_TAG . '/' . $component . '/' . self::$replacementFolder . '/' . $replacementFile . '.json';
+		return TJ_CERTIFICATE_REPLACEMENT_TAG . '/' . $component . '/' . self::$replacementFolder . '/' . $replacementFile . '.json';
+	}
+
+	/**
+	 * Function to get the JSON formated template replacement tags
+	 *
+	 * @param   string  $client  Client
+	 *
+	 * @return  boolean|string
+	 */
+	public function loadTemplateReplacementsByClient($client)
+	{
+		$replacementTagPath = $this->getReplacementTagFile($client);
 
 		if (JFile::exists($replacementTagPath))
 		{

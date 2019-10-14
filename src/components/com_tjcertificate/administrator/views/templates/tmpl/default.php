@@ -36,13 +36,13 @@ $client = $this->escape($this->state->get('filter.client'));
 
 $clientUrlAppend = '';
 
-if (!empty($client))
-{
-	$clientUrlAppend = '&tmplClient=' . $client;
-}
-elseif ($this->component)
+if ($this->component)
 {
 	$clientUrlAppend = '&extension=' . $this->component;
+}
+elseif (!empty($client))
+{
+	$clientUrlAppend = '&client=' . $client;
 }
 ?>
 
@@ -214,7 +214,7 @@ elseif ($this->component)
 					<?php
 					}
 					?>
-					<input type="hidden" name="tmplClient" value="<?php echo $client; ?>" />
+					<input type="hidden" name="client" value="<?php echo $client; ?>" />
 					<input type="hidden" name="extension" value="<?php echo $this->component; ?>" />
 					<input type="hidden" name="task" value="" />
 					<input type="hidden" name="boxchecked" value="0" />

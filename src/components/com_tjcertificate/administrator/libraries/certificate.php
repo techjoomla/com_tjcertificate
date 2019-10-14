@@ -649,8 +649,8 @@ class TjCertificateCertificate extends CMSObject
 		// Check if certificate expired
 		if ($table->expired_on != '0000-00-00 00:00:00')
 		{
-			$now                   = new DateTime(Factory::getDate('now', 'UTC')->format('Y-m-d'));
-			$certificateExpiryDate = new DateTime(Factory::getDate($table->expired_on, 'UTC')->format('Y-m-d'));
+			$now                   = new DateTime(Factory::getDate('now', 'UTC'));
+			$certificateExpiryDate = new DateTime(Factory::getDate($table->expired_on, 'UTC'));
 
 			if ($now > $certificateExpiryDate)
 			{
@@ -705,7 +705,13 @@ class TjCertificateCertificate extends CMSObject
 
 			if (!empty($this->expired_on))
 			{
-				if (!(DateTime::createFromFormat('Y-m-d H:i:s', $this->expired_on) !== false))
+				// Check if only date is provided e.g. Y-m-d, then add 23:59:59
+				if (!(DateTime::createFromFormat('Y-m-d H:i:s', $this->expired_on) !== false)
+					&& (DateTime::createFromFormat('Y-m-d', $this->expired_on) !== false))
+				{
+					$this->expired_on = $this->expired_on . ' 23:59:59';
+				}
+				elseif (!(DateTime::createFromFormat('Y-m-d H:i:s', $this->expired_on) !== false))
 				{
 					throw new Exception(Text::_('COM_TJCERTIFICATE_TEMPLATE_INVALID_DATE'));
 				}

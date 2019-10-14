@@ -56,9 +56,10 @@ class TjCertificateControllerTemplate extends FormController
 		{
 			$this->extension = $jinput->get('extension', '');
 		}
-		elseif (empty($this->client))
+
+		if (empty($this->client))
 		{
-			$this->client = $jinput->get('tmplClient', '');
+			$this->client = $jinput->get('client', '');
 		}
 	}
 
