@@ -27,6 +27,8 @@ class TjCertificateTemplate extends CMSObject
 
 	public $title = "";
 
+	public $unique_code = null;
+
 	public $body = "";
 
 	public $template_css = "";
@@ -53,7 +55,7 @@ class TjCertificateTemplate extends CMSObject
 
 	public $params = "";
 
-	public static $replacementTagFile = "certificateReplacements.json";
+	public static $replacementFolder = "tjcertificates";
 
 	protected static $certificateTemplateObj = array();
 
@@ -73,7 +75,7 @@ class TjCertificateTemplate extends CMSObject
 
 		$db = Factory::getDbo();
 
-		$this->checked_out_time = $this->created_on = $this->modified_on = $db->getNullDate();
+		$this->checked_out_time = $this->modified_on = $db->getNullDate();
 	}
 
 	/**
@@ -112,7 +114,7 @@ class TjCertificateTemplate extends CMSObject
 	 */
 	public function load($id)
 	{
-		$table = TjCertificateFactory::table("templates");
+		$table = TJCERT::table("templates");
 
 		if (!$table->load($id))
 		{
@@ -135,7 +137,7 @@ class TjCertificateTemplate extends CMSObject
 	public function save()
 	{
 		// Create the certificate template table object
-		$table = TjCertificateFactory::table("templates");
+		$table = TJCERT::table("templates");
 		$table->bind($this->getProperties());
 
 		$currentDateTime = Factory::getDate()->toSql();
@@ -258,24 +260,36 @@ class TjCertificateTemplate extends CMSObject
 	}
 
 	/**
-	 * Function to get the JSON formated template replacement tags
+	 * Function to get replacement tags file path
 	 *
 	 * @param   string  $client  Client
 	 *
 	 * @return  boolean|string
 	 */
-	public static function loadTemplateReplacementsByClient($client)
+	private function getReplacementTagFile($client)
 	{
 		if (empty($client))
 		{
 			return false;
 		}
 
-		$clientDetails = explode(".", $client);
-		$component     = $clientDetails[0];
-		$folder        = $clientDetails[1];
+		$clientDetails   = explode(".", $client);
+		$component       = $clientDetails[0];
+		$replacementFile = $clientDetails[1];
 
-		$replacementTagPath = TJ_CERTIFICATE_REPLACEMENT_TAG . '/' . $component . '/' . $folder . '/' . self::$replacementTagFile;
+		return TJ_CERTIFICATE_REPLACEMENT_TAG . '/' . $component . '/' . self::$replacementFolder . '/' . $replacementFile . '.json';
+	}
+
+	/**
+	 * Function to get the JSON formated template replacement tags
+	 *
+	 * @param   string  $client  Client
+	 *
+	 * @return  boolean|string
+	 */
+	public function loadTemplateReplacementsByClient($client)
+	{
+		$replacementTagPath = $this->getReplacementTagFile($client);
 
 		if (JFile::exists($replacementTagPath))
 		{

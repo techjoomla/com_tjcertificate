@@ -68,7 +68,7 @@ class TjCertificateControllerTemplate extends FormController
 			$htmlData = file_get_contents($templatePath . '/' . $this->htmlTemplateFile);
 			$cssData  = file_get_contents($templatePath . '/' . $this->cssTemplateFile);
 
-			$TjCertificateTemplate = TjCertificateTemplate::getInstance();
+			$TjCertificateTemplate = TJCERT::Template();
 
 			$templateData = $TjCertificateTemplate->getEmogrify($htmlData, $cssData);
 

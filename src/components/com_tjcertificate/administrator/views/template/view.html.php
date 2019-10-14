@@ -91,7 +91,7 @@ class TjCertificateViewTemplate extends HtmlView
 		if (!empty($this->item->client))
 		{
 			// Fetch replacement tags for the client
-			$this->replacementTags = TjCertificateTemplate::loadTemplateReplacementsByClient($this->item->client);
+			$this->replacementTags = TJCERT::Template()->loadTemplateReplacementsByClient($this->item->client);
 		}
 
 		// Check for errors.

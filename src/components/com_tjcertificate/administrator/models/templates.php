@@ -82,6 +82,10 @@ class TjCertificateModelTemplates extends ListModel
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
 
+		$extension = Factory::getApplication()->input->get('extension', '', 'CMD');
+
+		$this->setState('filter.component', $extension);
+
 		// Create the base select statement.
 		$query->select(array('ct.*', 'users.name as uname'));
 		$query->from($db->quoteName('#__tj_certificate_templates', 'ct'));
@@ -101,6 +105,10 @@ class TjCertificateModelTemplates extends ListModel
 		if (!empty($client))
 		{
 			$query->where($db->quoteName('ct.client') . ' = ' . $db->quote($client));
+		}
+		elseif (!empty($extension))
+		{
+			$query->where($db->quoteName('ct.client') . ' = ' . $db->quote($extension));
 		}
 
 		// Filter by search in title.

@@ -82,6 +82,10 @@ class TjCertificateModelCertificates extends ListModel
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
 
+		$extension = Factory::getApplication()->input->get('extension', '', 'CMD');
+
+		$this->setState('filter.component', $extension);
+
 		// Create the base select statement.
 		$query->select(array('ci.*', 'ct.title', 'users.name as uname'));
 		$query->from($db->quoteName('#__tj_certificate_issue', 'ci'));
@@ -111,6 +115,10 @@ class TjCertificateModelCertificates extends ListModel
 		if (!empty($client))
 		{
 			$query->where($db->quoteName('ci.client') . ' = ' . $db->quote($client));
+		}
+		elseif (!empty($extension))
+		{
+			$query->where($db->quoteName('ci.client') . ' = ' . $db->quote($extension));
 		}
 
 		// Filter by client id
@@ -155,6 +163,16 @@ class TjCertificateModelCertificates extends ListModel
 		elseif ($state === '')
 		{
 			$query->where('(ci.state = 0 OR ci.state = 1)');
+		}
+
+		// Filter by Expired certificates
+		$expired = $this->getState('filter.expired');
+
+		if ($expired)
+		{
+			$query->where($db->quoteName('ci.expired_on') . ' <> ""');
+			$query->where($db->quoteName('ci.expired_on') . ' <> ' . $db->quote('0000-00-00 00:00:00'));
+			$query->where($db->quoteName('ci.expired_on') . ' < ' . $db->quote(Factory::getDate()->toSql()));
 		}
 
 		// Add the list ordering clause.

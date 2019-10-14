@@ -30,6 +30,14 @@ class TjCertificateControllerTemplate extends FormController
 	protected $client;
 
 	/**
+	 * The extension for which the templates are being created.
+	 *
+	 * @var    string
+	 * @since  1.0
+	 */
+	protected $extension;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param   array  $config  An optional associative array of configuration settings.
@@ -41,9 +49,17 @@ class TjCertificateControllerTemplate extends FormController
 	{
 		parent::__construct($config);
 
+		$app    = Factory::getApplication();
+		$jinput = $app->input;
+
+		if (empty($this->extension))
+		{
+			$this->extension = $jinput->get('extension', '');
+		}
+
 		if (empty($this->client))
 		{
-			$this->client = Factory::getApplication()->input->get('tmplClient', '');
+			$this->client = $jinput->get('client', '');
 		}
 	}
 
@@ -61,7 +77,11 @@ class TjCertificateControllerTemplate extends FormController
 	{
 		$append = parent::getRedirectToItemAppend($recordId);
 
-		if (!empty ($this->client))
+		if (!empty ($this->extension))
+		{
+			$append .= '&extension=' . $this->extension;
+		}
+		elseif (!empty ($this->client))
 		{
 			$append .= '&client=' . $this->client;
 		}
@@ -80,7 +100,11 @@ class TjCertificateControllerTemplate extends FormController
 	{
 		$append = parent::getRedirectToListAppend();
 
-		if (!empty ($this->client))
+		if (!empty ($this->extension))
+		{
+			$append .= '&extension=' . $this->extension;
+		}
+		elseif (!empty ($this->client))
 		{
 			$append .= '&client=' . $this->client;
 		}

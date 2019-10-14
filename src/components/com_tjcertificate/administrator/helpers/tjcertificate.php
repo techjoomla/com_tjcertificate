@@ -11,6 +11,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
 
 /**
  * Certificate helper.
@@ -28,9 +29,16 @@ class TjCertificateHelper
 	 */
 	public static function addSubmenu($vName = '')
 	{
-		$layout = JFactory::getApplication()->input->get('layout', '', 'STRING');
+		$extension = Factory::getApplication()->input->get('extension', '', 'STRING');
 
-		if ($layout != "default")
+		$parts = explode('.', $extension);
+
+		// Eg com_tjcertificate
+		$component = $parts[0];
+		$eName     = str_replace('com_', '', $component);
+		$file      = JPath::clean(JPATH_ADMINISTRATOR . '/components/' . $component . '/helpers/' . $eName . '.php');
+
+		if (empty($extension) || (!empty($extension) && !file_exists($file)))
 		{
 			JHtmlSidebar::addEntry(
 				Text::_('COM_TJCERTIFICATE_VIEW_CERTIFICATE_TEMPLATES'),
@@ -46,16 +54,6 @@ class TjCertificateHelper
 		}
 		else
 		{
-			$client = JFactory::getApplication()->input->get('client', '', 'STRING');
-
-			// Set ordering.
-			$full_client = explode('.', $client);
-
-			// Eg com_jgive
-			$component = $full_client[0];
-			$eName = str_replace('com_', '', $component);
-			$file = JPath::clean(JPATH_ADMINISTRATOR . '/components/' . $component . '/helpers/' . $eName . '.php');
-
 			if (file_exists($file))
 			{
 				require_once $file;

@@ -36,9 +36,13 @@ $client = $this->escape($this->state->get('filter.client'));
 
 $clientUrlAppend = '';
 
-if (!empty($client))
+if ($this->component)
 {
-	$clientUrlAppend = '&tmplClient=' . $client;
+	$clientUrlAppend = '&extension=' . $this->component;
+}
+elseif (!empty($client))
+{
+	$clientUrlAppend = '&client=' . $client;
 }
 ?>
 
@@ -210,7 +214,8 @@ if (!empty($client))
 					<?php
 					}
 					?>
-					<input type="hidden" name="tmplClient" value="<?php echo $client; ?>" />
+					<input type="hidden" name="client" value="<?php echo $client; ?>" />
+					<input type="hidden" name="extension" value="<?php echo $this->component; ?>" />
 					<input type="hidden" name="task" value="" />
 					<input type="hidden" name="boxchecked" value="0" />
 					<?php echo HTMLHelper::_('form.token'); ?>

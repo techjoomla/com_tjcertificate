@@ -42,7 +42,7 @@ class JFormFieldCertificateTemplates extends JFormFieldList
 		if ($user->id)
 		{
 			// Get template model
-			$model = TjCertificateFactory::model('Templates', array('ignore_request' => true));
+			$model = TJCERT::model('Templates', array('ignore_request' => true));
 
 			if (!empty($client))
 			{
@@ -68,7 +68,7 @@ class JFormFieldCertificateTemplates extends JFormFieldList
 
 		// Get Public templates
 		// Get template model
-		$model = TjCertificateFactory::model('Templates', array('ignore_request' => true));
+		$model = TJCERT::model('Templates', array('ignore_request' => true));
 
 		if (!empty($client))
 		{

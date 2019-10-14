@@ -113,7 +113,7 @@ class TjCertificateModelTemplate extends AdminModel
 	public function save($data)
 	{
 		$pk   = (!empty($data['id'])) ? $data['id'] : (int) $this->getState('template.id');
-		$template = TjCertificateTemplate::getInstance($pk);
+		$template = TJCERT::Template($pk);
 
 		// PDF options
 		if (isset($data['params']) && is_array($data['params']))
@@ -162,8 +162,17 @@ class TjCertificateModelTemplate extends AdminModel
 		$id = ($jinput->get('id'))?$jinput->get('id'):$jinput->get('id');
 		$this->setState('template.id', $id);
 
-		$client = $jinput->get('client', '');
-		$this->setState('template.client', $client);
+		$client    = $jinput->get('client', '');
+		$extension = $jinput->get('extension', '');
+
+		if (!empty($extension))
+		{
+			$this->setState('template.client', $extension);
+		}
+		else
+		{
+			$this->setState('template.client', $client);
+		}
 	}
 
 	/**
