@@ -482,12 +482,12 @@ class TjCertificateCertificate extends CMSObject
 
 		$url .= '&show_search=' . $showSearchBox;
 
-		if ($options['popup'])
+		if (isset($options['popup']))
 		{
 			$url .= '&tmpl=component';
 		}
 
-		if ($options['absolute'])
+		if (isset($options['absolute']))
 		{
 			return JUri::root() . substr(Route::_($url), strlen(JUri::base(true)) + 1);
 		}
