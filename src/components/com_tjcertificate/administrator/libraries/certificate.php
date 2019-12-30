@@ -482,12 +482,12 @@ class TjCertificateCertificate extends CMSObject
 
 		$url .= '&show_search=' . $showSearchBox;
 
-		if ($options['popup'])
+		if (isset($options['popup']))
 		{
 			$url .= '&tmpl=component';
 		}
 
-		if ($options['absolute'])
+		if (isset($options['absolute']))
 		{
 			return JUri::root() . substr(Route::_($url), strlen(JUri::base(true)) + 1);
 		}
@@ -504,18 +504,18 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @since 1.0
 	 */
-	public function getDownloadUrl($options)
+	public function getDownloadUrl($options = array())
 	{
 		if (JFile::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
 		{
 			$url = 'index.php?option=com_tjcertificate&task=certificate.download&certificate=' . $this->unique_certificate_id;
 
-			if ($options['store'])
+			if (isset($options['store']))
 			{
 				$url .= '&store=store';
 			}
 
-			if ($options['absolute'])
+			if (isset($options['absolute']))
 			{
 				return JUri::root() . substr(Route::_($url), strlen(JUri::base(true)) + 1);
 			}
