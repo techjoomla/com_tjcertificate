@@ -15,6 +15,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\String\StringHelper;
 
 /**
  * Certificate template class. Handles all application interaction with a Certificate Template
@@ -222,6 +223,7 @@ class TjCertificateTemplate extends CMSObject
 
 		// Make sure its an integer
 		$this->id = (int) $this->id;
+		$this->title = StringHelper::trim($this->title);
 
 		return true;
 	}
