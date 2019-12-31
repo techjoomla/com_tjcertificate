@@ -22,7 +22,7 @@ if ($this->showSearchBox)
 		<div class="tj-search-filters">
 			<div class="btn-wrapper input-append">
 				<input type="text" name="certificate" id="certificate"
-				value="<?php echo $this->uniqueCertificateId; ?>" placeholder="Enter Certificate Id">
+				value="<?php echo $this->uniqueCertificateId; ?>" placeholder="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_ENTER_CERTIFICATE_ID'); ?>">
 				<button type="submit" class="btn hasTooltip" title="" aria-label="Search" data-original-title="Search">
 					<span class="icon-search" aria-hidden="true"></span>
 				</button>
