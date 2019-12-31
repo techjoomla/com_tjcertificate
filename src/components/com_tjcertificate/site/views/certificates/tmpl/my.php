@@ -28,19 +28,20 @@ $saveOrder = $listOrder == 'ci.id';
 
 ?>
 
-<div class="tj-page">
+<div class="tj-page tjBs3">
 	<div class="row-fluid">
 		<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificates&layout=my'); ?>" method="post" name="adminForm" id="adminForm">
-			<div id="j-main-container">
+			<div class="tj-search-filters">
 			<?php
 			// Search tools bar
 			echo LayoutHelper::render('joomla.searchtools.default', array('view' => $this));
 			?>
+			</div>
 			<?php
 			if (empty($this->items))
 			{
 			?>
-				<div class="alert alert-no-items">
+				<div class="alert alert-info alert-no-items ">
 					<?php echo Text::_('JGLOBAL_NO_MATCHING_RESULTS'); ?>
 				</div>
 			<?php
@@ -119,7 +120,6 @@ $saveOrder = $listOrder == 'ci.id';
 					<input type="hidden" name="task" value="" />
 					<input type="hidden" name="boxchecked" value="0" />
 					<?php echo HTMLHelper::_('form.token'); ?>
-			</div>
 		</form>
 	</div>
 </div>
@@ -127,5 +127,12 @@ $saveOrder = $listOrder == 'ci.id';
 	.cert_modal{
 		display: block !important;
 		position: relative;
+	}
+	.icon-search:before {
+		content: "\f002";
+		font-family: "FontAwesome";
+	}
+	.tj-search-filters .input-append{
+		display: inline-flex;
 	}
 </style>
