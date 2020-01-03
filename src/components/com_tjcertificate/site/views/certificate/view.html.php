@@ -49,7 +49,8 @@ class TjCertificateViewCertificate extends JViewLegacy
 
 		if (!empty($this->uniqueCertificateId))
 		{
-			$certificateObj = TJCERT::Certificate()::validateCertificate($this->uniqueCertificateId);
+			$certificate = TJCERT::Certificate();
+			$certificateObj = $certificate::validateCertificate($this->uniqueCertificateId);
 
 			if (!$certificateObj->id)
 			{

@@ -19,12 +19,14 @@ if ($this->showSearchBox)
 {
 	?>
 	<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate'); ?>" method="post" name="adminForm" id="adminForm">
-		<div class="btn-wrapper input-append">
-			<input type="text" name="certificate" id="certificate"
-			value="<?php echo $this->uniqueCertificateId; ?>" placeholder="Enter Certificate Id">
-			<button type="submit" class="btn hasTooltip" title="" aria-label="Search" data-original-title="Search">
-				<span class="icon-search" aria-hidden="true"></span>
-			</button>
+		<div class="tj-search-filters">
+			<div class="btn-wrapper input-append">
+				<input type="text" name="certificate" id="certificate"
+				value="<?php echo $this->uniqueCertificateId; ?>" placeholder="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_ENTER_CERTIFICATE_ID'); ?>">
+				<button type="submit" class="btn hasTooltip" title="" aria-label="Search" data-original-title="Search">
+					<span class="icon-search" aria-hidden="true"></span>
+				</button>
+			</div>
 		</div>
 	</form>
 	<?php
@@ -89,3 +91,12 @@ function printCertificate(elementId) {
 	document.body.innerHTML = originalContent;
 }
 </script>
+<style type="text/css">
+	.icon-search:before {
+		content: "\f002";
+		font-family: "FontAwesome";
+	}
+	.tj-search-filters .input-append{
+		display: inline-flex;
+	}
+</style>
