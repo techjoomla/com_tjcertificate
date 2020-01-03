@@ -538,13 +538,6 @@ class TjCertificateCertificate extends CMSObject
 	public function pdfDownload($store = 0)
 	{
 		$app  = Factory::getApplication();
-		$user = Factory::getUser();
-
-		if (!$user->id || ($user->id != $this->user_id))
-		{
-			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_ERROR_SOMETHING_WENT_WRONG'), 'error');
-			$app->redirect('index.php');
-		}
 
 		if (JFile::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
 		{
