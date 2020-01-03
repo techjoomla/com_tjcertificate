@@ -36,7 +36,7 @@ class JFormFieldSampleTemplates extends JFormFieldList
 		$user = Factory::getUser();
 		$db = Factory::getDbo();
 
-		$client = $input->get('client', '');
+		$client = $input->get('extension', '');
 
 		$options[] = JHtml::_('select.option', '', Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_SELECT_SAMPLE_TEMPLATE'));
 
@@ -72,7 +72,8 @@ class JFormFieldSampleTemplates extends JFormFieldList
 				}
 			}
 		}
-
+		else
+		{
 		// Get default sample templates
 		$defaultSampleTemplatePath = TJ_CERTIFICATE_DEFAULT_TEMPLATE;
 
@@ -94,6 +95,7 @@ class JFormFieldSampleTemplates extends JFormFieldList
 					$folder = trim(str_replace($defaultSampleTemplatePath, '', $folder), '/');
 
 					$options[] = JHtml::_('select.option', 'com_tjcertificate.' . $folder, $folder);
+					}
 				}
 			}
 		}
