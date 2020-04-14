@@ -41,17 +41,10 @@ if ($this->certificate)
 			<div class="table-responsive">
 				<table cellpadding="5">
 					<tr>
-						<?php
-						if ($this->tmpl != 'component')
-						{
-							?>
-							<td>
-								<input type="button" class="btn btn-blue" onclick="printCertificate('certificateContent')"
-								value="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_PRINT');?>" />
-							</td>
-							<?php
-						}
-						?>
+						<td>
+							<input type="button" class="btn btn-blue" onclick="printCertificate('certificateContent')"
+							value="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_PRINT');?>" />
+						</td>
 						<?php
 						if ($this->certificate->getDownloadUrl())
 						{
