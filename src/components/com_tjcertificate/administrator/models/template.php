@@ -115,6 +115,12 @@ class TjCertificateModelTemplate extends AdminModel
 		$pk   = (!empty($data['id'])) ? $data['id'] : (int) $this->getState('template.id');
 		$template = TJCERT::Template($pk);
 
+		// While editing the template don't allow to edit unique_code
+		if ($data['id'])
+		{
+			unset($data['unique_code']);
+		}
+
 		// PDF options
 		if (isset($data['params']) && is_array($data['params']))
 		{
