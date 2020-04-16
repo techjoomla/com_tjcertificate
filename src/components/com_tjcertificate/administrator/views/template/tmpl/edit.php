@@ -60,7 +60,18 @@ $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=c
 				<div class="row-fluid">
 					<div class="span8">
 						<?php echo $this->form->renderField('title'); ?>
-						<?php echo $this->form->renderField('unique_code'); ?>
+						<?php
+
+							if ($this->item->id == 0)
+							{
+								echo $this->form->renderField('unique_code');
+							}
+							else
+							{
+								$this->form->setFieldAttribute('unique_code', 'readonly', 'true');
+								echo $this->form->renderField('unique_code');
+							}
+						?>
 						<?php echo $this->form->renderField('sample_template'); ?>
 						<?php echo $this->form->renderField('body'); ?>
 						<?php echo $this->form->renderField('client'); ?>
