@@ -382,6 +382,9 @@ class TjCertificateCertificate extends CMSObject
 
 			$this->id = $table->id;
 
+			// For update the generated unique certificate id in the template body.
+			$this->updateCertificateId();
+
 			// Fire the onTjCertificateAfterSave event.
 			$dispatcher = \JEventDispatcher::getInstance();
 
@@ -850,5 +853,27 @@ class TjCertificateCertificate extends CMSObject
 		}
 
 		return $certificateString;
+	}
+
+	/**
+	 * Method to generate unique certificate Id in certificate body.
+	 *
+	 * @return   string
+	 *
+	 * @since    1.0.0
+	 */
+	protected function updateCertificateId()
+	{
+		// Update cert body
+		if (strpos($this->generated_body, '{certificate.cert_id}') !== false)
+		{
+			$this->generated_body = str_replace("{certificate.cert_id}", $this->unique_certificate_id, $this->generated_body);
+
+			return $this->save();
+		}
+		else
+		{
+			return true;
+		}
 	}
 }
