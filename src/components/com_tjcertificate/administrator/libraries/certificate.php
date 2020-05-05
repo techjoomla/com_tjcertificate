@@ -688,6 +688,12 @@ class TjCertificateCertificate extends CMSObject
 			// Generate certificate body
 			$this->generated_body = $this->generateCertificateBody($template->body, $replacements);
 
+			// Generate unique certficate id
+			$this->unique_certificate_id = $this->generateUniqueCertId($options);
+
+			// Replace Certificate Id tag i.e. {certificate.cert_id} if available
+			$this->replaceCertIdTag();
+
 			// Emogrify generated body with template css is available
 			$emogrData = $template->getEmogrify($this->generated_body, $template->template_css);
 
@@ -716,9 +722,6 @@ class TjCertificateCertificate extends CMSObject
 			{
 				$this->expired_on = $db->getNullDate();
 			}
-
-			// Generate unique certficate id - start
-			$this->unique_certificate_id = $this->generateUniqueCertId($options);
 
 			// Save certificate
 			$this->save();
@@ -862,18 +865,12 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @since    1.0.0
 	 */
-	protected function updateCertificateId()
+	protected function replaceCertIdTag()
 	{
 		// Update cert body
 		if (strpos($this->generated_body, '{certificate.cert_id}') !== false)
 		{
 			$this->generated_body = str_replace("{certificate.cert_id}", $this->unique_certificate_id, $this->generated_body);
-
-			return $this->save();
-		}
-		else
-		{
-			return true;
 		}
 	}
 }
