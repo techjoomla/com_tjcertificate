@@ -682,6 +682,12 @@ class TjCertificateCertificate extends CMSObject
 				throw new Exception(Text::_('COM_TJCERTIFICATE_TEMPLATE_INVALID'));
 			}
 
+			// Generate unique certificate id
+			$this->unique_certificate_id = $this->generateUniqueCertId($options);
+
+			// Generate unique certificate id replacement
+			$replacements->certificate->cert_id = $this->unique_certificate_id;
+
 			// Generate certificate body
 			$this->generated_body = $this->generateCertificateBody($template->body, $replacements);
 
@@ -713,9 +719,6 @@ class TjCertificateCertificate extends CMSObject
 			{
 				$this->expired_on = $db->getNullDate();
 			}
-
-			// Generate unique certficate id - start
-			$this->unique_certificate_id = $this->generateUniqueCertId($options);
 
 			// Save certificate
 			$this->save();
