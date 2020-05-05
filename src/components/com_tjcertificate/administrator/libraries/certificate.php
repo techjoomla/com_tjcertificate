@@ -382,9 +382,6 @@ class TjCertificateCertificate extends CMSObject
 
 			$this->id = $table->id;
 
-			// For update the generated unique certificate id in the template body.
-			$this->updateCertificateId();
-
 			// Fire the onTjCertificateAfterSave event.
 			$dispatcher = \JEventDispatcher::getInstance();
 
