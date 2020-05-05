@@ -682,14 +682,14 @@ class TjCertificateCertificate extends CMSObject
 				throw new Exception(Text::_('COM_TJCERTIFICATE_TEMPLATE_INVALID'));
 			}
 
-			// Generate certificate body
-			$this->generated_body = $this->generateCertificateBody($template->body, $replacements);
-
-			// Generate unique certficate id
+			// Generate unique certificate id
 			$this->unique_certificate_id = $this->generateUniqueCertId($options);
 
-			// Replace Certificate Id tag i.e. {certificate.cert_id} if available
-			$this->replaceCertIdTag();
+			// Generate unique certificate id replacement
+			$replacements->certificate->cert_id = $this->unique_certificate_id;
+
+			// Generate certificate body
+			$this->generated_body = $this->generateCertificateBody($template->body, $replacements);
 
 			// Emogrify generated body with template css is available
 			$emogrData = $template->getEmogrify($this->generated_body, $template->template_css);
@@ -853,21 +853,5 @@ class TjCertificateCertificate extends CMSObject
 		}
 
 		return $certificateString;
-	}
-
-	/**
-	 * Method to generate unique certificate Id in certificate body.
-	 *
-	 * @return   string
-	 *
-	 * @since    1.0.0
-	 */
-	protected function replaceCertIdTag()
-	{
-		// Update cert body
-		if (strpos($this->generated_body, '{certificate.cert_id}') !== false)
-		{
-			$this->generated_body = str_replace("{certificate.cert_id}", $this->unique_certificate_id, $this->generated_body);
-		}
 	}
 }
