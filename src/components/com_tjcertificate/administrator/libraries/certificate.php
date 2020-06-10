@@ -187,7 +187,7 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setClientIssuedToName($value = 0)
+	public function setClientIssuedToName($value = "")
 	{
 		$this->client_issued_to_name = $value;
 	}
