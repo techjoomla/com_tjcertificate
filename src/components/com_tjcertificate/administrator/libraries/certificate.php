@@ -574,7 +574,7 @@ class TjCertificateCertificate extends CMSObject
 				foreach ($fontArray as $fontName)
 				{
 					$fontName = str_replace(' ', '', ucfirst($fontName));
-					$link = '<link href="http://fonts.googleapis.com/css?family=' . $fontName . '" rel="stylesheet" type="text/css">';
+					$link = '<link href="https://fonts.googleapis.com/css?family=' . $fontName . '" rel="stylesheet" type="text/css">';
 					$style .= $link;
 				}
 			}
