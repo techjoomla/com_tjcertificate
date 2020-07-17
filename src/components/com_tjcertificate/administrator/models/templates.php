@@ -4,15 +4,16 @@
  * @subpackage  com_tjcertificate
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2020 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
 
 /**
  * Methods supporting a list of records.
@@ -87,7 +88,7 @@ class TjCertificateModelTemplates extends ListModel
 		$this->setState('filter.component', $extension);
 
 		// Create the base select statement.
-		$query->select(array('ct.*', 'users.name as uname'));
+		$query->select(array('ct.*', 'IF(users.name IS NULL,"' . Text::_('COM_TJCERTIFICATE_BLOCKED_USER') . '",users.name) AS uname'));
 		$query->from($db->quoteName('#__tj_certificate_templates', 'ct'));
 		$query->join('LEFT', $db->quoteName('#__users', 'users') . ' ON (' . $db->quoteName('ct.created_by') . ' = ' . $db->quoteName('users.id') . ')');
 
