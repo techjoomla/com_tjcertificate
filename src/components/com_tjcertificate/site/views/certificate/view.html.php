@@ -53,20 +53,15 @@ class TjCertificateViewCertificate extends JViewLegacy
 		if (!empty($this->uniqueCertificateId))
 		{
 			$certificate = TJCERT::Certificate();
-			$certificateObj = new stdClass;
-			$certificateObj = $certificate::validateCertificate($this->uniqueCertificateId);
+			$this->certificate = $certificate::validateCertificate($this->uniqueCertificateId);
 
-			if (!$certificateObj->id)
+			if (!$this->certificate->id)
 			{
 				JError::raiseWarning(500, Text::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EXPIRED'));
 			}
-			else
-			{
-				$this->certificate = $certificateObj;
-			}
 		}
 
-		$certificateInstance  = TJCERT::Certificate($certificateObj->id);
+		$certificateInstance  = TJCERT::Certificate($this->certificate->id);
 
 		// If certificate view is private then view is available only for certificate owner
 		if (!$params->get('certificate_scope') && Factory::getUser()->id != $certificateInstance->getUserId())
