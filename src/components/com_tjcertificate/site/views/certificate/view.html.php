@@ -46,7 +46,7 @@ class TjCertificateViewCertificate extends JViewLegacy
 		$input = Factory::getApplication()->input;
 
 		$this->uniqueCertificateId = $input->get('certificate', '', 'STRING');
-		$this->showSearchBox       = $input->getInt('show_search', $params->get('search_box'));
+		$this->showSearchBox       = $input->getInt('show_search', $params->get('show_search_box'));
 		$this->tmpl                = $input->get('tmpl', '', 'STRING');
 
 		if (!empty($this->uniqueCertificateId))

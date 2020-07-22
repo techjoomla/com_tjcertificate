@@ -30,12 +30,12 @@
 			<option value="0">COM_TJCERTIFICATE_CERTIFICATE_FIXED_RANDOM_STRING_LENTGH_RANDOM</option> -->
 		</field>
 		<field name="certificate_scope" class="btn-group" type="radio"  default="1" description="COM_TJCERTIFICATE_SHOW_PUBLIC_PRIVATE_DESC" label="COM_TJCERTIFICATE_SHOW_PUBLIC_PRIVATE" >
-			<option value="1">Public</option>
-			<option value="0">Private</option>
+			<option value="1">COM_TJCERTIFICATE_OPTION_PUBLIC</option>
+			<option value="0">COM_TJCERTIFICATE_OPTION_PRIVATE</option>
 		</field>
-		<field name="search_box" class="btn-group" type="radio"  default="0" description="COM_TJCERTIFICATE_SHOW_HIDE_SEARCH_BOX_DESC" label="COM_TJCERTIFICATE_SHOW_HIDE_SEARCH_BOX" >
-			<option value="1">Yes</option>
-			<option value="0">No</option>
+		<field name="show_search_box" class="btn-group" type="radio"  default="0" description="COM_TJCERTIFICATE_SHOW_SEARCH_BOX_DESC" label="COM_TJCERTIFICATE_SHOW_SEARCH_BOX" >
+			<option value="1">JYES</option>
+			<option value="0">JNo</option>
 		</field>
 	</fieldset>
 
