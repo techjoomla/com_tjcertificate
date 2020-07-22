@@ -32,8 +32,6 @@ class TjCertificateViewCertificate extends JViewLegacy
 
 	public $showSearchBox = null;
 
-	public $certificateObj = null;
-
 	/**
 	 * Display the view
 	 *
@@ -55,6 +53,7 @@ class TjCertificateViewCertificate extends JViewLegacy
 		if (!empty($this->uniqueCertificateId))
 		{
 			$certificate = TJCERT::Certificate();
+			$certificateObj = new stdClass;
 			$certificateObj = $certificate::validateCertificate($this->uniqueCertificateId);
 
 			if (!$certificateObj->id)
