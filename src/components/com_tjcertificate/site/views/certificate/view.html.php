@@ -14,6 +14,7 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.view');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
 
 JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
 
@@ -41,10 +42,11 @@ class TjCertificateViewCertificate extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
+		$params = ComponentHelper::getParams('com_tjcertificate');
 		$input = Factory::getApplication()->input;
 
 		$this->uniqueCertificateId = $input->get('certificate', '', 'STRING');
-		$this->showSearchBox       = $input->getInt('show_search', 1);
+		$this->showSearchBox       = $input->getInt('show_search', $params->get('search_box'));
 		$this->tmpl                = $input->get('tmpl', '', 'STRING');
 
 		if (!empty($this->uniqueCertificateId))
@@ -60,6 +62,16 @@ class TjCertificateViewCertificate extends JViewLegacy
 			{
 				$this->certificate = $certificateObj;
 			}
+		}
+
+		$certificateInstance  = TJCERT::Certificate($certificateObj->id);
+
+		// If certificate view is private then view is available only for certificate owner
+		if (!$params->get('certificate_scope') && Factory::getUser()->id != $certificateInstance->getUserId())
+		{
+			JError::raiseError(500, JText::_('JERROR_ALERTNOAUTHOR'));
+
+			return false;
 		}
 
 		parent::display($tpl);
