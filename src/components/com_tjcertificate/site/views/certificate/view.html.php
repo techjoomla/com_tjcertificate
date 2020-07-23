@@ -14,6 +14,8 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.view');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Language\Text;
 
 JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
 
@@ -41,25 +43,32 @@ class TjCertificateViewCertificate extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$input = Factory::getApplication()->input;
+		$params = ComponentHelper::getParams('com_tjcertificate');
+		$input  = Factory::getApplication()->input;
 
 		$this->uniqueCertificateId = $input->get('certificate', '', 'STRING');
-		$this->showSearchBox       = $input->getInt('show_search', 1);
+		$this->showSearchBox       = $input->getInt('show_search', $params->get('show_search_box'));
 		$this->tmpl                = $input->get('tmpl', '', 'STRING');
 
 		if (!empty($this->uniqueCertificateId))
 		{
 			$certificate = TJCERT::Certificate();
-			$certificateObj = $certificate::validateCertificate($this->uniqueCertificateId);
+			$this->certificate = $certificate::validateCertificate($this->uniqueCertificateId);
 
-			if (!$certificateObj->id)
+			if (!$this->certificate->id)
 			{
-				JError::raiseWarning(500, JText::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EXPIRED'));
+				JError::raiseWarning(500, Text::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EXPIRED'));
 			}
-			else
-			{
-				$this->certificate = $certificateObj;
-			}
+		}
+
+		$certificateInstance  = TJCERT::Certificate($this->certificate->id);
+
+		// If certificate view is private then view is available only for certificate owner
+		if (!$params->get('certificate_scope') && Factory::getUser()->id != $certificateInstance->getUserId())
+		{
+			JError::raiseWarning(500, Text::_('JERROR_ALERTNOAUTHOR'));
+
+			return false;
 		}
 
 		parent::display($tpl);
