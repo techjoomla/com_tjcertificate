@@ -61,10 +61,8 @@ class TjCertificateViewCertificate extends JViewLegacy
 			}
 		}
 
-		$certificateInstance  = TJCERT::Certificate($this->certificate->id);
-
 		// If certificate view is private then view is available only for certificate owner
-		if (!$params->get('certificate_scope') && Factory::getUser()->id != $certificateInstance->getUserId())
+		if (!$params->get('certificate_scope') && Factory::getUser()->id != $this->certificate->getUserId())
 		{
 			JError::raiseWarning(500, Text::_('JERROR_ALERTNOAUTHOR'));
 
