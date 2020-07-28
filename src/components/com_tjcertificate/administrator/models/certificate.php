@@ -142,7 +142,7 @@ class TjCertificateModelCertificate extends AdminModel
 	 *
 	 * @since   __DEPLOY_VERSION__ 
 	 * 
-	 * @return  HTML
+	 * @return  string
 	 */
 	public function getCertificateProviderInfo($contentId,$client)
 	{
