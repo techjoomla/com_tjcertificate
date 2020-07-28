@@ -73,7 +73,7 @@ class TjCertificateViewCertificate extends JViewLegacy
 
 		// Get HTML
 		$model = TJCERT::model('Certificate', array('ignore_request' => true));
-		$this->contentHtml = $model->getContentInfo($this->certificate->getClientId(), $this->certificate->getClient());
+		$this->contentHtml = $model->getCertificateProviderInfo($this->certificate->getClientId(), $this->certificate->getClient());
 
 		parent::display($tpl);
 	}

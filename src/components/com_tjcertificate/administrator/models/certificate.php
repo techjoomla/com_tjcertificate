@@ -14,6 +14,7 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use \Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Table\Table;
+use Joomla\CMS\Plugin\PluginHelper;
 
 /**
  * Item Model for an Certificate.
@@ -132,22 +133,22 @@ class TjCertificateModelCertificate extends AdminModel
 	}
 
 	/**
-	 * Method to get content HTML.
+	 * Method to get certificate provider info HTML.
 	 *
 	 * This method provides the tjlms course/jt event info HTML.
 	 *
-	 * @param   int     $id      id 
-	 * @param   string  $client  client
+	 * @param   int     $contentId  contentId 
+	 * @param   string  $client     client
 	 *
 	 * @since   __DEPLOY_VERSION__ 
 	 * 
 	 * @return  HTML
 	 */
-	public function getContentInfo($id,$client)
+	public function getCertificateProviderInfo($contentId,$client)
 	{
 		$dispatcher = JDispatcher::getInstance();
-		JPluginHelper::importPlugin('content');
-		$html = $dispatcher->trigger('onContentPrepareTjHtml', array($id,$client));
+		PluginHelper::importPlugin('content');
+		$html = $dispatcher->trigger('onContentPrepareTjHtml', array($contentId,$client));
 
 		return trim(implode("\n", $html));
 	}
