@@ -147,8 +147,8 @@ class TjCertificateModelCertificate extends AdminModel
 	{
 		$dispatcher = JDispatcher::getInstance();
 		JPluginHelper::importPlugin('content');
-		$html = $dispatcher->trigger('getContentInfoHTML', array($id,$client));
+		$html = $dispatcher->trigger('onContentPrepareTjHtml', array($id,$client));
 
-		return $html[0];
+		return trim(implode("\n", $html));
 	}
 }
