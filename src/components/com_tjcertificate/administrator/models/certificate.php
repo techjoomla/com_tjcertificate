@@ -130,4 +130,25 @@ class TjCertificateModelCertificate extends AdminModel
 		$id = ($jinput->get('id'))?$jinput->get('id'):$jinput->get('id');
 		$this->setState('certificate.id', $id);
 	}
+
+	/**
+	 * Method to get content HTML.
+	 *
+	 * This method provides the tjlms course/jt event info HTML.
+	 *
+	 * @param   int     $id      id 
+	 * @param   string  $client  client
+	 *
+	 * @since   __DEPLOY_VERSION__ 
+	 * 
+	 * @return  HTML
+	 */
+	public function getContentInfo($id,$client)
+	{
+		$dispatcher = JDispatcher::getInstance();
+		JPluginHelper::importPlugin('content');
+		$html = $dispatcher->trigger('getContentInfoHTML', array($id,$client));
+
+		return $html[0];
+	}
 }

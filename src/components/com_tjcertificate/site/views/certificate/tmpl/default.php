@@ -32,6 +32,12 @@ if ($this->showSearchBox)
 	<?php
 }
 
+// Tjlms course / jt event info HTML
+if (!empty($this->contentHtml))
+{
+	echo $this->contentHtml;
+}
+
 if ($this->certificate)
 {
 	if ($this->certificate->getUserId() == Factory::getUser()->id)
