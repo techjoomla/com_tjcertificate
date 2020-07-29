@@ -144,11 +144,12 @@ class TjCertificateModelCertificate extends AdminModel
 	 * 
 	 * @return  string
 	 */
-	public function getCertificateProviderInfo($contentId,$client)
+	public function getCertificateProviderInfo($contentId, $client)
 	{
 		$dispatcher = JDispatcher::getInstance();
 		PluginHelper::importPlugin('content');
-		$html = $dispatcher->trigger('onContentPrepareTjHtml', array($contentId,$client));
+		PluginHelper::importPlugin('tjlms');
+		$html = $dispatcher->trigger('onContentPrepareTjHtml', array($contentId, $client));
 
 		return trim(implode("\n", $html));
 	}
