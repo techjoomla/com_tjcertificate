@@ -32,6 +32,8 @@ class TjCertificateViewCertificate extends JViewLegacy
 
 	public $showSearchBox = null;
 
+	public $contentHtml = null;
+
 	/**
 	 * Display the view
 	 *
@@ -68,6 +70,10 @@ class TjCertificateViewCertificate extends JViewLegacy
 
 			return false;
 		}
+
+		// Get HTML
+		$model = TJCERT::model('Certificate', array('ignore_request' => true));
+		$this->contentHtml = $model->getCertificateProviderInfo($this->certificate->getClientId(), $this->certificate->getClient());
 
 		parent::display($tpl);
 	}
