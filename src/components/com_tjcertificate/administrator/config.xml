@@ -43,4 +43,24 @@
 	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
 		<field name="rules" type="rules" label="JCONFIG_PERMISSIONS_LABEL" class="inputbox" validate="rules" filter="rules" component="com_tjcertificate" section="component" />
 	</fieldset>
+
+	<!-- Social sharing -->
+	<fieldset name="social_sharing" label="COM_TJCERTIFICATE_SOCIAL_SHARING_SETINGS">
+		<field name="social_sharing" class="btn-group" type="radio"  default="0" description="COM_TJCERTIFICATE_SOCIAL_SHARING_DESC" label="COM_TJCERTIFICATE_SOCIAL_SHARING" >
+			<option value="1">JYES</option>
+			<option value="0">JNo</option>
+		</field>
+		<field name="facebook_share" class="btn-group" type="radio" default="0" label="COM_TJCERTIFICATE_SOCIAL_SHARING_FACEBOOK" showon="social_sharing:1">
+		   <option value="1">JSHOW</option>
+		   <option value="0">JHIDE</option>
+		</field>
+		<field name="linkedin_share" class="btn-group" type="radio" default="0" label="COM_TJCERTIFICATE_SOCIAL_SHARING_LINKEDIN" showon="social_sharing:1">
+		   <option value="1">JSHOW</option>
+		   <option value="0">JHIDE</option>
+		</field>
+		<field name="twitter_share" class="btn-group" type="radio" default="0" label="COM_TJCERTIFICATE_SOCIAL_SHARING_TWITTER" showon="social_sharing:1">
+		   <option value="1">JSHOW</option>
+		   <option value="0">JHIDE</option>
+		</field>
+	</fieldset>
 </config>

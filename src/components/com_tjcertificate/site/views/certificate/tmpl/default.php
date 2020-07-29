@@ -14,6 +14,10 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\HTMLHelper;
+
+HTMLHelper::_('stylesheet', 'components/com_tjcertificate/assets/font-awesome-4.1.0/css/font-awesome.min.css');
 
 if ($this->showSearchBox)
 {
@@ -32,7 +36,8 @@ if ($this->showSearchBox)
 	<?php
 }
 
-// Tjlms course / jt event info HTML
+
+// Tjlms course/ jt event info HTML
 if (!empty($this->contentHtml))
 {
 	echo $this->contentHtml;
@@ -69,9 +74,32 @@ if ($this->certificate)
 				</table>
 			</div>
 		<div>
+
+		<!-- Social Sharing button start-->
+		<?php if ($this->params->get('social_sharing')) { ?>
+		<div class="share" id="share-btn-grp">
+			<?php if ($this->params->get('facebook_share')) { ?>
+				 <div>
+					<a href="https://www.facebook.com/sharer/sharer.php?u="><i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i></a>
+				</div>
+			<?php } ?>
+			<?php if ($this->params->get('linkedin_share')) { ?>
+				<div>
+					<a href="https://www.linkedin.com/shareArticle?mini=true&url=title="><i class="fa fa-linkedin-square fa-2x" aria-hidden="true"></i></a>
+				</div>
+			<?php } ?>
+			<?php if ($this->params->get('twitter_share')) { ?>
+				<div>
+					<a href="https://twitter.com/intent/tweet?url=text="><i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i></a>
+				</div>
+			<?php } ?>
+		</div>
+		<?php } ?>
+		<!-- Social Sharing button end-->
 		<?php
 	}
 ?>
+
 <div id="certificateContent">
 <?php
 	echo $this->certificate->generated_body;

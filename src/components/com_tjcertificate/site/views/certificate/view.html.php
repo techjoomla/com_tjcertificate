@@ -45,11 +45,11 @@ class TjCertificateViewCertificate extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$params = ComponentHelper::getParams('com_tjcertificate');
+		$this->params = ComponentHelper::getParams('com_tjcertificate');
 		$input  = Factory::getApplication()->input;
 
 		$this->uniqueCertificateId = $input->get('certificate', '', 'STRING');
-		$this->showSearchBox       = $input->getInt('show_search', $params->get('show_search_box'));
+		$this->showSearchBox       = $input->getInt('show_search', $this->params->get('show_search_box'));
 		$this->tmpl                = $input->get('tmpl', '', 'STRING');
 
 		if (!empty($this->uniqueCertificateId))
@@ -64,7 +64,7 @@ class TjCertificateViewCertificate extends JViewLegacy
 		}
 
 		// If certificate view is private then view is available only for certificate owner
-		if (!$params->get('certificate_scope') && Factory::getUser()->id != $this->certificate->getUserId())
+		if (!$this->params->get('certificate_scope') && Factory::getUser()->id != $this->certificate->getUserId())
 		{
 			JError::raiseWarning(500, Text::_('JERROR_ALERTNOAUTHOR'));
 
