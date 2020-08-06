@@ -87,7 +87,7 @@ class TjCertificateModelCertificates extends ListModel
 		$this->setState('filter.component', $extension);
 
 		// Create the base select statement.
-		$query->select(array('ci.*', 'ct.title', 'users.name as uname'));
+		$query->select(array('ci.*', 'ct.title', 'users.name as uname, ci.client_issued_to_name as attendeeName'));
 		$query->from($db->quoteName('#__tj_certificate_issue', 'ci'));
 		$query->join('LEFT', $db->quoteName('#__tj_certificate_templates', 'ct') .
 			' ON (' . $db->quoteName('ci.certificate_template_id') . ' = ' . $db->quoteName('ct.id') . ')');

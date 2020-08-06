@@ -157,7 +157,7 @@ if ( $saveOrder )
 								</td>
 								<td><?php echo $this->escape($item->title); ?></td>
 								<td><?php echo $this->escape($item->client); ?></td>
-								<td><?php echo $this->escape($item->uname); ?></td>
+								<td><?php echo $this->escape($item->attendeeName); ?></td>
 								<td><?php echo HTMLHelper::date($item->issued_on, Text::_('DATE_FORMAT_LC')); ?></td>
 								<td><?php
 									if (!empty($item->expired_on) && $item->expired_on != '0000-00-00 00:00:00')
