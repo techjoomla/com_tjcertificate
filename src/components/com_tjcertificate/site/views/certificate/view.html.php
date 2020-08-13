@@ -34,6 +34,8 @@ class TjCertificateViewCertificate extends JViewLegacy
 
 	public $contentHtml = null;
 
+	public $item;
+
 	/**
 	 * Display the view
 	 *
@@ -74,6 +76,13 @@ class TjCertificateViewCertificate extends JViewLegacy
 		// Get HTML
 		$model = TJCERT::model('Certificate', array('ignore_request' => true));
 		$this->contentHtml = $model->getCertificateProviderInfo($this->certificate->getClientId(), $this->certificate->getClient());
+
+		if ($this->certificate->getClient() === 'com_tjlms.course')
+		{
+			JLoader::import('components.com_tjlms.models.course', JPATH_SITE);
+			$courseModel = JModelLegacy::getInstance('Course', 'TjlmsModel', array('ignore_request' => true));
+			$this->item = $courseModel->getItem($this->certificate->getClientId());
+		}
 
 		parent::display($tpl);
 	}

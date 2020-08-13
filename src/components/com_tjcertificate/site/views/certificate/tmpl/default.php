@@ -17,7 +17,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\HTML\HTMLHelper;
 
-HTMLHelper::_('stylesheet', 'components/com_tjcertificate/assets/font-awesome-4.1.0/css/font-awesome.min.css');
+HTMLHelper::StyleSheet('components/com_tjcertificate/assets/font-awesome-4.1.0/css/font-awesome.min.css');
 
 if ($this->showSearchBox)
 {
@@ -25,8 +25,9 @@ if ($this->showSearchBox)
 	<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate'); ?>" method="post" name="adminForm" id="adminForm">
 		<div class="tj-search-filters">
 			<div class="btn-wrapper input-append">
-				<input type="text" name="certificate" id="certificate"
-				value="<?php echo $this->uniqueCertificateId; ?>" placeholder="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_ENTER_CERTIFICATE_ID'); ?>">
+				<input type="text" name="certificate" id="certificate" 
+					value="<?php echo $this->uniqueCertificateId;?>" 
+					placeholder="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_ENTER_CERTIFICATE_ID'); ?>">
 				<button type="submit" class="btn hasTooltip" title="" aria-label="Search" data-original-title="Search">
 					<span class="icon-search" aria-hidden="true"></span>
 				</button>
@@ -74,29 +75,11 @@ if ($this->certificate)
 				</table>
 			</div>
 		<div>
-
-		<!-- Social Sharing button start-->
-		<?php if ($this->params->get('social_sharing')) { ?>
-		<div class="share" id="share-btn-grp">
-			<?php if ($this->params->get('facebook_share')) { ?>
-				 <div>
-					<a href="https://www.facebook.com/sharer/sharer.php?u="><i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i></a>
-				</div>
-			<?php } ?>
-			<?php if ($this->params->get('linkedin_share')) { ?>
-				<div>
-					<a href="https://www.linkedin.com/shareArticle?mini=true&url=title="><i class="fa fa-linkedin-square fa-2x" aria-hidden="true"></i></a>
-				</div>
-			<?php } ?>
-			<?php if ($this->params->get('twitter_share')) { ?>
-				<div>
-					<a href="https://twitter.com/intent/tweet?url=text="><i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i></a>
-				</div>
-			<?php } ?>
-		</div>
-		<?php } ?>
-		<!-- Social Sharing button end-->
 		<?php
+		if (isset($this->item))
+		{
+			echo $this->loadTemplate('social_sharing');
+		}
 	}
 ?>
 
