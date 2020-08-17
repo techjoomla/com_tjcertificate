@@ -509,6 +509,11 @@ class TjCertificateCertificate extends CMSObject
 			return false;
 		}
 
+		if (empty($userId) && empty($clientIssuedTo))
+		{
+			return false;
+		}
+
 		$model = TJCERT::model('Certificates', array('ignore_request' => true));
 
 		$model->setState('filter.client', $client);
