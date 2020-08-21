@@ -38,7 +38,7 @@ if ($this->showSearchBox)
 }
 
 
-// Tjlms course/ jt event info HTML
+// Client info HTML
 if (!empty($this->contentHtml))
 {
 	echo $this->contentHtml;

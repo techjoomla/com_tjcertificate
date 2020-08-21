@@ -20,11 +20,11 @@ $document = Factory::getDocument();
 		// For facebook and linkedin
 		$config = Factory::getConfig();
 		$siteName = $config->get('sitename');
-		$document->addCustomTag('<meta property="og:title" content="' . $this->item->title . '" />');
+		$document->addCustomTag('<meta property="og:title" content="' . $this->escape($this->item->title) . '" />');
 		$document->addCustomTag('<meta property="og:image" content="" />');
 		$document->addCustomTag('<meta property="og:url" content="" />');
-		$document->addCustomTag('<meta property="og:description" content="' . $this->item->description . '" />');
-		$document->addCustomTag('<meta property="og:site_name" content="' . $siteName . '" />');
+		$document->addCustomTag('<meta property="og:description" content="' . $this->escape($this->item->description) . '" />');
+		$document->addCustomTag('<meta property="og:site_name" content="' . $this->escape($siteName) . '" />');
 ?>
 
 <div class="share" id="share-btn-grp">

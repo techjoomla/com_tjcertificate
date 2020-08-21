@@ -16,6 +16,7 @@ jimport('joomla.application.component.view');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
 
 JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
 
@@ -74,15 +75,15 @@ class TjCertificateViewCertificate extends JViewLegacy
 		}
 
 		// Get HTML
+		$clientId = $this->certificate->getClientId();
+		$client   = $this->certificate->getClient();
 		$model = TJCERT::model('Certificate', array('ignore_request' => true));
-		$this->contentHtml = $model->getCertificateProviderInfo($this->certificate->getClientId(), $this->certificate->getClient());
+		$this->contentHtml = $model->getCertificateProviderInfo($clientId, $client);
 
-		if ($this->certificate->getClient() === 'com_tjlms.course')
-		{
-			JLoader::import('components.com_tjlms.models.course', JPATH_SITE);
-			$courseModel = JModelLegacy::getInstance('Course', 'TjlmsModel', array('ignore_request' => true));
-			$this->item = $courseModel->getItem($this->certificate->getClientId());
-		}
+		$dispatcher = JDispatcher::getInstance();
+		PluginHelper::importPlugin('content');
+		$result = $dispatcher->trigger('getCertificateClientData', array($clientId, $client));
+		$this->item = $result[0];
 
 		parent::display($tpl);
 	}
