@@ -18,6 +18,8 @@ use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\HTML\HTMLHelper;
 
 HTMLHelper::StyleSheet('components/com_tjcertificate/assets/font-awesome-4.1.0/css/font-awesome.min.css');
+HTMLHelper::script('components/com_tjcertificate/assets/html2canvas/js/html2canvas.js');
+HTMLHelper::script('components/com_tjcertificate/assets/tjCertificate.js');
 
 if ($this->showSearchBox)
 {
@@ -49,6 +51,7 @@ if ($this->certificate)
 	if ($this->certificate->getUserId() == Factory::getUser()->id)
 	{
 		?>
+		<a id="btn-Convert-Html2Image" href="#"><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD');?></a>
 		<div class="techjoomla-bootstrap">
 			<div class="table-responsive">
 				<table cellpadding="5">
@@ -91,16 +94,7 @@ if ($this->certificate)
 <?php
 }
 ?>
-
-<script type="text/javascript">
-function printCertificate(elementId) {
-	var printContent        = document.getElementById(elementId).innerHTML;
-	var originalContent     = document.body.innerHTML;
-	document.body.innerHTML = printContent;
-	window.print();
-	document.body.innerHTML = originalContent;
-}
-</script>
+<input id="certificateId" type="hidden" value="<?php echo $this->certificate->unique_certificate_id;?>"/>
 <style type="text/css">
 	.icon-search:before {
 		content: "\f002";
