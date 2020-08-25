@@ -32,18 +32,8 @@ class TjCertificateControllerCertificate extends FormController
 	 */
 	public function download()
 	{
-		$user  = Factory::getUser();
 		$app   = Factory::getApplication();
 		$input = $app->input;
-
-		if (!$user->id)
-		{
-			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_ERROR_LOGIN_MESSAGE'), 'error');
-			$url      = base64_encode(JUri::getInstance()->toString());
-			$loginUrl = Route::_('index.php?option=com_users&view=login&return=' . $url, false);
-			$app->redirect($loginUrl);
-		}
-
 		$uniqueCertificateId = $input->get('certificate', '');
 
 		// Download for sending it in email

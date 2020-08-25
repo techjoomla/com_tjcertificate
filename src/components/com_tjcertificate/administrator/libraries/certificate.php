@@ -538,13 +538,6 @@ class TjCertificateCertificate extends CMSObject
 	public function pdfDownload($store = 0)
 	{
 		$app  = Factory::getApplication();
-		$user = Factory::getUser();
-
-		if (!$user->id || ($user->id != $this->user_id))
-		{
-			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_ERROR_SOMETHING_WENT_WRONG'), 'error');
-			$app->redirect('index.php');
-		}
 
 		if (JFile::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
 		{
@@ -560,6 +553,7 @@ class TjCertificateCertificate extends CMSObject
 			$pageSize       = $templateParams->get('certifcate_page_size', 'A4');
 			$orientation    = $templateParams->get('orientation', 'portrait');
 			$font           = $templateParams->get('certificate_font', 'DeJaVu Sans');
+			$style          = '';
 
 			// If the pagesize is custom then get the correct size and width.
 			if ($pageSize === 'custom')
@@ -572,12 +566,22 @@ class TjCertificateCertificate extends CMSObject
 			// If the font is custom then get the custmized font.
 			if ($font === 'custom')
 			{
-				$font = $templateParams->get('certificate_custom_font', 'DeJaVu Sans');
+				$font      = $templateParams->get('certificate_custom_font', 'DeJaVu Sans');
+				$fontArray = explode(',', $font);
+
+				// Apply multiple google fonts.
+
+				foreach ($fontArray as $fontName)
+				{
+					$fontName = str_replace(' ', '', ucfirst($fontName));
+					$link = '<link href="https://fonts.googleapis.com/css?family=' . $fontName . '" rel="stylesheet" type="text/css">';
+					$style .= $link;
+				}
 			}
 
 			require_once JPATH_SITE . "/libraries/techjoomla/dompdf/autoload.inc.php";
 
-			$html = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/></head><body>' . $html . '</body></html>';
+			$html = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>' . $style . '</head><body>' . $html . '</body></html>';
 
 			if (get_magic_quotes_gpc())
 			{
@@ -689,6 +693,12 @@ class TjCertificateCertificate extends CMSObject
 				throw new Exception(Text::_('COM_TJCERTIFICATE_TEMPLATE_INVALID'));
 			}
 
+			// Generate unique certificate id
+			$this->unique_certificate_id = $this->generateUniqueCertId($options);
+
+			// Generate unique certificate id replacement
+			$replacements->certificate->cert_id = $this->unique_certificate_id;
+
 			// Generate certificate body
 			$this->generated_body = $this->generateCertificateBody($template->body, $replacements);
 
@@ -720,9 +730,6 @@ class TjCertificateCertificate extends CMSObject
 			{
 				$this->expired_on = $db->getNullDate();
 			}
-
-			// Generate unique certficate id - start
-			$this->unique_certificate_id = $this->generateUniqueCertId($options);
 
 			// Save certificate
 			$this->save();

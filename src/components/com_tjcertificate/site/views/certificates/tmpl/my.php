@@ -89,7 +89,7 @@ $saveOrder = $listOrder == 'ci.id';
 								<tr class="row <?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->id; ?>">
 								<td class="has-context">
 									<div class="pull-left break-word">
-										<a class="hasTooltip modal cert_modal" href="<?php echo TJCERT::Certificate($item->id)->getUrl($urlOpts, false); ?>" title="
+										<a rel="{handler: 'iframe', size: {x: 600, y: 600}}" class="hasTooltip modal cert_modal" href="<?php echo TJCERT::Certificate($item->id)->getUrl($urlOpts, false); ?>" title="
 											<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_PREVIEW'); ?>">
 											<?php echo $this->escape($item->unique_certificate_id); ?>
 										</a>
