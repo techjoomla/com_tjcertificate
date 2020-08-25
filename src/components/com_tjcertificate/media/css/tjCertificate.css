@@ -1,0 +1,144 @@
+.course-info-pin .thumbnail {
+    width: 200px;
+    padding: 0;
+    border-radius: 0;
+}
+.course-info-pin .thumbnail .tj-certificate-item-title {
+    font-weight: 600;
+    height: 42px;
+    overflow: hidden;
+    line-height: 20px;
+    font-size: 15px;
+    margin: 0;
+}
+.tj-certificate-sharing ul li {
+    display: inline-block;
+    padding: 20px 15px 0px 0;
+}
+.tj-certificate-blocks {
+    margin-bottom: 25px;
+}
+.tj-certificate-blocks h3 {
+    margin: 0 0 10px 0;
+    padding: 0;
+    font-size: 16px;
+}
+.btn-print {
+    background: transparent;
+    border: 0;
+    color: #337ab7;
+}
+.btn-print:before {
+    content: "\f02f";
+    font-family: "FontAwesome";
+    float: left;
+}
+.tj-certificate-action-btn .btn {
+    background-color: transparent !important;
+    color: #337ab7;
+    text-transform: uppercase;
+    font-weight: 600;
+    border-radius: 0;
+}
+.tj-certificate-action-btn .btn:hover,
+.tj-certificate-action-btn .btn:focus {
+    background-color: #337ab7 !important;
+    color: #fff !important;
+    border: 1px solid #337ab7;
+    text-decoration: none;
+}
+.icon-search:before {
+    content: "\f002";
+    font-family: "FontAwesome";
+}
+.tj-search-filters .input-append {
+    display: inline-flex;
+}
+.br-1 {
+    border: 1px solid #e3e4e5;
+}
+.bg-lightblue {
+    background-color: #d6edf6;
+}
+.bg-white {
+    background-color: white;
+}
+.font-600 {
+    font-weight: 600;
+}
+.mt-0 {
+    margin-top: 0;
+}
+.py-10 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.m-10 {
+    margin: 10px;
+}
+.m-5 {
+    margin: 5px;
+}
+.p-5 {
+    padding: 5px;
+}
+.p-15 {
+    padding: 15px;
+}
+.p-10 {
+    padding: 10px;
+}
+.px-15 {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.py-25 {
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+.fs-16 {
+    font-size: 16px;
+}
+.br-5 {
+    border-radius: 5px;
+}
+.mb-15 {
+    margin-bottom: 15px;
+}
+.mr-5 {
+    margin-right: 5px;
+}
+.d-block {
+    display: block;
+}
+@media screen and (max-width: 600px) {
+    .course-info-pin .thumbnail {
+        width: 100%;
+        border: 0;
+    }
+    .course-info-pin .thumbnail .bg-contain {
+        height: 80px !important;
+        width: 100px;
+        float: left;
+    }
+    .tj-certificate-item-content {
+        float: right;
+        width: 70%;
+    }
+    .course-info-pin .thumbnail .tj-certificate-item-title {
+        height: auto;
+    }
+    .tj-certificate-item-content .p-10 {
+        padding: 0;
+    }
+    .course-info-pin hr {
+        display: none;
+    }
+    .tj-certificate-action-btn {
+        margin: 10px 0 0 0;
+    }
+    .tj-certificate-action-btn .btn {
+        float: left;
+        width: auto;
+    }
+}
