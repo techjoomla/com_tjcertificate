@@ -17,7 +17,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\HTML\HTMLHelper;
 
-HTMLHelper::StyleSheet('components/com_tjcertificate/assets/font-awesome-4.1.0/css/font-awesome.min.css');
+HTMLHelper::StyleSheet('media/com_tjcertificate/vendors/font-awesome-4.1.0/css/font-awesome.min.css');
 
 if ($this->showSearchBox)
 {
