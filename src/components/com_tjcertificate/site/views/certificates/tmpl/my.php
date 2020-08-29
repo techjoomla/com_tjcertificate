@@ -25,7 +25,6 @@ HTMLHelper::_('behavior.modal', 'a.modal');
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
 $saveOrder = $listOrder == 'ci.id';
-
 ?>
 
 <div class="tj-page tjBs3">
@@ -58,16 +57,16 @@ $saveOrder = $listOrder == 'ci.id';
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_UNIQUE_ID'); ?>
 								</th>
 								<th>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_NAME'); ?>
+								</th>
+								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ISSUED_DATE', 'ci.issued_on', $listDirn, $listOrder); ?>
 								</th>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_EXPIRY_DATE', 'ci.expired_on', $listDirn, $listOrder); ?>
 								</th>
 								<th>
-									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_COMMENT'); ?>
-								</th>
-								<th>
-									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ID', 'ci.id', $listDirn, $listOrder); ?>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TYPE'); ?>
 								</th>
 							</tr>
 						</thead>
@@ -85,6 +84,21 @@ $saveOrder = $listOrder == 'ci.id';
 
 							foreach ($this->items as $i => $item)
 							{
+								$name = '';
+
+								if ($item->client === "com_tjlms.course")
+								{
+									JLoader::import('components.com_tjlms.models.orders', JPATH_SITE);
+									$ordersModel = JModelLegacy::getInstance('Orders', 'TjlmsModel', array('ignore_request' => true));
+									$name = $ordersModel->getCourseName($item->client_id);
+								}
+								elseif ($item->client === "com_jticketing.event")
+								{
+									JLoader::import('components.com_jticketing.helpers.event', JPATH_SITE);
+									$JteventHelper = new JteventHelper;
+									$name = $JteventHelper->getEventData($item->client_id)->title;
+								}
+								
 								?>
 								<tr class="row <?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->id; ?>">
 								<td class="has-context">
@@ -94,6 +108,9 @@ $saveOrder = $listOrder == 'ci.id';
 											<?php echo $this->escape($item->unique_certificate_id); ?>
 										</a>
 									</div>
+								</td>
+								<td>
+									<?php echo $name; ?>
 								</td>
 								<td><?php echo HTMLHelper::date($item->issued_on, Text::_('DATE_FORMAT_LC')); ?></td>
 								<td><?php
@@ -106,8 +123,12 @@ $saveOrder = $listOrder == 'ci.id';
 										echo '-';
 									}
 									?></td>
-								<td><?php echo $this->escape($item->comment); ?></td>
-								<td><?php echo (int) $item->id; ?></td>
+								<td>
+									<?php 
+										$client = explode('.', $item->client); 
+										echo ucfirst($client[1]);
+									?>
+								</td>
 							</tr>
 							<?php
 								}

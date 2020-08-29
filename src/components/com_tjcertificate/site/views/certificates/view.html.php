@@ -94,6 +94,9 @@ class TjCertificateViewCertificates extends JViewLegacy
 
 		$layout = $app->input->get('layout', "my");
 
+		// Get Menu params
+		$this->menuparams = $this->state->get('parameters.menu');
+
 		if ($layout == 'my')
 		{
 			// Show only logged-in user certificates
