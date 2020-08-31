@@ -17,9 +17,9 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\HTML\HTMLHelper;
 
-HTMLHelper::StyleSheet('components/com_tjcertificate/assets/font-awesome-4.1.0/css/font-awesome.min.css');
-HTMLHelper::script('components/com_tjcertificate/assets/html2canvas/js/html2canvas.js');
-HTMLHelper::script('components/com_tjcertificate/assets/tjCertificate.js');
+HTMLHelper::StyleSheet('media/com_tjcertificate/vendors/font-awesome-4.1.0/css/font-awesome.min.css');
+HTMLHelper::script('media/com_tjcertificate/vendors/html2canvas/js/html2canvas.js');
+HTMLHelper::script('media/com_tjcertificate/js/tjCertificate.js');
 
 if ($this->showSearchBox)
 {
@@ -86,11 +86,14 @@ if ($this->certificate)
 	}
 ?>
 
-<div id="certificateContent">
-<?php
-	echo $this->certificate->generated_body;
-?>
+<div id="previewImage">
 </div>
+
+	<div id="certificateContent" style="width:794px;height:1123px">
+	<?php
+		echo $this->certificate->generated_body;
+	?>
+	</div>
 <?php
 }
 ?>

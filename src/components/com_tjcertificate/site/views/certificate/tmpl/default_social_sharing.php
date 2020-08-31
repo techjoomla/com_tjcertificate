@@ -13,6 +13,8 @@ defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
 $document = Factory::getDocument();
+
+$sharingOptions = $this->params->get('sharing_option');
 ?>
 <!-- Social Sharing button start-->
 <?php if ($this->params->get('social_sharing'))
@@ -29,7 +31,7 @@ $document = Factory::getDocument();
 
 <div class="share" id="share-btn-grp">
 	<?php 
-	if ($this->params->get('facebook_share'))
+	if (in_array("facebook", $sharingOptions))
 	{
 	?>
 		 <div>
@@ -38,7 +40,7 @@ $document = Factory::getDocument();
 	<?php 
 	} ?>
 	<?php 
-	if ($this->params->get('linkedin_share'))
+	if (in_array("linkedin", $sharingOptions))
 	{
 	?>
 		<div>
@@ -47,7 +49,7 @@ $document = Factory::getDocument();
 	<?php 
 	} ?>
 	<?php
-	if ($this->params->get('twitter_share'))
+	if (in_array("twitter", $sharingOptions))
 	{
 		$document->addCustomTag('<meta name="twitter:card" content="summary_large_image" />');
 		$document->addCustomTag('<meta name="twitter:site" content="' . $siteName . '">');

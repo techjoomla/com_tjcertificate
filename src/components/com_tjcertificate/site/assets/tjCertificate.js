@@ -1,7 +1,5 @@
 jQuery(document).ready(function() {
-    jQuery('#btn-Convert-Html2Image').click(function() {
-        download(document.querySelector("#certificateContent"));
-    });
+        //download(document.querySelector("#certificateContent"));
 });
 
 function printCertificate(elementId) {
