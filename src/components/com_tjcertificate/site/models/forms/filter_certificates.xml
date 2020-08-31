@@ -10,7 +10,6 @@
 			hint="JSEARCH_FILTER"
 		/>
 
-
 		<field name="client"
 			type="getclientlist"
 			filter="safehtml"
@@ -19,7 +18,6 @@
 			addfieldpath="/components/com_tjcertificate/models/fields"
 			clientByUser="1"
 			onchange="this.form.submit();" />
-
 
 		<input type="hidden" name="form_submited" value="1"/>
 	</fields>
@@ -34,4 +32,3 @@
 		/>
 	</fields>
 </form>
-

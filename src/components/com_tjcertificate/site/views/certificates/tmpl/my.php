@@ -15,6 +15,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Plugin\PluginHelper;
 
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 HTMLHelper::_('bootstrap.tooltip');
@@ -25,6 +26,9 @@ HTMLHelper::_('behavior.modal', 'a.modal');
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
 $saveOrder = $listOrder == 'ci.id';
+
+$dispatcher = JDispatcher::getInstance();
+PluginHelper::importPlugin('content');
 ?>
 
 <div class="tj-page tjBs3">
@@ -84,21 +88,7 @@ $saveOrder = $listOrder == 'ci.id';
 
 							foreach ($this->items as $i => $item)
 							{
-								$name = '';
-
-								if ($item->client === "com_tjlms.course")
-								{
-									JLoader::import('components.com_tjlms.models.orders', JPATH_SITE);
-									$ordersModel = JModelLegacy::getInstance('Orders', 'TjlmsModel', array('ignore_request' => true));
-									$name = $ordersModel->getCourseName($item->client_id);
-								}
-								elseif ($item->client === "com_jticketing.event")
-								{
-									JLoader::import('components.com_jticketing.helpers.event', JPATH_SITE);
-									$JteventHelper = new JteventHelper;
-									$name = $JteventHelper->getEventData($item->client_id)->title;
-								}
-								
+								$data = $dispatcher->trigger('getCertificateClientData', array($item->client_id, $item->client));
 								?>
 								<tr class="row <?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->id; ?>">
 								<td class="has-context">
@@ -110,7 +100,7 @@ $saveOrder = $listOrder == 'ci.id';
 									</div>
 								</td>
 								<td>
-									<?php echo $name; ?>
+									<?php echo $data[0]->title; ?>
 								</td>
 								<td><?php echo HTMLHelper::date($item->issued_on, Text::_('DATE_FORMAT_LC')); ?></td>
 								<td><?php
@@ -125,8 +115,9 @@ $saveOrder = $listOrder == 'ci.id';
 									?></td>
 								<td>
 									<?php 
-										$client = explode('.', $item->client); 
-										echo ucfirst($client[1]);
+										$client = str_replace(".", "_", $item->client);
+										$client = strtoupper("COM_TJCERTIFICATE_CLIENT_" . $client);
+										echo TEXT::_($client);
 									?>
 								</td>
 							</tr>
