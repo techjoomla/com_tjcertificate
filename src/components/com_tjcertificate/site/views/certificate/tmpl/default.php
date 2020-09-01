@@ -51,7 +51,7 @@ if ($this->certificate)
 	if ($this->certificate->getUserId() == Factory::getUser()->id)
 	{
 		?>
-		<a id="btn-Convert-Html2Image" href="#"><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD');?></a>
+		<a id="btn-Convert-Html2Image" target="_blank"><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD');?></a>
 		<div class="techjoomla-bootstrap">
 			<div class="table-responsive">
 				<table cellpadding="5">
@@ -88,8 +88,7 @@ if ($this->certificate)
 
 <div id="previewImage">
 </div>
-
-	<div id="certificateContent" style="width:794px;height:1123px">
+	<div id="certificateContent" style="width:794px;">
 	<?php
 		echo $this->certificate->generated_body;
 	?>
@@ -98,6 +97,7 @@ if ($this->certificate)
 }
 ?>
 <input id="certificateId" type="hidden" value="<?php echo $this->certificate->unique_certificate_id;?>"/>
+
 <style type="text/css">
 	.icon-search:before {
 		content: "\f002";
