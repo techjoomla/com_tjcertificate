@@ -79,7 +79,7 @@ class TjCertificateControllerCertificate extends FormController
 
 		if (!JFolder::exists(JPATH_SITE . '/media/com_tjcertificate/certificates/'))
 		{
-			JFolder::create(JPATH_SITE . '/media/com_tjcertificate/certificates', 0777);
+			JFolder::create(JPATH_SITE . '/media/com_tjcertificate/certificates', 0775);
 		}
 
 		$filePath = 'media/com_tjcertificate/certificates/';

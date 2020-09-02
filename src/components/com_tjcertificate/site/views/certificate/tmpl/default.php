@@ -17,9 +17,10 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\HTML\HTMLHelper;
 
+$options['relative'] = true;
 HTMLHelper::StyleSheet('media/com_tjcertificate/vendors/font-awesome-4.1.0/css/font-awesome.min.css');
 HTMLHelper::script('media/com_tjcertificate/vendors/html2canvas/js/html2canvas.js');
-HTMLHelper::script('media/com_tjcertificate/js/tjCertificate.js');
+HTMLHelper::script('com_tjcertificate/certificateImage.js', $options);
 
 if ($this->showSearchBox)
 {
@@ -57,7 +58,7 @@ if ($this->certificate)
 				<table cellpadding="5">
 					<tr>
 						<td>
-							<input type="button" class="btn btn-blue" onclick="printCertificate('certificateContent')"
+							<input type="button" class="btn btn-blue" onclick="certificateImage.printCertificate('certificateContent')"
 							value="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_PRINT');?>" />
 						</td>
 						<?php
