@@ -17,7 +17,11 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\HTML\HTMLHelper;
 
+$options['relative'] = true;
 HTMLHelper::StyleSheet('media/com_tjcertificate/vendors/font-awesome-4.1.0/css/font-awesome.min.css');
+HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
+HTMLHelper::script('media/com_tjcertificate/vendors/html2canvas/js/html2canvas.js');
+HTMLHelper::script('com_tjcertificate/certificateImage.js', $options);
 
 if ($this->showSearchBox)
 {
@@ -36,77 +40,103 @@ if ($this->showSearchBox)
 	</form>
 	<?php
 }
-
-
-// Client info HTML
-if (!empty($this->contentHtml))
-{
-	echo $this->contentHtml;
-}
-
+?>
+<?php
 if ($this->certificate)
-{
-	if ($this->certificate->getUserId() == Factory::getUser()->id)
-	{
-		?>
-		<div class="techjoomla-bootstrap">
-			<div class="table-responsive">
-				<table cellpadding="5">
-					<tr>
-						<td>
-							<input type="button" class="btn btn-blue" onclick="printCertificate('certificateContent')"
-							value="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_PRINT');?>" />
-						</td>
-						<?php
-						if ($this->certificate->getDownloadUrl())
-						{
-							?>
-							<td>
-								<a class="btn btn-primary btn-medium" href="<?php echo $this->certificate->getDownloadUrl();?>">
-									<?php
-										echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_PDF');
-									?>
-								</a>
-							</td>
-							<?php
-						}
-						?>
-					</tr>
-				</table>
+{?>
+	<div class="row tj-certificate">
+		<div class="col-sm-12 col-md-9 tj-certificate-content mb-15">
+			<div id="previewImage"></div>
+			<div id="certificateContent" style="width:794px;">
+				<?php
+					echo $this->certificate->generated_body;
+				?>
 			</div>
-		<div>
-		<?php
-		if (isset($this->item))
-		{
-			echo $this->loadTemplate('social_sharing');
-		}
-	}
-?>
+			<input id="certificateId" type="hidden" value="<?php echo $this->certificate->unique_certificate_id;?>"/>
+		</div>
+		<div class="col-sm-12 col-md-3 tj-certificate-deatils">
+			<div class="tj-certificate-blocks">
+				<div class="tj-certificate-blocks-heading">
+					<h3>
+						<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_CERTIFICATE_RECIPIENT');?>
+					</h3>
+				</div>
+				<div class="tj-certificate-content bg-lightblue py-25 px-15">
+					<h4 class="mt-0 pull-left mr-5"><?php
+									echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_COMPLETED_BY');
+								?></h4>
+					<span class="fs-16"><strong><?php echo Factory::getUser($this->certificate->getUserId())->name; ?></strong></span>
+				</div>
+			</div>
+			<?php 
+			if ($this->certificate->getUserId() == Factory::getUser()->id)
+			{
+			?>	
+			<div class="tj-certificate-blocks">
+				<div class="tj-certificate-blocks-heading">
+					<h3>
+						<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_SHARE');?>
+					</h3>
+				</div>
+				<div class="tj-certificate-content p-15 br-1">
 
-<div id="certificateContent">
-<?php
-	echo $this->certificate->generated_body;
-?>
-</div>
+					<a class="d-block mb-15" id="btn-Convert-Html2Image" href="#"><i class="fa fa-download" aria-hidden="true"></i>
+					<?php
+									echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_AS_IMAGE');
+								?></a>
+
+					<?php
+					if ($this->certificate->getDownloadUrl())
+					{
+						?>
+					
+							<a class="d-block mb-15" href="<?php echo $this->certificate->getDownloadUrl();?>">
+								<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+								<?php
+									echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_PDF');
+								?>
+							</a>
+						
+						<?php
+					}
+					?>
+					
+					<span class="btn-print">
+					<input type="button" class="btn-print" onclick="certificateImage.printCertificate('certificateContent')"
+										value="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_PRINT');?>" />
+					</span>
+					
+					<div class="tj-certificate-sharing">
+					<?php
+						if (isset($this->item))
+						{ 
+							echo $this->loadTemplate('social_sharing');
+						} 
+					?>
+					</div>		
+			</div>
+			</div>
+			<?php
+			}
+			?>
+			<div class="tj-certificate-blocks">
+				<div class="tj-certificate-blocks-heading">
+					<h3>
+						<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_ABOUT_THE_COURSE');?>
+					</h3>
+				</div>
+				<div class="tj-certificate-content">
+					<?php
+						//Tjlms course/ jt event info HTML
+						if (!empty($this->contentHtml))
+						{
+							echo $this->contentHtml;
+						} 
+					?>
+				</div>
+			</div>
+		</div>
+	</div>
 <?php
 }
 ?>
-
-<script type="text/javascript">
-function printCertificate(elementId) {
-	var printContent        = document.getElementById(elementId).innerHTML;
-	var originalContent     = document.body.innerHTML;
-	document.body.innerHTML = printContent;
-	window.print();
-	document.body.innerHTML = originalContent;
-}
-</script>
-<style type="text/css">
-	.icon-search:before {
-		content: "\f002";
-		font-family: "FontAwesome";
-	}
-	.tj-search-filters .input-append{
-		display: inline-flex;
-	}
-</style>

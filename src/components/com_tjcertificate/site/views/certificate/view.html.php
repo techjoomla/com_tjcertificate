@@ -17,6 +17,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Filesystem\File;
 
 JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
 
@@ -36,6 +37,9 @@ class TjCertificateViewCertificate extends JViewLegacy
 	public $contentHtml = null;
 
 	public $item;
+	
+	public $imageUrl = null;
+	
 
 	/**
 	 * Display the view
@@ -72,6 +76,13 @@ class TjCertificateViewCertificate extends JViewLegacy
 			JError::raiseWarning(500, Text::_('JERROR_ALERTNOAUTHOR'));
 
 			return false;
+		}
+
+		$imagePath = 'media/com_tjcertificate/certificates/';
+
+		if (File::exists(JPATH_SITE . '/' . $imagePath . $this->certificate->unique_certificate_id . '.png'))
+		{
+			$this->imageUrl = JURI::root() . $imagePath . $this->certificate->unique_certificate_id . '.png';
 		}
 
 		// Get HTML

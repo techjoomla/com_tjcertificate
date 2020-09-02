@@ -56,4 +56,40 @@ class TjCertificateControllerCertificate extends FormController
 
 		echo $certificateObj->pdfDownload($store);
 	}
+
+	/**
+	 * Method to upload certificate image.
+	 *
+	 * @return  boolean|string image url.
+	 *
+	 * @since 1.0
+	 */
+	public function uploadCertificate()
+	{
+		$app   = Factory::getApplication();
+		$input = $app->input;
+		$canvasOutput = $input->get('image', '', 'RAW');
+		$certificateId = $input->get('certificateId', '', 'STRING');
+		$canvasOutput = str_replace('data:image/png;base64,', '', $canvasOutput);
+
+		// Replace all spaces with plus sign (helpful for larger images)
+		$canvasOutput = str_replace(" ", "+", $canvasOutput);
+		$canvasOutput = base64_decode($canvasOutput);
+		$filename = $certificateId . '.png';
+
+		if (!JFolder::exists(JPATH_SITE . '/media/com_tjcertificate/certificates/'))
+		{
+			JFolder::create(JPATH_SITE . '/media/com_tjcertificate/certificates');
+		}
+
+		$filePath = 'media/com_tjcertificate/certificates/';
+		$dir = JPATH_SITE . '/' . $filePath;
+
+		if (file_put_contents($dir . $filename, $canvasOutput))
+		{
+			echo Juri::root() . $filePath . $filename;
+		}
+
+		jexit();
+	}
 }
