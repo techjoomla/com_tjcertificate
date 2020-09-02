@@ -56,9 +56,11 @@ PluginHelper::importPlugin('content');
 						<thead>
 							<tr>
 								<th width="1%" class="nowrap center hidden-phone"></th>
-
 								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_UNIQUE_ID'); ?>
+								</th>
+								<th>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TYPE'); ?>
 								</th>
 								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_NAME'); ?>
@@ -68,9 +70,6 @@ PluginHelper::importPlugin('content');
 								</th>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_EXPIRY_DATE', 'ci.expired_on', $listDirn, $listOrder); ?>
-								</th>
-								<th>
-									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TYPE'); ?>
 								</th>
 							</tr>
 						</thead>
@@ -99,6 +98,13 @@ PluginHelper::importPlugin('content');
 									</div>
 								</td>
 								<td>
+									<?php 
+										$client = str_replace(".", "_", $item->client);
+										$client = strtoupper("COM_TJCERTIFICATE_CLIENT_" . $client);
+										echo TEXT::_($client);
+									?>
+								</td>
+								<td>
 									<?php echo $data[0]->title; ?>
 								</td>
 								<td><?php echo HTMLHelper::date($item->issued_on, Text::_('DATE_FORMAT_LC')); ?></td>
@@ -112,13 +118,6 @@ PluginHelper::importPlugin('content');
 										echo '-';
 									}
 									?></td>
-								<td>
-									<?php 
-										$client = str_replace(".", "_", $item->client);
-										$client = strtoupper("COM_TJCERTIFICATE_CLIENT_" . $client);
-										echo TEXT::_($client);
-									?>
-								</td>
 							</tr>
 							<?php
 								}
