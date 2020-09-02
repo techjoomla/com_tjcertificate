@@ -15,6 +15,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Plugin\PluginHelper;
 
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 HTMLHelper::_('bootstrap.tooltip');
@@ -26,6 +27,8 @@ $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
 $saveOrder = $listOrder == 'ci.id';
 
+$dispatcher = JDispatcher::getInstance();
+PluginHelper::importPlugin('content');
 ?>
 
 <div class="tj-page tjBs3">
@@ -53,21 +56,20 @@ $saveOrder = $listOrder == 'ci.id';
 						<thead>
 							<tr>
 								<th width="1%" class="nowrap center hidden-phone"></th>
-
 								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_UNIQUE_ID'); ?>
+								</th>
+								<th>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TYPE'); ?>
+								</th>
+								<th>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_NAME'); ?>
 								</th>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ISSUED_DATE', 'ci.issued_on', $listDirn, $listOrder); ?>
 								</th>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_EXPIRY_DATE', 'ci.expired_on', $listDirn, $listOrder); ?>
-								</th>
-								<th>
-									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_COMMENT'); ?>
-								</th>
-								<th>
-									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ID', 'ci.id', $listDirn, $listOrder); ?>
 								</th>
 							</tr>
 						</thead>
@@ -85,15 +87,25 @@ $saveOrder = $listOrder == 'ci.id';
 
 							foreach ($this->items as $i => $item)
 							{
+								$data = $dispatcher->trigger('getCertificateClientData', array($item->client_id, $item->client));
 								?>
 								<tr class="row <?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->id; ?>">
 								<td class="has-context">
 									<div class="pull-left break-word">
-										<a rel="{handler: 'iframe', size: {x: 600, y: 600}}" class="hasTooltip modal cert_modal" href="<?php echo TJCERT::Certificate($item->id)->getUrl($urlOpts, false); ?>" title="
-											<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_PREVIEW'); ?>">
+										<a href="<?php echo TJCERT::Certificate($item->id)->getUrl('',false); ?>" title="<?php echo JText::sprintf('COM_USERS_EDIT_USER', $this->escape($item->name)); ?>" target="_blank" >
 											<?php echo $this->escape($item->unique_certificate_id); ?>
 										</a>
 									</div>
+								</td>
+								<td>
+									<?php 
+										$client = str_replace(".", "_", $item->client);
+										$client = strtoupper("COM_TJCERTIFICATE_CLIENT_" . $client);
+										echo TEXT::_($client);
+									?>
+								</td>
+								<td>
+									<?php echo $data[0]->title; ?>
 								</td>
 								<td><?php echo HTMLHelper::date($item->issued_on, Text::_('DATE_FORMAT_LC')); ?></td>
 								<td><?php
@@ -106,8 +118,6 @@ $saveOrder = $listOrder == 'ci.id';
 										echo '-';
 									}
 									?></td>
-								<td><?php echo $this->escape($item->comment); ?></td>
-								<td><?php echo (int) $item->id; ?></td>
 							</tr>
 							<?php
 								}
