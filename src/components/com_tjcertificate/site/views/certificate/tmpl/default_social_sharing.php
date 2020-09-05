@@ -27,6 +27,7 @@ $description = $this->item->description ? $this->item->description : $this->item
 	$document->addCustomTag('<meta property="og:image" content="' . $this->imageUrl . '" />');
 	$document->addCustomTag('<meta property="og:description" content="' . $this->escape($description) . '" />');
 	$document->addCustomTag('<meta property="og:site_name" content="' . $this->escape($siteName) . '" />');
+	$document->addCustomTag('<meta property="og:url" content="' . $this->shareUrl . '" />');
 
 	// For twitter
 	$document->addCustomTag('<meta name="twitter:card" content="summary_large_image" />');
@@ -79,7 +80,7 @@ $description = $this->item->description ? $this->item->description : $this->item
 			{
 			?>
 				 <li>
-					<a id="fb" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode($this->imageUrl);?>"
+					<a id="fb" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode($this->imageUrl);?> "target="_blank" >
 						<i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i>
 					</a>
 				</li>
@@ -90,7 +91,7 @@ $description = $this->item->description ? $this->item->description : $this->item
 			{
 			?>
 				<li>
-					<a href="https://www.linkedin.com/shareArticle?mini=true&url=<?php echo urlencode($this->imageUrl);?>&title=<?php echo urlencode($this->item->title);?>"><i class="fa fa-linkedin-square fa-2x" aria-hidden="true"></i></a>
+					<a href="https://www.linkedin.com/shareArticle?mini=true&url=<?php echo urlencode($this->imageUrl);?>&title=<?php echo urlencode($this->item->title);?>"><i class="fa fa-linkedin-square fa-2x" aria-hidden="true" target="_blank"></i></a>
 				</li>
 			<?php 
 			} ?>
@@ -99,7 +100,7 @@ $description = $this->item->description ? $this->item->description : $this->item
 			{
 			?>
 				<li>
-					<a href="https://twitter.com/intent/tweet?url=<?php echo urlencode($this->imageUrl);?>&text=<?php echo urlencode($this->item->title);?>">
+					<a href="https://twitter.com/intent/tweet?url=<?php echo urlencode($this->imageUrl);?>&text=<?php echo urlencode($this->item->title);?>" target="_blank">
 						<i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
 					</a>
 				</li>
