@@ -18,6 +18,8 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
 
 JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
 
@@ -38,9 +40,9 @@ class TjCertificateViewCertificate extends JViewLegacy
 
 	public $item;
 
-	public $imageUrl = null;
+	public $imagePath = null;
 
-	public $shareUrl = null;
+	public $certificateUrl = null;
 
 	/**
 	 * Display the view
@@ -80,10 +82,10 @@ class TjCertificateViewCertificate extends JViewLegacy
 		}
 
 		$imagePath = 'media/com_tjcertificate/certificates/';
+		$this->imagePath = Uri::root() . $imagePath . $this->certificate->unique_certificate_id . '.png';
 
-		$this->imageUrl = JURI::root() . $imagePath . $this->certificate->unique_certificate_id . '.png';
-
-		$this->shareUrl = JURI::root() . 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->certificate->unique_certificate_id;
+		$certificateUrl = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->certificate->unique_certificate_id;
+		$this->certificateUrl = Uri::root() . substr(Route::_($certificateUrl), strlen(Uri::base(true)) + 1);
 
 		// Get HTML
 		$clientId = $this->certificate->getClientId();

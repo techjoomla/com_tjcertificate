@@ -43,7 +43,28 @@ if ($this->showSearchBox)
 ?>
 <?php
 if ($this->certificate)
-{?>
+{
+	$document = Factory::getDocument();
+	$description = $this->item->description ? $this->item->description : $this->item->short_desc;
+
+	// For facebook and linkedin
+	$config = Factory::getConfig();
+	$siteName = $config->get('sitename');
+	$document->addCustomTag('<meta property="og:title" content="' . $this->escape($this->item->title) . '" />');
+	$document->addCustomTag('<meta property="og:image" content="' . $this->imagePath . '" />');
+	$document->addCustomTag('<meta property="og:description" content="' . $this->escape($description) . '" />');
+	$document->addCustomTag('<meta property="og:site_name" content="' . $this->escape($siteName) . '" />');
+	$document->addCustomTag('<meta property="og:url" content="' . $this->certificateUrl . '" />');
+	$document->addCustomTag('<meta property="og:type" content="certificate" />');
+
+	// For twitter
+	$document->addCustomTag('<meta name="twitter:card" content="summary_large_image" />');
+	$document->addCustomTag('<meta name="twitter:site" content="' . $siteName . '">');
+	$document->addCustomTag('<meta name="twitter:title" content="' . $this->escape($this->item->title) . '">');
+	$document->addCustomTag('<meta name="twitter:description" content="' . $this->escape($description) . '">');
+	$document->addCustomTag('<meta name="twitter:image" content="' . $this->imagePath . '">');
+
+?>
 	<div class="tj-certificate tjBs3">
 		<div class="tj-certificate-top mb-25">
 			<h4 class=""><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_HEAD');?></h4>

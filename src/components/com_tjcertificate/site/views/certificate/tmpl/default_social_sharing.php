@@ -15,27 +15,10 @@ use Joomla\CMS\Factory;
 $document = Factory::getDocument();
 
 $sharingOptions = $this->params->get('sharing_option');
-$description = $this->item->description ? $this->item->description : $this->item->short_desc;
 ?>
 <!-- Social Sharing button start-->
 <?php if ($this->params->get('social_sharing'))
 {
-	// For facebook and linkedin
-	$config = Factory::getConfig();
-	$siteName = $config->get('sitename');
-	$document->addCustomTag('<meta property="og:title" content="' . $this->escape($this->item->title) . '" />');
-	$document->addCustomTag('<meta property="og:image" content="' . $this->imageUrl . '" />');
-	$document->addCustomTag('<meta property="og:description" content="' . $this->escape($description) . '" />');
-	$document->addCustomTag('<meta property="og:site_name" content="' . $this->escape($siteName) . '" />');
-	$document->addCustomTag('<meta property="og:url" content="' . $this->shareUrl . '" />');
-
-	// For twitter
-	$document->addCustomTag('<meta name="twitter:card" content="summary_large_image" />');
-	$document->addCustomTag('<meta name="twitter:site" content="' . $siteName . '">');
-	$document->addCustomTag('<meta name="twitter:title" content="' . $this->item->title . '">');
-	$document->addCustomTag('<meta name="twitter:description" content="' . $this->escape($description) . '">');
-	$document->addCustomTag('<meta name="twitter:image" content="' . $this->imageUrl . '">');
-
 	if ($this->params->get('social_sharing_type') === 'addthis')
 	{
 		$pid = $this->params->get('addthis_publishid');
@@ -47,11 +30,11 @@ $description = $this->item->description ? $this->item->description : $this->item
 			$add_this_share = '
 			<!-- AddThis Button BEGIN -->
 			<div class="addthis_toolbox addthis_default_style">
-			<a class="addthis_button_facebook_like" fb:like:layout="button_count" class="addthis_button" addthis:url="' . $this->courseDetailsUrl . '"></a>
-			<a class="addthis_button_google_plusone" g:plusone:size="medium" class="addthis_button" addthis:url="' . $this->courseDetailsUrl . '"></a>
-			<a class="addthis_button_tweet" class="addthis_button" addthis:url="' . $this->courseDetailsUrl . '"></a>
-			<a class="addthis_button_pinterest_pinit" class="addthis_button" addthis:url="' . $this->courseDetailsUrl . '"></a>
-			<a class="addthis_counter addthis_pill_style" class="addthis_button" addthis:url="' . $this->courseDetailsUrl . '"></a>
+			<a class="addthis_button_facebook_like" fb:like:layout="button_count" class="addthis_button" addthis:url="' . $this->certificateUrl . '"></a>
+			<a class="addthis_button_google_plusone" g:plusone:size="medium" class="addthis_button" addthis:url="' . $this->certificateUrl . '"></a>
+			<a class="addthis_button_tweet" class="addthis_button" addthis:url="' . $this->certificateUrl . '"></a>
+			<a class="addthis_button_pinterest_pinit" class="addthis_button" addthis:url="' . $this->certificateUrl . '"></a>
+			<a class="addthis_counter addthis_pill_style" class="addthis_button" addthis:url="' . $this->certificateUrl . '"></a>
 			</div>
 			<script type="text/javascript">
 				var addthis_config ={ pubid: "' . $pid . '"};
@@ -80,7 +63,7 @@ $description = $this->item->description ? $this->item->description : $this->item
 			{
 			?>
 				 <li>
-					<a id="fb" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode($this->imageUrl);?> "target="_blank" >
+					<a id="fb" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode($this->certificateUrl);?> "target="_blank" >
 						<i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i>
 					</a>
 				</li>
@@ -91,7 +74,7 @@ $description = $this->item->description ? $this->item->description : $this->item
 			{
 			?>
 				<li>
-					<a href="https://www.linkedin.com/shareArticle?mini=true&url=<?php echo urlencode($this->imageUrl);?>&title=<?php echo urlencode($this->item->title);?>"><i class="fa fa-linkedin-square fa-2x" aria-hidden="true" target="_blank"></i></a>
+					<a href="https://www.linkedin.com/shareArticle?mini=true&url=<?php echo urlencode($this->certificateUrl);?>&title=<?php echo urlencode($this->item->title);?>" target="_blank" ><i class="fa fa-linkedin-square fa-2x" aria-hidden="true"></i></a>
 				</li>
 			<?php 
 			} ?>
@@ -100,7 +83,7 @@ $description = $this->item->description ? $this->item->description : $this->item
 			{
 			?>
 				<li>
-					<a href="https://twitter.com/intent/tweet?url=<?php echo urlencode($this->imageUrl);?>&text=<?php echo urlencode($this->item->title);?>" target="_blank">
+					<a href="https://twitter.com/intent/tweet?url=<?php echo urlencode($this->certificateUrl);?>&text=<?php echo urlencode($this->item->title);?>" target="_blank">
 						<i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
 					</a>
 				</li>
