@@ -16,6 +16,10 @@ jimport('joomla.application.component.view');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
 
 JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
 
@@ -34,6 +38,12 @@ class TjCertificateViewCertificate extends JViewLegacy
 
 	public $contentHtml = null;
 
+	public $item;
+
+	public $imagePath = null;
+
+	public $certificateUrl = null;
+
 	/**
 	 * Display the view
 	 *
@@ -45,11 +55,11 @@ class TjCertificateViewCertificate extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$params = ComponentHelper::getParams('com_tjcertificate');
+		$this->params = ComponentHelper::getParams('com_tjcertificate');
 		$input  = Factory::getApplication()->input;
 
 		$this->uniqueCertificateId = $input->get('certificate', '', 'STRING');
-		$this->showSearchBox       = $input->getInt('show_search', $params->get('show_search_box'));
+		$this->showSearchBox       = $input->getInt('show_search', $this->params->get('show_search_box'));
 		$this->tmpl                = $input->get('tmpl', '', 'STRING');
 
 		if (!empty($this->uniqueCertificateId))
@@ -64,16 +74,29 @@ class TjCertificateViewCertificate extends JViewLegacy
 		}
 
 		// If certificate view is private then view is available only for certificate owner
-		if (!$params->get('certificate_scope') && Factory::getUser()->id != $this->certificate->getUserId())
+		if (!$this->params->get('certificate_scope') && Factory::getUser()->id != $this->certificate->getUserId())
 		{
 			JError::raiseWarning(500, Text::_('JERROR_ALERTNOAUTHOR'));
 
 			return false;
 		}
 
+		$imagePath = 'media/com_tjcertificate/certificates/';
+		$this->imagePath = Uri::root() . $imagePath . $this->certificate->unique_certificate_id . '.png';
+
+		$certificateUrl = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->certificate->unique_certificate_id;
+		$this->certificateUrl = Uri::root() . substr(Route::_($certificateUrl), strlen(Uri::base(true)) + 1);
+
 		// Get HTML
+		$clientId = $this->certificate->getClientId();
+		$client   = $this->certificate->getClient();
 		$model = TJCERT::model('Certificate', array('ignore_request' => true));
-		$this->contentHtml = $model->getCertificateProviderInfo($this->certificate->getClientId(), $this->certificate->getClient());
+		$this->contentHtml = $model->getCertificateProviderInfo($clientId, $client);
+
+		$dispatcher = JDispatcher::getInstance();
+		PluginHelper::importPlugin('content');
+		$result = $dispatcher->trigger('getCertificateClientData', array($clientId, $client));
+		$this->item = $result[0];
 
 		parent::display($tpl);
 	}

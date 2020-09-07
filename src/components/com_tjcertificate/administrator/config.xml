@@ -39,6 +39,26 @@
 		</field>
 	</fieldset>
 
+	<!-- Social sharing -->
+	<fieldset name="social_sharing" label="COM_TJCERTIFICATE_SOCIAL_SHARING_SETINGS">
+		<field name="social_sharing" class="btn-group" type="radio"  default="0" description="COM_TJCERTIFICATE_SOCIAL_SHARING_DESC" label="COM_TJCERTIFICATE_SOCIAL_SHARING" >
+			<option value="1">JYES</option>
+			<option value="0">JNo</option>
+		</field>
+		<field name="sharing_option" type="list" multiple="multiple" label="COM_TJCERTIFICATE_SOCIAL_SHARING_OPTIONS" showon="social_sharing:1">
+		   <option value="facebook">COM_TJCERTIFICATE_SOCIAL_SHARING_FACEBOOK</option>
+		   <option value="linkedin">COM_TJCERTIFICATE_SOCIAL_SHARING_LINKEDIN</option>
+		   <option value="twitter">COM_TJCERTIFICATE_SOCIAL_SHARING_TWITTER</option>
+		</field>
+
+		<field name="social_sharing_type" class="btn-group" type="radio" default="native" label="COM_TJCERTIFICATE_SOCIAL_SHARING_TYPE" description="COM_TJCERTIFICATE_SOCIAL_SHARING_TYPE_DESC" >
+			<option value="addthis">COM_TJCERTIFICATE_ADDTHIS_SOCIAL</option>
+			<option value="native">COM_TJCERTIFICATE_NATIVE</option>
+		</field>
+
+		<field name="addthis_publishid" type="text" default="" label="COM_TJCERTIFICATE_SELECT_ADDTHIS_PUBLISHED_ID" showon="social_sharing_type:addthis" description="COM_TJCERTIFICATE_SELECT_ADDTHIS_PUBLISHED_ID_DESC" />
+	</fieldset>
+
 	<!-- Permission setting  -->
 	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
 		<field name="rules" type="rules" label="JCONFIG_PERMISSIONS_LABEL" class="inputbox" validate="rules" filter="rules" component="com_tjcertificate" section="component" />
