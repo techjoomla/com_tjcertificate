@@ -85,12 +85,9 @@ class TjCertificateControllerCertificate extends FormController
 		$filePath = 'media/com_tjcertificate/certificates/';
 		$dir      = JPATH_SITE . '/' . $filePath;
 
-		if (!JFile::exists($dir . $filename))
+		if (file_put_contents($dir . $filename, $canvasOutput))
 		{
-			if (file_put_contents($dir . $filename, $canvasOutput))
-			{
-				echo Juri::root() . $filePath . $filename;
-			}
+			echo Juri::root() . $filePath . $filename;
 		}
 
 		jexit();
