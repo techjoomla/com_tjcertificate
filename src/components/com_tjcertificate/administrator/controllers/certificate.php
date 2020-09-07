@@ -15,6 +15,7 @@ use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Response\JsonResponse;
 
 /**
  * The certificate controller
@@ -87,7 +88,7 @@ class TjCertificateControllerCertificate extends FormController
 
 		if (file_put_contents($dir . $filename, $canvasOutput))
 		{
-			echo Juri::root() . $filePath . $filename;
+			echo new JsonResponse(Juri::root() . $filePath . $filename);
 		}
 
 		jexit();
