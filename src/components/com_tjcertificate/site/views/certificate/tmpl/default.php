@@ -70,8 +70,8 @@ if ($this->certificate)
 			<h4 class=""><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_HEAD');?></h4>
 		</div>
 		<div class="row">
-			<div class="col-xs-12 col-md-9">
-				<h1 class="font-600 m-0"><?php echo $this->item->title; ?></h1>
+			<div class="col-xs-12 mb-25">
+				<h1 class="font-300 m-0"><?php echo $this->item->title; ?></h1>
 			</div>
 		</div>
 		<div class="row mt-25">
@@ -144,6 +144,19 @@ if ($this->certificate)
 				</div>
 			</div>
 		</div>
+		<div class="col-sm-12 bg-lightblue p-15">
+			<div class="fs-16">
+				This certificate (ID: <?php echo $this->certificate->unique_certificate_id;?>) verifies that <strong><?php echo Factory::getUser($this->certificate->getUserId())->name; ?></strong> has successfully completed the <strong><?php echo $this->item->title; ?></strong> on <?php echo HTMLHelper::_('date', $this->certificate->issued_on, "F j, Y");?>.
+				<?php 
+				if ($this->certificate->getExpiry() != '0000-00-00 00:00:00')
+				{
+				?>
+					This Certificate expires on <strong><?php echo HTMLHelper::_('date', $this->certificate->getExpiry(), "F j, Y");?></strong>.
+				<?php
+				}
+				?>
+			</div>
+		</div>
 		<div class="col-sm-12 tj-certificate-content mb-15 mt-25">
 			<div id="certificateContent">
 				<?php
@@ -153,16 +166,10 @@ if ($this->certificate)
 			<div id="previewImage" class="tj-certificate-image"></div>
 			<input id="certificateId" type="hidden" value="<?php echo $this->certificate->unique_certificate_id;?>"/>
 		</div>
-		<div class="col-sm-12 tj-certificate-bottom">
-			<div class="fs-16">
-				<?php echo TEXT::sprintf('COM_TJCERTIFICATE_CERTIFICATE_VERIFICATION_NOTE', Factory::getUser($this->certificate->getUserId())->name, $this->item->title, HTMLHelper::_('date', $this->certificate->issued_on, "F j, Y")); ?>
-			</div>
-		</div>
 	</div>
 <?php
 }
 ?>
-
 <script>
   jQuery("#download-popover").popover({
    html: true,

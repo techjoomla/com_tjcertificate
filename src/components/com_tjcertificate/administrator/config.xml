@@ -51,12 +51,14 @@
 		   <option value="twitter">COM_TJCERTIFICATE_SOCIAL_SHARING_TWITTER</option>
 		</field>
 
+<!--
 		<field name="social_sharing_type" class="btn-group" type="radio" default="native" label="COM_TJCERTIFICATE_SOCIAL_SHARING_TYPE" description="COM_TJCERTIFICATE_SOCIAL_SHARING_TYPE_DESC" >
 			<option value="addthis">COM_TJCERTIFICATE_ADDTHIS_SOCIAL</option>
 			<option value="native">COM_TJCERTIFICATE_NATIVE</option>
 		</field>
 
 		<field name="addthis_publishid" type="text" default="" label="COM_TJCERTIFICATE_SELECT_ADDTHIS_PUBLISHED_ID" showon="social_sharing_type:addthis" description="COM_TJCERTIFICATE_SELECT_ADDTHIS_PUBLISHED_ID_DESC" />
+-->
 	</fieldset>
 
 	<!-- Permission setting  -->
