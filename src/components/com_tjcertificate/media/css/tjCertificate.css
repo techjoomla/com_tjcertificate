@@ -1,16 +1,3 @@
-.course-info-pin .thumbnail {
-    width: 200px;
-    padding: 0;
-    border-radius: 0;
-}
-.course-info-pin .thumbnail .tj-certificate-item-title {
-    font-weight: 600;
-    height: 42px;
-    overflow: hidden;
-    line-height: 20px;
-    font-size: 15px;
-    margin: 0;
-}
 .tj-certificate-sharing ul{
     margin-bottom: 0;
 }
@@ -66,6 +53,9 @@
 }
 .font-600 {
     font-weight: 600;
+}
+.font-300 {
+    font-weight: 300;
 }
 .m-0{
     margin: 0;
@@ -142,7 +132,7 @@
     float: left;
 }
 #certificateContent{
-    height: 800px;
+    min-height: 800px;
     width: 1150px;
     margin: 0 auto;
 }
@@ -155,13 +145,32 @@
     cursor: pointer;
     font-size: 16px;
     border-radius: 5px;
-    margin-left: 10px;
+    margin-left: 4px;
     border: 1px solid #ddd;
 }
 .tjlmspin__caption_desc{
     line-height: 18px;
     font-size: 14px;
     margin-bottom: 10px;
+}
+.tjlmspin__position {
+    position: absolute;
+    top: 9px;
+    background: #FAF8F8;
+    padding: 1px 10px;
+    color: #333;
+    font-weight: 600;
+}
+.tjlmslist .tjlmslist__image .tjlmspin__price {
+    left: 25px;
+}
+.tjlmspin.mobile-view{
+    width: 255px;
+    margin: 0 auto;
+    float: none;
+}
+.view-certificate .popover-title{
+    display: none;
 }
 @media screen and (max-width: 600px) {
     .tj-certificate-share-download{

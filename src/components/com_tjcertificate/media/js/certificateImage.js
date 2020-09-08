@@ -18,7 +18,6 @@ var certificateImage = {
         jQuery.ajax({
             url: Joomla.getOptions('system.paths').base + "/index.php?option=com_tjcertificate&task=certificate.uploadCertificate",
             type: 'POST',
-            dataType: "text",
             data: {
                 image: image,
                 certificateId: certificateId

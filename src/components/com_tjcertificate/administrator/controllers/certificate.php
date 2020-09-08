@@ -15,6 +15,7 @@ use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Response\JsonResponse;
 
 /**
  * The certificate controller
@@ -66,16 +67,16 @@ class TjCertificateControllerCertificate extends FormController
 	 */
 	public function uploadCertificate()
 	{
-		$app   = Factory::getApplication();
-		$input = $app->input;
-		$canvasOutput = $input->get('image', '', 'RAW');
+		$app           = Factory::getApplication();
+		$input         = $app->input;
+		$canvasOutput  = $input->get('image', '', 'RAW');
 		$certificateId = $input->get('certificateId', '', 'STRING');
-		$canvasOutput = str_replace('data:image/png;base64,', '', $canvasOutput);
+		$canvasOutput  = str_replace('data:image/png;base64,', '', $canvasOutput);
 
 		// Replace all spaces with plus sign (helpful for larger images)
 		$canvasOutput = str_replace(" ", "+", $canvasOutput);
 		$canvasOutput = base64_decode($canvasOutput);
-		$filename = $certificateId . '.png';
+		$filename     = $certificateId . '.png';
 
 		if (!JFolder::exists(JPATH_SITE . '/media/com_tjcertificate/certificates/'))
 		{
@@ -83,11 +84,11 @@ class TjCertificateControllerCertificate extends FormController
 		}
 
 		$filePath = 'media/com_tjcertificate/certificates/';
-		$dir = JPATH_SITE . '/' . $filePath;
+		$dir      = JPATH_SITE . '/' . $filePath;
 
 		if (file_put_contents($dir . $filename, $canvasOutput))
 		{
-			echo Juri::root() . $filePath . $filename;
+			echo new JsonResponse(Juri::root() . $filePath . $filename);
 		}
 
 		jexit();
