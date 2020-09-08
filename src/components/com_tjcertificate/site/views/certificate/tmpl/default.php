@@ -15,6 +15,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Filesystem\File;
 
 $options['relative'] = true;
 HTMLHelper::_('jquery.framework');
@@ -23,6 +24,13 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 HTMLHelper::StyleSheet('media/com_tjlms/vendors/artificiers/artficier.css');
 HTMLHelper::script('media/com_tjcertificate/vendors/html2canvas/js/html2canvas.js');
 HTMLHelper::script('com_tjcertificate/certificateImage.js', $options);
+
+$imageUrl = "";
+
+if (File::exists(JPATH_SITE . '/' . $this->mediaPath . $this->fileName))
+{
+	$imageUrl = $this->imagePath;
+}
 
 if ($this->showSearchBox)
 {
@@ -97,11 +105,9 @@ if ($this->certificate)
 						<div class="">
 						<a data-placement="bottom" class="tj-certificate-btn" data-toggle="popover" data-container="body" data-placement="left" type="button" data-html="true" id="download-popover"><i class="fa fa-arrow-circle-o-down mr-10" aria-hidden="true"></i><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD');?></a>
 						<div id="download-popover-content" class="hide">
-						<a class="d-block mb-15" id="btn-Convert-Html2Image" href="#"><i class="fa fa-download mr-5" aria-hidden="true"></i>
-							<?php
-											echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_AS_IMAGE');
-										?></a>
-
+							<a class="d-block mb-15" id="downloadImage" href="<?php echo $imageUrl;?>" download ><i class="fa fa-download mr-5" aria-hidden="true"></i>
+								<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_AS_IMAGE'); ?>
+							</a>
 							<?php
 							if ($this->certificate->getDownloadUrl())
 							{
@@ -117,7 +123,6 @@ if ($this->certificate)
 								<?php
 							}
 							?>
-							
 							<span class="btn-print">
 							<input type="button" class="btn-print" onclick="certificateImage.printCertificate('certificateContent')"
 												value="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_PRINT');?>" />
@@ -167,24 +172,40 @@ if ($this->certificate)
 					echo $this->certificate->generated_body;
 				?>
 			</div>
-			<div id="previewImage" class="tj-certificate-image"></div>
+			<div id="previewImage" class="tj-certificate-image">
+				<?php if ($imageUrl) {?>
+					<img src="<?php echo $imageUrl;?>">
+				<?php } ?>
+			</div>
 			<input id="certificateId" type="hidden" value="<?php echo $this->certificate->unique_certificate_id;?>"/>
 		</div>
 	</div>
 <?php
 }
 ?>
-<script>
-  jQuery("#download-popover").popover({
-   html: true,
-   content: function() {
-          return jQuery('#download-popover-content').html();
-        }
-   });
-   jQuery("#sharing-popover").popover({
-   html: true,
-   content: function() {
-          return jQuery('#sharing-popover-content').html();
-        }
-   });
- </script>
+<script type="text/javascript">
+
+	var imageExists = "<?php echo $imageUrl;?>";
+
+	jQuery(document).ready(function() {
+		if (imageExists) {
+			jQuery('#certificateContent').hide();
+		} else {
+			certificateImage.generateImage(document.querySelector("#certificateContent"));
+		}
+	});
+
+	jQuery("#download-popover").popover({
+		html: true,
+		content: function() {
+			return jQuery('#download-popover-content').html();
+		}
+	});
+	jQuery("#sharing-popover").popover({
+		html: true,
+		content: function() {
+			return jQuery('#sharing-popover-content').html();
+		}
+	});
+
+</script>
