@@ -92,7 +92,7 @@ PluginHelper::importPlugin('content');
 								<tr class="row <?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->id; ?>">
 								<td class="has-context">
 									<div class="pull-left break-word">
-										<a href="<?php echo TJCERT::Certificate($item->id)->getUrl('',false); ?>" title="<?php echo JText::sprintf('COM_USERS_EDIT_USER', $this->escape($item->name)); ?>" target="_blank" >
+										<a href="<?php echo TJCERT::Certificate($item->id)->getUrl('',false); ?>">
 											<?php echo $this->escape($item->unique_certificate_id); ?>
 										</a>
 									</div>

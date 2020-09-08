@@ -17,6 +17,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 
 $options['relative'] = true;
+HTMLHelper::_('jquery.framework');
 HTMLHelper::StyleSheet('media/com_tjcertificate/vendors/font-awesome-4.1.0/css/font-awesome.min.css');
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 HTMLHelper::StyleSheet('media/com_tjlms/vendors/artificiers/artficier.css');
@@ -68,6 +69,9 @@ if ($this->certificate)
 	<div class="tj-certificate tjBs3">
 		<div class="tj-certificate-top mb-25">
 			<h4 class=""><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_HEAD');?></h4>
+		</div>
+		<div>
+			<button class="tj-certificate-btn" onclick="window.history.back();"><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_BACK_BUTTON');?></button>
 		</div>
 		<div class="row">
 			<div class="col-xs-12 mb-25">

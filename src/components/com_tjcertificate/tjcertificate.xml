@@ -68,8 +68,10 @@
     </languages>
   </administration>
   <media destination="com_tjcertificate" folder="media">
-    <folder>js</folder>
     <folder>certificate-templates</folder>
+    <folder>css</folder>
+    <folder>js</folder>
+    <folder>vendors</folder>
   </media>
   <scriptfile>script.tjcertificate.php</scriptfile>
 </extension>
