@@ -14,7 +14,7 @@
 .btn-print {
     background: transparent;
     border: 0;
-    color: #337ab7;
+    color: #337AB7;
 }
 .btn-print:before {
     content: "\f02f";
@@ -23,16 +23,16 @@
 }
 .tj-certificate-action-btn .btn {
     background-color: transparent !important;
-    color: #337ab7;
+    color: #337AB7;
     text-transform: uppercase;
     font-weight: 600;
     border-radius: 0;
 }
 .tj-certificate-action-btn .btn:hover,
 .tj-certificate-action-btn .btn:focus {
-    background-color: #337ab7 !important;
+    background-color: #337AB7 !important;
     color: #fff !important;
-    border: 1px solid #337ab7;
+    border: 1px solid #337AB7;
     text-decoration: none;
 }
 .icon-search:before {
@@ -42,11 +42,14 @@
 .tj-search-filters .input-append {
     display: inline-flex;
 }
+.cursor-pointer{
+    cursor: pointer;
+}
 .br-1 {
-    border: 1px solid #e3e4e5;
+    border: 1px solid #E3E4E5;
 }
 .bg-lightblue {
-    background-color: #d6edf6;
+    background-color: #D6EDF6;
 }
 .bg-white {
     background-color: white;

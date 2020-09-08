@@ -70,12 +70,12 @@ if ($this->certificate)
 		<div class="tj-certificate-top mb-25">
 			<h4 class=""><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_HEAD');?></h4>
 		</div>
-		<div>
-			<button class="tj-certificate-btn" onclick="window.history.back();"><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_BACK_BUTTON');?></button>
-		</div>
-		<div class="row">
-			<div class="col-xs-12 mb-25">
+		<div class="row mb-25">
+			<div class="col-xs-10">
 				<h1 class="font-300 m-0"><?php echo $this->item->title; ?></h1>
+			</div>
+			<div class="col-xs-2">
+				<a class="pull-right fs-16 font-600 cursor-pointer" onclick="window.history.back();"><i class="fa fa-arrow-left mr-10" aria-hidden="true"></i><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_BACK_BUTTON');?></a>
 			</div>
 		</div>
 		<div class="row mt-25">
