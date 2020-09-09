@@ -40,9 +40,11 @@ class TjCertificateViewCertificate extends JViewLegacy
 
 	public $item;
 
-	public $imagePath = null;
+	public $mediaPath = null;
 
 	public $certificateUrl = null;
+
+	public $fileName = null;
 
 	/**
 	 * Display the view
@@ -81,8 +83,9 @@ class TjCertificateViewCertificate extends JViewLegacy
 			return false;
 		}
 
-		$imagePath = 'media/com_tjcertificate/certificates/';
-		$this->imagePath = Uri::root() . $imagePath . $this->certificate->unique_certificate_id . '.png';
+		$this->fileName  = $this->certificate->unique_certificate_id . '.png';
+		$this->mediaPath = 'media/com_tjcertificate/certificates/';
+		$this->imagePath = Uri::root() . $this->mediaPath . $this->fileName;
 
 		$certificateUrl = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->certificate->unique_certificate_id;
 		$this->certificateUrl = Uri::root() . substr(Route::_($certificateUrl), strlen(Uri::base(true)) + 1);

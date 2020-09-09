@@ -1,7 +1,3 @@
-jQuery(document).ready(function() {
-    certificateImage.generateImage(document.querySelector("#certificateContent"));
-});
-
 var certificateImage = {
 
     printCertificate: function(elementId) {
@@ -33,22 +29,16 @@ var certificateImage = {
     generateImage: function(element) {
         var certificateId = jQuery("#certificateId").val();
         var imagePath = Joomla.getOptions('system.paths').base + '/media/com_tjcertificate/certificates/';
-        var img = document.createElement('img');
+		jQuery('#certificateContent').width(element.offsetWidth).height(element.offsetHeight);
 
         html2canvas(element, {
             scale: (2),
             scrollX: 0,
             scrollY: -window.scrollY,
-            backgroundColor: null,
             allowTaint: true
         }).then(function(canvas) {
-            jQuery('#certificateContent').hide();
             certificateImage.uploadImage(canvas.toDataURL('image/png'));
-            img.src = imagePath + certificateId + ".png";
-            jQuery("#previewImage").append(img);
-            jQuery("#btn-Convert-Html2Image").attr(
-                "download", certificateId + '.png').attr(
-                "href", canvas.toDataURL('image/png'));
+			jQuery("#downloadImage").attr("href", imagePath + certificateId + '.png');
         });
     }
 }
