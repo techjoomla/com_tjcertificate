@@ -6,6 +6,23 @@ var certificateImage = {
         document.body.innerHTML = printContent;
         window.print();
         document.body.innerHTML = originalContent;
+
+        certificateImage.enableDownloadShareBtns();
+    },
+
+    enableDownloadShareBtns: function()
+    {
+        jQuery("#download-popover").popover({
+            trigger: 'focus',
+            html: true,
+            content: jQuery('#download-popover-content').html()
+        });
+
+        jQuery("#sharing-popover").popover({
+            trigger: 'focus',
+            html: true,
+            content: jQuery('#sharing-popover-content').html()
+        });
     },
 
     uploadImage: function(image) {
