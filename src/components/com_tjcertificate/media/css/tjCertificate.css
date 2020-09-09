@@ -135,10 +135,6 @@
     float: left;
 }
 #certificateContent{
-/*
-    min-height: 800px;
-    width: 1150px;
-*/
     margin: 0 auto;
 }
 .tj-certificate-content{
@@ -185,5 +181,10 @@
     }
     .tjlmslist .thumbnail{
         border:0;
+    }
+
+	#certificateContent{
+		min-height: 800px;
+		width: 1150px;
     }
 }
