@@ -103,7 +103,9 @@ if ($this->certificate)
 					?>	
 					<div class="tj-certificate-share-download pull-right">
 						<div class="">
-						<a data-placement="bottom" class="tj-certificate-btn" data-toggle="popover" data-container="body" data-placement="left" type="button" data-html="true" id="download-popover"><i class="fa fa-arrow-circle-o-down mr-10" aria-hidden="true"></i><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD');?></a>
+						<a id="download-popover" data-container="body" data-placement="bottom" tabindex="0" class="tj-certificate-btn" role="button" data-toggle="popover" data-trigger="focus" title="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD');?>"><i class="fa fa-share-square-o mr-10" aria-hidden="true"></i>
+						<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD');?>
+						</a>
 						<div id="download-popover-content" class="hide">
 							<a class="d-block mb-15" id="downloadImage" href="<?php echo $imageUrl;?>" download ><i class="fa fa-download mr-5" aria-hidden="true"></i>
 								<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_AS_IMAGE'); ?>
@@ -124,17 +126,19 @@ if ($this->certificate)
 							}
 							?>
 							<span class="btn-print">
-							<input type="button" class="btn-print" onclick="certificateImage.printCertificate('certificateContent')"
-												value="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_PRINT');?>" />
+							<input type="button" class="btn-print" onclick="certificateImage.printCertificate('certificateContent')" value="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_PRINT');?>" />
 							</span>
 						</div>
 
 						<?php 
 						if ($this->params->get('social_sharing'))
 						{?>
-							<a data-placement="bottom" data-toggle="popover" data-container="body" data-placement="left" type="button" data-html="true" id="sharing-popover" class="tj-certificate-btn"><i class="fa fa-share-square-o mr-10" aria-hidden="true"></i>								<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_SHARE');?></a>
+						<a id="sharing-popover" data-container="body" data-placement="bottom" tabindex="0" class="tj-certificate-btn" role="button" data-toggle="popover" data-trigger="focus" title="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_SHARE');?>"><i class="fa fa-share-square-o mr-10" aria-hidden="true"></i>
+						<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_SHARE');?>
+						</a>
+
 						<?php
-						} ?>		
+						} ?>
 						<div id="sharing-popover-content" class="hide">
 							<div class="tj-certificate-sharing">
 							<?php
@@ -144,7 +148,7 @@ if ($this->certificate)
 								}
 							?>
 							</div>
-						</div>	
+						</div>
 					</div>
 					</div>
 					<?php
@@ -185,27 +189,19 @@ if ($this->certificate)
 ?>
 <script type="text/javascript">
 
-	var imageExists = "<?php echo $imageUrl;?>";
+var imageExists = "<?php echo $imageUrl;?>";
 
-	jQuery(document).ready(function() {
-		if (imageExists) {
-			jQuery('#certificateContent').hide();
-		} else {
-			certificateImage.generateImage(document.querySelector("#certificateContent"));
-		}
-	});
+jQuery(document).ready(function() {
+	if (imageExists)
+	{
+		jQuery('#certificateContent').hide();
+	}
+	else
+	{
+		certificateImage.generateImage(document.querySelector("#certificateContent"));
+	}
 
-	jQuery("#download-popover").popover({
-		html: true,
-		content: function() {
-			return jQuery('#download-popover-content').html();
-		}
-	});
-	jQuery("#sharing-popover").popover({
-		html: true,
-		content: function() {
-			return jQuery('#sharing-popover-content').html();
-		}
-	});
+	certificateImage.enableDownloadShareBtns();
+});
 
 </script>
