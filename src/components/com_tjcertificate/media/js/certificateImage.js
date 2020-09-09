@@ -55,7 +55,8 @@ var certificateImage = {
             allowTaint: true
         }).then(function(canvas) {
             certificateImage.uploadImage(canvas.toDataURL('image/png'));
-			jQuery("#downloadImage").attr("href", imagePath + certificateId + '.png');
+			jQuery("#downloadImage").attr("href", canvas.toDataURL('image/png')).attr(
+			"download", certificateId + '.png');
         });
     }
 }
