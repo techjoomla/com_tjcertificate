@@ -55,6 +55,7 @@ if ($this->certificate)
 {
 	$document = Factory::getDocument();
 	$description = $this->item->description ? $this->item->description : $this->item->short_desc;
+	$document->addScriptDeclaration("var certRootUrl = '" . JUri::root() . "'");
 
 	// For facebook and linkedin
 	$config = Factory::getConfig();

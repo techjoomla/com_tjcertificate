@@ -29,7 +29,7 @@ var certificateImage = {
         var result = false;
         var certificateId = jQuery("#certificateId").val();
         jQuery.ajax({
-            url: Joomla.getOptions('system.paths').base + "/index.php?option=com_tjcertificate&task=certificate.uploadCertificate",
+            url: certRootUrl + "index.php?option=com_tjcertificate&task=certificate.uploadCertificate",
             type: 'POST',
             data: {
                 image: image,
@@ -37,6 +37,7 @@ var certificateImage = {
             },
             success: function(data) {
                 result = data;
+                Joomla.loadingLayer('hide');
             }
         });
 
@@ -45,8 +46,9 @@ var certificateImage = {
 
     generateImage: function(element) {
         var certificateId = jQuery("#certificateId").val();
-        var imagePath = Joomla.getOptions('system.paths').base + '/media/com_tjcertificate/certificates/';
+        var imagePath = certRootUrl + 'media/com_tjcertificate/certificates/';
 		jQuery('#certificateContent').width(element.offsetWidth).height(element.offsetHeight);
+        Joomla.loadingLayer('show');
 
         html2canvas(element, {
             scale: (2),
@@ -54,9 +56,9 @@ var certificateImage = {
             scrollY: -window.scrollY,
             allowTaint: true
         }).then(function(canvas) {
+			jQuery("#downloadImage").attr("href", canvas.toDataURL('image/png'));
+			certificateImage.enableDownloadShareBtns();
             certificateImage.uploadImage(canvas.toDataURL('image/png'));
-			jQuery("#downloadImage").attr("href", canvas.toDataURL('image/png')).attr(
-			"download", certificateId + '.png');
         });
     }
 }
