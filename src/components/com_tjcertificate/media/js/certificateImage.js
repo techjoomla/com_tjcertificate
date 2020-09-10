@@ -37,7 +37,15 @@ var certificateImage = {
             },
             success: function(data) {
                 result = data;
+
+                var certificateId = jQuery("#certificateId").val();
+                var imagePath     = certRootUrl + 'media/com_tjcertificate/certificates/';
+                var img           = document.createElement('img');
+                jQuery('#certificateContent').hide();
+                img.src = imagePath + certificateId + ".png";
+                jQuery("#previewImage").append(img);
                 Joomla.loadingLayer('hide');
+
             }
         });
 
@@ -45,8 +53,6 @@ var certificateImage = {
     },
 
     generateImage: function(element) {
-        var certificateId = jQuery("#certificateId").val();
-        var imagePath = certRootUrl + 'media/com_tjcertificate/certificates/';
 		jQuery('#certificateContent').width(element.offsetWidth).height(element.offsetHeight);
         Joomla.loadingLayer('show');
 
