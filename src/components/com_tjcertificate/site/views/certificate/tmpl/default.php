@@ -110,7 +110,7 @@ if ($this->certificate)
 						<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD');?>
 						</a>
 						<div id="download-popover-content" class="hide">
-							<a class="d-block mb-15" id="downloadImage" href="<?php echo $imageUrl;?>" download ><i class="fa fa-download mr-5" aria-hidden="true"></i>
+							<a class="d-block mb-15" id="downloadImage" href="<?php echo $this->imagePath;?>" download ><i class="fa fa-download mr-5" aria-hidden="true"></i>
 								<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_AS_IMAGE'); ?>
 							</a>
 							<?php
