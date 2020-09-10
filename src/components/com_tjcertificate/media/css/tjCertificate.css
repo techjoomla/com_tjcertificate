@@ -135,10 +135,6 @@
     float: left;
 }
 #certificateContent{
-/*
-    min-height: 800px;
-    width: 1150px;
-*/
     margin: 0 auto;
 }
 .tj-certificate-content{
@@ -152,6 +148,7 @@
     border-radius: 5px;
     margin-left: 4px;
     border: 1px solid #ddd;
+    display: inline-block;
 }
 .tjlmspin__caption_desc{
     line-height: 18px;
@@ -185,5 +182,10 @@
     }
     .tjlmslist .thumbnail{
         border:0;
+    }
+
+	#certificateContent{
+		min-height: 800px;
+		width: 1150px;
     }
 }

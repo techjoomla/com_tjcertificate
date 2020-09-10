@@ -19,6 +19,7 @@ use Joomla\CMS\Filesystem\File;
 
 $options['relative'] = true;
 HTMLHelper::_('jquery.framework');
+HTMLHelper::_('behavior.framework');
 HTMLHelper::StyleSheet('media/com_tjcertificate/vendors/font-awesome-4.1.0/css/font-awesome.min.css');
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 HTMLHelper::StyleSheet('media/com_tjlms/vendors/artificiers/artficier.css');
@@ -60,7 +61,8 @@ if ($this->certificate)
 	// For facebook and linkedin
 	$config = Factory::getConfig();
 	$siteName = $config->get('sitename');
-	$document->addCustomTag('<meta property="og:title" content="' . $this->escape($this->item->title) . '" />');
+	$ogTitle = $this->item->title ? $this->escape($this->item->title) : $this->escape($siteName) . ' ' .Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_HEAD');
+	$document->addCustomTag('<meta property="og:title" content="' . $ogTitle . '" />');
 	$document->addCustomTag('<meta property="og:image" content="' . $this->imagePath . '" />');
 	$document->addCustomTag('<meta property="og:description" content="' . $this->escape($description) . '" />');
 	$document->addCustomTag('<meta property="og:site_name" content="' . $this->escape($siteName) . '" />');
@@ -97,7 +99,7 @@ if ($this->certificate)
 					}
 				?>
 			</div>
-			<div class="col-xs-12 col-md-4">
+			<div class="col-xs-12 col-md-4 mb-25">
 			<?php 
 					if ($this->certificate->getUserId() == Factory::getUser()->id)
 					{
@@ -108,21 +110,19 @@ if ($this->certificate)
 						<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD');?>
 						</a>
 						<div id="download-popover-content" class="hide">
-							<a class="d-block mb-15" id="downloadImage" href="<?php echo $imageUrl;?>" download ><i class="fa fa-download mr-5" aria-hidden="true"></i>
+							<a class="d-block mb-15" id="downloadImage" href="<?php echo $this->imagePath;?>" download ><i class="fa fa-download mr-5" aria-hidden="true"></i>
 								<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_AS_IMAGE'); ?>
 							</a>
 							<?php
 							if ($this->certificate->getDownloadUrl())
 							{
 								?>
-							
-									<a class="d-block mb-15" href="<?php echo $this->certificate->getDownloadUrl();?>">
-										<i class="fa fa-file-pdf-o mr-5" aria-hidden="true"></i>
-										<?php
-											echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_PDF');
-										?>
-									</a>
-								
+								<a class="d-block mb-15" href="<?php echo $this->certificate->getDownloadUrl();?>">
+									<i class="fa fa-file-pdf-o mr-5" aria-hidden="true"></i>
+									<?php
+										echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_PDF');
+									?>
+								</a>
 								<?php
 							}
 							?>
@@ -138,18 +138,17 @@ if ($this->certificate)
 						<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_SHARE');?>
 						</a>
 
-						<?php
-						} ?>
 						<div id="sharing-popover-content" class="hide">
 							<div class="tj-certificate-sharing">
 							<?php
-								if (isset($this->item))
-								{
-									echo $this->loadTemplate('social_sharing');
-								}
+								echo $this->loadTemplate('social_sharing');
 							?>
 							</div>
 						</div>
+
+						<?php
+						}
+						?>
 					</div>
 					</div>
 					<?php
