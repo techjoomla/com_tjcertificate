@@ -61,7 +61,8 @@ if ($this->certificate)
 	// For facebook and linkedin
 	$config = Factory::getConfig();
 	$siteName = $config->get('sitename');
-	$document->addCustomTag('<meta property="og:title" content="' . $this->escape($this->item->title) . '" />');
+	$ogTitle = $this->item->title ? $this->escape($this->item->title) : $this->escape($siteName) . " Certificate";
+	$document->addCustomTag('<meta property="og:title" content="' . $ogTitle . '" />');
 	$document->addCustomTag('<meta property="og:image" content="' . $this->imagePath . '" />');
 	$document->addCustomTag('<meta property="og:description" content="' . $this->escape($description) . '" />');
 	$document->addCustomTag('<meta property="og:site_name" content="' . $this->escape($siteName) . '" />');
@@ -131,7 +132,7 @@ if ($this->certificate)
 						</div>
 
 						<?php 
-						if ($this->params->get('social_sharing') && isset($this->item))
+						if ($this->params->get('social_sharing'))
 						{?>
 						<a id="sharing-popover" data-container="body" data-placement="bottom" tabindex="0" class="tj-certificate-btn" role="button" data-toggle="popover" data-trigger="focus" title="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_SHARE');?>"><i class="fa fa-share-square-o mr-10" aria-hidden="true"></i>
 						<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_SHARE');?>
