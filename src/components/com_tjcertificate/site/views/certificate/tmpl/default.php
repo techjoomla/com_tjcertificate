@@ -19,6 +19,7 @@ use Joomla\CMS\Filesystem\File;
 
 $options['relative'] = true;
 HTMLHelper::_('jquery.framework');
+HTMLHelper::_('behavior.framework');
 HTMLHelper::StyleSheet('media/com_tjcertificate/vendors/font-awesome-4.1.0/css/font-awesome.min.css');
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 HTMLHelper::StyleSheet('media/com_tjlms/vendors/artificiers/artficier.css');
@@ -97,7 +98,7 @@ if ($this->certificate)
 					}
 				?>
 			</div>
-			<div class="col-xs-12 col-md-4">
+			<div class="col-xs-12 col-md-4 mb-25">
 			<?php 
 					if ($this->certificate->getUserId() == Factory::getUser()->id)
 					{
@@ -115,14 +116,12 @@ if ($this->certificate)
 							if ($this->certificate->getDownloadUrl())
 							{
 								?>
-							
-									<a class="d-block mb-15" href="<?php echo $this->certificate->getDownloadUrl();?>">
-										<i class="fa fa-file-pdf-o mr-5" aria-hidden="true"></i>
-										<?php
-											echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_PDF');
-										?>
-									</a>
-								
+								<a class="d-block mb-15" href="<?php echo $this->certificate->getDownloadUrl();?>">
+									<i class="fa fa-file-pdf-o mr-5" aria-hidden="true"></i>
+									<?php
+										echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_PDF');
+									?>
+								</a>
 								<?php
 							}
 							?>
@@ -132,24 +131,23 @@ if ($this->certificate)
 						</div>
 
 						<?php 
-						if ($this->params->get('social_sharing'))
+						if ($this->params->get('social_sharing') && isset($this->item))
 						{?>
 						<a id="sharing-popover" data-container="body" data-placement="bottom" tabindex="0" class="tj-certificate-btn" role="button" data-toggle="popover" data-trigger="focus" title="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_SHARE');?>"><i class="fa fa-share-square-o mr-10" aria-hidden="true"></i>
 						<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_SHARE');?>
 						</a>
 
-						<?php
-						} ?>
 						<div id="sharing-popover-content" class="hide">
 							<div class="tj-certificate-sharing">
 							<?php
-								if (isset($this->item))
-								{
-									echo $this->loadTemplate('social_sharing');
-								}
+								echo $this->loadTemplate('social_sharing');
 							?>
 							</div>
 						</div>
+
+						<?php
+						}
+						?>
 					</div>
 					</div>
 					<?php

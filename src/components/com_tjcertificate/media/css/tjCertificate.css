@@ -152,6 +152,7 @@
     border-radius: 5px;
     margin-left: 4px;
     border: 1px solid #ddd;
+    display: inline-block;
 }
 .tjlmspin__caption_desc{
     line-height: 18px;
