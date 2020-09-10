@@ -61,7 +61,7 @@ if ($this->certificate)
 	// For facebook and linkedin
 	$config = Factory::getConfig();
 	$siteName = $config->get('sitename');
-	$ogTitle = $this->item->title ? $this->escape($this->item->title) : $this->escape($siteName) . " Certificate";
+	$ogTitle = $this->item->title ? $this->escape($this->item->title) : $this->escape($siteName) . ' ' .Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_HEAD');
 	$document->addCustomTag('<meta property="og:title" content="' . $ogTitle . '" />');
 	$document->addCustomTag('<meta property="og:image" content="' . $this->imagePath . '" />');
 	$document->addCustomTag('<meta property="og:description" content="' . $this->escape($description) . '" />');
