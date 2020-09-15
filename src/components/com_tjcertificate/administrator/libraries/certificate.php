@@ -552,7 +552,11 @@ class TjCertificateCertificate extends CMSObject
 	{
 		$url = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->unique_certificate_id;
 
-		$url .= '&show_search=' . $showSearchBox;
+		// If search box is true then only show search box param in URL
+		if ($showSearchBox)
+		{
+			$url .= '&show_search=' . $showSearchBox;
+		}
 
 		if (isset($options['popup']))
 		{
