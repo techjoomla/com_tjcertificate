@@ -105,7 +105,7 @@ PluginHelper::importPlugin('content');
 									?>
 								</td>
 								<td>
-									<?php echo $data[0]->title; ?>
+									<?php echo $data[0]->title ? $data[0]->title : "-"; ?>
 								</td>
 								<td><?php echo HTMLHelper::date($item->issued_on, Text::_('DATE_FORMAT_LC')); ?></td>
 								<td><?php

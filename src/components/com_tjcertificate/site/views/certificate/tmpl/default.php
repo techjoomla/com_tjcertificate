@@ -159,7 +159,17 @@ if ($this->certificate)
 		</div>
 		<div class="col-sm-12 bg-lightblue p-15">
 			<div class="fs-16">
-				This certificate (ID: <?php echo $this->certificate->unique_certificate_id;?>) verifies that <strong><?php echo Factory::getUser($this->certificate->getUserId())->name; ?></strong> has successfully completed the <strong><?php echo $this->item->title; ?></strong> on <?php echo HTMLHelper::_('date', $this->certificate->issued_on, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_DATE_FORMAT'));?>.
+				<?php if ($this->item->title) 
+				{ ?>
+					This certificate (ID: <?php echo $this->certificate->unique_certificate_id;?>) verifies that <strong><?php echo Factory::getUser($this->certificate->getUserId())->name; ?></strong> has successfully completed the <strong><?php echo $this->item->title; ?></strong> on <?php echo HTMLHelper::_('date', $this->certificate->issued_on, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_DATE_FORMAT'));?>.
+				<?php 
+				}
+				else
+				{ ?>
+					This certificate (ID: <?php echo $this->certificate->unique_certificate_id;?>) has been awarded to <strong><?php echo Factory::getUser($this->certificate->getUserId())->name; ?></strong> on <?php echo HTMLHelper::_('date', $this->certificate->issued_on, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_DATE_FORMAT'));?>.
+				<?php 
+				} 
+				?>
 				<?php 
 				if ($this->certificate->getExpiry() != '0000-00-00 00:00:00')
 				{
