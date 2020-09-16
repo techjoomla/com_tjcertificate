@@ -72,6 +72,8 @@ class TjCertificateViewCertificate extends JViewLegacy
 			if (!$this->certificate->id)
 			{
 				JError::raiseWarning(500, Text::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EXPIRED'));
+
+				return false;
 			}
 		}
 

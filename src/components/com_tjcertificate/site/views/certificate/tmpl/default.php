@@ -72,7 +72,7 @@ if ($this->certificate)
 	// For twitter
 	$document->addCustomTag('<meta name="twitter:card" content="summary_large_image" />');
 	$document->addCustomTag('<meta name="twitter:site" content="' . $siteName . '">');
-	$document->addCustomTag('<meta name="twitter:title" content="' . $this->escape($this->item->title) . '">');
+	$document->addCustomTag('<meta name="twitter:title" content="' . $ogTitle . '">');
 	$document->addCustomTag('<meta name="twitter:description" content="' . $this->escape($description) . '">');
 	$document->addCustomTag('<meta name="twitter:image" content="' . $this->imagePath . '">');
 
