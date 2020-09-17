@@ -149,6 +149,11 @@ if ($this->certificate)
 						<?php
 						}
 						?>
+						<?php if ($this->params->get('certificate_scope')) 
+						{ ?>
+							<a class="tj-certificate-btn" type="button" onclick="prompt('Press: Ctrl+C, Enter','<?php echo JURI::getInstance();?>');"><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL_COPY');?></a>
+						<?php 
+						} ?>
 					</div>
 					</div>
 					<?php
