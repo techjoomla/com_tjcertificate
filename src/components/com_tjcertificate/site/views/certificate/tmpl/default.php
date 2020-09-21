@@ -212,11 +212,12 @@ jQuery(document).ready(function() {
 	}
 
 	certificateImage.enableDownloadShareBtns();
+
+	if (document.referrer == "")
+	{
+		jQuery("#backBtn").hide();
+	}
 });
 
-if (document.referrer == "")
-{
-	jQuery("#backBtn").hide();
-}
 
 </script>
