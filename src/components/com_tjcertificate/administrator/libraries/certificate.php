@@ -582,6 +582,11 @@ class TjCertificateCertificate extends CMSObject
 	 */
 	public function getDownloadUrl($options = array())
 	{
+		if (!$this->canDownload($this->unique_certificate_id))
+		{
+			return false;
+		}
+
 		if (JFile::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
 		{
 			$url = 'index.php?option=com_tjcertificate&task=certificate.download&certificate=' . $this->unique_certificate_id;
@@ -598,8 +603,6 @@ class TjCertificateCertificate extends CMSObject
 
 			return Route::_($url);
 		}
-
-		return false;
 	}
 
 	/**
@@ -940,5 +943,40 @@ class TjCertificateCertificate extends CMSObject
 		}
 
 		return $certificateString;
+	}
+
+	/**
+	 * This function checks the certificate download permission 
+	 *
+	 * @param   STRING  $uniqueCertificateId  certificate Id
+	 *
+	 * @return  boolean
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function canDownload($uniqueCertificateId)
+	{
+		$user = Factory::getUser();
+
+		if (!$user->authorise('certificate.download.own', 'com_tjcertificate') && !$user->authorise('certificate.download.all', 'com_tjcertificate'))
+		{
+			return false;
+		}
+
+		if ($user->authorise('certificate.download.all', 'com_tjcertificate'))
+		{
+			return true;
+		}
+
+		if ($user->authorise('certificate.download.own', 'com_tjcertificate'))
+		{
+			$table = TJCERT::table("certificates");
+			$table->load(array('unique_certificate_id' => $uniqueCertificateId));
+
+			if ($user->get('id') == $table->user_id)
+			{
+				return true;
+			}
+		}
 	}
 }
