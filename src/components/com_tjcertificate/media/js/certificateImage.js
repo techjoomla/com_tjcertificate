@@ -24,7 +24,7 @@ var certificateImage = {
             content: jQuery('#sharing-popover-content').html()
         });
 
-		jQuery("#copyurl").popover();
+        jQuery("#copyurl").popover();
     },
 
     uploadImage: function(image) {
@@ -70,7 +70,7 @@ var certificateImage = {
         });
     },
 
-	copyUrl: function(element) {
+    copyUrl: function(element) {
 		var inputDump = document.createElement('input'),
 			hrefText = window.location.href;
 		document.body.appendChild(inputDump);
