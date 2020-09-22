@@ -85,7 +85,7 @@ if ($this->certificate)
 			<div class="col-xs-10">
 				<h1 class="font-300 m-0"><?php echo $this->item->title; ?></h1>
 			</div>
-			<div class="col-xs-2">
+			<div id="backBtn" class="col-xs-2">
 				<a class="pull-right fs-16 font-600 cursor-pointer" onclick="window.history.back();"><i class="fa fa-arrow-left mr-10" aria-hidden="true"></i><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_BACK_BUTTON');?></a>
 			</div>
 		</div>
@@ -212,6 +212,12 @@ jQuery(document).ready(function() {
 	}
 
 	certificateImage.enableDownloadShareBtns();
+
+	if (document.referrer == "")
+	{
+		jQuery("#backBtn").hide();
+	}
 });
+
 
 </script>
