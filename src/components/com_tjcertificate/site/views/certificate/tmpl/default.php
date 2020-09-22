@@ -114,17 +114,20 @@ if ($this->certificate)
 								<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_AS_IMAGE'); ?>
 							</a>
 							<?php
-							if ($this->certificate->getDownloadUrl())
-							{
-								?>
-								<a class="d-block mb-15" href="<?php echo $this->certificate->getDownloadUrl();?>">
-									<i class="fa fa-file-pdf-o mr-5" aria-hidden="true"></i>
-									<?php
-										echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_PDF');
-									?>
-								</a>
-								<?php
-							}
+								if ($this->downloadPermission)
+								{
+									if ($this->certificate->getDownloadUrl())
+									{
+										?>
+										<a class="d-block mb-15" href="<?php echo $this->certificate->getDownloadUrl();?>">
+											<i class="fa fa-file-pdf-o mr-5" aria-hidden="true"></i>
+											<?php
+												echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_PDF');
+											?>
+										</a>
+										<?php
+									}
+								}
 							?>
 							<span class="btn-print">
 							<input type="button" class="btn-print" onclick="certificateImage.printCertificate('certificateContent')" value="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_PRINT');?>" />
