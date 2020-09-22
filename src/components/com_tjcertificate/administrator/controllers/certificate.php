@@ -36,15 +36,6 @@ class TjCertificateControllerCertificate extends FormController
 		$app   = Factory::getApplication();
 		$input = $app->input;
 		$uniqueCertificateId = $input->get('certificate', '');
-		$certificate    = TJCERT::Certificate();
-
-		// Check user having permission to download
-		if (!$certificate->canDownload($uniqueCertificateId))
-		{
-			$app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'));
-
-			return false;
-		}
 
 		// Download for sending it in email
 		$store = $input->get('store', '');
@@ -52,6 +43,15 @@ class TjCertificateControllerCertificate extends FormController
 		if (empty($uniqueCertificateId))
 		{
 			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EMPTY'), 'error');
+			$app->redirect('index.php');
+		}
+
+		$certificate    = TJCERT::Certificate();
+
+		// Check user having permission to download
+		if (!$certificate::canDownload($uniqueCertificateId))
+		{
+			$app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'));
 			$app->redirect('index.php');
 		}
 

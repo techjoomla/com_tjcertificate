@@ -582,11 +582,6 @@ class TjCertificateCertificate extends CMSObject
 	 */
 	public function getDownloadUrl($options = array())
 	{
-		if (!$this->canDownload($this->unique_certificate_id))
-		{
-			return false;
-		}
-
 		if (JFile::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
 		{
 			$url = 'index.php?option=com_tjcertificate&task=certificate.download&certificate=' . $this->unique_certificate_id;
@@ -954,14 +949,9 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function canDownload($uniqueCertificateId)
+	public static function canDownload($uniqueCertificateId)
 	{
 		$user = Factory::getUser();
-
-		if (!$user->authorise('certificate.download.own', 'com_tjcertificate') && !$user->authorise('certificate.download.all', 'com_tjcertificate'))
-		{
-			return false;
-		}
 
 		if ($user->authorise('certificate.download.all', 'com_tjcertificate'))
 		{
@@ -978,5 +968,7 @@ class TjCertificateCertificate extends CMSObject
 				return true;
 			}
 		}
+		
+		return false;
 	}
 }
