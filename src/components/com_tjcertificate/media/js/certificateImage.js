@@ -12,7 +12,7 @@ var certificateImage = {
 
     enableDownloadShareBtns: function()
     {
-        jQuery("#download-popover").popover({
+		jQuery("#download-popover").popover({
             trigger: 'focus',
             html: true,
             content: jQuery('#download-popover-content').html()
@@ -72,7 +72,7 @@ var certificateImage = {
 
     copyUrl: function(element) {
 		var inputDump = document.createElement('input'),
-			hrefText = window.location.href;
+		hrefText = window.location.href;
 		document.body.appendChild(inputDump);
 		inputDump.value = hrefText;
 		inputDump.select();
