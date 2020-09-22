@@ -598,6 +598,8 @@ class TjCertificateCertificate extends CMSObject
 
 			return Route::_($url);
 		}
+		
+		return false;
 	}
 
 	/**
