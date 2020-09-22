@@ -90,7 +90,7 @@ if ($this->certificate)
 			</div>
 		</div>
 		<div class="row mt-25">
-			<div class="col-xs-12 col-md-8">
+			<div class="col-xs-12 col-md-7">
 				<?php
 					// Certificate provider info
 					if (!empty($this->contentHtml))
@@ -99,7 +99,7 @@ if ($this->certificate)
 					}
 				?>
 			</div>
-			<div class="col-xs-12 col-md-4 mb-25">
+			<div class="col-xs-12 col-md-5 mb-25">
 			<?php 
 					if ($this->certificate->getUserId() == Factory::getUser()->id)
 					{
@@ -152,6 +152,7 @@ if ($this->certificate)
 						<?php
 						}
 						?>
+						<a id="copyurl" data-toggle="popover" data-placement="bottom" data-content="Copied!" class="tj-certificate-btn" type="button" onclick="certificateImage.copyUrl();"><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL_COPY');?></a>
 					</div>
 					</div>
 					<?php
