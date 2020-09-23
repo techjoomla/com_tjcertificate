@@ -19,6 +19,7 @@ use Joomla\CMS\Filesystem\File;
 
 $options['relative'] = true;
 HTMLHelper::_('jquery.framework');
+HTMLHelper::_('bootstrap.framework');
 HTMLHelper::_('behavior.framework');
 HTMLHelper::StyleSheet('media/com_tjcertificate/vendors/font-awesome-4.1.0/css/font-awesome.min.css');
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
@@ -210,18 +211,15 @@ jQuery(document).ready(function() {
 	{
 		jQuery('#certificateContent').hide();
 	}
-	else
+
+	certificateImage.enableDownloadShareBtns();
+});
+
+window.onload = function() {
+	if (!imageExists)
 	{
 		certificateImage.generateImage(document.querySelector("#certificateContent"));
 	}
-
-	certificateImage.enableDownloadShareBtns();
-
-	if (document.referrer == "")
-	{
-		jQuery("#backBtn").hide();
-	}
-});
-
+}
 
 </script>

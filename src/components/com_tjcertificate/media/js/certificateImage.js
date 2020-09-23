@@ -46,9 +46,9 @@ var certificateImage = {
                 jQuery('#certificateContent').hide();
                 img.src = imagePath + certificateId + ".png";
                 jQuery("#previewImage").append(img);
-				setTimeout(function(){ 
-					Joomla.loadingLayer('hide'); }, 
-					1000);
+				setTimeout(function(){
+					Joomla.loadingLayer('hide');
+                }, 1000);
             }
         });
 
@@ -60,7 +60,7 @@ var certificateImage = {
         Joomla.loadingLayer('show');
 
         html2canvas(element, {
-            scale: (2),
+            // scale: (2),
             scrollX: 0,
             scrollY: -window.scrollY,
             allowTaint: true
