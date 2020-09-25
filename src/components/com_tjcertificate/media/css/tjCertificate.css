@@ -129,10 +129,19 @@
 .bs-v1 {
     box-shadow: 0 4px 10px 0 rgba(0,0,0,0.1);
 }
+.line-h-noraml{
+    line-height: normal;
+}
+.w-100{
+    width:100%;
+}
 .tj-certificate-image {
     background-color: #fff;
     width: 100%;
     float: left;
+}
+.tj-certificate-image img{
+    width: 100%;
 }
 #certificateContent{
     margin: 0 auto;
@@ -148,14 +157,16 @@
     border-radius: 5px;
     margin-left: 4px;
     border: 1px solid #ddd;
-    display: inline-block;
+    display: inline-block !important;
 }
 .tjlmspin__caption_desc{
     line-height: 18px;
     font-size: 14px;
     margin-bottom: 10px;
 }
-.tjlmspin__position {
+.tjlmspin__position,
+.eventlist__price
+{
     position: absolute;
     top: 9px;
     background: #FAF8F8;
@@ -163,16 +174,29 @@
     color: #333;
     font-weight: 600;
 }
-.tjlmslist .tjlmslist__image .tjlmspin__price {
+.tjlmslist .tjlmslist__image .tjlmspin__price,
+.eventlist .eventlist__price
+{
     left: 25px;
 }
-.tjlmspin.mobile-view{
+.tjlmspin.mobile-view,
+.eventpin.mobile-view
+{
     width: 255px;
     margin: 0 auto;
     float: none;
 }
 .view-certificate .popover-title{
     display: none;
+}
+.tj-certificate .thumbnail{
+    min-height: auto !important;
+    width: 100% !important;
+}
+.eventlist__desc{
+    height: 20px;
+    overflow: hidden;
+    display: inline-block;
 }
 @media screen and (max-width: 600px) {
     .tj-certificate-share-download{
@@ -183,7 +207,6 @@
     .tjlmslist .thumbnail{
         border:0;
     }
-
 	#certificateContent{
 		min-height: 800px;
 		width: 1150px;
