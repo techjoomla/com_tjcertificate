@@ -82,5 +82,21 @@ var certificateImage = {
 		setTimeout(function() {
 			jQuery("#copyurl").popover("hide");
 		}, 1000);
-	}
+	},
+
+    copySingleUrl: function(element) {
+        jQuery(element).popover("show");
+        var link = jQuery(element).attr('data-alt-url');
+        var inputDump = document.createElement('input'),
+        hrefText = link;
+        document.body.appendChild(inputDump);
+        inputDump.value = hrefText;
+        inputDump.select();
+        document.execCommand('copy');
+        document.body.removeChild(inputDump);
+
+        setTimeout(function() {
+            jQuery(element).popover("hide");
+        }, 1000);
+    }
 }

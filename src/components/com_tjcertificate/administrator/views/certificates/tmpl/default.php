@@ -15,8 +15,10 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Factory;
 
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
+HTMLHelper::script('com_tjcertificate/certificateImage.min.js', $options);
 HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
 HTMLHelper::_('formbehavior.chosen', 'select');
@@ -99,6 +101,9 @@ if ( $saveOrder )
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_EXPIRY_DATE', 'ci.expired_on', $listDirn, $listOrder); ?>
 								</th>
 								<th>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL'); ?>
+								</th>
+								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_COMMENT'); ?>
 								</th>
 								<th>
@@ -169,6 +174,32 @@ if ( $saveOrder )
 										echo '-';
 									}
 									?></td>
+								<td>
+									<?php
+									$utcNow = Factory::getDate('now', 'UTC')->format('Y-m-d H:i:s');
+
+									if ($item->expired_on > $utcNow || $item->expired_on == '0000-00-00 00:00:00')
+									{
+										// Get TJcertificate url for display certificate
+										$urlOpts = array ('absolute' => '');
+										$link = TJCERT::Certificate($item->id)->getUrl($urlOpts, false);
+									?>
+									<div class="btn-group">
+									<a id="copyurl<?php echo $item->id;?>" data-toggle="popover"
+										data-placement="bottom" data-content="Copied!"
+										data-alt-url="<?php echo $link;?>" class="btn" type="button"
+										onclick="certificateImage.copySingleUrl('#copyurl<?php echo $item->id;?>');">
+										<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL_COPY');?>
+									</a>
+									</div>
+									<?php
+									}
+									else
+									{
+										echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_EXPIRED');
+									}
+									?>
+								</td>
 								<td><?php echo $this->escape($item->comment); ?></td>
 								<td><?php echo (int) $item->id; ?></td>
 							</tr>
