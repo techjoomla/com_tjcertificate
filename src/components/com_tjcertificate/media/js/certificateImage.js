@@ -56,7 +56,7 @@ var certificateImage = {
     },
 
     generateImage: function(element) {
-		jQuery('#certificateContent').width(element.offsetWidth).height(element.offsetHeight);
+		// jQuery('#certificateContent').width(element.offsetWidth).height(element.offsetHeight);
         Joomla.loadingLayer('show');
 
         html2canvas(element, {
