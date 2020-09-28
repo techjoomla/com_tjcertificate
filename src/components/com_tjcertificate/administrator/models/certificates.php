@@ -157,7 +157,9 @@ class TjCertificateModelCertificates extends ListModel
 			else
 			{
 				$search = $db->quote('%' . str_replace(' ', '%', $db->escape(trim($search), true) . '%'));
-				$query->where(' (ct.title LIKE ' . $search . ' OR ci.unique_certificate_id LIKE ' . $search . ' )');
+				$query->where(' (ct.title LIKE ' . $search . ' OR ci.unique_certificate_id LIKE '
+					. $search . ' OR ci.client_issued_to_name LIKE ' . $search .
+					' OR users.name LIKE ' . $search . ' )');
 			}
 		}
 
