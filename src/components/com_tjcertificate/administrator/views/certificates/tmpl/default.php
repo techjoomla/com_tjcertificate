@@ -178,7 +178,9 @@ if ( $saveOrder )
 									?></td>
 								<td><?php echo $this->escape($item->comment); ?></td>
 								<td>
-									<?php echo $data[0]->title; ?>
+									<?php
+									echo (!empty($data[0]->title)) ? $data[0]->title : '-';
+									?>
 								</td>
 								<td><?php echo (int) $item->id; ?></td>
 							</tr>
