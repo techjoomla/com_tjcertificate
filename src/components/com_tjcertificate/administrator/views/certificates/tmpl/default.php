@@ -191,7 +191,7 @@ if ( $saveOrder )
 									<a id="copyurl<?php echo $item->id;?>" data-toggle="popover"
 										data-placement="bottom" data-content="Copied!"
 										data-alt-url="<?php echo $link;?>" class="btn" type="button"
-										onclick="certificateImage.copyUrl('#copyurl<?php echo $item->id;?>');">
+										onclick="certificateImage.copyUrl('copyurl<?php echo $item->id;?>');">
 										<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL_COPY');?>
 									</a>
 									</div>

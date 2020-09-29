@@ -16,6 +16,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Uri\Uri;
 
 $options['relative'] = true;
 HTMLHelper::_('jquery.framework');
@@ -151,9 +152,15 @@ if ($this->certificate)
 						</div>
 
 						<?php
-						}
+						$uri = Uri::getInstance();
+						$url = $uri->toString();
 						?>
-						<a id="copyurl" data-toggle="popover" data-placement="bottom" data-content="Copied!" class="tj-certificate-btn" type="button" onclick="certificateImage.copyUrl();"><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL_COPY');?></a>
+						<a id="copyurl" data-toggle="popover" data-placement="bottom"
+						data-alt-url="<?php echo $url;?>" data-content="Copied!"
+						class="tj-certificate-btn" type="button"
+						onclick="certificateImage.copyUrl('copyurl');">
+						<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL_COPY');?>
+						</a>
 					</div>
 					</div>
 					<?php

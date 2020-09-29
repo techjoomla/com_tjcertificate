@@ -70,21 +70,12 @@ var certificateImage = {
         });
     },
 
-    copyUrl: function(element) {
+     copyUrl: function(element) {
+        element = '#' + element;
         var inputDump = document.createElement('input'),
-        hrefText = window.location.href;
+        hrefText = jQuery(element).attr('data-alt-url');
+        jQuery(element).popover("show");
         document.body.appendChild(inputDump);
-
-        if (element === undefined)
-        {
-            element = "#copyurl";
-        }
-        else
-        {
-            hrefText = jQuery(element).attr('data-alt-url');
-            jQuery(element).popover("show");
-        }
-
         inputDump.value = hrefText;
         inputDump.select();
         document.execCommand('copy');
