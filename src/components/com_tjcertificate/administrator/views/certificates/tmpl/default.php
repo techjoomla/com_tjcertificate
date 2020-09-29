@@ -15,6 +15,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Plugin\PluginHelper;
 
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 HTMLHelper::_('bootstrap.tooltip');
@@ -25,6 +26,8 @@ HTMLHelper::_('behavior.modal', 'a.modal');
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
 $saveOrder = $listOrder == 'ci.id';
+$dispatcher = JDispatcher::getInstance();
+PluginHelper::importPlugin('content');
 
 if ( $saveOrder )
 {
@@ -99,6 +102,9 @@ if ( $saveOrder )
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_EXPIRY_DATE', 'ci.expired_on', $listDirn, $listOrder); ?>
 								</th>
 								<th>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TYPE_NAME'); ?>
+								</th>
+								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_COMMENT'); ?>
 								</th>
 								<th>
@@ -117,6 +123,7 @@ if ( $saveOrder )
 							<?php
 							foreach ($this->items as $i => $item)
 							{
+								$data = $dispatcher->trigger('getCertificateClientData', array($item->client_id, $item->client));
 								$item->max_ordering = 0;
 
 								$canEdit    = $this->canDo->get('core.edit');
@@ -170,6 +177,11 @@ if ( $saveOrder )
 									}
 									?></td>
 								<td><?php echo $this->escape($item->comment); ?></td>
+								<td>
+									<?php
+									echo (!empty($data[0]->title)) ? $data[0]->title : '-';
+									?>
+								</td>
 								<td><?php echo (int) $item->id; ?></td>
 							</tr>
 							<?php
