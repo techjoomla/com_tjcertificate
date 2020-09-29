@@ -15,13 +15,18 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\PluginHelper;
+
+$options = array();
+$options['relative'] = true;
 
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
 HTMLHelper::_('formbehavior.chosen', 'select');
 HTMLHelper::_('behavior.modal', 'a.modal');
+HTMLHelper::script('com_tjcertificate/certificateImage.min.js', $options);
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
@@ -103,6 +108,9 @@ if ( $saveOrder )
 								</th>
 								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TYPE_NAME'); ?>
+								</th>
+								<th>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL'); ?>
 								</th>
 								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_COMMENT'); ?>
@@ -191,12 +199,38 @@ if ( $saveOrder )
 										echo '-';
 									}
 									?></td>
-								<td><?php echo $this->escape($item->comment); ?></td>
 								<td>
 									<?php
 									echo (!empty($data[0]->title)) ? $data[0]->title : '-';
 									?>
 								</td>
+								<td>
+									<?php
+									$utcNow = Factory::getDate()->toSql();
+
+									if ($item->expired_on > $utcNow || $item->expired_on == '0000-00-00 00:00:00')
+									{
+										// Get TJcertificate url for display certificate
+										$urlOpts = array ('absolute' => '');
+										$link = TJCERT::Certificate($item->id)->getUrl($urlOpts, false);
+									?>
+									<div class="btn-group">
+									<a id="copyurl<?php echo $item->id;?>" data-toggle="popover"
+										data-placement="bottom" data-content="Copied!"
+										data-alt-url="<?php echo $link;?>" class="btn" type="button"
+										onclick="certificateImage.copyUrl('copyurl<?php echo $item->id;?>');">
+										<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL_COPY');?>
+									</a>
+									</div>
+									<?php
+									}
+									else
+									{
+										echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_EXPIRED');
+									}
+									?>
+								</td>
+								<td><?php echo $this->escape($item->comment); ?></td>
 								<td><?php echo (int) $item->id; ?></td>
 							</tr>
 							<?php
