@@ -93,7 +93,7 @@ if ( $saveOrder )
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_CLIENT', 'ci.client', $listDirn, $listOrder); ?>
 								</th>
 								<th>
-									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_USER', 'ci.user_id', $listDirn, $listOrder); ?>
+									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_USER_NAME', 'ci.user_id', $listDirn, $listOrder); ?>
 								</th>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ISSUED_DATE', 'ci.issued_on', $listDirn, $listOrder); ?>
@@ -164,7 +164,22 @@ if ( $saveOrder )
 								</td>
 								<td><?php echo $this->escape($item->title); ?></td>
 								<td><?php echo $this->escape($item->client); ?></td>
-								<td><?php echo $this->escape($item->uname); ?></td>
+								<td>
+									<?php
+									$userName = '-';
+
+										if (!empty($item->client_issued_to_name))
+										{
+											$userName = $this->escape($item->client_issued_to_name);
+										}
+										elseif (!empty($item->uname))
+										{
+											$userName = $this->escape($item->uname);
+										}
+
+										echo $userName;
+										?>
+								</td>
 								<td><?php echo HTMLHelper::date($item->issued_on, Text::_('DATE_FORMAT_LC')); ?></td>
 								<td><?php
 									if (!empty($item->expired_on) && $item->expired_on != '0000-00-00 00:00:00')
