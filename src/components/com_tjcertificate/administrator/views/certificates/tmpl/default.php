@@ -163,7 +163,7 @@ if ( $saveOrder )
 										{
 											$userName = $this->escape($item->client_issued_to_name);
 										}
-										elseif(!empty($item->uname))
+										elseif (!empty($item->uname))
 										{
 											$userName = $this->escape($item->uname);
 										}
