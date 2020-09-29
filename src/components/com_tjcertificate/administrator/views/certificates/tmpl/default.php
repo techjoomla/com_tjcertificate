@@ -16,6 +16,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\PluginHelper;
 
 $options = array();
 $options['relative'] = true;
@@ -30,6 +31,8 @@ HTMLHelper::script('com_tjcertificate/certificateImage.min.js', $options);
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
 $saveOrder = $listOrder == 'ci.id';
+$dispatcher = JDispatcher::getInstance();
+PluginHelper::importPlugin('content');
 
 if ( $saveOrder )
 {
@@ -95,13 +98,16 @@ if ( $saveOrder )
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_CLIENT', 'ci.client', $listDirn, $listOrder); ?>
 								</th>
 								<th>
-									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_USER', 'ci.user_id', $listDirn, $listOrder); ?>
+									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_USER_NAME', 'ci.user_id', $listDirn, $listOrder); ?>
 								</th>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ISSUED_DATE', 'ci.issued_on', $listDirn, $listOrder); ?>
 								</th>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_EXPIRY_DATE', 'ci.expired_on', $listDirn, $listOrder); ?>
+								</th>
+								<th>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TYPE_NAME'); ?>
 								</th>
 								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL'); ?>
@@ -125,6 +131,7 @@ if ( $saveOrder )
 							<?php
 							foreach ($this->items as $i => $item)
 							{
+								$data = $dispatcher->trigger('getCertificateClientData', array($item->client_id, $item->client));
 								$item->max_ordering = 0;
 
 								$canEdit    = $this->canDo->get('core.edit');
@@ -165,7 +172,22 @@ if ( $saveOrder )
 								</td>
 								<td><?php echo $this->escape($item->title); ?></td>
 								<td><?php echo $this->escape($item->client); ?></td>
-								<td><?php echo $this->escape($item->uname); ?></td>
+								<td>
+									<?php
+									$userName = '-';
+
+										if (!empty($item->client_issued_to_name))
+										{
+											$userName = $this->escape($item->client_issued_to_name);
+										}
+										elseif (!empty($item->uname))
+										{
+											$userName = $this->escape($item->uname);
+										}
+
+										echo $userName;
+										?>
+								</td>
 								<td><?php echo HTMLHelper::date($item->issued_on, Text::_('DATE_FORMAT_LC')); ?></td>
 								<td><?php
 									if (!empty($item->expired_on) && $item->expired_on != '0000-00-00 00:00:00')
@@ -177,6 +199,11 @@ if ( $saveOrder )
 										echo '-';
 									}
 									?></td>
+								<td>
+									<?php
+									echo (!empty($data[0]->title)) ? $data[0]->title : '-';
+									?>
+								</td>
 								<td>
 									<?php
 									$utcNow = Factory::getDate()->toSql();
