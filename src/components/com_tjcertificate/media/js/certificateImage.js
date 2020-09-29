@@ -71,25 +71,20 @@ var certificateImage = {
     },
 
     copyUrl: function(element) {
-		var inputDump = document.createElement('input'),
-		hrefText = window.location.href;
-		document.body.appendChild(inputDump);
-		inputDump.value = hrefText;
-		inputDump.select();
-		document.execCommand('copy');
-		document.body.removeChild(inputDump);
-
-		setTimeout(function() {
-			jQuery("#copyurl").popover("hide");
-		}, 1000);
-	},
-
-    copySingleUrl: function(element) {
-        jQuery(element).popover("show");
-        var link = jQuery(element).attr('data-alt-url');
         var inputDump = document.createElement('input'),
-        hrefText = link;
+        hrefText = window.location.href;
         document.body.appendChild(inputDump);
+
+        if (element === undefined)
+        {
+            element = "#copyurl";
+        }
+        else
+        {
+            hrefText = jQuery(element).attr('data-alt-url');
+            jQuery(element).popover("show");
+        }
+
         inputDump.value = hrefText;
         inputDump.select();
         document.execCommand('copy');
