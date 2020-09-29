@@ -159,6 +159,8 @@ if ( $saveOrder )
 								<td><?php echo $this->escape($item->client); ?></td>
 								<td>
 									<?php
+									$userName = '-';
+
 										if (!empty($item->client_issued_to_name))
 										{
 											$userName = $this->escape($item->client_issued_to_name);
@@ -166,10 +168,6 @@ if ( $saveOrder )
 										elseif (!empty($item->uname))
 										{
 											$userName = $this->escape($item->uname);
-										}
-										else
-										{
-											$userName = '-';
 										}
 
 										echo $userName;
