@@ -102,7 +102,7 @@ if ( $saveOrder )
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_EXPIRY_DATE', 'ci.expired_on', $listDirn, $listOrder); ?>
 								</th>
 								<th>
-									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_COURSE_NAME'); ?>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TYPE_NAME'); ?>
 								</th>
 								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_COMMENT'); ?>
