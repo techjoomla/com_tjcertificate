@@ -186,7 +186,7 @@ if ($this->certificate)
 			</div>
 		</div>
 		<div class="col-sm-12 tj-certificate-content mb-15 mt-25">
-			<div id="certificateContent">
+			<div id="certificateContent" style="width: 1196px !important; height: 768px !important;">
 				<?php
 					echo $this->certificate->generated_body;
 				?>
