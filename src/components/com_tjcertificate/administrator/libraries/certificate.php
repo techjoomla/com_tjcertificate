@@ -598,7 +598,7 @@ class TjCertificateCertificate extends CMSObject
 
 			return Route::_($url);
 		}
-		
+
 		return false;
 	}
 
@@ -756,7 +756,7 @@ class TjCertificateCertificate extends CMSObject
 		try
 		{
 			// Check user_id or certificate_template_id (this is needed to generate certificate body) is empty
-			if (empty($this->user_id) || empty($this->client_issued_to))
+			if ((empty($this->user_id) && empty($this->client_issued_to)) || empty($this->certificate_template_id))
 			{
 				throw new Exception(Text::_('COM_TJCERTIFICATE_CERTIFICATE_EMPTY_DATA'));
 			}

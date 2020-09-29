@@ -70,17 +70,19 @@ var certificateImage = {
         });
     },
 
-    copyUrl: function(element) {
-		var inputDump = document.createElement('input'),
-		hrefText = window.location.href;
-		document.body.appendChild(inputDump);
-		inputDump.value = hrefText;
-		inputDump.select();
-		document.execCommand('copy');
-		document.body.removeChild(inputDump);
+     copyUrl: function(element) {
+        element = '#' + element;
+        var inputDump = document.createElement('input'),
+        hrefText = jQuery(element).attr('data-alt-url');
+        jQuery(element).popover("show");
+        document.body.appendChild(inputDump);
+        inputDump.value = hrefText;
+        inputDump.select();
+        document.execCommand('copy');
+        document.body.removeChild(inputDump);
 
-		setTimeout(function() {
-			jQuery("#copyurl").popover("hide");
-		}, 1000);
-	}
+        setTimeout(function() {
+            jQuery(element).popover("hide");
+        }, 1000);
+    }
 }
