@@ -152,6 +152,7 @@ if ($this->certificate)
 						</div>
 
 						<?php
+						}
 						?>
 						<a id="copyurl" data-toggle="popover" data-placement="bottom"
 						data-alt-url="<?php echo Uri::getInstance()->toString();?>"
