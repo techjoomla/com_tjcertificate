@@ -755,8 +755,8 @@ class TjCertificateCertificate extends CMSObject
 	{
 		try
 		{
-			// Check user_id/issued Id or certificate_template_id (this is needed to generate certificate body) is empty
-			if ((empty($this->user_id) && empty($this->setClientIssuedTo)) || empty($this->certificate_template_id))
+			// Check user_id or issued Id or certificate_template_id (this is needed to generate certificate body) is empty
+			if ((empty($this->user_id) && empty($this->client_issued_to)) || empty($this->certificate_template_id))
 			{
 				throw new Exception(Text::_('COM_TJCERTIFICATE_CERTIFICATE_EMPTY_DATA'));
 			}
