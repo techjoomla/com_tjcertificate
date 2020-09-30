@@ -93,7 +93,7 @@ $sharingOptions = $this->params->get('sharing_option');
 			}
 			?>
 				<li>
-					<a id="copyurl" data-toggle="popover" data-placement="bottom" data-alt-url="<?php echo Uri::getInstance()->toString();?>" data-content="Copied!" onclick="certificateImage.copyUrl('copyurl');">
+					<a id="copyurl" data-toggle="popover" data-placement="bottom" data-alt-url="<?php echo Uri::getInstance()->toString();?>" data-content="Copied!" onclick="certificateImage.copyUrl('copyurl');" title="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL_COPY');?>">
 					<i class="fa fa-clipboard fa-2x" aria-hidden="true"></i>
 					</a>
 				</li>
