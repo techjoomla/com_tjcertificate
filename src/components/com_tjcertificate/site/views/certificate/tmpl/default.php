@@ -16,7 +16,6 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Uri\Uri;
 
 $options['relative'] = true;
 HTMLHelper::_('jquery.framework');
@@ -154,12 +153,13 @@ if ($this->certificate)
 						<?php
 						}
 						?>
-						<a id="copyurl" data-toggle="popover" data-placement="bottom"
-						data-alt-url="<?php echo Uri::getInstance()->toString();?>"
-						data-content="Copied!" class="tj-certificate-btn" type="button"
-						onclick="certificateImage.copyUrl('copyurl');">
-						<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL_COPY');?>
-						</a>
+						<?php if ($this->params->get('linkedin_profile_btn')) {
+						?>
+							<a href="<?php echo $this->linkedInProfileUrl;?>" target="_blank">
+							<img src="media/com_tjcertificate/images/buttons/en_US.png" alt="LinkedIn Add to Profile button">
+							</a>
+						<?php }
+						?>
 					</div>
 					</div>
 					<?php

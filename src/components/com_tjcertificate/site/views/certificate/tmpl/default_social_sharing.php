@@ -12,6 +12,8 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Language\Text;
 $document = Factory::getDocument();
 
 $sharingOptions = $this->params->get('sharing_option');
@@ -90,6 +92,11 @@ $sharingOptions = $this->params->get('sharing_option');
 			<?php
 			}
 			?>
+				<li>
+					<a id="copyurl" data-toggle="popover" data-placement="bottom" data-alt-url="<?php echo Uri::getInstance()->toString();?>" data-content="Copied!" onclick="certificateImage.copyUrl('copyurl');">
+					<i class="fa fa-clipboard fa-2x" aria-hidden="true"></i>
+					</a>
+				</li>
 			</ul>
 		</div>
 <?php 
