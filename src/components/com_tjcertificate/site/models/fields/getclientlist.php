@@ -34,7 +34,7 @@ class JFormFieldGetClientList extends JFormFieldList
 
 		$clientByUser = $this->getAttribute('clientByUser');
 
-		$options[] = JHtml::_('select.option', '', Text::_('COM_TJCERTIFICATE_CERTIFICATE_FILTER_CERTIFICATE_CLIENT_SELECT'));
+		$options[] = JHtml::_('select.option', '', Text::_('COM_TJCERTIFICATE_CERTIFICATE_FILTER_CERTIFICATE_TYPE_SELECT'));
 
 		// Get Private/Created by logged-in user's templates
 		if ($user->id)

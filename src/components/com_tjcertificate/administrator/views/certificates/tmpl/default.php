@@ -89,13 +89,13 @@ if ( $saveOrder )
 								</th>
 
 								<th>
-									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_UNIQUE_ID'); ?>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_CERTIFICATE_ID'); ?>
 								</th>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TEMPLATE', 'ci.certificate_template_id', $listDirn, $listOrder); ?>
 								</th>
 								<th>
-									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_CLIENT', 'ci.client', $listDirn, $listOrder); ?>
+									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TYPE', 'ci.client', $listDirn, $listOrder); ?>
 								</th>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_USER_NAME', 'ci.user_id', $listDirn, $listOrder); ?>
@@ -171,7 +171,13 @@ if ( $saveOrder )
 									</div>
 								</td>
 								<td><?php echo $this->escape($item->title); ?></td>
-								<td><?php echo $this->escape($item->client); ?></td>
+								<td>
+									<?php
+										$client = str_replace(".", "_", $item->client);
+										$client = strtoupper("COM_TJCERTIFICATE_CLIENT_" . $client);
+										echo TEXT::_($client);
+									?>
+								</td>
 								<td>
 									<?php
 									$userName = '-';
