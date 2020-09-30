@@ -23,6 +23,7 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
 
 /**
  * Certificate class.  Handles all application interaction with a Certificate
@@ -979,52 +980,42 @@ class TjCertificateCertificate extends CMSObject
 	/**
 	 * Method to get linkedIn add to profile url.
 	 *
-	 * @param   STRING  $uniqueCertificateId  unique certificate id
-	 *
-	 * @return  STRING|boolean
+	 * @return  STRING
 	 *
 	 * @since  __DEPLOY_VERSION__
 	 */
-	public function getLinkedInProfileUrl($uniqueCertificateId)
+	public function getLinkedInProfileUrl()
 	{
-		if ($uniqueCertificateId)
+		$params   = ComponentHelper::getParams('com_tjcertificate');
+		$config   = Factory::getConfig();
+		$siteName = $config->get('sitename');
+
+		$issuedMonth = HTMLHelper::_('date', $this->issued_on, 'm');
+		$issuedYear  = HTMLHelper::_('date', $this->issued_on, 'Y');
+
+		$expirationDetails = null;
+
+		if ($this->expired_on != '0000-00-00 00:00:00')
 		{
-			$params   = ComponentHelper::getParams('com_tjcertificate');
-			$config   = Factory::getConfig();
-			$siteName = $config->get('sitename');
-
-			$table = TJCERT::table("certificates");
-			$table->load(array('unique_certificate_id' => $uniqueCertificateId));
-
-			$issuedMonth = HTMLHelper::_('date', $table->issued_on, 'm');
-			$issuedYear  = HTMLHelper::_('date', $table->issued_on, 'Y');
-
-			$expirationDetails = null;
-
-			if ($table->expired_on != '0000-00-00 00:00:00')
-			{
-				$expirationMonth   = HTMLHelper::_('date', $table->expired_on, 'm');
-				$expirationYear    = HTMLHelper::_('date', $table->expired_on, 'Y');
-				$expirationDetails = '&expirationYear=' . $expirationYear . '&expirationMonth=' . $expirationMonth;
-			}
-
-			$orgParam = '&' . $params->get('organization_info') . '=' . $params->get('organization_id_name');
-
-			$dispatcher = JDispatcher::getInstance();
-			PluginHelper::importPlugin('content');
-			$result = $dispatcher->trigger('getCertificateClientData', array($table->client_id, $table->client));
-			$clientData = $result[0];
-
-			$certificateTitle = $clientData->title ? $clientData->title : $siteName . ' ' . Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_HEAD');
-			$url = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $uniqueCertificateId;
-			$certificateUrl = JUri::root() . substr(Route::_($url), strlen(JUri::base(true)) + 1);
-			$linkedInprofileUrl = 'https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=' . $certificateTitle . $orgParam
-			. '&issueYear=' . $issuedYear . '&issueMonth=' . $issuedMonth . $expirationDetails
-			. '&certUrl=' . urlencode($certificateUrl) . '&certId=' . $uniqueCertificateId;
-
-			return $linkedInprofileUrl;
+			$expirationMonth   = HTMLHelper::_('date', $this->expired_on, 'm');
+			$expirationYear    = HTMLHelper::_('date', $this->expired_on, 'Y');
+			$expirationDetails = '&expirationYear=' . $expirationYear . '&expirationMonth=' . $expirationMonth;
 		}
 
-		return false;
+		$orgParam = '&' . $params->get('organization_info') . '=' . $params->get('organization_id_name');
+
+		// Get client data
+		$dispatcher = JDispatcher::getInstance();
+		PluginHelper::importPlugin('content');
+		$result = $dispatcher->trigger('getCertificateClientData', array($this->client_id, $this->client));
+		$clientData = $result[0];
+		
+		$certificateTitle = $clientData->title ? $clientData->title : $siteName . ' ' . Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_HEAD');
+		$certificateUrl = JUri::root() . substr(Route::_($this->getURL('', false)), strlen(Uri::base(true)) + 1);
+		$linkedInprofileUrl = 'https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=' . $certificateTitle . $orgParam
+		. '&issueYear=' . $issuedYear . '&issueMonth=' . $issuedMonth . $expirationDetails
+		. '&certUrl=' . urlencode($certificateUrl) . '&certId=' . $this->unique_certificate_id;
+
+		return $linkedInprofileUrl;
 	}
 }
