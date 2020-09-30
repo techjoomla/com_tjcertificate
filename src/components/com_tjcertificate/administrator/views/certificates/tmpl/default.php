@@ -89,7 +89,7 @@ if ( $saveOrder )
 								</th>
 
 								<th>
-									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_UNIQUE_ID'); ?>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_CERTIFICATE_ID'); ?>
 								</th>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TEMPLATE', 'ci.certificate_template_id', $listDirn, $listOrder); ?>
