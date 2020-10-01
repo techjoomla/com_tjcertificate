@@ -92,13 +92,10 @@ if ( $saveOrder )
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_CERTIFICATE_ID'); ?>
 								</th>
 								<th>
-									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TEMPLATE', 'ci.certificate_template_id', $listDirn, $listOrder); ?>
-								</th>
-								<th>
-									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TYPE', 'ci.client', $listDirn, $listOrder); ?>
-								</th>
-								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_USER_NAME', 'ci.user_id', $listDirn, $listOrder); ?>
+								</th>
+								<th>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TYPE_NAME'); ?>
 								</th>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ISSUED_DATE', 'ci.issued_on', $listDirn, $listOrder); ?>
@@ -107,7 +104,10 @@ if ( $saveOrder )
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_EXPIRY_DATE', 'ci.expired_on', $listDirn, $listOrder); ?>
 								</th>
 								<th>
-									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TYPE_NAME'); ?>
+									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TYPE', 'ci.client', $listDirn, $listOrder); ?>
+								</th>
+								<th>
+									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TEMPLATE', 'ci.certificate_template_id', $listDirn, $listOrder); ?>
 								</th>
 								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL'); ?>
@@ -170,14 +170,6 @@ if ( $saveOrder )
 
 									</div>
 								</td>
-								<td><?php echo $this->escape($item->title); ?></td>
-								<td>
-									<?php
-										$client = str_replace(".", "_", $item->client);
-										$client = strtoupper("COM_TJCERTIFICATE_CLIENT_" . $client);
-										echo TEXT::_($client);
-									?>
-								</td>
 								<td>
 									<?php
 									$userName = '-';
@@ -194,6 +186,11 @@ if ( $saveOrder )
 										echo $userName;
 										?>
 								</td>
+								<td>
+									<?php
+									echo (!empty($data[0]->title)) ? $data[0]->title : '-';
+									?>
+								</td>
 								<td><?php echo HTMLHelper::date($item->issued_on, Text::_('DATE_FORMAT_LC')); ?></td>
 								<td><?php
 									if (!empty($item->expired_on) && $item->expired_on != '0000-00-00 00:00:00')
@@ -204,12 +201,16 @@ if ( $saveOrder )
 									{
 										echo '-';
 									}
-									?></td>
-								<td>
-									<?php
-									echo (!empty($data[0]->title)) ? $data[0]->title : '-';
 									?>
 								</td>
+								<td>
+									<?php
+										$client = str_replace(".", "_", $item->client);
+										$client = strtoupper("COM_TJCERTIFICATE_CLIENT_" . $client);
+										echo TEXT::_($client);
+									?>
+								</td>
+								<td><?php echo $this->escape($item->title); ?></td>
 								<td>
 									<?php
 									$utcNow = Factory::getDate()->toSql();
