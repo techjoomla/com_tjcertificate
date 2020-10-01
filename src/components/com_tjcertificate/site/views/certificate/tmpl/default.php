@@ -16,6 +16,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Uri\Uri;
 
 $options['relative'] = true;
 HTMLHelper::_('jquery.framework');
