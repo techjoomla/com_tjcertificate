@@ -948,13 +948,11 @@ class TjCertificateCertificate extends CMSObject
 	/**
 	 * This function checks the certificate download permission 
 	 *
-	 * @param   STRING  $uniqueCertificateId  certificate Id
-	 *
 	 * @return  boolean
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public static function canDownload($uniqueCertificateId)
+	public function canDownload()
 	{
 		$user = Factory::getUser();
 
@@ -965,10 +963,7 @@ class TjCertificateCertificate extends CMSObject
 
 		if ($user->authorise('certificate.download.own', 'com_tjcertificate'))
 		{
-			$table = TJCERT::table("certificates");
-			$table->load(array('unique_certificate_id' => $uniqueCertificateId));
-
-			if ($user->get('id') == $table->user_id)
+			if ($user->get('id') == $this->user_id)
 			{
 				return true;
 			}
@@ -1009,7 +1004,7 @@ class TjCertificateCertificate extends CMSObject
 		PluginHelper::importPlugin('content');
 		$result = $dispatcher->trigger('getCertificateClientData', array($this->client_id, $this->client));
 		$clientData = $result[0];
-		
+
 		$certificateTitle = $clientData->title ? $clientData->title : $siteName . ' ' . Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_HEAD');
 		$certificateUrl = JUri::root() . substr(Route::_($this->getURL('', false)), strlen(Uri::base(true)) + 1);
 		$linkedInprofileUrl = 'https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=' . $certificateTitle . $orgParam
