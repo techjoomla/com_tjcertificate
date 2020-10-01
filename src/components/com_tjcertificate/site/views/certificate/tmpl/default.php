@@ -16,9 +16,11 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Uri\Uri;
 
 $options['relative'] = true;
 HTMLHelper::_('jquery.framework');
+HTMLHelper::_('bootstrap.framework');
 HTMLHelper::_('behavior.framework');
 HTMLHelper::StyleSheet('media/com_tjcertificate/vendors/font-awesome-4.1.0/css/font-awesome.min.css');
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
@@ -72,7 +74,7 @@ if ($this->certificate)
 	// For twitter
 	$document->addCustomTag('<meta name="twitter:card" content="summary_large_image" />');
 	$document->addCustomTag('<meta name="twitter:site" content="' . $siteName . '">');
-	$document->addCustomTag('<meta name="twitter:title" content="' . $this->escape($this->item->title) . '">');
+	$document->addCustomTag('<meta name="twitter:title" content="' . $ogTitle . '">');
 	$document->addCustomTag('<meta name="twitter:description" content="' . $this->escape($description) . '">');
 	$document->addCustomTag('<meta name="twitter:image" content="' . $this->imagePath . '">');
 
@@ -82,15 +84,15 @@ if ($this->certificate)
 			<h4 class=""><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_HEAD');?></h4>
 		</div>
 		<div class="row mb-25">
-			<div class="col-xs-10">
-				<h1 class="font-300 m-0"><?php echo $this->item->title; ?></h1>
+			<div class="col-xs-9">
+				<h1 class="font-300 m-0 text-truncate line-h-noraml"><?php echo $this->item->title; ?></h1>
 			</div>
-			<div class="col-xs-2">
+			<div id="backBtn" class="col-xs-3">
 				<a class="pull-right fs-16 font-600 cursor-pointer" onclick="window.history.back();"><i class="fa fa-arrow-left mr-10" aria-hidden="true"></i><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_BACK_BUTTON');?></a>
 			</div>
 		</div>
 		<div class="row mt-25">
-			<div class="col-xs-12 col-md-8">
+			<div class="col-xs-12 col-md-7">
 				<?php
 					// Certificate provider info
 					if (!empty($this->contentHtml))
@@ -99,7 +101,7 @@ if ($this->certificate)
 					}
 				?>
 			</div>
-			<div class="col-xs-12 col-md-4 mb-25">
+			<div class="col-xs-12 col-md-5 mb-25">
 			<?php 
 					if ($this->certificate->getUserId() == Factory::getUser()->id)
 					{
@@ -114,17 +116,20 @@ if ($this->certificate)
 								<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_AS_IMAGE'); ?>
 							</a>
 							<?php
-							if ($this->certificate->getDownloadUrl())
-							{
-								?>
-								<a class="d-block mb-15" href="<?php echo $this->certificate->getDownloadUrl();?>">
-									<i class="fa fa-file-pdf-o mr-5" aria-hidden="true"></i>
-									<?php
-										echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_PDF');
-									?>
-								</a>
-								<?php
-							}
+								if ($this->downloadPermission)
+								{
+									if ($this->certificate->getDownloadUrl())
+									{
+										?>
+										<a class="d-block mb-15" href="<?php echo $this->certificate->getDownloadUrl();?>">
+											<i class="fa fa-file-pdf-o mr-5" aria-hidden="true"></i>
+											<?php
+												echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_PDF');
+											?>
+										</a>
+										<?php
+									}
+								}
 							?>
 							<span class="btn-print">
 							<input type="button" class="btn-print" onclick="certificateImage.printCertificate('certificateContent')" value="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_PRINT');?>" />
@@ -149,6 +154,12 @@ if ($this->certificate)
 						<?php
 						}
 						?>
+						<a id="copyurl" data-toggle="popover" data-placement="bottom"
+						data-alt-url="<?php echo Uri::getInstance()->toString();?>"
+						data-content="Copied!" class="tj-certificate-btn" type="button"
+						onclick="certificateImage.copyUrl('copyurl');">
+						<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL_COPY');?>
+						</a>
 					</div>
 					</div>
 					<?php
@@ -159,7 +170,17 @@ if ($this->certificate)
 		</div>
 		<div class="col-sm-12 bg-lightblue p-15">
 			<div class="fs-16">
-				This certificate (ID: <?php echo $this->certificate->unique_certificate_id;?>) verifies that <strong><?php echo Factory::getUser($this->certificate->getUserId())->name; ?></strong> has successfully completed the <strong><?php echo $this->item->title; ?></strong> on <?php echo HTMLHelper::_('date', $this->certificate->issued_on, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_DATE_FORMAT'));?>.
+				<?php if ($this->item->title) 
+				{ ?>
+					This certificate (ID: <?php echo $this->certificate->unique_certificate_id;?>) verifies that <strong><?php echo Factory::getUser($this->certificate->getUserId())->name; ?></strong> has successfully completed the <strong><?php echo $this->item->title; ?></strong> on <?php echo HTMLHelper::_('date', $this->certificate->issued_on, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_DATE_FORMAT'));?>.
+				<?php 
+				}
+				else
+				{ ?>
+					This certificate (ID: <?php echo $this->certificate->unique_certificate_id;?>) has been awarded to <strong><?php echo Factory::getUser($this->certificate->getUserId())->name; ?></strong> on <?php echo HTMLHelper::_('date', $this->certificate->issued_on, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_DATE_FORMAT'));?>.
+				<?php 
+				} 
+				?>
 				<?php 
 				if ($this->certificate->getExpiry() != '0000-00-00 00:00:00')
 				{
@@ -171,7 +192,7 @@ if ($this->certificate)
 			</div>
 		</div>
 		<div class="col-sm-12 tj-certificate-content mb-15 mt-25">
-			<div id="certificateContent">
+			<div id="certificateContent" style="width: 1196px !important; height: 768px !important;">
 				<?php
 					echo $this->certificate->generated_body;
 				?>
@@ -196,12 +217,15 @@ jQuery(document).ready(function() {
 	{
 		jQuery('#certificateContent').hide();
 	}
-	else
-	{
-		certificateImage.generateImage(document.querySelector("#certificateContent"));
-	}
 
 	certificateImage.enableDownloadShareBtns();
 });
+
+window.onload = function() {
+	if (!imageExists)
+	{
+		certificateImage.generateImage(document.querySelector("#certificateContent"));
+	}
+}
 
 </script>

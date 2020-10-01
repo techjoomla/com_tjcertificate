@@ -46,6 +46,8 @@ class TjCertificateViewCertificate extends JViewLegacy
 
 	public $fileName = null;
 
+	public $downloadPermission = null;
+
 	/**
 	 * Display the view
 	 *
@@ -58,7 +60,7 @@ class TjCertificateViewCertificate extends JViewLegacy
 	public function display($tpl = null)
 	{
 		$this->params = ComponentHelper::getParams('com_tjcertificate');
-		$input  = Factory::getApplication()->input;
+		$input        = Factory::getApplication()->input;
 
 		$this->uniqueCertificateId = $input->get('certificate', '', 'STRING');
 		$this->showSearchBox       = $input->getInt('show_search', $this->params->get('show_search_box'));
@@ -72,6 +74,8 @@ class TjCertificateViewCertificate extends JViewLegacy
 			if (!$this->certificate->id)
 			{
 				JError::raiseWarning(500, Text::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EXPIRED'));
+
+				return false;
 			}
 		}
 
@@ -89,6 +93,7 @@ class TjCertificateViewCertificate extends JViewLegacy
 
 		$certificateUrl = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->certificate->unique_certificate_id;
 		$this->certificateUrl = Uri::root() . substr(Route::_($certificateUrl), strlen(Uri::base(true)) + 1);
+		$this->downloadPermission = $certificate::canDownload($this->certificate->unique_certificate_id);
 
 		// Get HTML
 		$clientId = $this->certificate->getClientId();

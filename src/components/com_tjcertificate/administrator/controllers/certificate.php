@@ -47,6 +47,14 @@ class TjCertificateControllerCertificate extends FormController
 		}
 
 		$certificate    = TJCERT::Certificate();
+
+		// Check user having permission to download
+		if (!$certificate::canDownload($uniqueCertificateId))
+		{
+			$app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'));
+			$app->redirect('index.php');
+		}
+
 		$certificateObj = $certificate::validateCertificate($uniqueCertificateId);
 
 		if (!$certificateObj->id)

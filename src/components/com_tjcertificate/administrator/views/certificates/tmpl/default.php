@@ -15,16 +15,24 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\PluginHelper;
+
+$options = array();
+$options['relative'] = true;
 
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
 HTMLHelper::_('formbehavior.chosen', 'select');
 HTMLHelper::_('behavior.modal', 'a.modal');
+HTMLHelper::script('com_tjcertificate/certificateImage.min.js', $options);
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
 $saveOrder = $listOrder == 'ci.id';
+$dispatcher = JDispatcher::getInstance();
+PluginHelper::importPlugin('content');
 
 if ( $saveOrder )
 {
@@ -81,22 +89,28 @@ if ( $saveOrder )
 								</th>
 
 								<th>
-									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_UNIQUE_ID'); ?>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_CERTIFICATE_ID'); ?>
 								</th>
 								<th>
-									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TEMPLATE', 'ci.certificate_template_id', $listDirn, $listOrder); ?>
+									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_USER_NAME', 'ci.user_id', $listDirn, $listOrder); ?>
 								</th>
 								<th>
-									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_CLIENT', 'ci.client', $listDirn, $listOrder); ?>
-								</th>
-								<th>
-									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_USER', 'ci.user_id', $listDirn, $listOrder); ?>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TYPE_NAME'); ?>
 								</th>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ISSUED_DATE', 'ci.issued_on', $listDirn, $listOrder); ?>
 								</th>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_EXPIRY_DATE', 'ci.expired_on', $listDirn, $listOrder); ?>
+								</th>
+								<th>
+									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TYPE', 'ci.client', $listDirn, $listOrder); ?>
+								</th>
+								<th>
+									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TEMPLATE', 'ci.certificate_template_id', $listDirn, $listOrder); ?>
+								</th>
+								<th>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL'); ?>
 								</th>
 								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_COMMENT'); ?>
@@ -117,6 +131,7 @@ if ( $saveOrder )
 							<?php
 							foreach ($this->items as $i => $item)
 							{
+								$data = $dispatcher->trigger('getCertificateClientData', array($item->client_id, $item->client));
 								$item->max_ordering = 0;
 
 								$canEdit    = $this->canDo->get('core.edit');
@@ -155,9 +170,27 @@ if ( $saveOrder )
 
 									</div>
 								</td>
-								<td><?php echo $this->escape($item->title); ?></td>
-								<td><?php echo $this->escape($item->client); ?></td>
-								<td><?php echo $this->escape($item->uname); ?></td>
+								<td>
+									<?php
+									$userName = '-';
+
+										if (!empty($item->client_issued_to_name))
+										{
+											$userName = $this->escape($item->client_issued_to_name);
+										}
+										elseif (!empty($item->uname))
+										{
+											$userName = $this->escape($item->uname);
+										}
+
+										echo $userName;
+										?>
+								</td>
+								<td>
+									<?php
+									echo (!empty($data[0]->title)) ? $data[0]->title : '-';
+									?>
+								</td>
 								<td><?php echo HTMLHelper::date($item->issued_on, Text::_('DATE_FORMAT_LC')); ?></td>
 								<td><?php
 									if (!empty($item->expired_on) && $item->expired_on != '0000-00-00 00:00:00')
@@ -168,7 +201,42 @@ if ( $saveOrder )
 									{
 										echo '-';
 									}
-									?></td>
+									?>
+								</td>
+								<td>
+									<?php
+										$client = str_replace(".", "_", $item->client);
+										$client = strtoupper("COM_TJCERTIFICATE_CLIENT_" . $client);
+										echo TEXT::_($client);
+									?>
+								</td>
+								<td><?php echo $this->escape($item->title); ?></td>
+								<td>
+									<?php
+									$utcNow = Factory::getDate()->toSql();
+
+									if ($item->expired_on > $utcNow || $item->expired_on == '0000-00-00 00:00:00')
+									{
+										// Get TJcertificate url for display certificate
+										$urlOpts = array ('absolute' => '');
+										$link = TJCERT::Certificate($item->id)->getUrl($urlOpts, false);
+									?>
+									<div class="btn-group">
+									<a id="copyurl<?php echo $item->id;?>" data-toggle="popover"
+										data-placement="bottom" data-content="Copied!"
+										data-alt-url="<?php echo $link;?>" class="btn" type="button"
+										onclick="certificateImage.copyUrl('copyurl<?php echo $item->id;?>');">
+										<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL_COPY');?>
+									</a>
+									</div>
+									<?php
+									}
+									else
+									{
+										echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_EXPIRED');
+									}
+									?>
+								</td>
 								<td><?php echo $this->escape($item->comment); ?></td>
 								<td><?php echo (int) $item->id; ?></td>
 							</tr>

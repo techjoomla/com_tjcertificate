@@ -57,7 +57,7 @@ PluginHelper::importPlugin('content');
 							<tr>
 								<th width="1%" class="nowrap center hidden-phone"></th>
 								<th>
-									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_UNIQUE_ID'); ?>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_CERTIFICATE_ID'); ?>
 								</th>
 								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TYPE'); ?>
@@ -105,7 +105,7 @@ PluginHelper::importPlugin('content');
 									?>
 								</td>
 								<td>
-									<?php echo $data[0]->title; ?>
+									<?php echo $data[0]->title ? $data[0]->title : "-"; ?>
 								</td>
 								<td><?php echo HTMLHelper::date($item->issued_on, Text::_('DATE_FORMAT_LC')); ?></td>
 								<td><?php

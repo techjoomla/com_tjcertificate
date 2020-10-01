@@ -552,7 +552,11 @@ class TjCertificateCertificate extends CMSObject
 	{
 		$url = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->unique_certificate_id;
 
-		$url .= '&show_search=' . $showSearchBox;
+		// If search box is true then only show search box param in URL
+		if ($showSearchBox)
+		{
+			$url .= '&show_search=' . $showSearchBox;
+		}
 
 		if (isset($options['popup']))
 		{
@@ -751,8 +755,8 @@ class TjCertificateCertificate extends CMSObject
 	{
 		try
 		{
-			// Check user_id or certificate_template_id (this is needed to generate certificate body) is empty
-			if (empty($this->user_id) || empty($this->certificate_template_id))
+			// Check user_id or issued Id or certificate_template_id (this is needed to generate certificate body) is empty
+			if ((empty($this->user_id) && empty($this->client_issued_to)) || empty($this->certificate_template_id))
 			{
 				throw new Exception(Text::_('COM_TJCERTIFICATE_CERTIFICATE_EMPTY_DATA'));
 			}
@@ -936,5 +940,37 @@ class TjCertificateCertificate extends CMSObject
 		}
 
 		return $certificateString;
+	}
+
+	/**
+	 * This function checks the certificate download permission 
+	 *
+	 * @param   STRING  $uniqueCertificateId  certificate Id
+	 *
+	 * @return  boolean
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public static function canDownload($uniqueCertificateId)
+	{
+		$user = Factory::getUser();
+
+		if ($user->authorise('certificate.download.all', 'com_tjcertificate'))
+		{
+			return true;
+		}
+
+		if ($user->authorise('certificate.download.own', 'com_tjcertificate'))
+		{
+			$table = TJCERT::table("certificates");
+			$table->load(array('unique_certificate_id' => $uniqueCertificateId));
+
+			if ($user->get('id') == $table->user_id)
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
