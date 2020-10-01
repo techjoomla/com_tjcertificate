@@ -30,7 +30,7 @@
 			clientByUser="0"
 			onchange="this.form.submit();" />
 
-		<!-- <field
+		<field
 			name="user_id"
 			type="sql"
 			query="SELECT DISTINCT (`ci`.`user_id`), u.name FROM `#__tj_certificate_issue` AS ci LEFT JOIN `#__users` AS u ON (ci.user_id = u.id)" key_field="user_id" value_field="name"
@@ -38,8 +38,8 @@
 			label="COM_TJCERTIFICATE_CERTIFICATE_FILTER_ISSUED_USER"
 			description="COM_TJCERTIFICATE_CERTIFICATE_FILTER_ISSUED_USER"
 			onchange="this.form.submit();">
-			<option value="">COM_TJCERTIFICATE_CERTIFICATE_FILTER_ISSUED_USER_SELECT</option>
-		</field> -->
+			<option value="">COM_TJCERTIFICATE_CERTIFICATE_FILTER_USER_SELECT</option>
+		</field>
 
 		<field
 			name="state"
