@@ -48,6 +48,8 @@ class TjCertificateViewCertificate extends JViewLegacy
 
 	public $downloadPermission = null;
 
+	public $linkedInProfileUrl = null;
+
 	/**
 	 * Display the view
 	 *
@@ -94,6 +96,11 @@ class TjCertificateViewCertificate extends JViewLegacy
 			$certificateUrl = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->certificate->unique_certificate_id;
 			$this->certificateUrl = Uri::root() . substr(Route::_($certificateUrl), strlen(Uri::base(true)) + 1);
 			$this->downloadPermission = $certificate::canDownload($this->certificate->unique_certificate_id);
+
+			if ($this->params->get('linkedin_profile_btn'))
+			{
+				$this->linkedInProfileUrl = $this->certificate->getAddToLinkedInProfileUrl();
+			}
 
 			// Get HTML
 			$clientId = $this->certificate->getClientId();
