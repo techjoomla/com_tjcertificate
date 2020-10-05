@@ -979,7 +979,7 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @since  __DEPLOY_VERSION__
 	 */
-	public function getLinkedInProfileUrl()
+	public function getAddToLinkedInProfileUrl()
 	{
 		$params   = ComponentHelper::getParams('com_tjcertificate');
 		$config   = Factory::getConfig();
@@ -1005,8 +1005,11 @@ class TjCertificateCertificate extends CMSObject
 		$result = $dispatcher->trigger('getCertificateClientData', array($this->client_id, $this->client));
 		$clientData = $result[0];
 
-		$certificateTitle = $clientData->title ? $clientData->title : $siteName . ' ' . Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_HEAD');
-		$certificateUrl = JUri::root() . substr(Route::_($this->getURL('', false)), strlen(Uri::base(true)) + 1);
+		$urlOptions             = array();
+		$urlOptions['absolute'] = true;
+		$certificateUrl         = $this->getURL($urlOptions, false);
+
+		$certificateTitle   = $clientData->title ? $clientData->title : $siteName . ' ' . Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_HEAD');
 		$linkedInprofileUrl = 'https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=' . $certificateTitle . $orgParam
 		. '&issueYear=' . $issuedYear . '&issueMonth=' . $issuedMonth . $expirationDetails
 		. '&certUrl=' . urlencode($certificateUrl) . '&certId=' . $this->unique_certificate_id;

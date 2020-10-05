@@ -51,7 +51,7 @@ class TjCertificateControllerCertificate extends FormController
 		$certificateObj = $certificate::validateCertificate($uniqueCertificateId);
 
 		// If $uniqueCertificateId is not valid then object is empty so need to handle error (CALL TO A MEMBER FUNCTION CANDOWNLOAD() ON BOOLEAN)
-		if (empty($certificateObj))
+		if (!$certificateObj->id)
 		{
 			$app->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
 			$app->redirect('index.php');

@@ -154,7 +154,7 @@ if ($this->certificate)
 						<?php
 						}
 						?>
-						<?php if ($this->params->get('linkedin_profile_btn')) {
+						<?php if ($this->linkedInProfileUrl) {
 						?>
 							<a href="<?php echo $this->linkedInProfileUrl;?>" target="_blank">
 							<img src="media/com_tjcertificate/images/buttons/en_US.png" alt="LinkedIn Add to Profile button">
