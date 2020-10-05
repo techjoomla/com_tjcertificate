@@ -211,6 +211,7 @@ if ($this->certificate)
 <script type="text/javascript">
 
 var imageExists = "<?php echo $imageUrl;?>";
+var certificateId = "<?php echo $this->certificate->id;?>";
 
 jQuery(document).ready(function() {
 	if (imageExists)
@@ -222,7 +223,7 @@ jQuery(document).ready(function() {
 });
 
 window.onload = function() {
-	if (!imageExists)
+	if (!imageExists && certificateId)
 	{
 		certificateImage.generateImage(document.querySelector("#certificateContent"));
 	}
