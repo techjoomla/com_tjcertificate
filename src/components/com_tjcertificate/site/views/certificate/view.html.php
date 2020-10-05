@@ -78,8 +78,7 @@ class TjCertificateViewCertificate extends JViewLegacy
 		{
 			JError::raiseWarning(500, Text::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EXPIRED'));
 		}
-
-		if ($this->certificate->id)
+		elseif ($this->certificate->id)
 		{
 			// If certificate view is private then view is available only for certificate owner
 			if (!$this->params->get('certificate_scope') && Factory::getUser()->id != $this->certificate->getUserId())
