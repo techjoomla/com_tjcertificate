@@ -48,14 +48,21 @@ class TjCertificateControllerCertificate extends FormController
 
 		$certificate    = TJCERT::Certificate();
 
+		$certificateObj = $certificate::validateCertificate($uniqueCertificateId);
+
+		// If $uniqueCertificateId is not valid then object is empty so need to handle error (CALL TO A MEMBER FUNCTION CANDOWNLOAD() ON BOOLEAN)
+		if (!$certificateObj->id)
+		{
+			$app->enqueueMessage(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 'error');
+			$app->redirect('index.php');
+		}
+
 		// Check user having permission to download
-		if (!$certificate::canDownload($uniqueCertificateId))
+		if (!$certificateObj->canDownload())
 		{
 			$app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'));
 			$app->redirect('index.php');
 		}
-
-		$certificateObj = $certificate::validateCertificate($uniqueCertificateId);
 
 		if (!$certificateObj->id)
 		{
