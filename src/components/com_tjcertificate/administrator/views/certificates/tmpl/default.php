@@ -217,6 +217,8 @@ if ( $saveOrder )
 
 									if ($item->expired_on > $utcNow || $item->expired_on == '0000-00-00 00:00:00')
 									{
+										$urlOpts = array ('absolute' => '');
+
 										// Get TJcertificate url for display certificate
 										$link = TJCERT::Certificate($item->id)->getUrl('', false);
 
