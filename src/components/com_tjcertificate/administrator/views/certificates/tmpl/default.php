@@ -218,11 +218,8 @@ if ( $saveOrder )
 									if ($item->expired_on > $utcNow || $item->expired_on == '0000-00-00 00:00:00')
 									{
 										// Get TJcertificate url for display certificate
-										$urlOpts = array ('absolute' => '');
-
-										// Get TJcertificate url for display certificate
-										$link = TJCERT::Certificate($item->id)->getUrl('', false);
-
+										$urlOpts = array ('absolute' => true);
+										$link = TJCERT::Certificate($item->id)->getUrl($urlOpts, false);
 									?>
 									<div class="btn-group">
 									<a id="copyurl<?php echo $item->id;?>" data-toggle="popover"
