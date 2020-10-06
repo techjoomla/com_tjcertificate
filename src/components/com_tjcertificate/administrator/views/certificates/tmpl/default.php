@@ -220,8 +220,6 @@ if ( $saveOrder )
 										// Get TJcertificate url for display certificate
 										$link = TJCERT::Certificate($item->id)->getUrl('', false);
 
-										// For sef url
-										$link = Route::link('site',substr($link, strlen(JUri::base(true)) + 1), false, 0 ,true);
 									?>
 									<div class="btn-group">
 									<a id="copyurl<?php echo $item->id;?>" data-toggle="popover"
