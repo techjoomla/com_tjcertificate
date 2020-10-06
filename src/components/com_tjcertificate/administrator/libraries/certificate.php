@@ -568,7 +568,7 @@ class TjCertificateCertificate extends CMSObject
 
 		if (isset($options['absolute']))
 		{
-			return JUri::root() . substr(Route::_($url), strlen(JUri::base(true)) + 1);
+			return Route::link('site', $url, false, 0 ,true);
 		}
 
 		return Route::_($url);

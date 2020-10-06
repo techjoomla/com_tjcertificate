@@ -219,7 +219,10 @@ if ( $saveOrder )
 									{
 										// Get TJcertificate url for display certificate
 										$urlOpts = array ('absolute' => '');
-										$link = TJCERT::Certificate($item->id)->getUrl($urlOpts, false);
+
+										// Get TJcertificate url for display certificate
+										$link = TJCERT::Certificate($item->id)->getUrl('', false);
+
 									?>
 									<div class="btn-group">
 									<a id="copyurl<?php echo $item->id;?>" data-toggle="popover"
