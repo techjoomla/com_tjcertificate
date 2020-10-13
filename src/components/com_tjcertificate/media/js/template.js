@@ -9,19 +9,20 @@
 
 var template = {
 
-	previewTemplate: function () {
+	previewTemplate: function (id) {
 		jQuery(document).on('click', 'button[data-target="#templatePreview"]', function () {
-
+			
 			jQuery('#show-info').hide();
+			var editorId = jQuery('#'+id);
 
 			if (typeof tinyMCE != "undefined")
 			{
-			   tinyMCE.execCommand('mceToggleEditor', false, 'jform_body');
+			   tinyMCE.execCommand('mceToggleEditor', false, id);
 			}
 			else if (typeof CodeMirror != "undefined")
 			{
 				var editor = document.querySelector('.CodeMirror').CodeMirror;
-				jQuery('#jform_body').html(editor.getValue());
+				editorId.html(editor.getValue());
 			}
 			else
 			{
@@ -30,14 +31,14 @@ var template = {
 
 			jQuery('#previewTempl').empty();
 			jQuery('<style>').html(jQuery('#jform_template_css').val()).appendTo('#previewTempl');
-			jQuery('<div>').html(jQuery('#jform_body').val()).appendTo('#previewTempl');
+			jQuery('<div>').html(editorId.val()).appendTo('#previewTempl');
 		});
 
 		jQuery('#templatePreview').on('hidden.bs.modal', function () {
 
 			if (typeof tinyMCE != "undefined")
 			{
-			   tinyMCE.execCommand('mceToggleEditor', false, 'jform_body');
+			   tinyMCE.execCommand('mceToggleEditor', false, id);
 			}
 
 			jQuery('#previewTempl').empty();
@@ -93,5 +94,30 @@ var template = {
 
 			editor.setValue(templateBody);
 		}
+	},
+	
+	renderCustomTemplate: function(templateId) 
+	{
+		var siteRoot = Joomla.getOptions("system.paths").base;
+		jQuery.ajax({
+			url: siteRoot + "/index.php?option=com_tjcertificate&task=template.loadCustomTemplate&format=json",
+			type: 'POST',
+			data: {
+				templateId: templateId
+			},
+			success: function(response) {
+				var templateBody = response.data;
+
+				jQuery('#jform_generated_body').empty().val(templateBody);
+
+				if (typeof tinyMCE != "undefined") {
+					tinyMCE.get('jform_generated_body').setContent(templateBody);
+				} else if (typeof CodeMirror != "undefined") {
+					var editor = document.querySelector('.CodeMirror').CodeMirror;
+
+					editor.setValue(templateBody);
+				}
+			}
+		});
 	}
 }
