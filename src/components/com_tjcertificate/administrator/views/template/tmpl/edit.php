@@ -170,7 +170,7 @@ $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=c
 <script type="text/javascript">
 	jQuery(document).ready(function () {
 
-		template.previewTemplate();
+		template.previewTemplate('jform_body');
 
 		jQuery(document).on("change", "#jform_sample_template", function () {
 			template.loadDefaultTemplate(this.value);

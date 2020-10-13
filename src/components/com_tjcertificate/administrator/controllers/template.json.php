@@ -14,6 +14,7 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Response\JsonResponse;
 
 jimport('joomla.filesystem.folder');
 
@@ -82,6 +83,29 @@ class TjCertificateControllerTemplate extends FormController
 			$templateData = stripslashes($templateData);
 
 			echo new JResponseJson($templateData);
+		}
+	}
+
+	/**
+	 * Function to load custom template
+	 *
+	 * @return  object  object
+	 */
+	public function loadCustomTemplate()
+	{
+		if (!JSession::checkToken('get'))
+		{
+			echo new JsonResponse(null, Text::_('JINVALID_TOKEN'), true);
+		}
+		else
+		{
+			$app   = Factory::getApplication();
+			$input = $app->input;
+			$templateId = $input->get('templateId');
+			$model = TJCERT::model('Template', array('ignore_request' => true));
+			$templateData = $model->getItem($templateId);
+
+			echo new JsonResponse($templateData->body);
 		}
 	}
 }

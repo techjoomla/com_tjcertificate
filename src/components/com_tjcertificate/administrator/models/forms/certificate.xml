@@ -13,12 +13,7 @@
 
 		<field
 			name="certificate_template_id"
-			required="true"
-			type="sql"
-			query="SELECT id, title FROM `#__tj_certificate_templates` WHERE state = '1' ORDER BY id DESC" key_field="id" value_field="title"
-			translate="false"
-			header="Select Certificate Template"
-			filter="int"
+			type="certificatetemplates"
 			label="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_TEMPLATE"
 			description="COM_TJCERTIFICATE_CERTIFICATE_FORM_DESC_CERTIFICATE_TEMPLATE"
 		/>

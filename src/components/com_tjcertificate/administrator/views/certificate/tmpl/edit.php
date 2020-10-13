@@ -18,13 +18,37 @@ use Joomla\CMS\Router\Route;
 
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
+HTMLHelper::_('jquery.token');
+HTMLHelper::_('behavior.framework');
 HTMLHelper::_('behavior.formvalidator');
 HTMLHelper::_('behavior.keepalive');
 HTMLHelper::_('formbehavior.chosen', 'select');
+
+$options['relative'] = true;
+HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
+HTMLHelper::_('script', 'com_tjcertificate/template.js', $options);
+
+$app = Factory::getApplication();
+$input = $app->input;
+
+$client    = $input->getCmd('client', '');
+$extension = $input->getCmd('extension', '');
+
+$clientUrlAppend = '';
+
+if (!empty($extension))
+{
+	$clientUrlAppend = '&extension=' . $extension;
+}
+elseif (!empty($client))
+{
+	$clientUrlAppend = '&client=' . $client;
+}
+
 ?>
 <div class="tj-page">
 	<div class="row-fluid">
-	<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate&layout=edit&id=' . (int) $this->item->id, false);?>"
+	<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate&layout=edit&id=' . (int) $this->item->id . $clientUrlAppend, false);?>"
 	 method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
 	 <?php if (!empty( $this->sidebar))
 		{
@@ -63,3 +87,41 @@ HTMLHelper::_('formbehavior.chosen', 'select');
 	</form>
 </div>
 </div>
+
+<!-- Modal -->
+<style>
+	.modal-body {
+	    overflow-y: auto;
+	}
+</style>
+<div id="templatePreview" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+	<button type="button" class="close" data-dismiss="modal" style="width: 40px;opacity: 0.7;">&times;</button>
+	<!-- Modal content-->
+	<div class="modal-content">
+		<div class="modal-header">
+			<h4 class="modal-title"><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_MODAL_HEADER'); ?></h4>
+			<p class="alert alert-info hide" id="show-info"><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_MODAL_HEADER_INFO'); ?></p>
+		</div>
+		<div class="modal-body" id="previewTempl">
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		</div>
+	</div>
+
+	</div>
+</div>
+
+<script type="text/javascript">
+	jQuery(document).ready(function () {
+
+		template.previewTemplate('jform_generated_body');
+
+		jQuery(document).on("change", "#jform_certificate_template_id", function () {
+			template.renderCustomTemplate(this.value);
+		});
+	});
+
+
+</script>
