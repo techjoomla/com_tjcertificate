@@ -46,6 +46,7 @@
 		<field
 			name="user_id"
 			type="user"
+			required="true"
 			label="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_ISSUED_USER"
 			description="COM_TJCERTIFICATE_CERTIFICATE_FORM_DESC_CERTIFICATE_ISSUED_USER"
 		/>
