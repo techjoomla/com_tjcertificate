@@ -11,6 +11,7 @@ var tjCertificateService = {
 
 	siteRoot: Joomla.getOptions("system.paths").base,
 	loadDefaultTemplateUrl: '/index.php?option=com_tjcertificate&task=template.loadDefaultTemplate&format=json',
+	loadCustomTemplateUrl: '/index.php?option=com_tjcertificate&task=template.loadCustomTemplate&format=json',
 
 	postData: function(url, formData, params) {
 		if(!params){
@@ -30,5 +31,8 @@ var tjCertificateService = {
 	},
 	loadDefaultTemplate: function (formData, params) {
 		return this.postData(this.loadDefaultTemplateUrl, formData, params);
+	},
+	loadCustomTemplate: function (formData, params) {
+		return this.postData(this.loadCustomTemplateUrl, formData, params);
 	}
 }

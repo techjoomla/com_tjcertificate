@@ -102,10 +102,17 @@ class TjCertificateControllerTemplate extends FormController
 			$app   = Factory::getApplication();
 			$input = $app->input;
 			$templateId = $input->get('templateId');
-			$model = TJCERT::model('Template', array('ignore_request' => true));
-			$templateData = $model->getItem($templateId);
 
-			echo new JsonResponse($templateData->body);
+			if (empty($templateId))
+			{
+				echo new JsonResponse(null, Text::_('COM_TJCERTIFICATE_ERROR_SOMETHING_WENT_WRONG'), true);
+
+				return;
+			}
+
+			$tjCertificateTemplate = TJCERT::Template($templateId);
+
+			echo new JsonResponse($tjCertificateTemplate->body);
 		}
 	}
 }

@@ -25,13 +25,13 @@ use Joomla\Registry\Registry;
 class TjCertificateModelCertificate extends AdminModel
 {
 	/**
-	 * Method to get a template.
+	 * Method to get a certificate.
 	 *
 	 * @param   integer  $pk  An optional id of the object to get, otherwise the id from the model state is used.
 	 *
-	 * @return  mixed    Template data object on success, false on failure.
+	 * @return  mixed    certificate data object on success, false on failure.
 	 *
-	 * @since   1.6
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function getItem($pk = null)
 	{

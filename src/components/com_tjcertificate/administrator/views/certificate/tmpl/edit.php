@@ -25,6 +25,7 @@ HTMLHelper::_('behavior.keepalive');
 HTMLHelper::_('formbehavior.chosen', 'select');
 
 $options['relative'] = true;
+HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
 HTMLHelper::_('script', 'com_tjcertificate/template.min.js', $options);
 
 $app = Factory::getApplication();
@@ -118,7 +119,7 @@ elseif (!empty($client))
 		template.previewTemplate('jform_generated_body');
 
 		jQuery(document).on("change", "#jform_certificate_template_id", function () {
-			template.renderCustomTemplate(this.value);
+			template.loadCustomTemplate(this.value);
 		});
 	});
 
