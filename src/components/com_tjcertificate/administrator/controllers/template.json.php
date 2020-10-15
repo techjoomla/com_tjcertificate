@@ -15,6 +15,7 @@ use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Response\JsonResponse;
+use Joomla\CMS\Session\Session;
 
 jimport('joomla.filesystem.folder');
 
@@ -89,11 +90,11 @@ class TjCertificateControllerTemplate extends FormController
 	/**
 	 * Function to load custom template
 	 *
-	 * @return  object  object
+	 * @return  object|void  object
 	 */
 	public function loadCustomTemplate()
 	{
-		if (!JSession::checkToken('get'))
+		if (!Session::checkToken('get'))
 		{
 			echo new JsonResponse(null, Text::_('JINVALID_TOKEN'), true);
 		}

@@ -15,6 +15,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Layout\LayoutHelper;
 
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
@@ -87,33 +88,14 @@ elseif (!empty($client))
 	</form>
 </div>
 </div>
-
 <!-- Modal -->
-<style>
-	.modal-body {
-	    overflow-y: auto;
-	}
-</style>
 <div id="templatePreview" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-	<button type="button" class="close" data-dismiss="modal" style="width: 40px;opacity: 0.7;">&times;</button>
-	<!-- Modal content-->
-	<div class="modal-content">
-		<div class="modal-header">
-			<h4 class="modal-title"><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_MODAL_HEADER'); ?></h4>
-			<p class="alert alert-info hide" id="show-info"><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_MODAL_HEADER_INFO'); ?></p>
-		</div>
-		<div class="modal-body" id="previewTempl">
-		</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		</div>
-	</div>
-
-	</div>
+	<?php
+		echo LayoutHelper::render('preview');
+	?>
 </div>
-
 <script type="text/javascript">
+
 	jQuery(document).ready(function () {
 
 		template.previewTemplate('jform_generated_body');
@@ -122,6 +104,5 @@ elseif (!empty($client))
 			template.loadCustomTemplate(this.value);
 		});
 	});
-
 
 </script>
