@@ -89,11 +89,9 @@ elseif (!empty($client))
 </div>
 </div>
 <!-- Modal -->
-<div id="templatePreview" class="modal fade" role="dialog">
-	<?php
-		echo LayoutHelper::render('preview');
-	?>
-</div>
+<?php
+	echo LayoutHelper::render('preview');
+?>
 <script type="text/javascript">
 
 	jQuery(document).ready(function () {
