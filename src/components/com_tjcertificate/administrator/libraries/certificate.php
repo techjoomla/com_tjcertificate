@@ -471,12 +471,31 @@ class TjCertificateCertificate extends CMSObject
 			return false;
 		}
 
-		// Bind the array
-		if (!$this->setProperties($array))
+		$getPrivateProperties = $this->_getPrivateProperties();
+
+		$getPublicProperties  = $this->_getPublicProperties();
+
+		$publicProperties = array();
+
+		foreach ($getPublicProperties as $key => $value)
+		{
+			$publicProperties[$value->name] = '';
+		}
+
+		$setPublicProperties = array_intersect_key($array, $publicProperties);
+
+		// Set public properties
+		if (!$this->setProperties($setPublicProperties))
 		{
 			$this->setError(Text::_('COM_TJCERTIFICATE_BINDING_ERROR'));
 
 			return false;
+		}
+
+		// Set private properties
+		foreach ($getPrivateProperties as $key => $value)
+		{
+			$this->{$value->name} = $array[$value->name];
 		}
 
 		// Make sure its an integer

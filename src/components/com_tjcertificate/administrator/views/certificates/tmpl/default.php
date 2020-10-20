@@ -87,7 +87,9 @@ if ( $saveOrder )
 								<th width="1%" class="nowrap center">
 									<?php echo HTMLHelper::_('searchtools.sort', 'JSTATUS', 'ci.state', $listDirn, $listOrder); ?>
 								</th>
-
+								<th>
+									<?php echo Text::_('JGLOBAL_PREVIEW');?>
+								</th>
 								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_CERTIFICATE_ID'); ?>
 								</th>
@@ -149,20 +151,26 @@ if ( $saveOrder )
 								<td class="center">
 									<?php echo HTMLHelper::_('jgrid.published', $item->state, $i, 'certificates.', $canChange, 'cb'); ?>
 								</td>
+								<td>
+									<div class="btn-group">
+									<a id="" href="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate&layout=preview&tmpl=component&id=' . (int) $item->id, false);?>" class="btn hasTooltip modal" type="button">
+										<?php echo Text::_('JGLOBAL_PREVIEW');?>
+									</a>
+									</div>
+								</td>
 								<td class="has-context">
 									<div class="pull-left break-word">
 										<?php if ($canEdit || $canEditOwn)
 										{
-											?>
-											<a class="hasTooltip modal" href="
-											<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate&layout=preview&tmpl=component&id=' . (int) $item->id, false);?>" title="
-											<?php echo Text::_('JGLOBAL_PREVIEW'); ?>">
+										?>
+											<a href="
+											<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate&layout=edit&id=' . (int) $item->id . '&extension=' . $this->component, false);?>">
 											<?php echo $this->escape($item->unique_certificate_id); ?></a>
 											<?php
-											}
-											else
-											{
-												?>
+										}
+										else
+										{
+										?>
 											<span title="<?php echo Text::sprintf('JFIELD_ALIAS_LABEL', $this->escape($item->unique_certificate_id)); ?>">
 											<?php echo $this->escape($item->unique_certificate_id); ?></span>
 										<?php

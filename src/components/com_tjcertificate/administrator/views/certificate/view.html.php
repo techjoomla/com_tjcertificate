@@ -76,13 +76,6 @@ class TjCertificateViewCertificate extends HtmlView
 
 		$layout = $this->input->get('layout', 'edit');
 
-		if ($layout == 'edit')
-		{
-			JError::raiseNotice(403, Text::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EDIT_NOT_PERMITTED'));
-
-			return false;
-		}
-
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
@@ -143,7 +136,6 @@ class TjCertificateViewCertificate extends HtmlView
 				JToolbarHelper::apply('certificate.apply');
 				JToolbarHelper::save('certificate.save');
 				JToolbarHelper::save2new('certificate.save2new');
-				JToolbarHelper::cancel('certificate.cancel');
 			}
 			else
 			{
@@ -151,8 +143,10 @@ class TjCertificateViewCertificate extends HtmlView
 
 				// Can't save the record if it's checked out and editable
 				$this->canSave($itemEditable);
-				JToolbarHelper::cancel('certificate.cancel', 'JTOOLBAR_CLOSE');
 			}
+
+			JToolbarHelper::modal('templatePreview', 'icon-eye', 'COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_TOOLBAR_PREVIEW');
+			JToolbarHelper::cancel('certificate.cancel');
 		}
 
 		JToolbarHelper::divider();

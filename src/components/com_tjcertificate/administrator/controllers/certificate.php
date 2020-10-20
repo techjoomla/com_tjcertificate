@@ -25,6 +25,48 @@ use Joomla\CMS\Response\JsonResponse;
 class TjCertificateControllerCertificate extends FormController
 {
 	/**
+	 * The client for which the templates are being created.
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $client;
+
+	/**
+	 * The extension for which the templates are being created.
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $extension;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param   array  $config  An optional associative array of configuration settings.
+	 *
+	 * @since  __DEPLOY_VERSION__
+	 * @see    JControllerLegacy
+	 */
+	public function __construct($config = array())
+	{
+		parent::__construct($config);
+
+		$app    = Factory::getApplication();
+		$jinput = $app->input;
+
+		if (empty($this->extension))
+		{
+			$this->extension = $jinput->get('extension', '');
+		}
+
+		if (empty($this->client))
+		{
+			$this->client = $jinput->get('client', '');
+		}
+	}
+
+	/**
 	 * Method to download issued certificate.
 	 *
 	 * @return  boolean|string Certificate pdf url.
@@ -100,5 +142,54 @@ class TjCertificateControllerCertificate extends FormController
 		}
 
 		jexit();
+	}
+
+	/**
+	 * Gets the URL arguments to append to an item redirect.
+	 *
+	 * @param   integer  $recordId  The primary key id for the item.
+	 * @param   string   $urlVar    The name of the URL variable for the id.
+	 *
+	 * @return  string  The arguments to append to the redirect URL.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
+	{
+		$append = parent::getRedirectToItemAppend($recordId);
+
+		if (!empty ($this->extension))
+		{
+			$append .= '&extension=' . $this->extension;
+		}
+		elseif (!empty ($this->client))
+		{
+			$append .= '&client=' . $this->client;
+		}
+
+		return $append;
+	}
+
+	/**
+	 * Gets the URL arguments to append to a list redirect.
+	 *
+	 * @return  string  The arguments to append to the redirect URL.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function getRedirectToListAppend()
+	{
+		$append = parent::getRedirectToListAppend();
+
+		if (!empty ($this->extension))
+		{
+			$append .= '&extension=' . $this->extension;
+		}
+		elseif (!empty ($this->client))
+		{
+			$append .= '&client=' . $this->client;
+		}
+
+		return $append;
 	}
 }
