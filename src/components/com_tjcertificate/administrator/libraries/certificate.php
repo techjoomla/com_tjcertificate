@@ -283,6 +283,32 @@ class TjCertificateCertificate extends CMSObject
 	}
 
 	/**
+	 * Set certificate issue date
+	 *
+	 * @param   string  $value  comment.
+	 *
+	 * @return  void.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setIssuedDate($value = null)
+	{
+		$this->issued_on = $value;
+	}
+
+	/**
+	 * Get certificate issue date
+	 *
+	 * @return  string comment
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getIssuedDate()
+	{
+		return $this->issued_on;
+	}
+
+	/**
 	 * Returns the global Certificate object
 	 *
 	 * @param   integer  $id  The primary key of the certificate to load (optional).
@@ -788,8 +814,19 @@ class TjCertificateCertificate extends CMSObject
 				throw new Exception(Text::_('COM_TJCERTIFICATE_TEMPLATE_INVALID'));
 			}
 
-			// Generate unique certificate id
-			$this->unique_certificate_id = $this->generateUniqueCertId($options);
+			$issuedCertInfo = $this::getIssued($this->client, $this->client_id, $this->user_id);
+
+			// If certificate already issued then assign old certificate id
+			if ($issuedCertInfo[0]->id)
+			{
+				$this->id = $issuedCertInfo[0]->id;
+				$this->unique_certificate_id = $issuedCertInfo[0]->unique_certificate_id;
+			}
+			else
+			{
+				// Generate unique certificate id
+				$this->unique_certificate_id = $this->generateUniqueCertId($options);
+			}
 
 			// Generate unique certificate id replacement
 			$replacements->certificate->cert_id = $this->unique_certificate_id;
