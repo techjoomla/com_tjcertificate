@@ -814,15 +814,7 @@ class TjCertificateCertificate extends CMSObject
 				throw new Exception(Text::_('COM_TJCERTIFICATE_TEMPLATE_INVALID'));
 			}
 
-			$issuedCertInfo = $this::getIssued($this->client, $this->client_id, $this->user_id);
-
-			// If certificate already issued then assign old certificate id
-			if ($issuedCertInfo[0]->id)
-			{
-				$this->id = $issuedCertInfo[0]->id;
-				$this->unique_certificate_id = $issuedCertInfo[0]->unique_certificate_id;
-			}
-			else
+			if (empty($this->unique_certificate_id))
 			{
 				// Generate unique certificate id
 				$this->unique_certificate_id = $this->generateUniqueCertId($options);
