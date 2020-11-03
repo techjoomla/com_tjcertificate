@@ -856,7 +856,17 @@ class TjCertificateCertificate extends CMSObject
 			}
 
 			// Save certificate
-			$this->save();
+			if ($this->save())
+			{
+				// Remove old certificate image after re-generating the certificate
+				$path = JPATH_SITE . '/media/com_tjcertificate/certificates/';
+				$fileName = $this->unique_certificate_id . '.png';
+
+				if (JFile::exists($path . $fileName))
+				{
+					JFile::delete($path . $fileName);
+				}
+			}
 
 			return self::getInstance($this->id);
 		}
