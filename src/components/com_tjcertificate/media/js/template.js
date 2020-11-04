@@ -79,19 +79,7 @@ var template = {
 	},
 	renderDefaultTemplate: function (response)
 	{
-		var templateBody = response.data;
-
-		jQuery('#jform_body').empty().val(templateBody);
-
-		if (typeof tinyMCE != "undefined")
-		{
-			tinyMCE.get('jform_body').setContent(templateBody);
-		}
-		else if (typeof CodeMirror != "undefined")
-		{
-			var editor = document.querySelector('.CodeMirror').CodeMirror;
-
-			editor.setValue(templateBody);
-		}
+		jQuery('#jform_body').empty().val(response.data);
+		Joomla.editors.instances['jform_body'].setValue(response.data);
 	}
 }
