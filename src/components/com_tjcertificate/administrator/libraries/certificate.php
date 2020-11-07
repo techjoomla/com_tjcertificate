@@ -866,9 +866,9 @@ class TjCertificateCertificate extends CMSObject
 				{
 					JFile::delete($path . $fileName);
 				}
-			}
 
-			return self::getInstance($this->id);
+				return self::getInstance($this->id);
+			}
 		}
 		catch (\Exception $e)
 		{
