@@ -88,9 +88,6 @@ if ( $saveOrder )
 									<?php echo HTMLHelper::_('searchtools.sort', 'JSTATUS', 'ci.state', $listDirn, $listOrder); ?>
 								</th>
 								<th>
-									<?php echo Text::_('JGLOBAL_PREVIEW');?>
-								</th>
-								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_CERTIFICATE_ID'); ?>
 								</th>
 								<th>
@@ -109,13 +106,10 @@ if ( $saveOrder )
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TYPE', 'ci.client', $listDirn, $listOrder); ?>
 								</th>
 								<th>
-									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TEMPLATE', 'ci.certificate_template_id', $listDirn, $listOrder); ?>
-								</th>
-								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL'); ?>
 								</th>
 								<th>
-									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_COMMENT'); ?>
+									<?php echo Text::_('JGLOBAL_PREVIEW');?>
 								</th>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ID', 'ci.id', $listDirn, $listOrder); ?>
@@ -150,13 +144,6 @@ if ( $saveOrder )
 								</td>
 								<td class="center">
 									<?php echo HTMLHelper::_('jgrid.published', $item->state, $i, 'certificates.', $canChange, 'cb'); ?>
-								</td>
-								<td>
-									<div class="btn-group">
-									<a id="" href="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate&layout=preview&tmpl=component&id=' . (int) $item->id, false);?>" class="btn hasTooltip modal" type="button">
-										<?php echo Text::_('JGLOBAL_PREVIEW');?>
-									</a>
-									</div>
 								</td>
 								<td class="has-context">
 									<div class="pull-left break-word">
@@ -218,7 +205,6 @@ if ( $saveOrder )
 										echo TEXT::_($client);
 									?>
 								</td>
-								<td><?php echo $this->escape($item->title); ?></td>
 								<td>
 									<?php
 									$utcNow = Factory::getDate()->toSql();
@@ -245,7 +231,13 @@ if ( $saveOrder )
 									}
 									?>
 								</td>
-								<td><?php echo $this->escape($item->comment); ?></td>
+								<td>
+									<div class="btn-group">
+									<a id="" href="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate&layout=preview&tmpl=component&id=' . (int) $item->id, false);?>" class="btn hasTooltip modal" type="button">
+										<?php echo Text::_('JGLOBAL_PREVIEW');?>
+									</a>
+									</div>
+								</td>
 								<td><?php echo (int) $item->id; ?></td>
 							</tr>
 							<?php
