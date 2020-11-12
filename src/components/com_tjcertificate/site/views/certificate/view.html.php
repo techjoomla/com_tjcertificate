@@ -50,6 +50,8 @@ class TjCertificateViewCertificate extends JViewLegacy
 
 	public $linkedInProfileUrl = null;
 
+	public $imagePath = null;
+
 	/**
 	 * Display the view
 	 *
