@@ -80,21 +80,8 @@ var template = {
 	},
 	renderDefaultTemplate: function (response, id)
 	{
-		var templateBody = response.data;
-		var editorId = jQuery('#'+id);
-
-		editorId.empty().val(templateBody);
-
-		if (typeof tinyMCE != "undefined")
-		{
-			tinyMCE.get(id).setContent(templateBody);
-		}
-		else if (typeof CodeMirror != "undefined")
-		{
-			var editor = document.querySelector('.CodeMirror').CodeMirror;
-
-			editor.setValue(templateBody);
-		}
+		jQuery('#' + id).empty().val(response.data);
+		Joomla.editors.instances[id].setValue(response.data);
 	},
 	loadCustomTemplate: function (customTemplate)
 	{
