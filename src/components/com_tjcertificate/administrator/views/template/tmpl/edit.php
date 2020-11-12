@@ -141,39 +141,19 @@ $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=c
 		</form>
 	</div>
 </div>
-
 <!-- Modal -->
-<style>
-	.modal-body {
-	    overflow-y: auto;
-	}
-</style>
-<div id="templatePreview" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-	<button type="button" class="close" data-dismiss="modal" style="width: 40px;opacity: 0.7;">&times;</button>
-	<!-- Modal content-->
-	<div class="modal-content">
-		<div class="modal-header">
-			<h4 class="modal-title"><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_MODAL_HEADER'); ?></h4>
-			<p class="alert alert-info hide" id="show-info"><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_MODAL_HEADER_INFO'); ?></p>
-		</div>
-		<div class="modal-body" id="previewTempl">
-		</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		</div>
-	</div>
-
-	</div>
-</div>
-
+<?php
+	echo LayoutHelper::render('preview');
+?>
 <script type="text/javascript">
+
 	jQuery(document).ready(function () {
 
-		template.previewTemplate();
+		template.previewTemplate('jform_body');
 
 		jQuery(document).on("change", "#jform_sample_template", function () {
 			template.loadDefaultTemplate(this.value);
 		});
 	});
+
 </script>

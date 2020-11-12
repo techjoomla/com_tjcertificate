@@ -11,14 +11,13 @@
 		/>
 
 		<field name="client"
-			type="sql"
-			query="SELECT DISTINCT (`client`) FROM `#__tj_certificate_templates` ORDER BY client ASC" key_field="client" value_field="client"
+			type="getclientlist"
 			filter="safehtml"
 			label="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FILTER_CERTIFICATE_CLIENT"
 			description="COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FILTER_DESC_CERTIFICATE_CLIENT"
-			onchange="this.form.submit();">
-			<option value="">COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FILTER_CERTIFICATE_SELECT_CLIENT</option>
-		</field>
+			addfieldpath="/components/com_tjcertificate/models/fields"
+			clientByUser="1"
+			onchange="this.form.submit();" />
 
 		<field
 			name="created_by"

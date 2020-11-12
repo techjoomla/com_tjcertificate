@@ -100,7 +100,7 @@ elseif (!empty($client))
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_LIST_VIEW_TITLE', 'ct.title', $listDirn, $listOrder); ?>
 								</th>
 								<th>
-									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_LIST_VIEW_CLIENT', 'ct.client', $listDirn, $listOrder); ?>
+									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TYPE', 'ct.client', $listDirn, $listOrder); ?>
 								</th>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_LIST_VIEW_ACCESS', 'ct.is_public', $listDirn, $listOrder); ?>
@@ -201,7 +201,13 @@ elseif (!empty($client))
 
 									</div>
 								</td>
-								<td><?php echo $this->escape($item->client); ?></td>
+								<td>
+									<?php
+										$client = str_replace(".", "_", $item->client);
+										$client = strtoupper("COM_TJCERTIFICATE_CLIENT_" . $client);
+										echo TEXT::_($client);
+									?>
+								</td>
 								<td><?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_LIST_VIEW_ACCESS_' . $item->is_public); ?></td>
 								<td><?php echo $this->escape($item->uname); ?></td>
 								<td><?php echo (int) $item->id; ?></td>

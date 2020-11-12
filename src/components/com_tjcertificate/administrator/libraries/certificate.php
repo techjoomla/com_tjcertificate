@@ -286,6 +286,32 @@ class TjCertificateCertificate extends CMSObject
 	}
 
 	/**
+	 * Set certificate issue date
+	 *
+	 * @param   string  $value  comment.
+	 *
+	 * @return  void.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setIssuedDate($value = null)
+	{
+		$this->issued_on = $value;
+	}
+
+	/**
+	 * Get certificate issue date
+	 *
+	 * @return  string comment
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getIssuedDate()
+	{
+		return $this->issued_on;
+	}
+
+	/**
 	 * Returns the global Certificate object
 	 *
 	 * @param   integer  $id  The primary key of the certificate to load (optional).
@@ -474,12 +500,31 @@ class TjCertificateCertificate extends CMSObject
 			return false;
 		}
 
-		// Bind the array
-		if (!$this->setProperties($array))
+		$getPrivateProperties = $this->_getPrivateProperties();
+
+		$getPublicProperties  = $this->_getPublicProperties();
+
+		$publicProperties = array();
+
+		foreach ($getPublicProperties as $key => $value)
+		{
+			$publicProperties[$value->name] = '';
+		}
+
+		$setPublicProperties = array_intersect_key($array, $publicProperties);
+
+		// Set public properties
+		if (!$this->setProperties($setPublicProperties))
 		{
 			$this->setError(Text::_('COM_TJCERTIFICATE_BINDING_ERROR'));
 
 			return false;
+		}
+
+		// Set private properties
+		foreach ($getPrivateProperties as $key => $value)
+		{
+			$this->{$value->name} = $array[$value->name];
 		}
 
 		// Make sure its an integer
@@ -772,8 +817,11 @@ class TjCertificateCertificate extends CMSObject
 				throw new Exception(Text::_('COM_TJCERTIFICATE_TEMPLATE_INVALID'));
 			}
 
-			// Generate unique certificate id
-			$this->unique_certificate_id = $this->generateUniqueCertId($options);
+			if (empty($this->unique_certificate_id))
+			{
+				// Generate unique certificate id
+				$this->unique_certificate_id = $this->generateUniqueCertId($options);
+			}
 
 			// Generate unique certificate id replacement
 			$replacements->certificate->cert_id = $this->unique_certificate_id;
@@ -811,9 +859,19 @@ class TjCertificateCertificate extends CMSObject
 			}
 
 			// Save certificate
-			$this->save();
+			if ($this->save())
+			{
+				// Remove old certificate image after re-generating the certificate
+				$path = JPATH_SITE . '/media/com_tjcertificate/certificates/';
+				$fileName = $this->unique_certificate_id . '.png';
 
-			return self::getInstance($this->id);
+				if (JFile::exists($path . $fileName))
+				{
+					JFile::delete($path . $fileName);
+				}
+
+				return self::getInstance($this->id);
+			}
 		}
 		catch (\Exception $e)
 		{

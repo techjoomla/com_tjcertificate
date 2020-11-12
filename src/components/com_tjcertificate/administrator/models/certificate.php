@@ -15,6 +15,7 @@ use Joomla\CMS\Factory;
 use \Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\Registry\Registry;
 
 /**
  * Item Model for an Certificate.
@@ -23,6 +24,29 @@ use Joomla\CMS\Plugin\PluginHelper;
  */
 class TjCertificateModelCertificate extends AdminModel
 {
+	/**
+	 * Method to get a certificate.
+	 *
+	 * @param   integer  $pk  An optional id of the object to get, otherwise the id from the model state is used.
+	 *
+	 * @return  mixed    certificate data object on success, false on failure.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getItem($pk = null)
+	{
+		if ($result = parent::getItem($pk))
+		{
+			// Prime required properties.
+			if (empty($result->id))
+			{
+				$result->client = $this->getState('certificate.client');
+			}
+		}
+
+		return $result;
+	}
+
 	/**
 	 * Method to get the record form.
 	 *
@@ -130,6 +154,18 @@ class TjCertificateModelCertificate extends AdminModel
 		$jinput = Factory::getApplication()->input;
 		$id = ($jinput->get('id'))?$jinput->get('id'):$jinput->get('id');
 		$this->setState('certificate.id', $id);
+
+		$client    = $jinput->get('client', '');
+		$extension = $jinput->get('extension', '');
+
+		if (!empty($extension))
+		{
+			$this->setState('certificate.client', $extension);
+		}
+		else
+		{
+			$this->setState('certificate.client', $client);
+		}
 	}
 
 	/**

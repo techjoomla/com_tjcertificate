@@ -92,6 +92,9 @@ class TjCertificateViewCertificate extends JViewLegacy
 			$this->mediaPath = 'media/com_tjcertificate/certificates/';
 			$this->imagePath = Uri::root() . $this->mediaPath . $this->fileName;
 
+      			$this->fileName  = $this->certificate->unique_certificate_id . '.png';
+      			$this->mediaPath = 'media/com_tjcertificate/certificates/';
+      			$this->imagePath = Uri::root() . $this->mediaPath . $this->fileName . '?issuedate=' . strtotime($this->certificate->issued_on);
 			$certificateUrl = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->certificate->unique_certificate_id;
 			$this->certificateUrl = Uri::root() . substr(Route::_($certificateUrl), strlen(Uri::base(true)) + 1);
 			$this->downloadPermission = $certificate::canDownload($this->certificate->unique_certificate_id);

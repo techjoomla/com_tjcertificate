@@ -9,19 +9,20 @@
 
 var template = {
 
-	previewTemplate: function () {
+	previewTemplate: function (id) {
 		jQuery(document).on('click', 'button[data-target="#templatePreview"]', function () {
-
+			
 			jQuery('#show-info').hide();
+			var editorId = jQuery('#'+id);
 
 			if (typeof tinyMCE != "undefined")
 			{
-			   tinyMCE.execCommand('mceToggleEditor', false, 'jform_body');
+			   tinyMCE.execCommand('mceToggleEditor', false, id);
 			}
 			else if (typeof CodeMirror != "undefined")
 			{
 				var editor = document.querySelector('.CodeMirror').CodeMirror;
-				jQuery('#jform_body').html(editor.getValue());
+				editorId.html(editor.getValue());
 			}
 			else
 			{
@@ -30,14 +31,14 @@ var template = {
 
 			jQuery('#previewTempl').empty();
 			jQuery('<style>').html(jQuery('#jform_template_css').val()).appendTo('#previewTempl');
-			jQuery('<div>').html(jQuery('#jform_body').val()).appendTo('#previewTempl');
+			jQuery('<div>').html(editorId.val()).appendTo('#previewTempl');
 		});
 
 		jQuery('#templatePreview').on('hidden.bs.modal', function () {
 
 			if (typeof tinyMCE != "undefined")
 			{
-			   tinyMCE.execCommand('mceToggleEditor', false, 'jform_body');
+			   tinyMCE.execCommand('mceToggleEditor', false, id);
 			}
 
 			jQuery('#previewTempl').empty();
@@ -73,13 +74,48 @@ var template = {
 			}
 
 			if (response.success) {
-				template.renderDefaultTemplate(response);
+				template.renderDefaultTemplate(response, 'jform_body');
 			}
 		});
 	},
-	renderDefaultTemplate: function (response)
+	renderDefaultTemplate: function (response, id)
 	{
-		jQuery('#jform_body').empty().val(response.data);
-		Joomla.editors.instances['jform_body'].setValue(response.data);
+		jQuery('#' + id).empty().val(response.data);
+		Joomla.editors.instances[id].setValue(response.data);
+	},
+	loadCustomTemplate: function (customTemplate)
+	{
+		var formData = {};
+
+		if (customTemplate == '' || customTemplate === undefined)
+		{
+			return false;
+		}
+
+		formData['templateId'] = customTemplate;
+
+		var promise = tjCertificateService.loadCustomTemplate(formData);
+
+		promise.fail(
+			function(response) {
+				var messages = { "error": [response.responseText]};
+				Joomla.renderMessages(messages);
+			}
+		).done(function(response) {
+
+			if (!response.success && response.message)
+			{
+				var messages = { "error": [response.message]};
+				Joomla.renderMessages(messages);
+			}
+
+			if (response.messages){
+				Joomla.renderMessages(response.messages);
+			}
+
+			if (response.success) {
+				template.renderDefaultTemplate(response, 'jform_generated_body');
+			}
+		});
 	}
 }

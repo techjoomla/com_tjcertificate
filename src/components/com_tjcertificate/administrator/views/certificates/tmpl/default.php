@@ -87,7 +87,6 @@ if ( $saveOrder )
 								<th width="1%" class="nowrap center">
 									<?php echo HTMLHelper::_('searchtools.sort', 'JSTATUS', 'ci.state', $listDirn, $listOrder); ?>
 								</th>
-
 								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_CERTIFICATE_ID'); ?>
 								</th>
@@ -107,13 +106,10 @@ if ( $saveOrder )
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TYPE', 'ci.client', $listDirn, $listOrder); ?>
 								</th>
 								<th>
-									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TEMPLATE', 'ci.certificate_template_id', $listDirn, $listOrder); ?>
-								</th>
-								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL'); ?>
 								</th>
 								<th>
-									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_COMMENT'); ?>
+									<?php echo Text::_('JGLOBAL_PREVIEW');?>
 								</th>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ID', 'ci.id', $listDirn, $listOrder); ?>
@@ -153,16 +149,15 @@ if ( $saveOrder )
 									<div class="pull-left break-word">
 										<?php if ($canEdit || $canEditOwn)
 										{
-											?>
-											<a class="hasTooltip modal" href="
-											<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate&layout=preview&tmpl=component&id=' . (int) $item->id, false);?>" title="
-											<?php echo Text::_('JGLOBAL_PREVIEW'); ?>">
+										?>
+											<a href="
+											<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate&layout=edit&id=' . (int) $item->id . '&extension=' . $this->component, false);?>">
 											<?php echo $this->escape($item->unique_certificate_id); ?></a>
 											<?php
-											}
-											else
-											{
-												?>
+										}
+										else
+										{
+										?>
 											<span title="<?php echo Text::sprintf('JFIELD_ALIAS_LABEL', $this->escape($item->unique_certificate_id)); ?>">
 											<?php echo $this->escape($item->unique_certificate_id); ?></span>
 										<?php
@@ -210,7 +205,6 @@ if ( $saveOrder )
 										echo TEXT::_($client);
 									?>
 								</td>
-								<td><?php echo $this->escape($item->title); ?></td>
 								<td>
 									<?php
 									$utcNow = Factory::getDate()->toSql();
@@ -237,7 +231,13 @@ if ( $saveOrder )
 									}
 									?>
 								</td>
-								<td><?php echo $this->escape($item->comment); ?></td>
+								<td>
+									<div class="btn-group">
+									<a id="" href="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate&layout=preview&tmpl=component&id=' . (int) $item->id, false);?>" class="btn hasTooltip modal" type="button">
+										<?php echo Text::_('JGLOBAL_PREVIEW');?>
+									</a>
+									</div>
+								</td>
 								<td><?php echo (int) $item->id; ?></td>
 							</tr>
 							<?php
