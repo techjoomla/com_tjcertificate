@@ -61,6 +61,7 @@
       <folder>views</folder>
       <folder>libraries</folder>
       <folder>languages</folder>
+      <folder>layouts</folder>
     </files>
     <languages folder="administrator">
       <language tag="en-GB">languages/en-GB/en-GB.com_tjcertificate.ini</language>
@@ -71,6 +72,7 @@
     <folder>certificate-templates</folder>
     <folder>css</folder>
     <folder>js</folder>
+    <folder>images</folder>
     <folder>vendors</folder>
   </media>
   <scriptfile>script.tjcertificate.php</scriptfile>

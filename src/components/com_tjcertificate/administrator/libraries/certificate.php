@@ -613,7 +613,7 @@ class TjCertificateCertificate extends CMSObject
 
 		if (isset($options['absolute']))
 		{
-			return Route::link('site', $url, false, 0 ,true);
+			return Route::link('site', $url, false, 0, true);
 		}
 
 		return Route::_($url);
