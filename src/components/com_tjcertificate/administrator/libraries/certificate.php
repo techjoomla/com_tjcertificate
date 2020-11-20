@@ -659,7 +659,7 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @param   boolean  $store  Store as attachment for emails
 	 *
-	 * @return  boolean|string Certificate pdf url.
+	 * @return  boolean|string|integer Certificate pdf url.
 	 *
 	 * @since 1.0
 	 */
