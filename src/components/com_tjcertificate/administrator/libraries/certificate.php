@@ -657,9 +657,9 @@ class TjCertificateCertificate extends CMSObject
 	/**
 	 * Method to get certificate download url.
 	 *
-	 * @param   boolean  $store  Store as attachment for emails
+	 * @param   integer  $store  Store as attachment for emails
 	 *
-	 * @return  boolean|string|integer Certificate pdf url.
+	 * @return  integer|string Certificate pdf url.
 	 *
 	 * @since 1.0
 	 */
