@@ -1121,7 +1121,7 @@ class TjCertificateCertificate extends CMSObject
 
 			$im = new Imagick;
 			$im->setResolution(72, 72);
-			$im->readimage($this->certTmpDir . $this->unique_certificate_id . ".pdf");
+			$im->readimage($tmpPDF);
 			$im->setImageBackgroundColor('white');
 			$im->setImageAlphaChannel(imagick::ALPHACHANNEL_REMOVE);
 			$im->mergeImageLayers(imagick::LAYERMETHOD_FLATTEN);
