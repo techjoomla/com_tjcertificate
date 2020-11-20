@@ -69,6 +69,15 @@
 -->
 	</fieldset>
 
+	<fieldset name="certificate_image_generation" label="COM_TJCERTIFICATE_IMAGE_GENERATION">
+		<field type="note" id="tjcert-certificate-image-settings" name="tjcert-certificate-image-settings" label="COM_TJCERTIFICATE_IMAGE_GENERATION_SETTINGS" />
+		<field name="cert_image_gen_type" class="btn-group" type="radio" default="canvas" label="COM_TJCERTIFICATE_IMAGE_GENERATION_TYPE" description="COM_TJCERTIFICATE_IMAGE_GENERATION_TYPE_DESC" >
+			<option value="canvas">COM_TJCERTIFICATE_IMAGE_GENERATION_TYPE_CANVAS</option>
+			<option value="imagick">COM_TJCERTIFICATE_IMAGE_GENERATION_TYPE_IMAGICK</option>
+		</field>
+		<field type="note" id="tjcert-certificate-image-settings-note" name="tjcert-certificate-image-settings-note" label="COM_TJCERTIFICATE_IMAGE_GENERATION_SETTINGS_NOTE" showon="cert_image_gen_type:imagick" />
+	</fieldset>
+
 	<!-- Permission setting  -->
 	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
 		<field name="rules" type="rules" label="JCONFIG_PERMISSIONS_LABEL" class="inputbox" validate="rules" filter="rules" component="com_tjcertificate" section="component" />
