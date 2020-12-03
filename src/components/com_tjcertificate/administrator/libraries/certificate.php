@@ -60,6 +60,10 @@ class TjCertificateCertificate extends CMSObject
 
 	public $defaultCertPrefix = "CERT";
 
+	public $certImageDir = JPATH_SITE . '/media/com_tjcertificate/certificates/';
+
+	public $certTmpDir = JPATH_SITE . '/media/com_tjcertificate/tmp/';
+
 	protected static $certificateObj = array();
 
 	public $is_external = 0;
@@ -688,7 +692,7 @@ class TjCertificateCertificate extends CMSObject
 	/**
 	 * Method to get certificate download url.
 	 *
-	 * @param   boolean  $store  Store as attachment for emails
+	 * @param   integer  $store  Store as attachment for emails
 	 *
 	 * @return  boolean|string Certificate pdf url.
 	 *
@@ -779,6 +783,10 @@ class TjCertificateCertificate extends CMSObject
 				flush();
 				readfile($certificatePdfName);
 				jexit();
+			}
+			elseif ($store == 2)
+			{
+				return $domPDF->output();
 			}
 
 			$domPDF->stream($certificatePdfName, array("Attachment" => 1));
@@ -903,6 +911,15 @@ class TjCertificateCertificate extends CMSObject
 				if (JFile::exists($path . $fileName))
 				{
 					JFile::delete($path . $fileName);
+				}
+
+				// Generate Certificate Image
+				$params = ComponentHelper::getParams('com_tjcertificate');
+
+				if ($params->get('cert_image_gen_type') == 'imagick')
+				{
+					// Generate image from PDF
+					$this->generateImageFromPDF($this->pdfDownload(2));
 				}
 
 				return self::getInstance($this->id);
@@ -1039,7 +1056,7 @@ class TjCertificateCertificate extends CMSObject
 	}
 
 	/**
-	 * This function checks the certificate download permission 
+	 * This function checks the certificate download permission
 	 *
 	 * @return  boolean
 	 *
@@ -1108,5 +1125,49 @@ class TjCertificateCertificate extends CMSObject
 		. '&certUrl=' . urlencode($certificateUrl) . '&certId=' . $this->unique_certificate_id;
 
 		return $linkedInprofileUrl;
+	}
+
+	/**
+	 * Method to generate certificate image from PDF.
+	 *
+	 * @param   string  $domPDFOutput  DomPDF output.
+	 *
+	 * @return  void
+	 *
+	 * @since  __DEPLOY_VERSION__
+	 */
+	public function generateImageFromPDF($domPDFOutput)
+	{
+		if (extension_loaded('imagick'))
+		{
+			if (!JFolder::exists($this->certImageDir))
+			{
+				JFolder::create($this->certImageDir);
+			}
+
+			if (!JFolder::exists($this->certTmpDir))
+			{
+				JFolder::create($this->certTmpDir);
+			}
+
+			$tmpPDF = $this->certTmpDir . $this->unique_certificate_id . '.pdf';
+
+			file_put_contents($tmpPDF, $domPDFOutput);
+
+			$im = new Imagick;
+			$im->setResolution(72, 72);
+			$im->readimage($tmpPDF);
+			$im->setImageBackgroundColor('white');
+			$im->setImageAlphaChannel(imagick::ALPHACHANNEL_REMOVE);
+			$im->mergeImageLayers(imagick::LAYERMETHOD_FLATTEN);
+			$im->writeImage($this->certImageDir . $this->unique_certificate_id . '.png');
+			$im->clear();
+			$im->destroy();
+
+			if (JFile::exists($tmpPDF))
+			{
+				JFile::delete($tmpPDF);
+			}
+		}
 	}
 }
