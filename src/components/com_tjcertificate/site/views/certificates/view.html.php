@@ -68,6 +68,27 @@ class TjCertificateViewCertificates extends JViewLegacy
 	public $activeFilters;
 
 	/**
+	 * Manage own  Permissions
+	 *
+	 * @var  boolean
+	 */
+	public $manageOwn;
+
+	/**
+	 * Manage Permissions
+	 *
+	 * @var  boolean
+	 */
+	public $manage;
+
+	/**
+	 * Create Permissions
+	 *
+	 * @var  boolean
+	 */
+	public $create;
+
+	/**
 	 * Display the  view
 	 *
 	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
@@ -108,6 +129,9 @@ class TjCertificateViewCertificates extends JViewLegacy
 
 		$this->filterForm    = $this->get('FilterForm');
 		$this->activeFilters = $this->get('ActiveFilters');
+		$this->manageOwn     = $this->user->authorise('certificate.external.manageown', 'com_tjcertificate');
+		$this->manage	     = $this->user->authorise('certificate.external.manage', 'com_tjcertificate');
+		$this->create	     = $this->user->authorise('certificate.external.create', 'com_tjcertificate');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

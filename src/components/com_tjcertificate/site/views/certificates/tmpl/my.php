@@ -16,6 +16,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Factory;
 
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 HTMLHelper::_('bootstrap.tooltip');
@@ -29,6 +30,11 @@ $saveOrder = $listOrder == 'ci.id';
 
 $dispatcher = JDispatcher::getInstance();
 PluginHelper::importPlugin('content');
+$app    = Factory::getApplication();
+$menu   = $app->getMenu();
+$itemId = $menu->getActive()->id;
+
+
 ?>
 
 <div class="tj-page tjBs3">
@@ -40,6 +46,20 @@ PluginHelper::importPlugin('content');
 			echo LayoutHelper::render('joomla.searchtools.default', array('view' => $this));
 			?>
 			</div>
+
+			<?php
+			if ($this->create)
+			{
+				$slaActivityFormLink = 'index.php?option=com_tjcertificate&view=externalcertificate&layout=edit';
+				$addSlaActivityLink = Route::_($slaActivityFormLink);?>
+				<div class="">
+					<a class="btn btn-primary btn-small pull-right" href="<?php echo $addSlaActivityLink;?>">
+						<i class="icon-plus"></i><?php echo JText::_('COM_TJCERTIFICATE_ADD_EXTERNAL_CERTIFICATE'); ?>
+					</a>
+				</div>
+			<?php
+			}
+			?>
 			<?php
 			if (empty($this->items))
 			{
@@ -71,6 +91,9 @@ PluginHelper::importPlugin('content');
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_EXPIRY_DATE', 'ci.expired_on', $listDirn, $listOrder); ?>
 								</th>
+								<th>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_ACTIONS'); ?>
+								</th>
 							</tr>
 						</thead>
 						<tfoot>
@@ -92,9 +115,16 @@ PluginHelper::importPlugin('content');
 								<tr class="row <?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->id; ?>">
 								<td class="has-context">
 									<div class="pull-left break-word">
+										<?php if (!$item->is_external) {?>
 										<a href="<?php echo TJCERT::Certificate($item->id)->getUrl('',false); ?>">
 											<?php echo $this->escape($item->unique_certificate_id); ?>
 										</a>
+										<?php } ?>
+										<?php if ($item->is_external) {?>
+										<a href="<?php echo Route::_('index.php?option=com_tjcertificate&view=externalcertificate&id=' . $item->id); ?>">
+											<?php echo $this->escape($item->unique_certificate_id); ?>
+										</a>
+										<?php } ?>
 									</div>
 								</td>
 								<td>
@@ -105,10 +135,23 @@ PluginHelper::importPlugin('content');
 									?>
 								</td>
 								<td>
-									<?php echo $data[0]->title ? $data[0]->title : "-"; ?>
+									<?php
+										
+										if ($data[0]->title)
+										{
+											$title = $data[0]->title;
+										}
+										else
+										{
+											$title = $item->name;
+										}
+
+										echo $title ? $title : "-"; 
+									?>
 								</td>
 								<td><?php echo HTMLHelper::date($item->issued_on, Text::_('DATE_FORMAT_LC')); ?></td>
-								<td><?php
+								<td>
+									<?php
 									if (!empty($item->expired_on) && $item->expired_on != '0000-00-00 00:00:00')
 									{
 										echo HTMLHelper::date($item->expired_on, Text::_('DATE_FORMAT_LC'));
@@ -117,7 +160,38 @@ PluginHelper::importPlugin('content');
 									{
 										echo '-';
 									}
-									?></td>
+									?>
+								</td>
+									<td>
+										<div class="hide">
+										<?php echo HTMLHelper::_('grid.id', $i, $item->id); ?>
+										</div>
+
+										<?php if ($this->manageOwn) { ?>
+											<?php if ($item->is_external && $item->state == 0) { ?>
+												<a class="d-inline-block mr-4" href="
+												<?php echo 'index.php?option=com_tjcertificate&view=externalcertificate&layout=edit&id=' . $item->id; ?>" title="<?php echo JText::_('JACTION_EDIT'); ?>">
+													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+												</a>										
+												<a class="d-inline-block mr-4" onclick="deleteItem('<?php echo $item->id; ?>',this)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button"><i class="fa fa-trash"></i>
+											<?php }
+											} ?>
+											<?php if ($this->manage && $item->is_external) { ?> 
+												<a class="d-inline-block mr-4" onclick="listItemTask('cb<?php echo $i;?>', 'certificates.<?php echo $item->state == 0 ? 'publish' : 'unpublish';?>')" class="btn btn-mini" type="button">
+												<?php if ($item->state == 0) { ?>
+												<i class="fa fa-window-close"></i>
+												<?php } else {?>
+												<i class="fa fa-check-square"></i>
+												<?php } ?>
+									<?php } ?>
+									<?php 
+										if (!$item->is_external || !$this->manageOwn) 
+										{
+											echo "NA";
+										}
+									?>
+
+									</td>
 							</tr>
 							<?php
 								}
@@ -146,3 +220,25 @@ PluginHelper::importPlugin('content');
 		display: inline-flex;
 	}
 </style>
+<script type="text/javascript">
+
+function deleteItem(certificateId,params)
+{
+	var itemId = '<?php echo $itemId;?>';
+	var id = parseInt(certificateId);
+
+	if(isNaN(id) || id =='')
+	{
+		return false;
+	}
+
+	var redirectURL = Joomla.getOptions('system.paths').base + '/index.php?option=com_tjcertificate&task=certificates.deleteCertificate&id='+id+'&Itemid='+itemId;
+
+	if (!confirm(jQuery(params).data("message")))
+	{
+		return false;
+	}
+
+	window.location.href = redirectURL;
+}
+</script>

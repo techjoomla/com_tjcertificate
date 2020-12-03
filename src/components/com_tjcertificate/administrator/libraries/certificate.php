@@ -62,6 +62,20 @@ class TjCertificateCertificate extends CMSObject
 
 	protected static $certificateObj = array();
 
+	public $is_external = 0;
+
+	public $name = null;
+
+	public $cert_url = "";
+
+	public $cert_file = "";
+
+	public $issuing_org = "";
+
+	public $status = "";
+
+	public $created_by = "";
+
 	/**
 	 * Constructor activating the default information of the Certificate
 	 *
@@ -457,6 +471,13 @@ class TjCertificateCertificate extends CMSObject
 				$table->issued_on = Factory::getDate()->toSql();
 			}
 
+			// If certificate id is not added from the form then add
+			if (empty($this->unique_certificate_id))
+			{
+				$options = new Registry;
+				$table->unique_certificate_id = $this->generateUniqueCertId($options);
+			}
+
 			// Store the user data in the database
 			if (!($table->store()))
 			{
@@ -467,8 +488,22 @@ class TjCertificateCertificate extends CMSObject
 
 			$this->id = $table->id;
 
-			// Fire the onTjCertificateAfterSave event.
 			$dispatcher = \JEventDispatcher::getInstance();
+
+			if ($table->is_external)
+			{
+				/* Send mail on record creation */
+				JLoader::import('components.com_tjcertificate.events.record', JPATH_SITE);
+				$tjCertificateTriggerRecord = new TjCertificateTriggerRecord;
+
+				if ($isNew)
+				{
+					$tjCertificateTriggerRecord->onAfterRecordSave($this, true);
+					$dispatcher->trigger('onExternalCertificateAfterAdded', array($isNew, $this));
+				}
+			}
+
+			// Fire the onTjCertificateAfterSave event.
 
 			$dispatcher->trigger('onTjCertificateAfterSave', array($isNew, $this));
 		}

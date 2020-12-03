@@ -188,4 +188,93 @@ class TjCertificateModelCertificate extends AdminModel
 
 		return trim(implode("\n", $html));
 	}
+
+	/**
+	 * Method to delete record
+	 *
+	 * @param   int  $certificateId  post data
+	 *
+	 * @return	JForm	A JForm object on success, false on failure
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function delete($certificateId)
+	{
+		$table    = $this->getTable('Certificates');
+		$table->load(array('id' => (int) $certificateId));
+
+		if ($table->delete($table->id))
+		{
+			JLoader::import('components.com_tjcertificate.events.record', JPATH_SITE);
+			$tjCertificateTriggerRecord = new TjCertificateTriggerRecord;
+
+			$tjCertificateTriggerRecord->onAfterRecordDeleted($table);
+			$dispatcher = \JEventDispatcher::getInstance();
+			$dispatcher->trigger('onExternalCertificateAfterDelete', array($table));
+		}
+	}
+
+	/**
+	 * Method to check the record is exist for deleting againt the user
+	 *
+	 * @param   Integer  $certificateId  certificate Id
+	 * @param   Integer  $userId         user Id
+	 *
+	 * @return	boolean
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function checkCertificateExist($certificateId,$userId)
+	{
+		$result    = $this->getTable('Certificates');
+		$result->load(array('id' => (int) $certificateId, 'user_id' => $userId));
+
+		if ($result->id)
+		{
+			return true;
+		}
+	}
+
+	/**
+	 * Publish the element
+	 *
+	 * @param   array  $ids    Item id
+	 * 
+	 * @param   int    $state  Publish state
+	 *
+	 * @return  boolean
+	 * 
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function publish($ids, $state = 1)
+	{
+		$table = $this->getTable();
+
+		foreach ($ids as $id)
+		{
+			$table->load($id);
+		}
+
+		$table->state = $state;
+
+		if ($table->store())
+		{
+			JLoader::import('components.com_tjcertificate.events.record', JPATH_SITE);
+			$tjCertificateTriggerRecord = new TjCertificateTriggerRecord;
+
+			$tjCertificateTriggerRecord->onRecordStateChange($table, $table->state);
+			$dispatcher = \JEventDispatcher::getInstance();
+
+			if ($table->state == 1)
+			{
+				$dispatcher->trigger('onExternalCertificateAfterPublished', array($table));
+			}
+			elseif ($table->state == 0)
+			{
+				$dispatcher->trigger('onExternalCertificateAfterUnpublished', array($table));
+			}
+
+			return true;
+		}
+	}
 }

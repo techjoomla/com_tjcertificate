@@ -33,6 +33,14 @@ CREATE TABLE IF NOT EXISTS `#__tj_certificate_issue` (
   `state` tinyint(3) NOT NULL,
   `issued_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `expired_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `is_external` tinyint(1) NOT NULL DEFAULT '0',
+  `name` varchar(255) NOT NULL,
+  `issuing_org` varchar(255) NOT NULL,
+  `cert_url` text NULL,
+  `cert_file` varchar(255) NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `access` tinyint(1) NOT NULL DEFAULT '0',
+  `status` text NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY unqk_certificate_id (`unique_certificate_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;

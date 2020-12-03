@@ -69,6 +69,18 @@
 -->
 	</fieldset>
 
+	<!-- Media setting  -->
+	<fieldset name="media_sets" label="COM_TJCERTIFICATE_MEDIA_SETS" description="">
+		<field name="upload_maxsize" type="text" default="10" label="COM_TJCERTIFICATE_UPLOAD_MAX_SIZE" description="COM_TJCERTIFICATE_UPLOAD_MAX_SIZE_DESC" />
+		<field name="upload_extensions" type="text" cols="60" rows="5" default="image/jpeg,image/jpg,image/png,application/pdf" label="COM_TJCERTIFICATE_LEGAL_EXTENSION" description="COM_TJCERTIFICATE_LEGAL_EXTENSION_DESC" />
+		<field name="file_path" type="text" default="media/com_tjcertificate/external/" label="COM_TJCERTIFICATE_UPLOAD_FILE_PATH" description="COM_TJCERTIFICATE_UPLOAD_FILE_PATH_DESC"/>
+	</fieldset>
+
+	<!-- Email Notification setting  -->
+	<fieldset name="email_settings" label="COM_TJCERTIFICATE_EMAIL_SETTINGS">
+		<field name="email" type="text" default="" label="COM_TJCERTIFICATE_ADMIN_EMAIL" description="COM_TJCERTIFICATE_ADMIN_EMAIL_DESC" />
+	</fieldset>
+
 	<!-- Permission setting  -->
 	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
 		<field name="rules" type="rules" label="JCONFIG_PERMISSIONS_LABEL" class="inputbox" validate="rules" filter="rules" component="com_tjcertificate" section="component" />

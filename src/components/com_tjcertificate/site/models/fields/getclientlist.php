@@ -44,11 +44,13 @@ class JFormFieldGetClientList extends JFormFieldList
 
 			$query->select('DISTINCT (`client`)');
 			$query->from('#__tj_certificate_issue');
-			$query->where($db->quoteName('state') . ' = ' . (int) 1);
 
-			if (!empty($clientByUser))
+			if (!$user->authorise('core.admin'))
 			{
-				$query->where($db->quoteName('user_id') . ' = ' . (int) $user->id);
+				if (!empty($clientByUser))
+				{
+					$query->where($db->quoteName('user_id') . ' = ' . (int) $user->id);
+				}
 			}
 
 			$db->setQuery($query);
