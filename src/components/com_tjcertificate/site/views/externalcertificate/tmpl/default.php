@@ -60,7 +60,17 @@ defined('_JEXEC') or die('Restricted access');
 		<dt>
 		</dt>
 		<dd>
-			<img src="media/com_tjcertificate/external/image/<?php echo $this->item->cert_file; ?>">
+			<?php if ($this->item->mediaData[0]->type === "image") { ?>
+				<img src="media/com_tjcertificate/external/image/<?php echo $this->item->cert_file; ?>">
+			<?php } ?>
+			<a
+				class="mr-20"
+				href="<?php echo $this->item->mediaData[0]->path . '/' . $this->item->mediaData[0]->source;?>"
+				target=""
+				title="<?php echo $this->escape(strip_tags($this->item->mediaData[0]->title));?>">
+				<?php echo $this->item->mediaData[0]->title;?>
+				<i class="fa fa-download" aria-hidden="true"></i>
+			</a>
 		</dd>
 		<?php } ?>
 		<?php if ($this->item->comment) { ?>
