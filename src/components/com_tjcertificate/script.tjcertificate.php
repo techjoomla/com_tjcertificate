@@ -46,6 +46,8 @@ class Com_TjcertificateInstallerScript
 			return false;
 		}
 
+		$this->installNotificationsTemplates();
+
 		return true;
 	}
 
