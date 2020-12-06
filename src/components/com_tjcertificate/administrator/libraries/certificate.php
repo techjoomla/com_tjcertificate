@@ -494,17 +494,13 @@ class TjCertificateCertificate extends CMSObject
 
 			$dispatcher = \JEventDispatcher::getInstance();
 
-			if ($table->is_external)
+			if ($table->is_external && $isNew)
 			{
 				/* Send mail on record creation */
 				JLoader::import('components.com_tjcertificate.events.record', JPATH_SITE);
 				$tjCertificateTriggerRecord = new TjCertificateTriggerRecord;
-
-				if ($isNew)
-				{
-					$tjCertificateTriggerRecord->onAfterRecordSave($this, true);
-					$dispatcher->trigger('onExternalCertificateAfterAdded', array($isNew, $this));
-				}
+				$tjCertificateTriggerRecord->onAfterRecordSave($this, true);
+				$dispatcher->trigger('onExternalCertificateAfterAdded', array($isNew, $this));
 			}
 
 			// Fire the onTjCertificateAfterSave event.
@@ -631,13 +627,22 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @param   boolean  $showSearchBox  Show search box
 	 *
+	 * @param   boolean  $isExternal     Check record is external
+	 *
 	 * @return  string Certificate url.
 	 *
 	 * @since 1.0
 	 */
-	public function getUrl($options, $showSearchBox = true)
+	public function getUrl($options, $showSearchBox = true, $isExternal = false)
 	{
-		$url = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->unique_certificate_id;
+		if ($isExternal)
+		{
+			$url = 'index.php?option=com_tjcertificate&view=externalcertificate&id=' . $this->id;
+		}
+		else
+		{
+			$url = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->unique_certificate_id;
+		}
 
 		// If search box is true then only show search box param in URL
 		if ($showSearchBox)

@@ -10,8 +10,11 @@
 
 // No direct access
 defined('_JEXEC') or die('Restricted access');
-JLoader::import('components.com_tjcertificate.helpers.mails', JPATH_SITE);
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+
+JLoader::import('components.com_tjcertificate.libraries.mails', JPATH_ADMINISTRATOR);
 /**
  * Tjcertificate triggers class for record.
  *
@@ -26,18 +29,18 @@ class TjCertificateTriggerRecord
 	 */
 	public function __construct()
 	{
-		$app    = JFactory::getApplication();
-		$this->menu   = $app->getMenu();
-		$this->params = JComponentHelper::getParams('com_tjcertificate');
-		$this->siteConfig = JFactory::getConfig();
-		$this->sitename = $this->siteConfig->get('sitename');
-		$this->user = JFactory::getUser();
-		$this->tjnotifications = new Tjnotifications;
-		$this->tjCertificateMailsHelper = new TjCertificateMailsHelper;
+		$app                            = Factory::getApplication();
+		$this->menu                     = $app->getMenu();
+		$this->params                   = ComponentHelper::getParams('com_tjcertificate');
+		$this->siteConfig               = Factory::getConfig();
+		$this->sitename                 = $this->siteConfig->get('sitename');
+		$this->user                     = Factory::getUser();
+		$this->tjnotifications          = new Tjnotifications;
+		$this->tjCertificateMails       = new TjCertificateMails;
 	}
 
 	/**
-	 * Trigger for Record after save
+	 * Trigger for record after save
 	 *
 	 * @param   OBJECT  $recordDetails  Record Details
 	 * 
@@ -53,7 +56,7 @@ class TjCertificateTriggerRecord
 		{
 			case true:
 					/* Send mail on campaign create */
-					$this->tjCertificateMailsHelper->onAfterCreateRecord($recordDetails);
+					$this->tjCertificateMails->onAfterCreateRecord($recordDetails);
 				break;
 		}
 
@@ -61,7 +64,7 @@ class TjCertificateTriggerRecord
 	}
 
 	/**
-	 * Trigger for Campaign state change
+	 * Trigger for record state change
 	 *
 	 * @param   OBJECT  $recordDetails  Record Details
 	 * 
@@ -77,29 +80,10 @@ class TjCertificateTriggerRecord
 		{
 			case 1:
 				/* Send mail on record approved */
-				$this->tjCertificateMailsHelper->onAfterRecordStateChange($recordDetails, $isPublished);
-				break;
-
-			case 0:
-				/* Send mail on record rejected */
-				$this->tjCertificateMailsHelper->onAfterRecordStateChange($recordDetails, $isPublished);
+				$this->tjCertificateMails->onAfterRecordStateChange($recordDetails, $isPublished);
 				break;
 		}
 
 		return;
-	}
-
-	/**
-	 * Trigger for campaign's Goal amount has reached for first time
-	 *
-	 * @param   OBJECT  $recordDetails  Record Details
-	 *
-	 * @return  void
-	 * 
-	 * @since	__DEPLOY_VERSION__
-	 */
-	public function onAfterRecordDeleted($recordDetails)
-	{
-		return $this->tjCertificateMailsHelper->onAfterRecordDeleted($recordDetails);
 	}
 }

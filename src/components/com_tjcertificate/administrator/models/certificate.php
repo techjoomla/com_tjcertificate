@@ -192,47 +192,32 @@ class TjCertificateModelCertificate extends AdminModel
 	/**
 	 * Method to delete record
 	 *
-	 * @param   int  $certificateId  post data
+	 * @param   array  $certificateIds  post data
 	 *
-	 * @return	JForm	A JForm object on success, false on failure
+	 * @return  boolean  True on success.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function delete($certificateId)
+	public function delete($certificateIds)
 	{
+		$certificateIds  = (array) $certificateIds;
 		$table    = $this->getTable('Certificates');
-		$table->load(array('id' => (int) $certificateId));
 
-		if ($table->delete($table->id))
+		foreach ($certificateIds as $certificateId)
 		{
-			JLoader::import('components.com_tjcertificate.events.record', JPATH_SITE);
-			$tjCertificateTriggerRecord = new TjCertificateTriggerRecord;
+			$table->load(array('id' => (int) $certificateId));
 
-			$tjCertificateTriggerRecord->onAfterRecordDeleted($table);
-			$dispatcher = \JEventDispatcher::getInstance();
-			$dispatcher->trigger('onExternalCertificateAfterDelete', array($table));
+			if ($table->delete($table->id))
+			{
+				if ($table->is_external)
+				{
+					$dispatcher = \JEventDispatcher::getInstance();
+					$dispatcher->trigger('onExternalCertificateAfterDelete', array($table));
+				}
+			}
 		}
-	}
 
-	/**
-	 * Method to check the record is exist for deleting againt the user
-	 *
-	 * @param   Integer  $certificateId  certificate Id
-	 * @param   Integer  $userId         user Id
-	 *
-	 * @return	boolean
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function checkCertificateExist($certificateId,$userId)
-	{
-		$result    = $this->getTable('Certificates');
-		$result->load(array('id' => (int) $certificateId, 'user_id' => $userId));
-
-		if ($result->id)
-		{
-			return true;
-		}
+		return true;
 	}
 
 	/**
@@ -253,28 +238,30 @@ class TjCertificateModelCertificate extends AdminModel
 		foreach ($ids as $id)
 		{
 			$table->load($id);
+			$table->state = $state;
+
+			if ($table->store())
+			{
+				if ($table->is_external)
+				{
+					JLoader::import('components.com_tjcertificate.events.record', JPATH_SITE);
+					$tjCertificateTriggerRecord = new TjCertificateTriggerRecord;
+
+					$tjCertificateTriggerRecord->onRecordStateChange($table, $table->state);
+					$dispatcher = \JEventDispatcher::getInstance();
+
+					if ($table->state == 1)
+					{
+						$dispatcher->trigger('onExternalCertificateAfterPublished', array($table));
+					}
+					elseif ($table->state == 0)
+					{
+						$dispatcher->trigger('onExternalCertificateAfterUnpublished', array($table));
+					}
+				}
+			}
 		}
 
-		$table->state = $state;
-
-		if ($table->store())
-		{
-			JLoader::import('components.com_tjcertificate.events.record', JPATH_SITE);
-			$tjCertificateTriggerRecord = new TjCertificateTriggerRecord;
-
-			$tjCertificateTriggerRecord->onRecordStateChange($table, $table->state);
-			$dispatcher = \JEventDispatcher::getInstance();
-
-			if ($table->state == 1)
-			{
-				$dispatcher->trigger('onExternalCertificateAfterPublished', array($table));
-			}
-			elseif ($table->state == 0)
-			{
-				$dispatcher->trigger('onExternalCertificateAfterUnpublished', array($table));
-			}
-
-			return true;
-		}
+		return true;
 	}
 }

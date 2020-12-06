@@ -22,10 +22,11 @@ HTMLHelper::_('behavior.keepalive');
 HTMLHelper::_('behavior.tooltip');
 HTMLHelper::_('bootstrap.framework');
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
+HTMLHelper::_('jquery.token');
 
 $options = array();
 $options['relative'] = true;
-HTMLHelper::script('com_tjcertificate/tjmedia.js', $options);
+HTMLHelper::script('com_tjcertificate/tjmedia.min.js', $options);
 
 ?>
 <form action="" class="form-validate form-horizontal"
@@ -58,10 +59,7 @@ HTMLHelper::script('com_tjcertificate/tjmedia.js', $options);
 					 ?>
 					 <?php 	
 					 if ($this->item->mediaData[0]) {
-						$token = Session::getFormToken();
 						echo '<input type="hidden" name="oldFiles" value="'. $this->item->mediaData[0]->media_id . '">';
-						$downloadAttachmentLink = JUri::root() . 'index.php?option=com_tjcertificate&task=externalcertificate.downloadCertificate&' .
-						JSession::getFormToken() . '=1' . '&mediaId=' . $this->item->mediaData[0]->media_id . '&certificate=' . $this->item->cert_file . '&certificateId=' . $this->item->id;
 					?>
 					<div class="control-group">
 					<div class="controls w-100 control-group-fwidth">
@@ -69,7 +67,7 @@ HTMLHelper::script('com_tjcertificate/tjmedia.js', $options);
 						<li>
 							<a
 								class="mr-20"
-								href="<?php echo Route::_($downloadAttachmentLink);?>"
+								href="<?php echo $this->item->mediaData[0]->path . '/' . $this->item->mediaData[0]->source;?>"
 								target=""
 								title="<?php echo $this->escape(strip_tags($this->item->mediaData[0]->title));?>">
 								<?php echo $this->item->mediaData[0]->title;?>
@@ -80,14 +78,14 @@ HTMLHelper::script('com_tjcertificate/tjmedia.js', $options);
 									title="<?php echo Text::_('COM_TJCERTIFICATE_ATTACHMENT_DELETE');?>"
 									data-mid="<?php echo $this->item->mediaData[0]->media_id;?>"
 									data-aid="<?php echo $this->item->id;?>"
-									onclick="tjMediaFile.deleteAttachment('externalcertificate.deleteAttachment', this, '<?php echo $token ?>')"></i>
+									onclick="tjMediaFile.deleteAttachment(this)"></i>
 						</li>
 					</ul>
 					</div>
 					</div>
 					<?php } ?>
 					<?php
-					 echo $this->form->renderField('created_by');
+					 echo $this->form->renderField('created_by', null, null, ['class' => 'hidden']);
 					 echo $this->form->renderField('comment'); 
 				?>
 			</div>
@@ -106,7 +104,7 @@ HTMLHelper::script('com_tjcertificate/tjmedia.js', $options);
 	<input type="hidden" name="jform[id]" id="id" value="<?php echo $this->item->id; ?>" />
 	<input type="hidden" name="option" value="com_tjcertificate"/>
 	<input type="hidden" name="task" value="externalcertificate.save"/>
-	<?php echo JHtml::_('form.token'); ?>
+	<?php echo HTMLHelper::_( 'form.token'); ?>
 </form>
 
 <script type="text/javascript">

@@ -34,7 +34,6 @@
     <filename>router.php</filename>
     <folder>controllers</folder>
     <folder>events</folder>
-    <folder>helpers</folder>
     <folder>views</folder>
     <folder>models</folder>
     <folder>languages</folder>

@@ -45,7 +45,7 @@ class JFormFieldGetClientList extends JFormFieldList
 			$query->select('DISTINCT (`client`)');
 			$query->from('#__tj_certificate_issue');
 
-			if (!$user->authorise('core.admin'))
+			if (!$user->authorise('certificate.external.manage', 'com_tjcertificate'))
 			{
 				if (!empty($clientByUser))
 				{

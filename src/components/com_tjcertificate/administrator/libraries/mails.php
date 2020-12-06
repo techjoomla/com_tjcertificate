@@ -18,11 +18,11 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\Registry\Registry;
 
 /**
- * Class TjCertificateMailsHelper
+ * Class TjCertificateMails
  *
  * @since  __DEPLOY_VERSION__
  */
-class TjCertificateMailsHelper
+class TjCertificateMails
 {
 	protected $params;
 
@@ -57,7 +57,6 @@ class TjCertificateMailsHelper
 
 		$this->siteinfo            = new stdClass;
 		$this->siteinfo->sitename  = $this->sitename;
-		$this->siteinfo->adminname = Text::_('COM_TJCERTIFICATE_SITEADMIN');
 	}
 
 	/**
@@ -71,19 +70,22 @@ class TjCertificateMailsHelper
 	 */
 	public function onAfterCreateRecord($recordDetails)
 	{
-		$adminEmailArray = array();
-		$adminEmail      = (!empty($this->params->get('email'))) ? $this->params->get('email') : $this->siteConfig->get('mailfrom');
-		$adminEmailArray = explode(',', $adminEmail);
-		$userIdArray = $this->getUserIdFromEmail($adminEmailArray);
-		$adminRecipients = array(
-			'email' => array(
-				'to' => $adminEmailArray
-			)
-		);
+		$adminRecipients = array();
+		$db = Factory::getDBO();
 
-		foreach ($userIdArray as $userId)
+		// Get all admin users
+		$query = $db->getQuery(true);
+
+		$query->select('id');
+		$query->from($db->quoteName('#__users'));
+		$query->where($db->quoteName('sendEmail') . '= 1');
+		$db->setQuery($query);
+		$adminUsers = $db->loadObjectList();
+
+		foreach ($adminUsers as $adminUser)
 		{
-			array_unshift($adminRecipients, Factory::getUser($userId));
+			$adminRecipients[]                = Factory::getUser($adminUser->id);
+			$adminRecipients['email']['to'][] = Factory::getUser($adminUser->id)->email;
 		}
 
 		$userEmailArray = array();
@@ -166,102 +168,8 @@ class TjCertificateMailsHelper
 		$options->set('record', $recordDetails);
 
 		// Mail to record owner
-		if ($isPublished == 1)
-		{
-			$this->tjnotifications->send($this->client, "recordApprovedMailToUser", $recipients, $replacements, $options);
-		}
-		elseif ($isPublished == 0)
-		{
-			$this->tjnotifications->send($this->client, "recordRejectedMailToUser", $recipients, $replacements, $options);
-		}
+		$this->tjnotifications->send($this->client, "recordApprovedMailToUser", $recipients, $replacements, $options);
 
 		return;
-	}
-
-	/**
-	 * Send mail when record is deleted
-	 *
-	 * @param   OBJECT  $recordDetails  record Detail
-	 *
-	 * @return void
-	 * 
-	 * @since	__DEPLOY_VERSION__
-	 */
-	public function onAfterRecordDeleted($recordDetails)
-	{
-		$adminEmailArray = array();
-		$adminEmail      = (!empty($this->params->get('email'))) ? $this->params->get('email') : $this->siteConfig->get('mailfrom');
-		$adminEmailArray = explode(',', $adminEmail);
-		$userIdArray = $this->getUserIdFromEmail($adminEmailArray);
-		$adminRecipients = array(
-			'email' => array(
-				'to' => $adminEmailArray
-			)
-		);
-
-		foreach ($userIdArray as $userId)
-		{
-			array_unshift($adminRecipients, Factory::getUser($userId));
-		}
-
-		$userEmailArray = array();
-
-		if ($recordDetails->user_id)
-		{
-			$recordOwner = Factory::getUser($recordDetails->user_id);
-			$userEmailArray[] = $recordOwner->email;
-		}
-
-		$recipients   = array('email' => array('to' => $userEmailArray));
-
-		$replacements         = new stdClass;
-		$replacements->info   = $this->siteinfo;
-		$replacements->record = $recordDetails;
-		$replacements->user   = $recordOwner;
-
-		$siteinfo = new stdClass;
-		$siteinfo->sitename = $this->sitename;
-
-		$options = new Registry;
-		$options->set('record', $recordDetails);
-
-		$this->tjnotifications->send($this->client, "recordDeleteMailToUser", $recipients, $replacements, $options);
-
-		$this->tjnotifications->send($this->client, "recordDeleteMailToAdmin", $adminRecipients, $replacements, $options);
-
-		return;
-	}
-
-	/**
-	 * Method to create recipient array
-	 *
-	 * @param   ARRAY  $adminRecipients  Contains email object
-	 *
-	 * @return  array.
-	 *
-	 * @since	__DEPLOY_VERSION__
-	 */
-	public function getUserIdFromEmail($adminRecipients)
-	{
-		$finalUserIdRecipient = [];
-
-		if (!empty($adminRecipients))
-		{
-			$db = JFactory::getDbo();
-
-			foreach ($adminRecipients as $adminRecipient)
-			{
-				$query = $db->getQuery(true)
-					->select($db->quoteName('id'))
-					->from($db->quoteName('#__users'))
-					->where($db->quoteName('email') . ' = ' . $db->quote($adminRecipient));
-				$db->setQuery($query);
-				$userId = $db->loadResult();
-
-				$finalUserIdRecipient[] = $userId;
-			}
-		}
-
-		return $finalUserIdRecipient;
 	}
 }

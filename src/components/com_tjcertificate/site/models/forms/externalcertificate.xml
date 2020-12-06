@@ -36,7 +36,7 @@
 			menu_published="0"
 			size="25"
 			filter=""
-			maxlength="250"/>
+		/>
 
 		<field
 			name="unique_certificate_id"
@@ -44,7 +44,6 @@
 			filter="safehtml"
 			label="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_ID"
 			description="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_ID_DESC"
-			maxlength="250"
 			size="25"
 		/>
 
@@ -56,7 +55,7 @@
 			menu_published="0"
 			size="25"
 			filter=""
-			maxlength="250"/>
+		/>
 
 		<field
 			name="issuing_org"
@@ -67,7 +66,7 @@
 			menu_published="0"
 			size="25"
 			filter=""
-			maxlength="250"/>
+		/>
 
 		<field
 			name="issued_on"
@@ -82,7 +81,6 @@
 			todaybutton="false"
 			weeknumbers="false"
 			filltable="true"
-			minyear="-1"
 			maxyear="5"
 			label="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_ISSUED_DATE"
 			description="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_ISSUED_DATE_DESC"
@@ -101,7 +99,6 @@
 			todaybutton="false"
 			weeknumbers="false"
 			filltable="true"
-			minyear="-1"
 			maxyear="5"
 			label="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_EXPIRY_DATE"
 			description="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_EXPIRY_DATE_DESC"
@@ -121,7 +118,7 @@
 			label="COM_TJCERTIFICATE_FORM_LBL_CERTIFICATE_FILE"
 			description="COM_TJCERTIFICATE_FORM_LBL_CERTIFICATE_FILE_DESC"
 			onchange="tjMediaFile.validateFile(this)"
-			accept="image/jpeg,image/png,image/jpg" />
+			accept="image/jpeg,image/png,image/jpg,application/pdf" />
 
 		<field name="comment"
 			type="textarea"

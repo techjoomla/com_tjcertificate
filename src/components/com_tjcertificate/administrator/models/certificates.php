@@ -132,14 +132,11 @@ class TjCertificateModelCertificates extends ListModel
 
 		// Filter by user id
 
-		if (!$user->authorise('core.admin'))
-		{
-			$userId = $this->getState('filter.user_id');
+		$userId = $this->getState('filter.user_id');
 
-			if (!empty($userId))
-			{
-				$query->where($db->quoteName('ci.user_id') . ' = ' . (int) $userId);
-			}
+		if (!empty($userId))
+		{
+			$query->where($db->quoteName('ci.user_id') . ' = ' . (int) $userId);
 		}
 
 		// Filter by client issued to

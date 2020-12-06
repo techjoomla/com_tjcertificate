@@ -130,4 +130,18 @@ class TJCERT
 
 		return self::$loadedClass[$className];
 	}
+
+	/**
+	 * Initializes the css, js and necessary dependencies
+	 *
+	 * @param   string  $location  The location where the assets needs to load
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public static function init()
+	{
+		self::Language()->siteLanguageConstant();
+	}
 }

@@ -48,4 +48,35 @@ class Com_TjcertificateInstallerScript
 
 		return true;
 	}
+
+	/**
+	 * Installed Notifications Templates
+	 *
+	 * @return  void
+	 */
+	public function installNotificationsTemplates()
+	{
+		jimport('joomla.application.component.model');
+		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjnotifications/tables');
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjnotifications/models');
+		$notificationsModel = JModelLegacy::getInstance('Notification', 'TJNotificationsModel');
+
+		$filePath = JPATH_ADMINISTRATOR . '/components/com_tjcertificate/tjcertificateTemplate.json';
+		$str = file_get_contents($filePath);
+		$json = json_decode($str, true);
+
+		$existingKeys = $notificationsModel->getKeys('com_tjcertificate');
+
+		if (count($json) != 0)
+		{
+			foreach ($json as $template => $array)
+			{
+				// If template doesn't exist then we add notification template.
+				if (!in_array($array['key'], $existingKeys))
+				{
+					$notificationsModel->createTemplates($array);
+				}
+			}
+		}
+	}
 }

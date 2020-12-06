@@ -115,7 +115,7 @@ class TjCertificateViewCertificates extends JViewLegacy
 
 		$layout = $app->input->get('layout', "my");
 
-		if ($layout == 'my')
+		if ($layout == 'my' && !$this->user->authorise('core.admin'))
 		{
 			// Show only logged-in user certificates
 			$this->state->set('filter.user_id', $this->user->id);

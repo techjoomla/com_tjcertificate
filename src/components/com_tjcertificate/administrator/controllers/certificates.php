@@ -40,9 +40,9 @@ class TjCertificateControllerCertificates extends AdminController
 	}
 
 	/**
-	 * Method to delete the certificate.
+	 * Method to delete the record from frontend.
 	 *
-	 * @return  void
+	 * @return  void|boolean
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -51,17 +51,22 @@ class TjCertificateControllerCertificates extends AdminController
 		$user = Factory::getUser();
 		$app  = Factory::getApplication();
 		$certificateId = $app->input->getInt('id');
-		$model = $this->getModel();
+		$manageOwn = $user->authorise('certificate.external.manageown', 'com_tjcertificate');
+		$manage    = $user->authorise('certificate.external.manage', 'com_tjcertificate');
 
-		if (!$user->authorise('certificate.external.manage', 'com_tjcertificate'))
+		// If manageOwn permission then check record owner can only deleting own record
+		if ($manageOwn && !$manage)
 		{
-			$checkCertificateExist = $model->checkCertificateExist($certificateId, $user->id);
+			$table = TJCERT::table("certificates");
+			$table->load(array('id' => (int) $certificateId, 'user_id' => $user->id));
 
-			if ($checkCertificateExist === false)
+			if (!$table->id)
 			{
 				return false;
 			}
 		}
+
+		$model = $this->getModel();
 
 		// Remove the items.
 		if ($model->delete($certificateId))
@@ -73,7 +78,7 @@ class TjCertificateControllerCertificates extends AdminController
 	}
 
 	/**
-	 * Method to publish a list of articles.
+	 * Method to publish a list of records.
 	 *
 	 * @return  void
 	 *
@@ -117,14 +122,16 @@ class TjCertificateControllerCertificates extends AdminController
 			{
 				$model->publish($cid, $value);
 
-				if ($value === 1)
+				if ($value == 1)
 				{
-					$this->setMessage(Text::_('COM_TJCERTIFICATE_RECORD_PUBLISHED'));
+					$ntext = 'COM_TJCERTIFICATE_N_RECORD_PUBLISHED';
 				}
-				elseif ($value === 0)
+				elseif ($value == 0)
 				{
-					$this->setMessage(Text::_('COM_TJCERTIFICATE_RECORD_UNPUBLISHED'));
+					$ntext = 'COM_TJCERTIFICATE_N_RECORD_UNPUBLISHED';
 				}
+
+				$this->setMessage(Text::plural($ntext, count($cid)));
 			}
 			catch (Exception $e)
 			{

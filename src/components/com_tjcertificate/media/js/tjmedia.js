@@ -8,96 +8,89 @@
  */
 
 var tjMediaFile = {
-	validateFile: function(thisFile) {
-		/** Validation is for file field only */
-		if (jQuery(thisFile).attr('type') != 'file')
-		{
-			return false;
-		}
+    validateFile: function(thisFile) {
+        /** Validation is for file field only */
+        if (jQuery(thisFile).attr('type') != 'file') {
+            return false;
+        }
 
-		/** Clear error message */
-		jQuery('#system-message-container').empty();
+        /** Clear error message */
+        jQuery('#system-message-container').empty();
 
-		var uploadedfile = jQuery(thisFile)[0].files[0];
-		var fileType = uploadedfile.type;
-		var fileExtension = uploadedfile.name.split(".");
+        var uploadedfile = jQuery(thisFile)[0].files[0];
+        var fileType = uploadedfile.type;
+        var fileExtension = uploadedfile.name.split(".");
 
-		/** global: allowedAttachments */
-		var allowedExtensionsArray = allowedAttachments.split(",");
+        /** global: allowedAttachments */
+        var allowedExtensionsArray = allowedAttachments.split(",");
 
-		var invalid = 0;
-		var errorMsg = new Array();
+        var invalid = 0;
+        var errorMsg = new Array();
 
-		if ((fileExtension[fileExtension.length-1] !== ''|| fileExtension[fileExtension.length-1] !== null) && (jQuery.inArray(fileType , allowedExtensionsArray) == -1))
-		{
-			invalid = "1";
-			errorMsg.push(Joomla.JText._('COM_TJCERTIFICATE_MEDIA_INVALID_FILE_TYPE'));
-		}
+        if ((fileExtension[fileExtension.length - 1] !== '' || fileExtension[fileExtension.length - 1] !== null) && (jQuery.inArray(fileType, allowedExtensionsArray) == -1)) {
+            invalid = "1";
+            errorMsg.push(Joomla.JText._('COM_TJCERTIFICATE_MEDIA_INVALID_FILE_TYPE'));
+        }
 
-		var uploadedFileSize       = uploadedfile.size;
+        var uploadedFileSize = uploadedfile.size;
 
 
-		/** global: attachmentMaxSize */
-		if (uploadedFileSize > attachmentMaxSize * 1024 *1024)
-		{
+        /** global: attachmentMaxSize */
+        if (uploadedFileSize > attachmentMaxSize * 1024 * 1024) {
 
-			invalid = "1";
-			errorMsg.push(Joomla.JText._('COM_TJCERTIFICATE_MEDIA_UPLOAD_ERROR'));
-			console.log("COM_TIMELOG_FILE_SIZE_ERROR");
-		}
+            invalid = "1";
+            errorMsg.push(Joomla.JText._('COM_TJCERTIFICATE_MEDIA_UPLOAD_ERROR'));
+            console.log("COM_TIMELOG_FILE_SIZE_ERROR");
+        }
 
-		if (invalid)
-		{
-			Joomla.renderMessages({'error': errorMsg});
+        if (invalid) {
+            Joomla.renderMessages({
+                'error': errorMsg
+            });
 
-			jQuery("html, body").animate({
-				scrollTop: 0
-			}, 500);
+            jQuery("html, body").animate({
+                scrollTop: 0
+            }, 500);
 
-			return false;
-		}
-	},
-	deleteAttachment: function(task, currentElement, jtoken)
-	{
-		if(confirm(Joomla.JText._('COM_TJCERTIFICATE_CONFIRM_DELETE_ATTACHMENT')) == true)
-		{
-			var certificateId = jQuery(currentElement).attr('data-aid');
-			var mediaId    = jQuery(currentElement).attr('data-mid');
+            return false;
+        }
+    },
+    deleteAttachment: function(currentElement) {
+        if (confirm(Joomla.JText._('COM_TJCERTIFICATE_CONFIRM_DELETE_ATTACHMENT')) == true) {
+            var certificateId = jQuery(currentElement).attr('data-aid');
+            var mediaId = jQuery(currentElement).attr('data-mid');
 
-			jQuery.ajax({
-				url: Joomla.getOptions('system.paths').base + "/index.php?option=com_tjcertificate&" + jtoken + "=1",
-				data: {
-					certificateId: certificateId,
-					mediaId: mediaId,
-					task: task
-				},
-				type: 'POST',
-				dataType:'JSON',
-				success: function(data) {
-					let msg = data.message;
-					if (data.success === true)
-					{
-						Joomla.renderMessages({'alert alert-success': [msg]});
-						jQuery("html, body").animate({
-							scrollTop: 0
-						}, 2000);
-					}
-					else
-					{
-						Joomla.renderMessages({'alert alert-error': [msg]});
-						jQuery("html, body").animate({
-							scrollTop: 0
-						}, 2000);
-					}
-					setTimeout(function(){
-						window.location.reload(1);
-					}, 2000);
-				}
-			});
-		}
-		else
-		{
-			return false;
-		}
-	}
+            jQuery.ajax({
+                url: Joomla.getOptions('system.paths').base + "/index.php?option=com_tjcertificate&task=externalcertificate.deleteAttachment&format=json",
+                data: {
+                    certificateId: certificateId,
+                    mediaId: mediaId,
+                },
+                type: 'POST',
+                dataType: 'JSON',
+                success: function(data) {
+
+                    if (data.success === true) {
+                        tjMediaFile.renderMessage(data.message);
+                    } else {
+                        tjMediaFile.renderMessage(data.message);
+                    }
+
+                    setTimeout(function() {
+                        window.location.reload(1);
+                    }, 2000);
+                }
+            });
+        } else {
+            return false;
+        }
+    },
+    renderMessage: function(msg) {
+        Joomla.renderMessages({
+            'alert alert-success': [msg]
+        });
+        jQuery("html, body").animate({
+            scrollTop: 0
+        }, 2000);
+    }
 };

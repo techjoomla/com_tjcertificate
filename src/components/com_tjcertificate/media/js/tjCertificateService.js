@@ -34,5 +34,20 @@ var tjCertificateService = {
 	},
 	loadCustomTemplate: function (formData, params) {
 		return this.postData(this.loadCustomTemplateUrl, formData, params);
+	},
+	deleteItem: function(certificateId, params, itemId) {
+		var id = parseInt(certificateId);
+
+		if (isNaN(id) || id == '') {
+			return false;
+		}
+
+		var redirectURL = Joomla.getOptions('system.paths').base + '/index.php?option=com_tjcertificate&task=certificates.deleteCertificate&id=' + id + '&Itemid=' + itemId;
+
+		if (!confirm(jQuery(params).data("message"))) {
+			return false;
+		}
+
+		window.location.href = redirectURL;
 	}
 }

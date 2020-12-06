@@ -34,6 +34,8 @@ $app    = Factory::getApplication();
 $menu   = $app->getMenu();
 $itemId = $menu->getActive()->id;
 
+$options['relative'] = true;
+HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.js', $options);
 
 ?>
 
@@ -110,18 +112,19 @@ $itemId = $menu->getActive()->id;
 
 							foreach ($this->items as $i => $item)
 							{
+								$certificateObj = TJCERT::Certificate($item->id);
 								$data = $dispatcher->trigger('getCertificateClientData', array($item->client_id, $item->client));
 								?>
 								<tr class="row <?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->id; ?>">
 								<td class="has-context">
 									<div class="pull-left break-word">
 										<?php if (!$item->is_external) {?>
-										<a href="<?php echo TJCERT::Certificate($item->id)->getUrl('',false); ?>">
+										<a href="<?php echo $certificateObj->getUrl('',false); ?>">
 											<?php echo $this->escape($item->unique_certificate_id); ?>
 										</a>
 										<?php } ?>
 										<?php if ($item->is_external) {?>
-										<a href="<?php echo Route::_('index.php?option=com_tjcertificate&view=externalcertificate&id=' . $item->id); ?>">
+										<a href="<?php echo $certificateObj->getUrl('',false, true); ?>">
 											<?php echo $this->escape($item->unique_certificate_id); ?>
 										</a>
 										<?php } ?>
@@ -136,17 +139,14 @@ $itemId = $menu->getActive()->id;
 								</td>
 								<td>
 									<?php
-										
-										if ($data[0]->title)
+										if ($item->is_external)
 										{
-											$title = $data[0]->title;
+											echo $item->name;									
 										}
 										else
 										{
-											$title = $item->name;
+											echo ($data[0]->title ? $data[0]->title : "-");
 										}
-
-										echo $title ? $title : "-"; 
 									?>
 								</td>
 								<td><?php echo HTMLHelper::date($item->issued_on, Text::_('DATE_FORMAT_LC')); ?></td>
@@ -173,7 +173,7 @@ $itemId = $menu->getActive()->id;
 												<?php echo 'index.php?option=com_tjcertificate&view=externalcertificate&layout=edit&id=' . $item->id; ?>" title="<?php echo JText::_('JACTION_EDIT'); ?>">
 													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 												</a>										
-												<a class="d-inline-block mr-4" onclick="deleteItem('<?php echo $item->id; ?>',this)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button"><i class="fa fa-trash"></i>
+												<a class="d-inline-block mr-4" onclick="tjCertificateService.deleteItem('<?php echo $item->id; ?>',this, <?php echo $itemId ?>)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button"><i class="fa fa-trash"></i>
 											<?php }
 											} ?>
 											<?php if ($this->manage && $item->is_external) { ?> 
@@ -187,7 +187,7 @@ $itemId = $menu->getActive()->id;
 									<?php 
 										if (!$item->is_external || !$this->manageOwn) 
 										{
-											echo "NA";
+											echo "-";
 										}
 									?>
 
@@ -220,25 +220,3 @@ $itemId = $menu->getActive()->id;
 		display: inline-flex;
 	}
 </style>
-<script type="text/javascript">
-
-function deleteItem(certificateId,params)
-{
-	var itemId = '<?php echo $itemId;?>';
-	var id = parseInt(certificateId);
-
-	if(isNaN(id) || id =='')
-	{
-		return false;
-	}
-
-	var redirectURL = Joomla.getOptions('system.paths').base + '/index.php?option=com_tjcertificate&task=certificates.deleteCertificate&id='+id+'&Itemid='+itemId;
-
-	if (!confirm(jQuery(params).data("message")))
-	{
-		return false;
-	}
-
-	window.location.href = redirectURL;
-}
-</script>

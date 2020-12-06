@@ -78,21 +78,6 @@ class TjCertificateViewExternalCertificate extends HtmlView
 			throw new Exception(implode("\n", $errors), 500);
 		}
 
-		$this->getLanguageConstant();
 		parent::display($tpl);
-	}
-
-	/**
-	 * Get all jtext for javascript
-	 *
-	 * @return   void
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public static function getLanguageConstant()
-	{
-		Text::script('COM_TJCERTIFICATE_CONFIRM_DELETE_ATTACHMENT');
-		Text::script('COM_TJCERTIFICATE_MEDIA_INVALID_FILE_TYPE');
-		Text::script('COM_TJCERTIFICATE_MEDIA_UPLOAD_ERROR');
 	}
 }
