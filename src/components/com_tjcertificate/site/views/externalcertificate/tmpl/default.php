@@ -10,50 +10,55 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+
+$dateFormat = $this->params->get('date_format_show');
+
 ?>
 <fieldset id="users-profile-core">
 	<legend>
-		<?php echo JText::_('COM_TJCERTIFICATE_EXTERNAL_CERTIFICATE_DETAIL_VIEW_HEAD'); ?>
+		<?php echo Text::_('COM_TJCERTIFICATE_EXTERNAL_CERTIFICATE_DETAIL_VIEW_HEAD'); ?>
 	</legend>
 	<dl class="dl-horizontal">
 		<dt>
-			<?php echo JText::_('COM_TJCERTIFICATE_FORM_LBL_CERTIFICATE_NAME'); ?>
+			<?php echo Text::_('COM_TJCERTIFICATE_FORM_LBL_CERTIFICATE_NAME'); ?>
 		</dt>
 		<dd>
 			<?php echo $this->escape($this->item->name); ?>
 		</dd>
 		<?php if ($this->item->cert_url) { ?>
 		<dt>
-			<?php echo JText::_('COM_TJCERTIFICATE_FORM_LBL_CERTIFICATE_URL'); ?>
+			<?php echo Text::_('COM_TJCERTIFICATE_FORM_LBL_CERTIFICATE_URL'); ?>
 		</dt>
 		<dd>
 			<a href="<?php echo $this->escape($this->item->cert_url); ?>" target="_blank"><?php echo $this->escape($this->item->cert_url); ?></a>
 		</dd>
 		<?php } ?>
 		<dt>
-			<?php echo JText::_('COM_TJCERTIFICATE_FORM_LBL_ISSUE_ORG'); ?>
+			<?php echo Text::_('COM_TJCERTIFICATE_FORM_LBL_ISSUE_ORG'); ?>
 		</dt>
 		<dd>
 			<?php echo $this->escape($this->item->issuing_org); ?>
 		</dd>
 		<dt>
-			<?php echo JText::_('COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_STATUS'); ?>
+			<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_STATUS'); ?>
 		</dt>
 		<dd>
 			<?php echo ucfirst($this->escape($this->item->status)); ?>
 		</dd>
 		<dt>
-			<?php echo JText::_('COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_ISSUED_DATE'); ?>
+			<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_ISSUED_DATE'); ?>
 		</dt>
 		<dd>
-			<?php echo JHtml::_('date', $this->item->issued_on, JText::_('COM_TJCERTIFICATE_CERTIFICATE_DATE_FORMAT')); ?>
+			<?php echo HTMLHelper::_('date', $this->item->issued_on, $dateFormat); ?>
 		</dd>
 		<?php if ($this->item->expired_on != "0000-00-00 00:00:00") { ?> 
 		<dt>
-			<?php echo JText::_('COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_EXPIRY_DATE'); ?>
+			<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_EXPIRY_DATE'); ?>
 		</dt>
 		<dd>
-			<?php echo JHtml::_('date', $this->item->expired_on, JText::_('COM_TJCERTIFICATE_CERTIFICATE_DATE_FORMAT')); ?>
+			<?php echo HTMLHelper::_('date', $this->item->expired_on, $dateFormat); ?>
 		</dd>
 		<?php } ?>
 		<?php if ($this->item->cert_file) { ?>
@@ -61,7 +66,7 @@ defined('_JEXEC') or die('Restricted access');
 		</dt>
 		<dd>
 			<?php if ($this->item->mediaData[0]->type === "image") { ?>
-				<img src="media/com_tjcertificate/external/image/<?php echo $this->item->cert_file; ?>">
+				<img src="<?php echo $this->item->mediaData[0]->path . '/' . $this->item->mediaData[0]->source;?>">
 			<?php } ?>
 			<a
 				class="mr-20"
@@ -75,7 +80,7 @@ defined('_JEXEC') or die('Restricted access');
 		<?php } ?>
 		<?php if ($this->item->comment) { ?>
 		<dt>
-			<?php echo JText::_('COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_COMMENT'); ?>
+			<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_COMMENT'); ?>
 		</dt>
 		<dd>
 			<?php echo $this->escape($this->item->comment); ?>

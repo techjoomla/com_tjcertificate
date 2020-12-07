@@ -26,11 +26,12 @@ class TJCertificateLanguage
 	 *
 	 * @since   _DEPLOY_VERSION_
 	 */
-	public function siteLanguageConstant()
+	public function JsLanguageConstant()
 	{
 		// Tjmedia js
 		Text::script('COM_TJCERTIFICATE_CONFIRM_DELETE_ATTACHMENT');
 		Text::script('COM_TJCERTIFICATE_MEDIA_INVALID_FILE_TYPE');
 		Text::script('COM_TJCERTIFICATE_MEDIA_UPLOAD_ERROR');
+		Text::script('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');
 	}
 }

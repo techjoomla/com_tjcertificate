@@ -139,6 +139,9 @@ class TjCertificateControllerExternalCertificate extends FormController
 		}
 
 		$this->setRedirect(JRoute::_('index.php?option=com_tjcertificate&view=certificates&layout=my', false));
+
+		// Flush the data from the session.
+		$app->setUserState('com_tjcertificate.edit.externalcertificate.data', null);
 	}
 
 	/**

@@ -40,44 +40,6 @@ class TjCertificateControllerCertificates extends AdminController
 	}
 
 	/**
-	 * Method to delete the record from frontend.
-	 *
-	 * @return  void|boolean
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function deleteCertificate()
-	{
-		$user = Factory::getUser();
-		$app  = Factory::getApplication();
-		$certificateId = $app->input->getInt('id');
-		$manageOwn = $user->authorise('certificate.external.manageown', 'com_tjcertificate');
-		$manage    = $user->authorise('certificate.external.manage', 'com_tjcertificate');
-
-		// If manageOwn permission then check record owner can only deleting own record
-		if ($manageOwn && !$manage)
-		{
-			$table = TJCERT::table("certificates");
-			$table->load(array('id' => (int) $certificateId, 'user_id' => $user->id));
-
-			if (!$table->id)
-			{
-				return false;
-			}
-		}
-
-		$model = $this->getModel();
-
-		// Remove the items.
-		if ($model->delete($certificateId))
-		{
-			$this->setMessage(Text::_('COM_TJCERTIFICATE_CERTIFICATE_DELETED_SUCCESSFULLY'));
-		}
-
-		$this->setRedirect(Route::_('index.php?option=com_tjcertificate&view=certificates&layout=my&Itemid=' . $itemId, false));
-	}
-
-	/**
 	 * Method to publish a list of records.
 	 *
 	 * @return  void

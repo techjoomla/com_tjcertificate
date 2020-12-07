@@ -61,7 +61,7 @@ class TjCertificateControllerExternalCertificate extends FormController
 
 		$params   = ComponentHelper::getParams('com_tjcertificate');
 		$filePath = $params->get('file_path', 'media/com_tjcertificate/external');
-		$clientId = $app->input->get('activityId', '', 'INT');
+		$clientId = $app->input->get('certificateId', '', 'INT');
 		$mediaId  = $app->input->get('mediaId', '', 'INT');
 
 		if (!$mediaId && !$clientId)
@@ -82,6 +82,62 @@ class TjCertificateControllerExternalCertificate extends FormController
 		{
 			echo new JResponseJson(null, Text::_('COM_TJCERTIFICATE_ATTACHMENT_DELETED_FAILED'), true);
 			$app->close();
+		}
+	}
+
+	/**
+	 * Method to delete the record from frontend.
+	 *
+	 * @return  void|boolean
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function delete()
+	{
+		$app = Factory::getApplication();
+
+		if (!Session::checkToken())
+		{
+			$app->enqueueMessage(Text::_('JINVALID_TOKEN'), 'error');
+			echo new JsonResponse(null, null, true);
+			$app->close();
+		}
+
+		$user = Factory::getUser();
+		$app  = Factory::getApplication();
+
+		$certificateId = $app->input->getInt('certificateId');
+		$manageOwn = $user->authorise('certificate.external.manageown', 'com_tjcertificate');
+		$manage    = $user->authorise('certificate.external.manage', 'com_tjcertificate');
+
+		// If manageOwn permission then check record owner can only deleting own record
+		if ($manageOwn && !$manage)
+		{
+			$table = TJCERT::table("certificates");
+			$table->load(array('id' => (int) $certificateId, 'user_id' => $user->id));
+
+			if (!$table->id)
+			{
+				echo new JsonResponse(null, Text::_('COM_TJCERTIFICATE_ERROR_SOMETHING_WENT_WRONG'), true);
+				$app->close();
+			}
+		}
+
+		$model = $this->getModel();
+
+		if ($manageOwn || $manage)
+		{
+			// Remove the items.
+			if ($model->delete($certificateId))
+			{
+				echo new JResponseJson($result, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DELETED_SUCCESSFULLY'), false);
+				$app->close();
+			}
+			else
+			{
+				echo new JResponseJson(null, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DELETED_FAILED'), true);
+				$app->close();
+			}
 		}
 	}
 }

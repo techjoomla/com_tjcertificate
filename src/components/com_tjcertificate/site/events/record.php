@@ -55,7 +55,7 @@ class TjCertificateTriggerRecord
 		switch ($isNew)
 		{
 			case true:
-					/* Send mail on campaign create */
+					/* Send mail on record create */
 					$this->tjCertificateMails->onAfterCreateRecord($recordDetails);
 				break;
 		}

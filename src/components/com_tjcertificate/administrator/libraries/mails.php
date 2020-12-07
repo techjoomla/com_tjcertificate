@@ -62,7 +62,7 @@ class TjCertificateMails
 	/**
 	 * Send mails when record is created
 	 *
-	 * @param   OBJECT  $recordDetails  Campaigns Detail
+	 * @param   OBJECT  $recordDetails  Record Detail
 	 *
 	 * @return void
 	 * 

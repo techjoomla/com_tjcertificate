@@ -23,6 +23,7 @@ HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
 HTMLHelper::_('formbehavior.chosen', 'select');
 HTMLHelper::_('behavior.modal', 'a.modal');
+HTMLHelper::_('jquery.token');
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
@@ -173,7 +174,7 @@ HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.js', $options);
 												<?php echo 'index.php?option=com_tjcertificate&view=externalcertificate&layout=edit&id=' . $item->id; ?>" title="<?php echo JText::_('JACTION_EDIT'); ?>">
 													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 												</a>										
-												<a class="d-inline-block mr-4" onclick="tjCertificateService.deleteItem('<?php echo $item->id; ?>',this, <?php echo $itemId ?>)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button"><i class="fa fa-trash"></i>
+												<a class="d-inline-block mr-4" onclick="tjCertificateService.deleteItem('<?php echo $item->id; ?>')" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button"><i class="fa fa-trash"></i>
 											<?php }
 											} ?>
 											<?php if ($this->manage && $item->is_external) { ?> 

@@ -132,9 +132,7 @@ class TJCERT
 	}
 
 	/**
-	 * Initializes the css, js and necessary dependencies
-	 *
-	 * @param   string  $location  The location where the assets needs to load
+	 * Initializes js lang constant dependencies
 	 *
 	 * @return  void
 	 *
@@ -142,6 +140,6 @@ class TJCERT
 	 */
 	public static function init()
 	{
-		self::Language()->siteLanguageConstant();
+		self::Language()->JsLanguageConstant();
 	}
 }

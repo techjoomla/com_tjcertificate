@@ -37,6 +37,8 @@
 			<option value="1">JYES</option>
 			<option value="0">JNo</option>
 		</field>
+		<field name="date_format_show" class="btn-group" default="Y-m-d H:i:s" type="inputbox" label="COM_TJCERTIFICATE_DATE_FORMAT_TO_SHOW" description="COM_TJCERTIFICATE_DATE_FORMAT_TO_SHOW_DESC">
+		</field>
 	</fieldset>
 
 	<!-- Social sharing -->

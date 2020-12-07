@@ -112,7 +112,7 @@ class TjCertificateModelExternalCertificate extends AdminModel
 		if (empty($data))
 		{
 			$data = $this->getItem();
-			$data->assigned_user_id= $data->user_id;
+			$data->assigned_user_id = $data->user_id;
 		}
 
 		return $data;
