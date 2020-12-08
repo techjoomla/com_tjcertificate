@@ -4,7 +4,7 @@
  * @subpackage  com_tjcertificate
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2020 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -22,6 +22,7 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Session\Session;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Response\JsonResponse;
+use Joomla\CMS\Table\Table;
 
 JLoader::import("/techjoomla/media/storage/local", JPATH_LIBRARIES);
 
@@ -33,7 +34,7 @@ JLoader::import("/techjoomla/media/storage/local", JPATH_LIBRARIES);
 class TjCertificateControllerExternalCertificate extends FormController
 {
 	/**
-	 * Function to delete the timelog activity attachment
+	 * Function to delete the record attachment
 	 *
 	 * @return  void
 	 *
@@ -59,8 +60,7 @@ class TjCertificateControllerExternalCertificate extends FormController
 			return false;
 		}
 
-		$params   = ComponentHelper::getParams('com_tjcertificate');
-		$filePath = $params->get('file_path', 'media/com_tjcertificate/external');
+		$filePath = 'media/com_tjcertificate/external';
 		$clientId = $app->input->get('certificateId', '', 'INT');
 		$mediaId  = $app->input->get('mediaId', '', 'INT');
 
@@ -104,7 +104,6 @@ class TjCertificateControllerExternalCertificate extends FormController
 		}
 
 		$user = Factory::getUser();
-		$app  = Factory::getApplication();
 
 		$certificateId = $app->input->getInt('certificateId');
 		$manageOwn = $user->authorise('certificate.external.manageown', 'com_tjcertificate');
@@ -123,13 +122,24 @@ class TjCertificateControllerExternalCertificate extends FormController
 			}
 		}
 
-		$model = $this->getModel();
+		$model = TJCERT::model('Certificate', array('ignore_request' => true));
 
 		if ($manageOwn || $manage)
 		{
-			// Remove the items.
+			// Remove the item
 			if ($model->delete($certificateId))
 			{
+				// Delete media
+				$model  = $this->getModel();
+				JLoader::import("/techjoomla/media/tables/xref", JPATH_LIBRARIES);
+				$tableXref = Table::getInstance('Xref', 'TJMediaTable');
+				$tableXref->load(array('client_id' => $certificateId));
+
+				if ($tableXref->media_id)
+				{
+					$model->deleteMedia($tableXref->media_id, 'media/com_tjcertificate/external', 'com_tjcertificate', $certificateId);
+				}
+
 				echo new JResponseJson($result, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DELETED_SUCCESSFULLY'), false);
 				$app->close();
 			}

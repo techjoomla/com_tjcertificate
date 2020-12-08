@@ -32,6 +32,8 @@ class TjCertificateViewExternalCertificate extends HtmlView
 
 	protected $params;
 
+	public $certificate = null;
+
 	/**
 	 * Display the view
 	 *
@@ -65,6 +67,7 @@ class TjCertificateViewExternalCertificate extends HtmlView
 			throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 403);
 		}
 
+		$this->certificate = TJCERT::Certificate();
 		$this->state = $this->get('State');
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');

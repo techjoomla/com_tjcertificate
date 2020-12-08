@@ -20,7 +20,7 @@ use Joomla\CMS\Language\Text;
 class TJCertificateLanguage
 {
 	/**
-	 * Site language constants to be used in front end
+	 * Language constants to be used in js
 	 *
 	 * @return   void
 	 *

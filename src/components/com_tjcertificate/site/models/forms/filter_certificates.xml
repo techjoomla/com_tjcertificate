@@ -19,6 +19,14 @@
 			clientByUser="1"
 			onchange="this.form.submit();" />
 
+		<field name="user_id"
+			type="users"
+			filter="safehtml"
+			label="COM_TJCERTIFICATE_CERTIFICATE_FILTER_USER"
+			description="COM_TJCERTIFICATE_CERTIFICATE_FILTER_USER"
+			addfieldpath="/components/com_tjcertificate/models/fields"
+			onchange="this.form.submit();" />
+
 		<input type="hidden" name="form_submited" value="1"/>
 	</fields>
 

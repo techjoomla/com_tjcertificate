@@ -1175,4 +1175,26 @@ class TjCertificateCertificate extends CMSObject
 			}
 		}
 	}
+
+	/**
+	 * Get formated date
+	 *
+	 * @param   string  $datetime  The current offset
+	 *
+	 * @return  string  formatted datetime
+	 *
+	 * @since  __DEPLOY_VERSION__
+	 **/
+	public function getFormatedDate($datetime)
+	{
+		$params   = ComponentHelper::getParams('com_tjcertificate');
+		$dateFormat = $params->get('date_format_show');
+
+		if ($dateFormat == "custom")
+		{
+			$dateFormat = $params->get('custom_format');
+		}
+
+		return HTMLHelper::_('date', $datetime, $dateFormat, true);
+	}
 }

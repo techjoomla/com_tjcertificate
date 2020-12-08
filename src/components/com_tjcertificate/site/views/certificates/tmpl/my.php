@@ -150,12 +150,12 @@ HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.js', $options);
 										}
 									?>
 								</td>
-								<td><?php echo HTMLHelper::date($item->issued_on, Text::_('DATE_FORMAT_LC')); ?></td>
+								<td><?php echo $this->certificate->getFormatedDate($item->issued_on); ?></td>
 								<td>
 									<?php
 									if (!empty($item->expired_on) && $item->expired_on != '0000-00-00 00:00:00')
 									{
-										echo HTMLHelper::date($item->expired_on, Text::_('DATE_FORMAT_LC'));
+										echo $this->certificate->getFormatedDate($item->expired_on);
 									}
 									else
 									{

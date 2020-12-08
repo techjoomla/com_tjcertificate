@@ -69,7 +69,7 @@ HTMLHelper::script('com_tjcertificate/tjmedia.min.js', $options);
 								class="mr-20"
 								href="<?php echo $this->item->mediaData[0]->path . '/' . $this->item->mediaData[0]->source;?>"
 								target=""
-								title="<?php echo $this->escape(strip_tags($this->item->mediaData[0]->title));?>">
+								title="<?php echo $this->escape(strip_tags($this->item->mediaData[0]->title));?>" download>
 								<?php echo $this->item->mediaData[0]->title;?>
 								<i class="fa fa-download" aria-hidden="true"></i>
 							</a>

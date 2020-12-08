@@ -12,9 +12,6 @@
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
-
-$dateFormat = $this->params->get('date_format_show');
-
 ?>
 <fieldset id="users-profile-core">
 	<legend>
@@ -51,14 +48,14 @@ $dateFormat = $this->params->get('date_format_show');
 			<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_ISSUED_DATE'); ?>
 		</dt>
 		<dd>
-			<?php echo HTMLHelper::_('date', $this->item->issued_on, $dateFormat); ?>
+			<?php echo $this->certificate->getFormatedDate($this->item->issued_on);?>
 		</dd>
 		<?php if ($this->item->expired_on != "0000-00-00 00:00:00") { ?> 
 		<dt>
 			<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_EXPIRY_DATE'); ?>
 		</dt>
 		<dd>
-			<?php echo HTMLHelper::_('date', $this->item->expired_on, $dateFormat); ?>
+			<?php echo $this->certificate->getFormatedDate($this->item->expired_on);?>
 		</dd>
 		<?php } ?>
 		<?php if ($this->item->cert_file) { ?>

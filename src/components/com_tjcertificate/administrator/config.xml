@@ -37,9 +37,19 @@
 			<option value="1">JYES</option>
 			<option value="0">JNo</option>
 		</field>
-		<field name="date_format_show" class="btn-group" default="Y-m-d H:i:s" type="inputbox" label="COM_TJCERTIFICATE_DATE_FORMAT_TO_SHOW" description="COM_TJCERTIFICATE_DATE_FORMAT_TO_SHOW_DESC">
+		<field name="date_format_show" class="btn-group" type="list" label="COM_TJCERTIFICATE_DATE_FORMAT_TO_SHOW" description="COM_TJCERTIFICATE_DATE_FORMAT_TO_SHOW_DESC">
+			<option value="Y-m-d H:i:s">COM_TJCERTIFICATE_DATE_FORMAT_1</option>
+			<option value="D, M d h:i A">COM_TJCERTIFICATE_DATE_FORMAT_2</option>
+			<option value="F j, Y, g:i a">COM_TJCERTIFICATE_DATE_FORMAT_3</option>
+			<option value="m.d.y">COM_TJCERTIFICATE_DATE_FORMAT_4</option>
+			<option value="j, n, Y">COM_TJCERTIFICATE_DATE_FORMAT_5</option>
+			<option value="h-i-s, j-m-y">COM_TJCERTIFICATE_DATE_FORMAT_6</option>
+			<option value="H:i:s">COM_TJCERTIFICATE_DATE_FORMAT_7</option>
+			<option value="custom">Custom</option>
 		</field>
-	</fieldset>
+		<field name="custom_format" class="inputbox" type="text" label="COM_TJCERTIFICATE_CUSTOM_DATE_FORMAT"
+			showon="date_format_show:custom" description="COM_TJCERTIFICATE_CUSTOM_DATE_FORMAT_DESC" />
+		</fieldset>
 
 	<!-- Social sharing -->
 	<fieldset name="social_sharing" label="COM_TJCERTIFICATE_SOCIAL_SHARING_SETINGS">
