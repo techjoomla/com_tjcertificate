@@ -44,10 +44,11 @@ class JFormFieldUsers extends JFormFieldList
 
 		$db = Factory::getDBO();
 		$query = $db->getQuery(true);
-		$query->select('distinct(id), name');
-		$query->from($db->quoteName('#__users'));
-		$query->where($db->qn('block') . ' = 0');
-		$query->order($db->escape('name' . ' ' . 'asc'));
+		$query->select('distinct(u.id), u.name');
+		$query->from($db->quoteName('#__tj_certificate_issue', 'ci'));
+		$query->join('INNER', '#__users AS u ON ci.user_id = u.id');
+		$query->where($db->qn('u.block') . ' = 0');
+		$query->order($db->escape('u.name' . ' ' . 'asc'));
 		$db->setQuery($query);
 		$users = $db->loadObjectList();
 
@@ -55,7 +56,7 @@ class JFormFieldUsers extends JFormFieldList
 
 		if ($loggedInuser->authorise('certificate.external.manage', 'com_tjcertificate'))
 		{
-			$options[] = HTMLHelper::_('select.option', "", Text::_('COM_TJCERTIFICATE_SELECT_USER'));
+			$options[] = HTMLHelper::_('select.option', "", Text::_('COM_TJCERTIFICATE_CERTIFICATE_FILTER_ISSUED_USER_SELECT'));
 
 			foreach ($users as $user)
 			{
@@ -66,7 +67,6 @@ class JFormFieldUsers extends JFormFieldList
 		{
 			$options[] = HTMLHelper::_('select.option', $loggedInuser->id, $loggedInuser->name);
 		}
-
 
 		return $options;
 	}
