@@ -37,7 +37,7 @@
 			<option value="1">JYES</option>
 			<option value="0">JNo</option>
 		</field>
-		<field name="date_format_show" class="btn-group" type="list" label="COM_TJCERTIFICATE_DATE_FORMAT_TO_SHOW" description="COM_TJCERTIFICATE_DATE_FORMAT_TO_SHOW_DESC">
+		<field name="date_format_show" class="btn-group" default="Y-m-d H:i:s" type="list" label="COM_TJCERTIFICATE_DATE_FORMAT_TO_SHOW" description="COM_TJCERTIFICATE_DATE_FORMAT_TO_SHOW_DESC">
 			<option value="Y-m-d H:i:s">COM_TJCERTIFICATE_DATE_FORMAT_1</option>
 			<option value="D, M d h:i A">COM_TJCERTIFICATE_DATE_FORMAT_2</option>
 			<option value="F j, Y, g:i a">COM_TJCERTIFICATE_DATE_FORMAT_3</option>
