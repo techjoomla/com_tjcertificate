@@ -12,17 +12,19 @@ var tjCertificateService = {
 	siteRoot: Joomla.getOptions("system.paths").base,
 	loadDefaultTemplateUrl: '/index.php?option=com_tjcertificate&task=template.loadDefaultTemplate&format=json',
 	loadCustomTemplateUrl: '/index.php?option=com_tjcertificate&task=template.loadCustomTemplate&format=json',
+	deleteAttachmentUrl: '/index.php?option=com_tjcertificate&task=externalcertificate.deleteAttachment&format=json',
+	deleteItemUrl: '/index.php?option=com_tjcertificate&task=externalcertificate.delete&format=json',
 
 	postData: function(url, formData, params) {
 		if(!params){
 			params = {};
 		}
 
-		params['url']		= this.siteRoot + url;
-		params['data'] 		= formData;
-		params['type'] 		= typeof params['type'] != "undefined" ? params['type'] : 'POST';
-		params['async'] 	= typeof params['async'] != "undefined" ? params['async'] :false;
-		params['dataType'] 	= typeof params['datatype'] != "undefined" ? params['datatype'] : 'json';
+		params['url']		    = this.siteRoot + url;
+		params['data'] 		    = formData;
+		params['type'] 		    = typeof params['type'] != "undefined" ? params['type'] : 'POST';
+		params['async'] 	    = typeof params['async'] != "undefined" ? params['async'] :false;
+		params['dataType'] 	    = typeof params['datatype'] != "undefined" ? params['datatype'] : 'json';
 		params['contentType'] 	= typeof params['contentType'] != "undefined" ? params['contentType'] : 'application/x-www-form-urlencoded; charset=UTF-8';
 		params['processData'] 	= typeof params['processData'] != "undefined" ? params['processData'] : true;
 
@@ -35,19 +37,58 @@ var tjCertificateService = {
 	loadCustomTemplate: function (formData, params) {
 		return this.postData(this.loadCustomTemplateUrl, formData, params);
 	},
-	deleteItem: function(certificateId, params, itemId) {
-		var id = parseInt(certificateId);
+	deleteAttachment: function (formData, params) {
+		return this.postData(this.deleteAttachmentUrl, formData, params);
+	},
+	deleteItem: function(certificateId) {
+		if (confirm(Joomla.JText._('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE')) == true) {
+			var formData = {};
 
-		if (isNaN(id) || id == '') {
-			return false;
+			if (certificateId == '' || certificateId === undefined)
+			{
+				return false;
+			}
+
+			formData['certificateId'] = certificateId;
+			var data = this.postData(this.deleteItemUrl, formData)
+
+			data.fail(
+				function(response) {
+					var messages = {
+						"error": [response.responseText]
+					};
+					tjCertificateService.renderMessage(messages);
+				}
+			).done(function(response) {
+
+				if (!response.success && response.message) {
+					var messages = {
+						"error": [response.message]
+					};
+					tjCertificateService.renderMessage(messages);
+				}
+
+				if (response.messages) {
+					tjCertificateService.renderMessage(response.messages);
+				}
+
+				if (response.success) {
+					tjCertificateService.renderMessage(response.message);
+				}
+
+				setTimeout(function() {
+					window.location.reload(1);
+				}, 2000);
+
+			});
 		}
-
-		var redirectURL = Joomla.getOptions('system.paths').base + '/index.php?option=com_tjcertificate&task=certificates.deleteCertificate&id=' + id + '&Itemid=' + itemId;
-
-		if (!confirm(jQuery(params).data("message"))) {
-			return false;
-		}
-
-		window.location.href = redirectURL;
-	}
+	},
+    renderMessage: function(msg) {
+        Joomla.renderMessages({
+            'alert alert-success': [msg]
+        });
+        jQuery("html, body").animate({
+            scrollTop: 0
+        }, 2000);
+    }
 }

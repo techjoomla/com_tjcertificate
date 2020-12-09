@@ -55,42 +55,47 @@ var tjMediaFile = {
             return false;
         }
     },
-    deleteAttachment: function(currentElement) {
-        if (confirm(Joomla.JText._('COM_TJCERTIFICATE_CONFIRM_DELETE_ATTACHMENT')) == true) {
-            var certificateId = jQuery(currentElement).attr('data-aid');
-            var mediaId = jQuery(currentElement).attr('data-mid');
+	deleteAttachment: function(currentElement) {
+		if (confirm(Joomla.JText._('COM_TJCERTIFICATE_CONFIRM_DELETE_ATTACHMENT')) == true) {
+			var formData = {};
 
-            jQuery.ajax({
-                url: Joomla.getOptions('system.paths').base + "/index.php?option=com_tjcertificate&task=externalcertificate.deleteAttachment&format=json",
-                data: {
-                    certificateId: certificateId,
-                    mediaId: mediaId,
-                },
-                type: 'POST',
-                dataType: 'JSON',
-                success: function(data) {
+			if (currentElement == '' || currentElement === undefined) {
+				return false;
+			}
 
-                    if (data.success === true) {
-                        tjMediaFile.renderMessage(data.message);
-                    } else {
-                        tjMediaFile.renderMessage(data.message);
-                    }
+			formData['certificateId'] = jQuery(currentElement).attr('data-aid');
+			formData['mediaId'] = jQuery(currentElement).attr('data-mid');
 
-                    setTimeout(function() {
-                        window.location.reload(1);
-                    }, 2000);
-                }
-            });
-        } else {
-            return false;
-        }
-    },
-    renderMessage: function(msg) {
-        Joomla.renderMessages({
-            'alert alert-success': [msg]
-        });
-        jQuery("html, body").animate({
-            scrollTop: 0
-        }, 2000);
-    }
+			var promise = tjCertificateService.deleteAttachment(formData);
+
+			promise.fail(
+				function(response) {
+					var messages = {
+						"error": [response.responseText]
+					};
+					tjCertificateService.renderMessage(messages);
+				}
+			).done(function(response) {
+
+				if (!response.success && response.message) {
+					var messages = {
+						"error": [response.message]
+					};
+					tjCertificateService.renderMessage(messages);
+				}
+
+				if (response.messages) {
+					tjCertificateService.renderMessage(response.messages);
+				}
+
+				if (response.success) {
+					tjCertificateService.renderMessage(response.message);
+				}
+
+				setTimeout(function() {
+					window.location.reload(1);
+				}, 2000);
+			});
+		}
+	}
 };

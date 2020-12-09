@@ -24,9 +24,9 @@ HTMLHelper::_('bootstrap.framework');
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 HTMLHelper::_('jquery.token');
 
-$options = array();
 $options['relative'] = true;
-HTMLHelper::script('com_tjcertificate/tjmedia.min.js', $options);
+HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
+HTMLHelper::_('script', 'com_tjcertificate/tjmedia.min.js', $options);
 
 ?>
 <form action="" class="form-validate form-horizontal"

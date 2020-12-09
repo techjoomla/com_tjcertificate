@@ -36,7 +36,7 @@ $menu   = $app->getMenu();
 $itemId = $menu->getActive()->id;
 
 $options['relative'] = true;
-HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.js', $options);
+HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
 
 ?>
 

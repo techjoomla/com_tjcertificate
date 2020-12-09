@@ -53,7 +53,6 @@ class TjCertificateControllerExternalCertificate extends FormController
 
 		// Get the current user id
 		$user = Factory::getuser();
-		$app  = Factory::getApplication();
 
 		if (!$user->id)
 		{
