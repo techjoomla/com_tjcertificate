@@ -94,8 +94,8 @@ HTMLHelper::_('script', 'com_tjcertificate/tjmedia.min.js', $options);
 
 	<div class="control-group">
 		<div class="controls">
-			<button onclick="Joomla.submitbutton('externalcertificate.save');" type="button" class="btn btn-primary"><?php echo Text::_('JSUBMIT'); ?></button>
-			<button type="button" class="btn btn-default"  onclick="Joomla.submitbutton('externalcertificate.cancel')">
+			<button onclick="Joomla.submitbutton('trainingrecord.save');" type="button" class="btn btn-primary"><?php echo Text::_('JSUBMIT'); ?></button>
+			<button type="button" class="btn btn-default"  onclick="Joomla.submitbutton('trainingrecord.cancel')">
 					<span><?php echo Text::_('JCANCEL'); ?></span>
 			</button>
 		</div>
@@ -103,7 +103,7 @@ HTMLHelper::_('script', 'com_tjcertificate/tjmedia.min.js', $options);
 	
 	<input type="hidden" name="jform[id]" id="id" value="<?php echo $this->item->id; ?>" />
 	<input type="hidden" name="option" value="com_tjcertificate"/>
-	<input type="hidden" name="task" value="externalcertificate.save"/>
+	<input type="hidden" name="task" value="trainingrecord.save"/>
 	<?php echo HTMLHelper::_( 'form.token'); ?>
 </form>
 

@@ -212,7 +212,7 @@ class TjCertificateModelCertificate extends AdminModel
 				if ($table->is_external)
 				{
 					$dispatcher = \JEventDispatcher::getInstance();
-					$dispatcher->trigger('onExternalCertificateAfterDelete', array($table));
+					$dispatcher->trigger('onTrainingRecordAfterDelete', array($table));
 				}
 			}
 		}
@@ -252,11 +252,11 @@ class TjCertificateModelCertificate extends AdminModel
 
 					if ($table->state == 1)
 					{
-						$dispatcher->trigger('onExternalCertificateAfterPublished', array($table));
+						$dispatcher->trigger('onTrainingRecordAfterPublished', array($table));
 					}
 					elseif ($table->state == 0)
 					{
-						$dispatcher->trigger('onExternalCertificateAfterUnpublished', array($table));
+						$dispatcher->trigger('onTrainingRecordAfterUnpublished', array($table));
 					}
 				}
 			}

@@ -20,11 +20,11 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 JLoader::import("/techjoomla/media/storage/local", JPATH_LIBRARIES);
 
 /**
- * TjCertificate External Certificate Model.
+ * TjCertificate Training Record Model.
  *
  * @since  __DEPLOY_VERSION__
  */
-class TjCertificateModelExternalCertificate extends AdminModel
+class TjCertificateModelTrainingRecord extends AdminModel
 {
 	/**
 	 * @var null  Item data
@@ -76,7 +76,7 @@ class TjCertificateModelExternalCertificate extends AdminModel
 	public function getForm($data = array(), $loadData = true)
 	{
 		// Get the form.
-		$form = $this->loadForm('com_tjcertificate.externalcertificate', 'externalcertificate', array('control' => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm('com_tjcertificate.trainingrecord', 'trainingrecord', array('control' => 'jform', 'load_data' => $loadData));
 
 		return empty($form) ? false : $form;
 	}
@@ -107,7 +107,7 @@ class TjCertificateModelExternalCertificate extends AdminModel
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_tjcertificate.edit.externalcertificate.data', array());
+		$data = Factory::getApplication()->getUserState('com_tjcertificate.edit.trainingrecord.data', array());
 
 		if (empty($data))
 		{

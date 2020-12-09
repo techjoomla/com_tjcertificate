@@ -25,11 +25,11 @@ use Joomla\CMS\Router\Route;
 JLoader::import("/techjoomla/media/storage/local", JPATH_LIBRARIES);
 
 /**
- * The Tj Certificate External Certificate controller
+ * The Tj Certificate Training Record controller
  *
  * @since  __DEPLOY_VERSION__
  */
-class TjCertificateControllerExternalCertificate extends FormController
+class TjCertificateControllerTrainingRecord extends FormController
 {
 	/**
 	 * Method to save a external certficate data.
@@ -91,10 +91,10 @@ class TjCertificateControllerExternalCertificate extends FormController
 			}
 
 			// Save the data in the session.
-			$app->setUserState('com_tjcertificate.edit.externalcertificate.data', $data);
+			$app->setUserState('com_tjcertificate.edit.trainingrecord.data', $data);
 
 			// Redirect back to the edit screen.
-			$redirectUrl = Route::_('index.php?option=com_tjcertificate&view=externalcertificate' . $this->getRedirectToItemAppend($recordId, $urlVar), false);
+			$redirectUrl = Route::_('index.php?option=com_tjcertificate&view=trainingrecord' . $this->getRedirectToItemAppend($recordId, $urlVar), false);
 			$this->setRedirect($redirectUrl);
 
 			return false;
@@ -141,7 +141,7 @@ class TjCertificateControllerExternalCertificate extends FormController
 		$this->setRedirect(Route::_('index.php?option=com_tjcertificate&view=certificates&layout=my', false));
 
 		// Flush the data from the session.
-		$app->setUserState('com_tjcertificate.edit.externalcertificate.data', null);
+		$app->setUserState('com_tjcertificate.edit.trainingrecord.data', null);
 	}
 
 	/**

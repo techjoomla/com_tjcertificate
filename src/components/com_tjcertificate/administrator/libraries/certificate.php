@@ -500,7 +500,7 @@ class TjCertificateCertificate extends CMSObject
 				JLoader::import('components.com_tjcertificate.events.record', JPATH_SITE);
 				$tjCertificateTriggerRecord = new TjCertificateTriggerRecord;
 				$tjCertificateTriggerRecord->onAfterRecordSave($this, true);
-				$dispatcher->trigger('onExternalCertificateAfterAdded', array($isNew, $this));
+				$dispatcher->trigger('onTrainingRecordAfterAdded', array($isNew, $this));
 			}
 
 			// Fire the onTjCertificateAfterSave event.
@@ -637,7 +637,7 @@ class TjCertificateCertificate extends CMSObject
 	{
 		if ($isExternal)
 		{
-			$url = 'index.php?option=com_tjcertificate&view=externalcertificate&id=' . $this->id;
+			$url = 'index.php?option=com_tjcertificate&view=trainingrecord&id=' . $this->id;
 		}
 		else
 		{

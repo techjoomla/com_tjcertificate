@@ -11,4 +11,4 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-JLoader::import('components.com_tjcertificate.models.externalcertificate', JPATH_ADMINISTRATOR);
+JLoader::import('components.com_tjcertificate.models.trainingrecord', JPATH_ADMINISTRATOR);

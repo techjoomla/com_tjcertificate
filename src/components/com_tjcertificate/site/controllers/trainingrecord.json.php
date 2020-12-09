@@ -27,11 +27,11 @@ use Joomla\CMS\Table\Table;
 JLoader::import("/techjoomla/media/storage/local", JPATH_LIBRARIES);
 
 /**
- * The Tj Certificate External Certificate controller
+ * The Tj Certificate Training Record controller
  *
  * @since  __DEPLOY_VERSION__
  */
-class TjCertificateControllerExternalCertificate extends FormController
+class TjCertificateControllerTrainingRecord extends FormController
 {
 	/**
 	 * Function to delete the record attachment

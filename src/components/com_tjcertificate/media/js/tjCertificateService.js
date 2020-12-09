@@ -12,8 +12,8 @@ var tjCertificateService = {
 	siteRoot: Joomla.getOptions("system.paths").base,
 	loadDefaultTemplateUrl: '/index.php?option=com_tjcertificate&task=template.loadDefaultTemplate&format=json',
 	loadCustomTemplateUrl: '/index.php?option=com_tjcertificate&task=template.loadCustomTemplate&format=json',
-	deleteAttachmentUrl: '/index.php?option=com_tjcertificate&task=externalcertificate.deleteAttachment&format=json',
-	deleteItemUrl: '/index.php?option=com_tjcertificate&task=externalcertificate.delete&format=json',
+	deleteAttachmentUrl: '/index.php?option=com_tjcertificate&task=trainingrecord.deleteAttachment&format=json',
+	deleteItemUrl: '/index.php?option=com_tjcertificate&task=trainingrecord.delete&format=json',
 
 	postData: function(url, formData, params) {
 		if(!params){

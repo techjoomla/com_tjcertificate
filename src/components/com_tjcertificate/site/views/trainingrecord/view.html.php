@@ -16,11 +16,11 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 
 /**
- * External Certificate view
+ * Training record view
  *
  * @since  __DEPLOY_VERSION__
  */
-class TjCertificateViewExternalCertificate extends HtmlView
+class TjCertificateViewTrainingRecord extends HtmlView
 {
 	protected $state;
 

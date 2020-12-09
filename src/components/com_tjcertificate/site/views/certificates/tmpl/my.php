@@ -53,11 +53,11 @@ HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $option
 			<?php
 			if ($this->create)
 			{
-				$slaActivityFormLink = 'index.php?option=com_tjcertificate&view=externalcertificate&layout=edit';
-				$addSlaActivityLink = Route::_($slaActivityFormLink);?>
+				$recordFormLink = 'index.php?option=com_tjcertificate&view=trainingrecord&layout=edit';
+				$addRecordLink = Route::_($recordFormLink);?>
 				<div class="">
-					<a class="btn btn-primary btn-small pull-right" href="<?php echo $addSlaActivityLink;?>">
-						<i class="icon-plus"></i><?php echo JText::_('COM_TJCERTIFICATE_ADD_EXTERNAL_CERTIFICATE'); ?>
+					<a class="btn btn-primary btn-small pull-right" href="<?php echo $addRecordLink;?>">
+						<i class="icon-plus"></i><?php echo Text::_('COM_TJCERTIFICATE_ADD_EXTERNAL_CERTIFICATE'); ?>
 					</a>
 				</div>
 			<?php
@@ -171,7 +171,7 @@ HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $option
 										<?php if ($this->manageOwn) { ?>
 											<?php if ($item->is_external && $item->state == 0) { ?>
 												<a class="d-inline-block mr-4" href="
-												<?php echo 'index.php?option=com_tjcertificate&view=externalcertificate&layout=edit&id=' . $item->id; ?>" title="<?php echo JText::_('JACTION_EDIT'); ?>">
+												<?php echo 'index.php?option=com_tjcertificate&view=trainingrecord&layout=edit&id=' . $item->id; ?>" title="<?php echo Text::_('JACTION_EDIT'); ?>">
 													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 												</a>										
 												<a class="d-inline-block mr-4" onclick="tjCertificateService.deleteItem('<?php echo $item->id; ?>')" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button"><i class="fa fa-trash"></i>
