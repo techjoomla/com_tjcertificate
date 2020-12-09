@@ -14,6 +14,9 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Component\ComponentHelper
 
 /**
  * Training record view
@@ -53,8 +56,8 @@ class TjCertificateViewTrainingRecord extends HtmlView
 
 		if (!$this->user->id)
 		{
-			$url      = base64_encode(JUri::getInstance()->toString());
-			$loginUrl = JRoute::_('index.php?option=com_users&view=login&return=' . $url, false);
+			$url      = base64_encode(Uri::getInstance()->toString());
+			$loginUrl = Route::_('index.php?option=com_users&view=login&return=' . $url, false);
 			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_ERROR_LOGIN_MESSAGE'), 'error');
 			$app->redirect($loginUrl);
 		}
@@ -71,7 +74,7 @@ class TjCertificateViewTrainingRecord extends HtmlView
 		$this->state = $this->get('State');
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
-		$this->params = JComponentHelper::getParams('com_tjcertificate');
+		$this->params = ComponentHelper::getParams('com_tjcertificate');
 		$this->allowedFileExtensions = $this->params->get('upload_extensions');
 		$this->uploadLimit      = $this->params->get('upload_maxsize', '1024');
 

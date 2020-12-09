@@ -31,9 +31,6 @@ $saveOrder = $listOrder == 'ci.id';
 
 $dispatcher = JDispatcher::getInstance();
 PluginHelper::importPlugin('content');
-$app    = Factory::getApplication();
-$menu   = $app->getMenu();
-$itemId = $menu->getActive()->id;
 
 $options['relative'] = true;
 HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
@@ -150,12 +147,12 @@ HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $option
 										}
 									?>
 								</td>
-								<td><?php echo $this->certificate->getFormatedDate($item->issued_on); ?></td>
+								<td><?php echo $certificateObj->getFormatedDate($item->issued_on); ?></td>
 								<td>
 									<?php
 									if (!empty($item->expired_on) && $item->expired_on != '0000-00-00 00:00:00')
 									{
-										echo $this->certificate->getFormatedDate($item->expired_on);
+										echo $certificateObj->getFormatedDate($item->expired_on);
 									}
 									else
 									{

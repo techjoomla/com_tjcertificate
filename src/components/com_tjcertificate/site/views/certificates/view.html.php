@@ -89,13 +89,6 @@ class TjCertificateViewCertificates extends JViewLegacy
 	public $create;
 
 	/**
-	 * Certificate obj
-	 *
-	 * @var  JObject
-	 */
-	public $certificate = null;
-
-	/**
 	 * Display the  view
 	 *
 	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
@@ -120,9 +113,10 @@ class TjCertificateViewCertificates extends JViewLegacy
 		// Get state
 		$this->state = $this->get('State');
 
-		$layout = $app->input->get('layout', "my");
+		$layout       = $app->input->get('layout', "my");
+		$this->manage = $this->user->authorise('certificate.external.manage', 'com_tjcertificate');
 
-		if ($layout == 'my' && !$this->user->authorise('core.admin'))
+		if ($layout == 'my' && !$this->manage)
 		{
 			// Show only logged-in user certificates
 			$this->state->set('filter.user_id', $this->user->id);
@@ -137,9 +131,7 @@ class TjCertificateViewCertificates extends JViewLegacy
 		$this->filterForm    = $this->get('FilterForm');
 		$this->activeFilters = $this->get('ActiveFilters');
 		$this->manageOwn     = $this->user->authorise('certificate.external.manageown', 'com_tjcertificate');
-		$this->manage	     = $this->user->authorise('certificate.external.manage', 'com_tjcertificate');
 		$this->create	     = $this->user->authorise('certificate.external.create', 'com_tjcertificate');
-		$this->certificate = TJCERT::Certificate();
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
