@@ -61,9 +61,12 @@ class JFormFieldGetClientList extends JFormFieldList
 			{
 				foreach ($listobjects as $obj)
 				{
-					$client    = str_replace(".", "_", $obj->client);
-					$langConst = strtoupper("COM_TJCERTIFICATE_CLIENT_" . $client);
-					$options[] = JHtml::_('select.option', $obj->client, TEXT::_($langConst));
+					if ($obj->client)
+					{
+						$client    = str_replace(".", "_", $obj->client);
+						$langConst = strtoupper("COM_TJCERTIFICATE_CLIENT_" . $client);
+						$options[] = JHtml::_('select.option', $obj->client, TEXT::_($langConst));
+					}
 				}
 			}
 		}

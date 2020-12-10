@@ -81,7 +81,6 @@ class TjCertificateModelCertificates extends ListModel
 		// Initialize variables.
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
-		$user = Factory::getUser();
 
 		$extension = Factory::getApplication()->input->get('extension', '', 'CMD');
 
@@ -131,7 +130,6 @@ class TjCertificateModelCertificates extends ListModel
 		}
 
 		// Filter by user id
-
 		$userId = $this->getState('filter.user_id');
 
 		if (!empty($userId))

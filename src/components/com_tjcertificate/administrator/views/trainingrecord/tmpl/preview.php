@@ -11,7 +11,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
 ?>
 <fieldset id="users-profile-core">
 	<legend>
@@ -68,17 +68,17 @@ use Joomla\CMS\HTML\HTMLHelper;
 				if ($this->item->mediaData[0]->type === "image") 
 				{ 
 				?>
-				<img src="<?php echo $this->item->mediaData[0]->path . '/' . $this->item->mediaData[0]->source;?>">
+				<img src="<?php echo Uri::root() . $this->item->mediaData[0]->path . '/' . $this->item->mediaData[0]->source;?>">
 				<?php 
-				} 
+				}
 				?>
 				<a
 					class="mr-20"
-					href="<?php echo $this->item->mediaData[0]->path . '/' . $this->item->mediaData[0]->source;?>"
+					href="<?php echo Uri::root() . $this->item->mediaData[0]->path . '/' . $this->item->mediaData[0]->source;?>"
 					target=""
-					title="<?php echo $this->escape(strip_tags($this->item->mediaData[0]->title));?>">
+					title="<?php echo $this->escape(strip_tags($this->item->mediaData[0]->title));?>" download>
 					<?php echo $this->item->mediaData[0]->title;?>
-					<i class="fa fa-download" aria-hidden="true"></i>
+					<i class="icon-download" aria-hidden="true"></i>
 				</a>
 		<?php } ?>
 		</dd>

@@ -214,6 +214,17 @@ class TjCertificateModelCertificate extends AdminModel
 					$dispatcher = \JEventDispatcher::getInstance();
 					$dispatcher->trigger('onTrainingRecordAfterDelete', array($table));
 				}
+
+				// Delete media
+				$model = TJCERT::model('TrainingRecord', array('ignore_request' => true));
+				JLoader::import("/techjoomla/media/tables/xref", JPATH_LIBRARIES);
+				$tableXref = Table::getInstance('Xref', 'TJMediaTable');
+				$tableXref->load(array('client_id' => $table->id));
+
+				if ($tableXref->media_id)
+				{
+					$model->deleteMedia($tableXref->media_id, 'media/com_tjcertificate/external', 'com_tjcertificate', $table->id);
+				}
 			}
 		}
 

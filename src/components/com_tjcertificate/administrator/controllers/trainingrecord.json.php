@@ -128,6 +128,17 @@ class TjCertificateControllerTrainingRecord extends FormController
 			// Remove the item
 			if ($model->delete($certificateId))
 			{
+				// Delete media
+				$model  = $this->getModel();
+				JLoader::import("/techjoomla/media/tables/xref", JPATH_LIBRARIES);
+				$tableXref = Table::getInstance('Xref', 'TJMediaTable');
+				$tableXref->load(array('client_id' => $certificateId));
+
+				if ($tableXref->media_id)
+				{
+					$model->deleteMedia($tableXref->media_id, 'media/com_tjcertificate/external', 'com_tjcertificate', $certificateId);
+				}
+
 				echo new JResponseJson($result, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DELETED_SUCCESSFULLY'), false);
 				$app->close();
 			}

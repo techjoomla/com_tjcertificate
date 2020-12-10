@@ -4,7 +4,7 @@
  * @subpackage  com_tjcertificate
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2020 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -14,14 +14,14 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
-use Joomla\CMS\Router\Route;
+use Joomla\CMS\Component\ComponentHelper;
 
 /**
  * View to edit
  *
  * @since  __DEPLOY_VERSION__
  */
-class TjCertificateViewCertificate extends HtmlView
+class TjCertificateViewTrainingRecord extends HtmlView
 {
 	/**
 	 * The JForm object
@@ -29,13 +29,6 @@ class TjCertificateViewCertificate extends HtmlView
 	 * @var  JForm
 	 */
 	protected $form;
-
-	/**
-	 * The certificate helper
-	 *
-	 * @var  object
-	 */
-	protected $certificateHelper;
 
 	/**
 	 * The active item
@@ -69,21 +62,15 @@ class TjCertificateViewCertificate extends HtmlView
 	 */
 	public function display($tpl = null)
 	{
-		$app         = Factory::getApplication();
 		$this->state = $this->get('State');
 		$this->item  = $this->get('Item');
-
-		// If training record then redirect to training record form
-		if ($this->item->is_external)
-		{
-			$app->redirect(
-				Route::_('index.php?option=com_tjcertificate&view=trainingrecord&layout=edit&id=' . $this->item->id, false)
-			);
-		}
-
 		$this->form  = $this->get('Form');
 		$this->input = Factory::getApplication()->input;
 		$this->canDo = JHelperContent::getActions('com_tjcertificate', 'certificate', $this->item->id);
+		$this->params = ComponentHelper::getParams('com_tjcertificate');
+		$this->allowedFileExtensions = $this->params->get('upload_extensions');
+		$this->uploadLimit      = $this->params->get('upload_maxsize', '1024');
+		$this->certificate = TJCERT::Certificate();
 
 		$layout = $this->input->get('layout', 'edit');
 
@@ -103,24 +90,17 @@ class TjCertificateViewCertificate extends HtmlView
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	protected function addToolbar()
 	{
 		$user       = Factory::getUser();
 		$userId     = $user->id;
 		$isNew      = empty($this->item->id);
-		JLoader::import('administrator.components.com_tjcertificate.helpers.tjcertificate', JPATH_SITE);
-
-		$this->certificateHelper = new TjCertificateHelper;
 
 		// Built the actions for new and existing records.
 		$canDo = $this->canDo;
 		$layout = Factory::getApplication()->input->get("layout");
-
-		JToolbarHelper::title(
-			Text::_('COM_TJCERTIFICATE_PAGE_VIEW_CERTIFICATE')
-		);
 
 		$app = Factory::getApplication();
 
@@ -138,15 +118,15 @@ class TjCertificateViewCertificate extends HtmlView
 			Factory::getApplication()->input->set('hidemainmenu', true);
 
 			JToolbarHelper::title(
-				Text::_('COM_TJCERTIFICATE_PAGE_' . ($isNew ? 'ADD_CERTIFICATE' : 'EDIT_CERTIFICATE')),
+				Text::_('COM_TJCERTIFICATE_PAGE_' . ($isNew ? 'ADD_TRAINING_RECORD' : 'EDIT_TRAINING_RECORD')),
 				'pencil-2 certificate-add'
 			);
 
 			if ($isNew)
 			{
-				JToolbarHelper::apply('certificate.apply');
-				JToolbarHelper::save('certificate.save');
-				JToolbarHelper::save2new('certificate.save2new');
+				JToolbarHelper::apply('trainingrecord.apply');
+				JToolbarHelper::save('trainingrecord.save');
+				JToolbarHelper::save2new('trainingrecord.save2new');
 			}
 			else
 			{
@@ -156,7 +136,6 @@ class TjCertificateViewCertificate extends HtmlView
 				$this->canSave($itemEditable);
 			}
 
-			JToolbarHelper::modal('templatePreview', 'icon-eye', 'COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_TOOLBAR_PREVIEW');
 			JToolbarHelper::cancel('certificate.cancel');
 		}
 
@@ -174,8 +153,8 @@ class TjCertificateViewCertificate extends HtmlView
 	{
 		if ($itemEditable)
 		{
-			JToolbarHelper::apply('certificate.apply');
-			JToolbarHelper::save('certificate.save');
+			JToolbarHelper::apply('trainingrecord.apply');
+			JToolbarHelper::save('trainingrecord.save');
 		}
 	}
 

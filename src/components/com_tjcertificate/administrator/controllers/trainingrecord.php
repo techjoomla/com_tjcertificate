@@ -32,7 +32,7 @@ JLoader::import("/techjoomla/media/storage/local", JPATH_LIBRARIES);
 class TjCertificateControllerTrainingRecord extends FormController
 {
 	/**
-	 * Method to save a external certficate data.
+	 * Method to save a training record data.
 	 *
 	 * @param   string  $key     The name of the primary key of the URL variable.
 	 * @param   string  $urlVar  The name of the URL variable if different from the primary key (sometimes required to avoid router collisions).
@@ -41,14 +41,14 @@ class TjCertificateControllerTrainingRecord extends FormController
 	 *
 	 * @since  __DEPLOY_VERSION__
 	 */
-	public function save($key = 'id', $urlVar = 'id')
+	public function save($key = null, $urlVar = null)
 	{
 		// Check for request forgeries.
 		$this->checkToken();
 		$app      = Factory::getApplication();
 		$user     = Factory::getUser();
-		$recordId = $this->input->getInt('id');
-		$params = ComponentHelper::getParams('com_tjcertificate');
+		$params   = ComponentHelper::getParams('com_tjcertificate');
+		$recordId = $app->input->get('id', '', 'int');
 
 		if (!$user->id)
 		{
@@ -57,27 +57,15 @@ class TjCertificateControllerTrainingRecord extends FormController
 
 		$commonClass = TJCERT::Common();
 
-		// Call common save function
 		if ($commonClass->saveTrainingRecord($app->input))
 		{
-			$this->setRedirect(Route::_('index.php?option=com_tjcertificate&view=certificates&layout=my', false));
+			$this->setMessage(Text::_('COM_TJCERTIFICATE_SAVE_SUCCESS'));
 
-			// Flush the data from the session.
-			$app->setUserState('com_tjcertificate.edit.trainingrecord.data', null);
+			// Redirect back to the edit screen.
+			$this->setRedirect(Route::_('index.php?option=com_tjcertificate&view=trainingrecord&layout=edit&id=' . $recordId, false));
 		}
-	}
 
-	/**
-	 * Cancel operation
-	 *
-	 * @return  void
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function cancel()
-	{
-		// Check for request forgeries.
-		$this->checkToken('request');
-		$this->setRedirect(Route::_('index.php?option=com_tjcertificate&view=certificates&layout=my', false));
+		// Flush the data from the session.
+		$app->setUserState('com_tjcertificate.edit.trainingrecord.data', null);
 	}
 }

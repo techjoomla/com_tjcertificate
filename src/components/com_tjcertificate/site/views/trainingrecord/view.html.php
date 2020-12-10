@@ -16,7 +16,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Router\Route;
-use Joomla\CMS\Component\ComponentHelper
+use Joomla\CMS\Component\ComponentHelper;
 
 /**
  * Training record view
@@ -53,26 +53,30 @@ class TjCertificateViewTrainingRecord extends HtmlView
 		$this->user  = Factory::getUser();
 		$layout = $this->input->get('layout');
 		$id     = $this->input->getInt('id');
+		$this->item  = $this->get('Item');
+		$this->certificate = TJCERT::Certificate();
+		$params = ComponentHelper::getParams('com_tjcertificate');
+		$this->manage = $this->user->authorise('certificate.external.manage', 'com_tjcertificate');
 
-		if (!$this->user->id)
+		if (!$this->manage)
 		{
-			$url      = base64_encode(Uri::getInstance()->toString());
-			$loginUrl = Route::_('index.php?option=com_users&view=login&return=' . $url, false);
-			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_ERROR_LOGIN_MESSAGE'), 'error');
-			$app->redirect($loginUrl);
+			// If certificate view is private then view is available only for record owner
+			if (!$params->get('certificate_scope') && Factory::getUser()->id != $this->item->user_id)
+			{
+				JError::raiseWarning(500, Text::_('JERROR_ALERTNOAUTHOR'));
+
+				return false;
+			}
 		}
 
 		$this->create = $this->user->authorise('certificate.external.create', 'com_tjcertificate');
-		$this->manage = $this->user->authorise('certificate.external.manage', 'com_tjcertificate');
 
 		if (!$this->create)
 		{
 			throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 403);
 		}
 
-		$this->certificate = TJCERT::Certificate();
 		$this->state = $this->get('State');
-		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
 		$this->params = ComponentHelper::getParams('com_tjcertificate');
 		$this->allowedFileExtensions = $this->params->get('upload_extensions');
