@@ -224,7 +224,7 @@ jQuery(document).ready(function() {
 });
 
 <?php
-if ($this->params->get('cert_image_gen_type') == 'canvas')
+if (empty($this->params->get('cert_image_gen_type')) || $this->params->get('cert_image_gen_type') == 'canvas')
 {
 ?>
 window.onload = function() {
