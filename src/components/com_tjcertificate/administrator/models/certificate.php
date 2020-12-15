@@ -249,6 +249,7 @@ class TjCertificateModelCertificate extends AdminModel
 		foreach ($ids as $id)
 		{
 			$table->load($id);
+			$oldState = $table->state;
 			$table->state = $state;
 
 			if ($table->store())
@@ -258,7 +259,12 @@ class TjCertificateModelCertificate extends AdminModel
 					JLoader::import('components.com_tjcertificate.events.record', JPATH_SITE);
 					$tjCertificateTriggerRecord = new TjCertificateTriggerRecord;
 
-					$tjCertificateTriggerRecord->onRecordStateChange($table, $table->state);
+					// If record state is pending then only send the approval email
+					if ($oldState == -1)
+					{
+						$tjCertificateTriggerRecord->onRecordStateChange($table, $table->state);
+					}
+
 					$dispatcher = \JEventDispatcher::getInstance();
 
 					if ($table->state == 1)

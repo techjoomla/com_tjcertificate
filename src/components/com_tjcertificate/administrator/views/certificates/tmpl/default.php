@@ -30,15 +30,8 @@ HTMLHelper::script('com_tjcertificate/certificateImage.min.js', $options);
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
-$saveOrder = $listOrder == 'ci.id';
 $dispatcher = JDispatcher::getInstance();
 PluginHelper::importPlugin('content');
-
-if ( $saveOrder )
-{
-	$saveOrderingUrl = 'index.php?option=com_tjcertificate&task=certificates.saveOrderAjax';
-	HTMLHelper::_('sortablelist.sortable', 'certificateList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
-}
 ?>
 
 <div class="tj-page">
@@ -110,6 +103,8 @@ if ( $saveOrder )
 								</th>
 								<th>
 									<?php echo Text::_('JGLOBAL_PREVIEW');?>
+								</th>
+								<th>
 								</th>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ID', 'ci.id', $listDirn, $listOrder); ?>
@@ -259,6 +254,9 @@ if ( $saveOrder )
 										</a>
 									<?php } ?>
 									</div>
+								</td>
+								<td>
+									<a href="<?php echo $link;?>" target="_blank" title="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_FRONTEND_PREVIEW');?>"><span class="icon-out-2"></span></a>
 								</td>
 								<td><?php echo (int) $item->id; ?></td>
 							</tr>

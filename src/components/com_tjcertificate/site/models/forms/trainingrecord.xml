@@ -55,6 +55,8 @@
 			menu_published="0"
 			size="25"
 			filter=""
+			validate="url" 
+			schemes="http,https"
 		/>
 
 		<field
@@ -81,7 +83,6 @@
 			todaybutton="false"
 			weeknumbers="false"
 			filltable="true"
-			maxyear="5"
 			label="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_ISSUED_DATE"
 			description="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_ISSUED_DATE_DESC"
 			size="25"
@@ -99,13 +100,14 @@
 			todaybutton="false"
 			weeknumbers="false"
 			filltable="true"
-			maxyear="5"
 			label="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_EXPIRY_DATE"
 			description="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_EXPIRY_DATE_DESC"
 			size="25"
+			onchange="tjCertificateService.validationEndDate(this)"
+			class="validate-expdate"
 		/>
 
-		<field name="status" type="list" label="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_STATUS" description="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_STATUS_DESC">
+		<field name="status" default="completed" type="list" label="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_STATUS" description="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_STATUS_DESC">
 		  <option value="attended">COM_TJCERTIFICATE_CERTIFICATE_FORM_STATUS_ATTENDED</option>
 		  <option value="completed">COM_TJCERTIFICATE_CERTIFICATE_FORM_STATUS_COMPLETED</option>
 		  <option value="passed">COM_TJCERTIFICATE_CERTIFICATE_FORM_STATUS_PASSED</option>

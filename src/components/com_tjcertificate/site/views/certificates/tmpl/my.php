@@ -34,7 +34,7 @@ PluginHelper::importPlugin('content');
 
 $options['relative'] = true;
 HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
-
+HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 ?>
 
 <div class="tj-page tjBs3">
@@ -164,24 +164,48 @@ HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $option
 										<div class="hide">
 										<?php echo HTMLHelper::_('grid.id', $i, $item->id); ?>
 										</div>
+										<!-- If user have manage permission then permission to edit and delete any record -->
+										<?php
+										$editLink = 'index.php?option=com_tjcertificate&view=trainingrecord&layout=edit&id=' . $item->id;
 
-										<?php if ($this->manageOwn) { ?>
-											<?php if ($item->is_external && $item->state == 0) { ?>
-												<a class="d-inline-block mr-4" href="
-												<?php echo 'index.php?option=com_tjcertificate&view=trainingrecord&layout=edit&id=' . $item->id; ?>" title="<?php echo Text::_('JACTION_EDIT'); ?>">
+										if ($this->manage && $item->is_external) 
+										{ ?>
+												<a class="d-inline-block" href="
+												<?php echo $editLink; ?>" title="<?php echo Text::_('JACTION_EDIT'); ?>">
 													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 												</a>										
-												<a class="d-inline-block mr-4" onclick="tjCertificateService.deleteItem('<?php echo $item->id; ?>')" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button"><i class="fa fa-trash"></i>
-											<?php }
-											} ?>
-											<?php if ($this->manage && $item->is_external) { ?> 
-												<a class="d-inline-block mr-4" onclick="listItemTask('cb<?php echo $i;?>', 'certificates.<?php echo $item->state == 0 ? 'publish' : 'unpublish';?>')" class="btn btn-mini" type="button">
-												<?php if ($item->state == 0) { ?>
+												<a class="d-inline-block p-5" onclick="tjCertificateService.deleteItem('<?php echo $item->id; ?>')" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button"><i class="fa fa-trash"></i>
+										<?php 
+										} ?>
+
+										<?php 
+										if ((!$this->manage && $this->manageOwn) && ($item->is_external && $item->state != 1)) 
+										{ ?>
+												<a class="d-inline-block" href="
+												<?php echo $editLink; ?>" title="<?php echo Text::_('JACTION_EDIT'); ?>">
+													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+												</a>										
+												<a class="d-inline-block p-5" onclick="tjCertificateService.deleteItem('<?php echo $item->id; ?>')" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button"><i class="fa fa-trash"></i>
+										<?php 
+										} ?>
+
+										<?php 
+										if ($this->manage && $item->is_external) 
+										{ ?> 
+											<a class="d-inline-block" onclick="listItemTask('cb<?php echo $i;?>', 'certificates.<?php echo ($item->state == -1 ||$item->state == 0)  ? 'publish' : 'unpublish';?>')" class="btn btn-mini" type="button">
+											<?php 
+											if ($item->state == -1 || $item->state == 0) 
+											{ ?>
 												<i class="fa fa-window-close"></i>
-												<?php } else {?>
+											<?php 
+											} 
+											elseif ($item->state == 1) 
+											{ ?>
 												<i class="fa fa-check-square"></i>
-												<?php } ?>
-									<?php } ?>
+											<?php 
+											} ?>
+									<?php 
+										} ?>
 									<?php 
 										if (!$item->is_external || !$this->manageOwn) 
 										{

@@ -70,18 +70,18 @@ HTMLHelper::_('script', 'com_tjcertificate/tjmedia.min.js', $options);
 					 <?php 	
 					 if ($this->item->mediaData[0]) 
 					 {
+						$downloadAttachmentLink = Uri::root() . 'index.php?option=com_tjcertificate&task=trainingrecord.downloadAttachment&id=' . $this->item->mediaData[0]->media_id . '&recordId=' . $this->item->id;
 						echo '<input type="hidden" name="oldFiles" value="'. $this->item->mediaData[0]->media_id . '">';
 					?>
 					<span class="help-block">
+						<?php echo $this->item->mediaData[0]->title;?>
 						<a
-							class="mr-20"
-							href="<?php echo Uri::root() . $this->item->mediaData[0]->path . '/' . $this->item->mediaData[0]->source;?>"
+							class="p-5"
+							href="<?php echo $downloadAttachmentLink;?>"
 							target=""
-							title="<?php echo $this->escape(strip_tags($this->item->mediaData[0]->title));?>" download>
-							<?php echo $this->item->mediaData[0]->title;?>
-							<i class="fa fa-download" aria-hidden="true"></i>
+							title="<?php echo $this->escape(strip_tags($this->item->mediaData[0]->title)); ?>">
+							<i class="icon-download" aria-hidden="true"></i>
 						</a>
-						
 						<i class="icon-trash"
 								title="<?php echo Text::_('COM_TJCERTIFICATE_ATTACHMENT_DELETE');?>"
 								data-mid="<?php echo $this->item->mediaData[0]->media_id;?>"

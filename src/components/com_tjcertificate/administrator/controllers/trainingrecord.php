@@ -47,25 +47,183 @@ class TjCertificateControllerTrainingRecord extends FormController
 		$this->checkToken();
 		$app      = Factory::getApplication();
 		$user     = Factory::getUser();
-		$params   = ComponentHelper::getParams('com_tjcertificate');
-		$recordId = $app->input->get('id', '', 'int');
+		$recordId = $app->input->getInt('id');
+		$params = ComponentHelper::getParams('com_tjcertificate');
 
 		if (!$user->id)
 		{
 			throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 403);
 		}
 
-		$commonClass = TJCERT::Common();
+		$data  = $app->input->get('jform', array(), 'array');
 
-		if ($commonClass->saveTrainingRecord($app->input))
+		$model = $this->getModel();
+
+		// Validate the posted data.
+		$form = $model->getForm($data, false);
+
+		if (!$form)
 		{
-			$this->setMessage(Text::_('COM_TJCERTIFICATE_SAVE_SUCCESS'));
+			throw new \Exception($model->getError(), 500);
+		}
+
+		$validData = $model->validate($form, $data);
+
+		// Check for validation errors.
+		if ($validData === false)
+		{
+			// Get the validation messages.
+			$errors = $model->getErrors();
+
+			if (!empty($errors))
+			{
+				// Push up to three validation messages out to the user.
+				for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++)
+				{
+					if ($errors[$i] instanceof Exception)
+					{
+						$app->enqueueMessage($errors[$i]->getMessage(), 'warning');
+					}
+					else
+					{
+						$app->enqueueMessage($errors[$i], 'warning');
+					}
+				}
+			}
+
+			// Save the data in the session.
+			$app->setUserState('com_tjcertificate.edit.trainingrecord.data', $data);
 
 			// Redirect back to the edit screen.
 			$this->setRedirect(Route::_('index.php?option=com_tjcertificate&view=trainingrecord&layout=edit&id=' . $recordId, false));
+
+			return false;
 		}
+
+		if ($validData['assigned_user_id'])
+		{
+			$validData['user_id'] = $validData['assigned_user_id'];
+		}
+		else
+		{
+			$validData['user_id'] = $user->id;
+		}
+
+		$validData['client'] = "external";
+		$validData['state'] = $validData['state'] ? $validData['state'] : "-1";
+		$validData['is_external'] = 1;
+
+		$file = $app->input->files->get('jform', array(), 'array');
+
+		if (!empty($file['cert_file']))
+		{
+			$validData['old_media_ids'] = $app->input->get('oldFiles', 0, 'INT');
+			$uploadData = $model->uploadMedia($file, $validData);
+			$validData['cert_file'] = $uploadData['source'];
+		}
+
+		$certificateModel = TJCERT::model('Certificate', array('ignore_request' => true));
+
+		$certificateModel->save($validData);
+
+		$modelMediaXref = TJMediaXref::getInstance();
+
+		if ($uploadData['id'])
+		{
+			$mediaData['id'] = '';
+			$mediaData['client_id'] = $certificateModel->getState('certificate.id');
+			$mediaData['media_id'] = $uploadData['id'];
+			$mediaData['client'] = 'com_tjcertificate';
+			$modelMediaXref->bind($mediaData);
+			$modelMediaXref->save();
+		}
+
+		$this->setMessage(Text::_('COM_TJCERTIFICATE_TRAINING_RECORD_SAVE_SUCCESSFULLY'));
+
+		// Redirect back to the edit screen.
+		$this->setRedirect(
+			Route::_('index.php?option=com_tjcertificate&view=trainingrecord&layout=edit&id=' . $certificateModel->getState('certificate.id'), false)
+			);
 
 		// Flush the data from the session.
 		$app->setUserState('com_tjcertificate.edit.trainingrecord.data', null);
+	}
+
+	/**
+	 * Cancel operation
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function cancel()
+	{
+		// Check for request forgeries.
+		$this->checkToken('request');
+
+		// Clear data from session.
+		\JFactory::getApplication()->setUserState('com_tjcertificate.edit.trainingrecord.data', null);
+
+		$this->setRedirect(Route::_('index.php?option=com_tjcertificate&view=certificates&layout=my', false));
+	}
+
+	/**
+	 * Downloads the file requested by user
+	 *
+	 * @return  boolean|void
+	 *
+	 * @since  __DEPLOY_VERSION__
+	 */
+	public function downloadAttachment()
+	{
+		$app  = Factory::getApplication();
+		$user = Factory::getUser();
+
+		if (!$user->id)
+		{
+			throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 403);
+
+			return false;
+		}
+
+		$clientId = $app->input->get('recordId', '', 'INT');
+		$mediaId  = $app->input->get('id', '', 'INT');
+
+		$manageOwn = $user->authorise('certificate.external.manageown', 'com_tjcertificate');
+		$manage    = $user->authorise('certificate.external.manage', 'com_tjcertificate');
+
+		// If manageOwn permission then check record owner can only download own record
+		if ($manageOwn && !$manage)
+		{
+			$table = TJCERT::table("certificates");
+			$table->load(array('id' => (int) $clientId, 'user_id' => $user->id));
+
+			if (!$table->id)
+			{
+				throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 403);
+			}
+		}
+
+		$params = ComponentHelper::getParams('com_tjcertificate');
+
+		if (!$mediaId && !$clientId)
+		{
+			return false;
+		}
+
+		$config              = array();
+		$config['mediaId']   = $mediaId;
+
+		// Assign client id as Record Id
+		$config['client_id'] = $clientId;
+		$config['client']    = 'com_tjcertificate';
+		$mediaAttachmentData = TJMediaXref::getInstance($config);
+		$folderName          = explode('.', $mediaAttachmentData->media->type);
+
+		$downloadPath        = JPATH_SITE . '/' . 'media/com_tjcertificate/external';
+		$downloadPath        = $downloadPath . '/' . $folderName[0] . '/' . $mediaAttachmentData->media->source;
+
+		$media               = TJMediaStorageLocal::getInstance();
+		$media->downloadMedia($downloadPath);
 	}
 }

@@ -90,5 +90,19 @@ var tjCertificateService = {
         jQuery("html, body").animate({
             scrollTop: 0
         }, 2000);
-    }
+    },
+	validationEndDate: function(expDateObj) {
+		var expDate   = jQuery(expDateObj).val();
+		var issueDate = jQuery('#jform_issued_on').val();
+
+		jQuery(document).ready(function(){
+			document.formvalidator.setHandler('expdate', function (value) {
+				if (issueDate < expDate == false)
+				{
+					tjCertificateService.renderMessage(Joomla.JText._('COM_TJCERTIFICATE_EXPIRY_DATE_VALIDATION_MESSAGE'));
+					jQuery('#jform_expired_on').val("");
+				}
+			});
+		});
+	}
 }

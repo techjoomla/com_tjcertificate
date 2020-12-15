@@ -136,7 +136,14 @@ class TjCertificateViewTrainingRecord extends HtmlView
 				$this->canSave($itemEditable);
 			}
 
-			JToolbarHelper::cancel('certificate.cancel');
+			if (empty($this->item->id))
+			{
+				JToolbarHelper::cancel('certificate.cancel');
+			}
+			else
+			{
+				JToolbarHelper::cancel('certificate.cancel', 'JTOOLBAR_CLOSE');
+			}
 		}
 
 		JToolbarHelper::divider();

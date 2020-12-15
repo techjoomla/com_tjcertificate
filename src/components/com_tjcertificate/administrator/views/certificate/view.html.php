@@ -157,7 +157,15 @@ class TjCertificateViewCertificate extends HtmlView
 			}
 
 			JToolbarHelper::modal('templatePreview', 'icon-eye', 'COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_TOOLBAR_PREVIEW');
-			JToolbarHelper::cancel('certificate.cancel');
+
+			if (empty($this->item->id))
+			{
+				JToolbarHelper::cancel('certificate.cancel');
+			}
+			else
+			{
+				JToolbarHelper::cancel('certificate.cancel', 'JTOOLBAR_CLOSE');
+			}
 		}
 
 		JToolbarHelper::divider();

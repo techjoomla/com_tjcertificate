@@ -60,8 +60,8 @@ class TjCertificateControllerTrainingRecord extends FormController
 		}
 
 		$filePath = 'media/com_tjcertificate/external';
-		$clientId = $app->input->get('certificateId', '', 'INT');
-		$mediaId  = $app->input->get('mediaId', '', 'INT');
+		$clientId = $app->input->get('certificateId', 0, 'INT');
+		$mediaId  = $app->input->get('mediaId', 0, 'INT');
 
 		if (!$mediaId && !$clientId)
 		{

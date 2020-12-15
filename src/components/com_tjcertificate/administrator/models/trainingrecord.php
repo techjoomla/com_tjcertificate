@@ -16,6 +16,7 @@ use Joomla\CMS\Table\Table;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Language\Text;
 
 JLoader::import("/techjoomla/media/storage/local", JPATH_LIBRARIES);
 
@@ -208,7 +209,8 @@ class TjCertificateModelTrainingRecord extends AdminModel
 		// Making file delete path
 		$mediaPresent = $filetable->load($mediaId);
 
-		$mediaType    = explode(".", $filetable->type);
+		$mediaType  = explode(".", $filetable->type);
+		$deletePath = $deletePath . '/' . $mediaType[0];
 
 		// If Media is present
 		if ($checkMediaDataExist)
@@ -220,7 +222,6 @@ class TjCertificateModelTrainingRecord extends AdminModel
 			if ($mediaXrefLib->delete())
 			{
 				// If media xref delete then delete main entry from media_files
-
 				$mediaLib = TJMediaStorageLocal::getInstance(array('id' => $mediaId, 'uploadPath' => $deletePath));
 
 				// Checking Media is present or not
@@ -258,5 +259,32 @@ class TjCertificateModelTrainingRecord extends AdminModel
 		}
 
 		return true;
+	}
+
+	/**
+	 * Method to validate the form data.
+	 *
+	 * @param   \JForm  $form  The form to validate against.
+	 * @param   Array   $data  The data to validate.
+	 *
+	 * @return  array|boolean  Array of filtered data if valid, false otherwise.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function validate($form, $data)
+	{
+		$return = true;
+		$return = parent::validate($form, $data);
+
+		if (!empty($data['expired_on']))
+		{
+			if ($data['issued_on'] > $data['expired_on'])
+			{
+				$this->setError(Text::_('COM_TJCERTIFICATE_EXPIRY_DATE_VALIDATION_MESSAGE'));
+				$return = false;
+			}
+		}
+
+		return $return;
 	}
 }

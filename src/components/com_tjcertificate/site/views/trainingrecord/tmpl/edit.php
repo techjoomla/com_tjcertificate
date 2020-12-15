@@ -15,6 +15,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Session\Session;
+use Joomla\CMS\Uri\Uri;
 
 HTMLHelper::_('behavior.formvalidation');
 HTMLHelper::_('behavior.modal');
@@ -55,35 +56,35 @@ HTMLHelper::_('script', 'com_tjcertificate/tjmedia.min.js', $options);
 					 echo $this->form->renderField('issued_on'); 
 					 echo $this->form->renderField('expired_on'); 
 					 echo $this->form->renderField('status'); 
-					 echo $this->form->renderField('cert_file');
 					 ?>
-					 <?php 	
-					 if ($this->item->mediaData[0]) {
-						echo '<input type="hidden" name="oldFiles" value="'. $this->item->mediaData[0]->media_id . '">';
-					?>
-					<div class="control-group">
-					<div class="controls w-100 control-group-fwidth">
-					 <ul class="list-unstyled">
-						<li>
+				<div class="control-group">
+					<div class="control-label"><?php echo $this->form->getLabel('cert_file'); ?></div>
+					<div class="controls ">
+						<?php echo $this->form->getInput('cert_file'); ?>
+						 <?php 	
+						 if ($this->item->mediaData[0]) 
+						 {
+							$downloadAttachmentLink = Uri::root() . 'index.php?option=com_tjcertificate&task=trainingrecord.downloadAttachment&id=' . $this->item->mediaData[0]->media_id . '&recordId=' . $this->item->id;
+							echo '<input type="hidden" name="oldFiles" value="'. $this->item->mediaData[0]->media_id . '">';
+						?>
+						<span class="help-block">
+							<?php echo $this->item->mediaData[0]->title;?>
 							<a
-								class="mr-20"
-								href="<?php echo $this->item->mediaData[0]->path . '/' . $this->item->mediaData[0]->source;?>"
+								class="p-5"
+								href="<?php echo $downloadAttachmentLink;?>"
 								target=""
-								title="<?php echo $this->escape(strip_tags($this->item->mediaData[0]->title));?>" download>
-								<?php echo $this->item->mediaData[0]->title;?>
+								title="<?php echo $this->escape(strip_tags($this->item->mediaData[0]->title)); ?>">
 								<i class="fa fa-download" aria-hidden="true"></i>
-							</a>
-							
+							</a>						
 							<i class="fa fa-trash"
 									title="<?php echo Text::_('COM_TJCERTIFICATE_ATTACHMENT_DELETE');?>"
 									data-mid="<?php echo $this->item->mediaData[0]->media_id;?>"
 									data-aid="<?php echo $this->item->id;?>"
 									onclick="tjMediaFile.deleteAttachment(this)"></i>
-						</li>
-					</ul>
+						</span>
+						<?php } ?>
 					</div>
-					</div>
-					<?php } ?>
+				</div>
 					<?php
 					 echo $this->form->renderField('created_by', null, null, ['class' => 'hidden']);
 					 echo $this->form->renderField('comment'); 
@@ -110,4 +111,7 @@ HTMLHelper::_('script', 'com_tjcertificate/tjmedia.min.js', $options);
 <script type="text/javascript">
 var allowedAttachments = '<?php echo $this->allowedFileExtensions; ?>';
 var attachmentMaxSize  = '<?php echo $this->uploadLimit; ?>';
+
+
+
 </script>

@@ -46,7 +46,7 @@ class JFormFieldUsers extends JFormFieldList
 		$query = $db->getQuery(true);
 		$query->select('distinct(u.id), u.name');
 		$query->from($db->quoteName('#__tj_certificate_issue', 'ci'));
-		$query->join('INNER', '#__users AS u ON ci.user_id = u.id');
+		$query->join('LEFT', '#__users AS u ON ci.user_id = u.id');
 		$query->where($db->qn('u.block') . ' = 0');
 		$query->order($db->escape('u.name' . ' ' . 'asc'));
 		$db->setQuery($query);

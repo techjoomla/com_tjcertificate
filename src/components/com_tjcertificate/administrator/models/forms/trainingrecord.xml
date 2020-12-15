@@ -37,6 +37,8 @@
 			description="COM_TJCERTIFICATE_FORM_LBL_CERTIFICATE_URL_DESC"
 			menu_published="0"
 			filter=""
+			validate="url" 
+			schemes="http,https"
 		/>
 
 		<field
@@ -70,8 +72,6 @@
 			todaybutton="false"
 			weeknumbers="false"
 			filltable="true"
-			minyear="-1"
-			maxyear="5"
 			label="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_ISSUED_DATE"
 			description="COM_TJCERTIFICATE_CERTIFICATE_FORM_DESC_CERTIFICATE_ISSUED_DATE"
 		/>
@@ -88,10 +88,10 @@
 			todaybutton="false"
 			weeknumbers="false"
 			filltable="true"
-			minyear="-1"
-			maxyear="5"
 			label="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_EXPIRY_DATE"
 			description="COM_TJCERTIFICATE_CERTIFICATE_FORM_DESC_CERTIFICATE_EXPIRY_DATE"
+			onchange="tjCertificateService.validationEndDate(this)"
+			class="validate-expdate"
 		/>
 
 		<field name="status" type="list" label="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_STATUS" description="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_STATUS_DESC">
@@ -120,8 +120,7 @@
 			size="1">
 				<option value="1">JPUBLISHED</option>
 				<option value="0">JUNPUBLISHED</option>
-				<option value="2">JARCHIVED</option>
-				<option value="-2">JTRASHED</option>
+				<option value="-1">COM_TJCERTIFICATE_STATUS_PENDING</option>
 		</field>
 
 		<field
