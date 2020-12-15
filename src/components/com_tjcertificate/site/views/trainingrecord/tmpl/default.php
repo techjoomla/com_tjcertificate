@@ -12,6 +12,8 @@
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
+
 ?>
 <fieldset id="users-profile-core">
 	<legend>
@@ -64,7 +66,9 @@ use Joomla\CMS\HTML\HTMLHelper;
 		<dd>
 			<?php 
 			if ($this->item->mediaData[0]) 
-			{ 
+			{
+				$downloadAttachmentLink = Uri::root() . 'index.php?option=com_tjcertificate&task=trainingrecord.downloadAttachment&id=' . $this->item->mediaData[0]->media_id . '&recordId=' . $this->item->id;
+
 				if ($this->item->mediaData[0]->type === "image") 
 				{ 
 				?>
@@ -72,12 +76,12 @@ use Joomla\CMS\HTML\HTMLHelper;
 				<?php 
 				} 
 				?>
+				<?php echo $this->item->mediaData[0]->title;?>
 				<a
-					class="mr-20"
-					href="<?php echo $this->item->mediaData[0]->path . '/' . $this->item->mediaData[0]->source;?>"
+					class="p-5"
+					href="<?php echo $downloadAttachmentLink;?>"
 					target=""
-					title="<?php echo $this->escape(strip_tags($this->item->mediaData[0]->title));?>" download>
-					<?php echo $this->item->mediaData[0]->title;?>
+					title="<?php echo $this->escape(strip_tags($this->item->mediaData[0]->title)); ?>">
 					<i class="fa fa-download" aria-hidden="true"></i>
 				</a>
 		<?php } ?>
