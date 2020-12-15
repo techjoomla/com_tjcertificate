@@ -211,7 +211,7 @@ PluginHelper::importPlugin('content');
 								<td>
 									<?php
 									$utcNow = Factory::getDate()->toSql();
-
+									$link = "";
 									if ($item->expired_on > $utcNow || $item->expired_on == '0000-00-00 00:00:00')
 									{
 										// Get TJcertificate url for display certificate
@@ -256,7 +256,9 @@ PluginHelper::importPlugin('content');
 									</div>
 								</td>
 								<td>
+									<?php if ($link) { ?>
 									<a href="<?php echo $link;?>" target="_blank" title="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_FRONTEND_PREVIEW');?>"><span class="icon-out-2"></span></a>
+									<?php } ?>
 								</td>
 								<td><?php echo (int) $item->id; ?></td>
 							</tr>
