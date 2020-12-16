@@ -33,6 +33,10 @@ JLoader::import("/techjoomla/media/storage/local", JPATH_LIBRARIES);
  */
 class TjCertificateControllerTrainingRecord extends FormController
 {
+	public $mediaPath = 'media/com_tjcertificate/external';
+
+	public $client    = 'com_tjcertificate';
+
 	/**
 	 * Function to delete the record attachment
 	 *
@@ -59,7 +63,6 @@ class TjCertificateControllerTrainingRecord extends FormController
 			return false;
 		}
 
-		$filePath = 'media/com_tjcertificate/external';
 		$clientId = $app->input->get('certificateId', 0, 'INT');
 		$mediaId  = $app->input->get('mediaId', 0, 'INT');
 
@@ -70,7 +73,7 @@ class TjCertificateControllerTrainingRecord extends FormController
 		}
 
 		$model  = $this->getModel();
-		$result = $model->deleteMedia($mediaId, $filePath, 'com_tjcertificate', $clientId);
+		$result = $model->deleteMedia($mediaId, $this->mediaPath, $this->client, $clientId);
 
 		if ($result)
 		{
@@ -105,8 +108,8 @@ class TjCertificateControllerTrainingRecord extends FormController
 		$user = Factory::getUser();
 
 		$certificateId = $app->input->getInt('certificateId');
-		$manageOwn = $user->authorise('certificate.external.manageown', 'com_tjcertificate');
-		$manage    = $user->authorise('certificate.external.manage', 'com_tjcertificate');
+		$manageOwn = $user->authorise('certificate.external.manageown', $this->client);
+		$manage    = $user->authorise('certificate.external.manage', $this->client);
 
 		// If manageOwn permission then check record owner can only deleting own record
 		if ($manageOwn && !$manage)
@@ -136,7 +139,7 @@ class TjCertificateControllerTrainingRecord extends FormController
 
 				if ($tableXref->media_id)
 				{
-					$model->deleteMedia($tableXref->media_id, 'media/com_tjcertificate/external', 'com_tjcertificate', $certificateId);
+					$model->deleteMedia($tableXref->media_id, $this->mediaPath, $this->client, $certificateId);
 				}
 
 				echo new JResponseJson($result, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DELETED_SUCCESSFULLY'), false);

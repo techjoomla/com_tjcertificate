@@ -19,7 +19,7 @@ use Joomla\CMS\Router\Route;
 /**
  * View to edit
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.0.0
  */
 class TjCertificateViewCertificate extends HtmlView
 {

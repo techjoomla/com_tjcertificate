@@ -120,7 +120,6 @@
 			size="1">
 				<option value="1">JPUBLISHED</option>
 				<option value="0">JUNPUBLISHED</option>
-				<option value="-1">COM_TJCERTIFICATE_STATUS_PENDING</option>
 		</field>
 
 		<field
