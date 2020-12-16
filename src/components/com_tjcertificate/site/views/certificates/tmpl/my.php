@@ -34,6 +34,7 @@ PluginHelper::importPlugin('content');
 
 $options['relative'] = true;
 HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
+HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 ?>
 
@@ -174,7 +175,7 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 												<?php echo $editLink; ?>" title="<?php echo Text::_('JACTION_EDIT'); ?>">
 													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 												</a>										
-												<a class="d-inline-block p-5" onclick="tjCertificateService.deleteItem('<?php echo $item->id; ?>')" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button"><i class="fa fa-trash"></i>
+												<a class="d-inline-block p-5" onclick="certificate.deleteItem('<?php echo $item->id; ?>')" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button"><i class="fa fa-trash"></i>
 										<?php 
 										} ?>
 
@@ -185,7 +186,7 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 												<?php echo $editLink; ?>" title="<?php echo Text::_('JACTION_EDIT'); ?>">
 													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 												</a>										
-												<a class="d-inline-block p-5" onclick="tjCertificateService.deleteItem('<?php echo $item->id; ?>')" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button"><i class="fa fa-trash"></i>
+												<a class="d-inline-block p-5" onclick="certificate.deleteItem('<?php echo $item->id; ?>')" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button"><i class="fa fa-trash"></i>
 										<?php 
 										} ?>
 

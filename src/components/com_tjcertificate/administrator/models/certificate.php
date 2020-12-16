@@ -220,10 +220,12 @@ class TjCertificateModelCertificate extends AdminModel
 				JLoader::import("/techjoomla/media/tables/xref", JPATH_LIBRARIES);
 				$tableXref = Table::getInstance('Xref', 'TJMediaTable');
 				$tableXref->load(array('client_id' => $table->id));
+				$mediaPath = TJCERT::getMediaPath();
+				$client    = TJCERT::getClient();
 
 				if ($tableXref->media_id)
 				{
-					$model->deleteMedia($tableXref->media_id, 'media/com_tjcertificate/external', 'com_tjcertificate', $table->id);
+					$model->deleteMedia($tableXref->media_id, $mediaPath, $client, $table->id);
 				}
 			}
 		}

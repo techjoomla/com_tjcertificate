@@ -40,69 +40,7 @@ var tjCertificateService = {
 	deleteAttachment: function (formData, params) {
 		return this.postData(this.deleteAttachmentUrl, formData, params);
 	},
-	deleteItem: function(certificateId) {
-		if (confirm(Joomla.JText._('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE')) == true) {
-			var formData = {};
-
-			if (certificateId == '' || certificateId === undefined)
-			{
-				return false;
-			}
-
-			formData['certificateId'] = certificateId;
-			var data = this.postData(this.deleteItemUrl, formData)
-
-			data.fail(
-				function(response) {
-					var messages = {
-						"error": [response.responseText]
-					};
-					tjCertificateService.renderMessage(messages);
-				}
-			).done(function(response) {
-
-				if (!response.success && response.message) {
-					var messages = {
-						"error": [response.message]
-					};
-					tjCertificateService.renderMessage(messages);
-				}
-
-				if (response.messages) {
-					tjCertificateService.renderMessage(response.messages);
-				}
-
-				if (response.success) {
-					tjCertificateService.renderMessage(response.message);
-				}
-
-				setTimeout(function() {
-					window.location.reload(1);
-				}, 2000);
-
-			});
-		}
-	},
-    renderMessage: function(msg) {
-        Joomla.renderMessages({
-            'alert alert-success': [msg]
-        });
-        jQuery("html, body").animate({
-            scrollTop: 0
-        }, 2000);
-    },
-	validationEndDate: function(expDateObj) {
-		var expDate   = jQuery(expDateObj).val();
-		var issueDate = jQuery('#jform_issued_on').val();
-
-		jQuery(document).ready(function(){
-			document.formvalidator.setHandler('expdate', function (value) {
-				if (issueDate < expDate == false)
-				{
-					tjCertificateService.renderMessage(Joomla.JText._('COM_TJCERTIFICATE_EXPIRY_DATE_VALIDATION_MESSAGE'));
-					jQuery('#jform_expired_on').val("");
-				}
-			});
-		});
+	deleteItem: function (formData, params) {
+		return this.postData(this.deleteItemUrl, formData, params);
 	}
 }

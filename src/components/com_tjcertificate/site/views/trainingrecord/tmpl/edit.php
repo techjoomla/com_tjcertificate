@@ -27,7 +27,7 @@ HTMLHelper::_('jquery.token');
 
 $options['relative'] = true;
 HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
-HTMLHelper::_('script', 'com_tjcertificate/tjmedia.min.js', $options);
+HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 
 ?>
 <form action="" class="form-validate form-horizontal"
@@ -80,7 +80,7 @@ HTMLHelper::_('script', 'com_tjcertificate/tjmedia.min.js', $options);
 									title="<?php echo Text::_('COM_TJCERTIFICATE_ATTACHMENT_DELETE');?>"
 									data-mid="<?php echo $this->item->mediaData[0]->media_id;?>"
 									data-aid="<?php echo $this->item->id;?>"
-									onclick="tjMediaFile.deleteAttachment(this)"></i>
+									onclick="certificate.deleteAttachment(this)"></i>
 						</span>
 						<?php } ?>
 					</div>

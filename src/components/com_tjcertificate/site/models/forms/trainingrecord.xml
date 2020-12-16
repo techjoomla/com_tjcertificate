@@ -73,7 +73,6 @@
 		<field
 			name="issued_on"
 			type="calendar"
-			default=""
 			required="true"
 			filter="user_utc"
 			format="%Y-%m-%d %H:%M:%S"
@@ -91,7 +90,6 @@
 		<field
 			name="expired_on"
 			type="calendar"
-			default=""
 			filter="user_utc"
 			format="%Y-%m-%d %H:%M:%S"
 			singleheader="true"
@@ -103,7 +101,7 @@
 			label="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_EXPIRY_DATE"
 			description="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_EXPIRY_DATE_DESC"
 			size="25"
-			onchange="tjCertificateService.validationEndDate(this)"
+			onchange="certificate.validationEndDate(this)"
 			class="validate-expdate"
 		/>
 
@@ -119,7 +117,7 @@
 			type="file"
 			label="COM_TJCERTIFICATE_FORM_LBL_CERTIFICATE_FILE"
 			description="COM_TJCERTIFICATE_FORM_LBL_CERTIFICATE_FILE_DESC"
-			onchange="tjMediaFile.validateFile(this)"
+			onchange="certificate.validateFile(this)"
 			accept="image/jpeg,image/png,image/jpg,application/pdf" />
 
 		<field name="comment"

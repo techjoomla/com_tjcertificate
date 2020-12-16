@@ -138,7 +138,7 @@ class TjCertificateModelTrainingRecord extends AdminModel
 
 		if (!empty($file['cert_file']))
 		{
-			$filePath = 'media/com_tjcertificate/external';
+			$filePath = TJCERT::getMediaPath();
 			$uploadedFileExtension = strtolower($params->get('upload_extensions', '', 'STRING'));
 			$fileExtensionType     = explode(',', $uploadedFileExtension);
 
@@ -276,7 +276,7 @@ class TjCertificateModelTrainingRecord extends AdminModel
 		$return = true;
 		$return = parent::validate($form, $data);
 
-		if (!empty($data['expired_on']))
+		if (!empty($data['expired_on']) && $data['expired_on'] != '0000-00-00 00:00:00')
 		{
 			if ($data['issued_on'] > $data['expired_on'])
 			{

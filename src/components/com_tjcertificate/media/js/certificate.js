@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-var tjMediaFile = {
+var certificate = {
     validateFile: function(thisFile) {
         /** Validation is for file field only */
         if (jQuery(thisFile).attr('type') != 'file') {
@@ -73,7 +73,7 @@ var tjMediaFile = {
 					var messages = {
 						"error": [response.responseText]
 					};
-					tjCertificateService.renderMessage(messages);
+					certificate.renderMessage(messages);
 				}
 			).done(function(response) {
 
@@ -81,15 +81,15 @@ var tjMediaFile = {
 					var messages = {
 						"error": [response.message]
 					};
-					tjCertificateService.renderMessage(messages);
+					certificate.renderMessage(messages);
 				}
 
 				if (response.messages) {
-					tjCertificateService.renderMessage(response.messages);
+					certificate.renderMessage(response.messages);
 				}
 
 				if (response.success) {
-					tjCertificateService.renderMessage(response.message);
+					certificate.renderMessage(response.message);
 				}
 
 				setTimeout(function() {
@@ -97,5 +97,69 @@ var tjMediaFile = {
 				}, 2000);
 			});
 		}
+	},
+	deleteItem: function(certificateId) {
+		if (confirm(Joomla.JText._('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE')) == true) {
+			var formData = {};
+
+			if (certificateId == '' || certificateId === undefined) {
+				return false;
+			}
+
+			formData['certificateId'] = certificateId;
+
+			var promise = tjCertificateService.deleteItem(formData);
+
+			promise.fail(
+				function(response) {
+					var messages = {
+						"error": [response.responseText]
+					};
+					certificate.renderMessage(messages);
+				}
+			).done(function(response) {
+
+				if (!response.success && response.message) {
+					var messages = {
+						"error": [response.message]
+					};
+					certificate.renderMessage(messages);
+				}
+
+				if (response.messages) {
+					certificate.renderMessage(response.messages);
+				}
+
+				if (response.success) {
+					certificate.renderMessage(response.message);
+				}
+
+				setTimeout(function() {
+					window.location.reload(1);
+				}, 2000);
+			});
+		}
+	},
+    renderMessage: function(msg) {
+        Joomla.renderMessages({
+            'alert alert-success': [msg]
+        });
+        jQuery("html, body").animate({
+            scrollTop: 0
+        }, 2000);
+    },
+	validationEndDate: function(expDateObj) {
+		var expDate   = jQuery(expDateObj).val();
+		var issueDate = jQuery('#jform_issued_on').val();
+
+		jQuery(document).ready(function(){
+			document.formvalidator.setHandler('expdate', function (value) {
+				if (issueDate < expDate == false)
+				{
+					certificate.renderMessage(Joomla.JText._('COM_TJCERTIFICATE_EXPIRY_DATE_VALIDATION_MESSAGE'));
+					jQuery('#jform_expired_on').val("");
+				}
+			});
+		});
 	}
 };

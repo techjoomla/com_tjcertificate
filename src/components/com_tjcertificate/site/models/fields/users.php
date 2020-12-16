@@ -44,7 +44,7 @@ class JFormFieldUsers extends JFormFieldList
 
 		$db = Factory::getDBO();
 		$query = $db->getQuery(true);
-		$query->select('distinct(u.id), u.name');
+		$query->select('distinct(ci.user_id), u.name');
 		$query->from($db->quoteName('#__tj_certificate_issue', 'ci'));
 		$query->join('LEFT', '#__users AS u ON ci.user_id = u.id');
 		$query->where($db->qn('u.block') . ' = 0');
@@ -60,7 +60,7 @@ class JFormFieldUsers extends JFormFieldList
 
 			foreach ($users as $user)
 			{
-				$options[] = HTMLHelper::_('select.option', $user->id, $user->name);
+				$options[] = HTMLHelper::_('select.option', $user->user_id, $user->name);
 			}
 		}
 		else

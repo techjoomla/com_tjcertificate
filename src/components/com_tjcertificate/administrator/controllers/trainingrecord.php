@@ -133,7 +133,7 @@ class TjCertificateControllerTrainingRecord extends FormController
 			$mediaData['id'] = '';
 			$mediaData['client_id'] = $certificateModel->getState('certificate.id');
 			$mediaData['media_id'] = $uploadData['id'];
-			$mediaData['client'] = 'com_tjcertificate';
+			$mediaData['client'] = TJCERT::getClient();
 			$modelMediaXref->bind($mediaData);
 			$modelMediaXref->save();
 		}
@@ -216,11 +216,12 @@ class TjCertificateControllerTrainingRecord extends FormController
 
 		// Assign client id as Record Id
 		$config['client_id'] = $clientId;
-		$config['client']    = 'com_tjcertificate';
+		$config['client']    = TJCERT::getClient();
+		$mediaPath           = TJCERT::getMediaPath();
 		$mediaAttachmentData = TJMediaXref::getInstance($config);
 		$folderName          = explode('.', $mediaAttachmentData->media->type);
 
-		$downloadPath        = JPATH_SITE . '/' . 'media/com_tjcertificate/external';
+		$downloadPath        = JPATH_SITE . '/' . $mediaPath;
 		$downloadPath        = $downloadPath . '/' . $folderName[0] . '/' . $mediaAttachmentData->media->source;
 
 		$media               = TJMediaStorageLocal::getInstance();

@@ -77,13 +77,17 @@ use Joomla\CMS\Uri\Uri;
 				} 
 				?>
 				<?php echo $this->item->mediaData[0]->title;?>
-				<a
-					class="p-5"
-					href="<?php echo $downloadAttachmentLink;?>"
-					target=""
-					title="<?php echo $this->escape(strip_tags($this->item->mediaData[0]->title)); ?>">
-					<i class="fa fa-download" aria-hidden="true"></i>
-				</a>
+
+				<!-- Downlaod option available for who have manage permission and record owner -->
+				<?php if ($this->manage || $this->item->user_id == $this->user->id) { ?>
+					<a
+						class="p-5"
+						href="<?php echo $downloadAttachmentLink;?>"
+						target=""
+						title="<?php echo $this->escape(strip_tags($this->item->mediaData[0]->title)); ?>">
+						<i class="fa fa-download" aria-hidden="true"></i>
+					</a>
+				<?php } ?>
 		<?php } ?>
 		</dd>
 		<?php } ?>

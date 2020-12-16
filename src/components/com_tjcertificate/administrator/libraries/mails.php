@@ -52,7 +52,7 @@ class TjCertificateMails
 		$this->sitename            = $this->siteConfig->get('sitename');
 		$this->siteadminname       = $this->siteConfig->get('fromname');
 		$this->user                = Factory::getUser();
-		$this->client              = "com_tjcertificate";
+		$this->client              = TJCERT::getClient();
 		$this->tjnotifications     = new Tjnotifications;
 
 		$this->siteinfo            = new stdClass;
