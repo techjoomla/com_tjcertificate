@@ -23,7 +23,6 @@ HTMLHelper::_('behavior.keepalive');
 HTMLHelper::_('behavior.tooltip');
 HTMLHelper::_('bootstrap.framework');
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
-HTMLHelper::StyleSheet('media/com_tjcertificate/vendors/font-awesome-4.1.0/css/font-awesome.min.css');
 HTMLHelper::_('jquery.token');
 
 $options['relative'] = true;
