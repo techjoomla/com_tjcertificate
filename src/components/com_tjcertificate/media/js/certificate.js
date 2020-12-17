@@ -98,7 +98,7 @@ var certificate = {
 			});
 		}
 	},
-	deleteItem: function(certificateId) {
+	deleteItem: function(certificateId, obj) {
 		if (confirm(Joomla.JText._('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE')) == true) {
 			var formData = {};
 
@@ -134,9 +134,7 @@ var certificate = {
 					certificate.renderMessage(response.message);
 				}
 
-				setTimeout(function() {
-					window.location.reload(1);
-				}, 2000);
+				jQuery(obj).closest("tr").remove();
 			});
 		}
 	},
