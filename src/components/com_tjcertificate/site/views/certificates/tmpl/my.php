@@ -34,7 +34,7 @@ PluginHelper::importPlugin('content');
 
 $options['relative'] = true;
 HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
-HTMLHelper::_('script', 'com_tjcertificate/certificate.js', $options);
+HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 ?>
 

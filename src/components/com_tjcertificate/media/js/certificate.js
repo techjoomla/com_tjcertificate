@@ -92,9 +92,7 @@ var certificate = {
 					certificate.renderMessage(response.message);
 				}
 
-				setTimeout(function() {
-					window.location.reload(1);
-				}, 2000);
+				jQuery(currentElement).closest("span.fileupload").remove();
 			});
 		}
 	},

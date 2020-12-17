@@ -73,7 +73,7 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 						$downloadAttachmentLink = Uri::root() . 'index.php?option=com_tjcertificate&task=trainingrecord.downloadAttachment&id=' . $this->item->mediaData[0]->media_id . '&recordId=' . $this->item->id;
 						echo '<input type="hidden" name="oldFiles" value="'. $this->item->mediaData[0]->media_id . '">';
 					?>
-					<span class="help-block">
+					<span class="help-block fileupload">
 						<?php echo $this->item->mediaData[0]->title;?>
 						<a
 							class="p-5"
