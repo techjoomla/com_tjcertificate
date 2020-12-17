@@ -44,6 +44,10 @@ class TJCERT
 	 */
 	private static $config = null;
 
+	public static $client = "com_tjcertificate";
+
+	public static $mediaPath = "media/com_tjcertificate/external";
+
 	/**
 	 * Retrieves a table from the table folder
 	 *
@@ -129,5 +133,41 @@ class TJCERT
 		}
 
 		return self::$loadedClass[$className];
+	}
+
+	/**
+	 * Initializes js lang constant dependencies
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public static function init()
+	{
+		self::Language()->JsLanguageConstant();
+	}
+
+	/**
+	 * Method to get client
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getClient()
+	{
+		return self::$client;
+	}
+
+	/**
+	 * Method to get external media path
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getMediaPath()
+	{
+		return self::$mediaPath;
 	}
 }

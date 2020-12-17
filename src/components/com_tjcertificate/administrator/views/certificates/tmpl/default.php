@@ -30,15 +30,8 @@ HTMLHelper::script('com_tjcertificate/certificateImage.min.js', $options);
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
-$saveOrder = $listOrder == 'ci.id';
 $dispatcher = JDispatcher::getInstance();
 PluginHelper::importPlugin('content');
-
-if ( $saveOrder )
-{
-	$saveOrderingUrl = 'index.php?option=com_tjcertificate&task=certificates.saveOrderAjax';
-	HTMLHelper::_('sortablelist.sortable', 'certificateList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
-}
 ?>
 
 <div class="tj-page">
@@ -112,6 +105,8 @@ if ( $saveOrder )
 									<?php echo Text::_('JGLOBAL_PREVIEW');?>
 								</th>
 								<th>
+								</th>
+								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ID', 'ci.id', $listDirn, $listOrder); ?>
 								</th>
 							</tr>
@@ -127,6 +122,7 @@ if ( $saveOrder )
 							<?php
 							foreach ($this->items as $i => $item)
 							{
+								$certificateObj = TJCERT::Certificate($item->id);
 								$data = $dispatcher->trigger('getCertificateClientData', array($item->client_id, $item->client));
 								$item->max_ordering = 0;
 
@@ -183,14 +179,21 @@ if ( $saveOrder )
 								</td>
 								<td>
 									<?php
-									echo (!empty($data[0]->title)) ? $data[0]->title : '-';
+										if ($item->is_external)
+										{
+											echo $item->name;									
+										}
+										else
+										{
+											echo ($data[0]->title ? $data[0]->title : "-");
+										}
 									?>
 								</td>
-								<td><?php echo HTMLHelper::date($item->issued_on, Text::_('DATE_FORMAT_LC')); ?></td>
+								<td><?php echo $certificateObj->getFormatedDate($item->issued_on); ?></td>
 								<td><?php
 									if (!empty($item->expired_on) && $item->expired_on != '0000-00-00 00:00:00')
 									{
-										echo HTMLHelper::date($item->expired_on, Text::_('DATE_FORMAT_LC'));
+										echo $certificateObj->getFormatedDate($item->expired_on);
 									}
 									else
 									{
@@ -208,12 +211,20 @@ if ( $saveOrder )
 								<td>
 									<?php
 									$utcNow = Factory::getDate()->toSql();
-
+									$link = "";
 									if ($item->expired_on > $utcNow || $item->expired_on == '0000-00-00 00:00:00')
 									{
 										// Get TJcertificate url for display certificate
 										$urlOpts = array ('absolute' => true);
-										$link = TJCERT::Certificate($item->id)->getUrl($urlOpts, false);
+										
+										if ($item->is_external)
+										{
+											$link = $certificateObj->getUrl($urlOpts, false, true);
+										}
+										else
+										{	
+											$link = $certificateObj->getUrl($urlOpts, false);
+										}
 									?>
 									<div class="btn-group">
 									<a id="copyurl<?php echo $item->id;?>" data-toggle="popover"
@@ -233,10 +244,21 @@ if ( $saveOrder )
 								</td>
 								<td>
 									<div class="btn-group">
-									<a id="" href="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate&layout=preview&tmpl=component&id=' . (int) $item->id, false);?>" class="btn hasTooltip modal" type="button">
-										<?php echo Text::_('JGLOBAL_PREVIEW');?>
-									</a>
+									<?php if (!$item->is_external) { ?>
+										<a id="" href="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate&layout=preview&tmpl=component&id=' . (int) $item->id, false);?>" class="btn hasTooltip modal" type="button">
+											<?php echo Text::_('JGLOBAL_PREVIEW');?>
+										</a>
+									<?php } else { ?>
+										<a id="" href="<?php echo Route::_('index.php?option=com_tjcertificate&view=trainingrecord&layout=preview&tmpl=component&id=' . (int) $item->id, false);?>" class="btn hasTooltip modal" type="button">
+											<?php echo Text::_('JGLOBAL_PREVIEW');?>
+										</a>
+									<?php } ?>
 									</div>
+								</td>
+								<td>
+									<?php if ($link) { ?>
+									<a href="<?php echo $link;?>" target="_blank" title="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_FRONTEND_PREVIEW');?>"><span class="icon-out-2"></span></a>
+									<?php } ?>
 								</td>
 								<td><?php echo (int) $item->id; ?></td>
 							</tr>

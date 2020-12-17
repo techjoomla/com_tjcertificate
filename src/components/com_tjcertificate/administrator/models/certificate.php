@@ -188,4 +188,99 @@ class TjCertificateModelCertificate extends AdminModel
 
 		return trim(implode("\n", $html));
 	}
+
+	/**
+	 * Method to delete record
+	 *
+	 * @param   array  $certificateIds  post data
+	 *
+	 * @return  boolean  True on success.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function delete($certificateIds)
+	{
+		$certificateIds  = (array) $certificateIds;
+		$table    = $this->getTable('Certificates');
+
+		foreach ($certificateIds as $certificateId)
+		{
+			$table->load(array('id' => (int) $certificateId));
+
+			if ($table->delete($table->id))
+			{
+				if ($table->is_external)
+				{
+					$dispatcher = \JEventDispatcher::getInstance();
+					$dispatcher->trigger('onTrainingRecordAfterDelete', array($table));
+				}
+
+				// Delete media
+				$model = TJCERT::model('TrainingRecord', array('ignore_request' => true));
+				JLoader::import("/techjoomla/media/tables/xref", JPATH_LIBRARIES);
+				$tableXref = Table::getInstance('Xref', 'TJMediaTable');
+				$tableXref->load(array('client_id' => $table->id));
+				$mediaPath = TJCERT::getMediaPath();
+				$client    = TJCERT::getClient();
+
+				if ($tableXref->media_id)
+				{
+					$model->deleteMedia($tableXref->media_id, $mediaPath, $client, $table->id);
+				}
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Publish the element
+	 *
+	 * @param   array  $ids    Item id
+	 * 
+	 * @param   int    $state  Publish state
+	 *
+	 * @return  boolean
+	 * 
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function publish($ids, $state = 1)
+	{
+		$table = $this->getTable();
+
+		foreach ($ids as $id)
+		{
+			$table->load($id);
+			$oldState = $table->state;
+			$table->state = $state;
+
+			if ($table->store())
+			{
+				if ($table->is_external)
+				{
+					JLoader::import('components.com_tjcertificate.events.record', JPATH_SITE);
+					$tjCertificateTriggerRecord = new TjCertificateTriggerRecord;
+
+					// If record state is pending then only send the approval email
+					if ($oldState == -1)
+					{
+						$tjCertificateTriggerRecord->onRecordStateChange($table, $table->state);
+					}
+
+					$dispatcher = \JEventDispatcher::getInstance();
+
+					if ($table->state == 1)
+					{
+						$dispatcher->trigger('onTrainingRecordAfterPublished', array($table));
+					}
+					elseif ($table->state == 0)
+					{
+						$dispatcher->trigger('onTrainingRecordAfterUnpublished', array($table));
+					}
+				}
+			}
+		}
+
+		return true;
+	}
 }

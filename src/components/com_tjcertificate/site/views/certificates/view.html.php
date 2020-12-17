@@ -68,6 +68,27 @@ class TjCertificateViewCertificates extends JViewLegacy
 	public $activeFilters;
 
 	/**
+	 * Manage own  Permissions
+	 *
+	 * @var  boolean
+	 */
+	public $manageOwn;
+
+	/**
+	 * Manage Permissions
+	 *
+	 * @var  boolean
+	 */
+	public $manage;
+
+	/**
+	 * Create Permissions
+	 *
+	 * @var  boolean
+	 */
+	public $create;
+
+	/**
 	 * Display the  view
 	 *
 	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
@@ -92,9 +113,10 @@ class TjCertificateViewCertificates extends JViewLegacy
 		// Get state
 		$this->state = $this->get('State');
 
-		$layout = $app->input->get('layout', "my");
+		$layout       = $app->input->get('layout', "my");
+		$this->manage = $this->user->authorise('certificate.external.manage', 'com_tjcertificate');
 
-		if ($layout == 'my')
+		if ($layout == 'my' && !$this->manage)
 		{
 			// Show only logged-in user certificates
 			$this->state->set('filter.user_id', $this->user->id);
@@ -108,6 +130,8 @@ class TjCertificateViewCertificates extends JViewLegacy
 
 		$this->filterForm    = $this->get('FilterForm');
 		$this->activeFilters = $this->get('ActiveFilters');
+		$this->manageOwn     = $this->user->authorise('certificate.external.manageown', 'com_tjcertificate');
+		$this->create	     = $this->user->authorise('certificate.external.create', 'com_tjcertificate');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

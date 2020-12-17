@@ -66,6 +66,20 @@ class TjCertificateCertificate extends CMSObject
 
 	protected static $certificateObj = array();
 
+	public $is_external = 0;
+
+	public $name = null;
+
+	public $cert_url = "";
+
+	public $cert_file = "";
+
+	public $issuing_org = "";
+
+	public $status = "";
+
+	public $created_by = "";
+
 	/**
 	 * Constructor activating the default information of the Certificate
 	 *
@@ -461,6 +475,13 @@ class TjCertificateCertificate extends CMSObject
 				$table->issued_on = Factory::getDate()->toSql();
 			}
 
+			// If certificate id is not added from the form then add
+			if (empty($this->unique_certificate_id))
+			{
+				$options = new Registry;
+				$table->unique_certificate_id = $this->generateUniqueCertId($options);
+			}
+
 			// Store the user data in the database
 			if (!($table->store()))
 			{
@@ -471,8 +492,18 @@ class TjCertificateCertificate extends CMSObject
 
 			$this->id = $table->id;
 
-			// Fire the onTjCertificateAfterSave event.
 			$dispatcher = \JEventDispatcher::getInstance();
+
+			if ($table->is_external && $isNew)
+			{
+				/* Send mail on record creation */
+				JLoader::import('components.com_tjcertificate.events.record', JPATH_SITE);
+				$tjCertificateTriggerRecord = new TjCertificateTriggerRecord;
+				$tjCertificateTriggerRecord->onAfterRecordSave($this, true);
+				$dispatcher->trigger('onTrainingRecordAfterAdded', array($isNew, $this));
+			}
+
+			// Fire the onTjCertificateAfterSave event.
 
 			$dispatcher->trigger('onTjCertificateAfterSave', array($isNew, $this));
 		}
@@ -596,13 +627,22 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @param   boolean  $showSearchBox  Show search box
 	 *
+	 * @param   boolean  $isExternal     Check record is external
+	 *
 	 * @return  string Certificate url.
 	 *
 	 * @since 1.0
 	 */
-	public function getUrl($options, $showSearchBox = true)
+	public function getUrl($options, $showSearchBox = true, $isExternal = false)
 	{
-		$url = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->unique_certificate_id;
+		if ($isExternal)
+		{
+			$url = 'index.php?option=com_tjcertificate&view=trainingrecord&id=' . $this->id;
+		}
+		else
+		{
+			$url = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->unique_certificate_id;
+		}
 
 		// If search box is true then only show search box param in URL
 		if ($showSearchBox)
@@ -1134,5 +1174,27 @@ class TjCertificateCertificate extends CMSObject
 				JFile::delete($tmpPDF);
 			}
 		}
+	}
+
+	/**
+	 * Get formated date
+	 *
+	 * @param   string  $datetime  The current offset
+	 *
+	 * @return  string  formatted datetime
+	 *
+	 * @since  __DEPLOY_VERSION__
+	 **/
+	public function getFormatedDate($datetime)
+	{
+		$params   = ComponentHelper::getParams('com_tjcertificate');
+		$dateFormat = $params->get('date_format_show');
+
+		if ($dateFormat == "custom")
+		{
+			$dateFormat = $params->get('custom_format');
+		}
+
+		return HTMLHelper::_('date', $datetime, $dateFormat, true);
 	}
 }

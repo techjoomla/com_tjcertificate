@@ -37,7 +37,19 @@
 			<option value="1">JYES</option>
 			<option value="0">JNo</option>
 		</field>
-	</fieldset>
+		<field name="date_format_show" class="btn-group" default="Y-m-d H:i:s" type="list" label="COM_TJCERTIFICATE_DATE_FORMAT_TO_SHOW" description="COM_TJCERTIFICATE_DATE_FORMAT_TO_SHOW_DESC">
+			<option value="Y-m-d H:i:s">COM_TJCERTIFICATE_DATE_FORMAT_1</option>
+			<option value="D, M d h:i A">COM_TJCERTIFICATE_DATE_FORMAT_2</option>
+			<option value="F j, Y, g:i a">COM_TJCERTIFICATE_DATE_FORMAT_3</option>
+			<option value="m.d.y">COM_TJCERTIFICATE_DATE_FORMAT_4</option>
+			<option value="j, n, Y">COM_TJCERTIFICATE_DATE_FORMAT_5</option>
+			<option value="h-i-s, j-m-y">COM_TJCERTIFICATE_DATE_FORMAT_6</option>
+			<option value="H:i:s">COM_TJCERTIFICATE_DATE_FORMAT_7</option>
+			<option value="custom">Custom</option>
+		</field>
+		<field name="custom_format" class="inputbox" type="text" label="COM_TJCERTIFICATE_CUSTOM_DATE_FORMAT"
+			showon="date_format_show:custom" description="COM_TJCERTIFICATE_CUSTOM_DATE_FORMAT_DESC" />
+		</fieldset>
 
 	<!-- Social sharing -->
 	<fieldset name="social_sharing" label="COM_TJCERTIFICATE_SOCIAL_SHARING_SETINGS">
@@ -67,6 +79,12 @@
 
 		<field name="addthis_publishid" type="text" default="" label="COM_TJCERTIFICATE_SELECT_ADDTHIS_PUBLISHED_ID" showon="social_sharing_type:addthis" description="COM_TJCERTIFICATE_SELECT_ADDTHIS_PUBLISHED_ID_DESC" />
 -->
+	</fieldset>
+
+	<!-- Media setting  -->
+	<fieldset name="media_sets" label="COM_TJCERTIFICATE_MEDIA_SETS" description="">
+		<field name="upload_maxsize" type="text" default="10" label="COM_TJCERTIFICATE_UPLOAD_MAX_SIZE" description="COM_TJCERTIFICATE_UPLOAD_MAX_SIZE_DESC" />
+		<field name="upload_extensions" type="text" cols="60" rows="5" default="image/jpeg,image/jpg,image/png,application/pdf" label="COM_TJCERTIFICATE_LEGAL_EXTENSION" description="COM_TJCERTIFICATE_LEGAL_EXTENSION_DESC" />
 	</fieldset>
 
 	<fieldset name="certificate_image_generation" label="COM_TJCERTIFICATE_IMAGE_GENERATION">
