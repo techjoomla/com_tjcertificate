@@ -15,7 +15,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\BaseController;
 
 JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
-TJCERT::init();
+TJCERT::init('admin');
 
 JLoader::registerPrefix('TjCertificate', JPATH_ADMINISTRATOR);
 JLoader::register('TjCertificateController', JPATH_ADMINISTRATOR . '/controller.php');

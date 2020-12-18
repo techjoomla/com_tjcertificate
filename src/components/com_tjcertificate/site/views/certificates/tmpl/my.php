@@ -53,14 +53,15 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 			{
 				$recordFormLink = 'index.php?option=com_tjcertificate&view=trainingrecord&layout=edit';
 				$addRecordLink = Route::_($recordFormLink);?>
-				<div class="">
-					<a class="btn btn-primary btn-small pull-right" href="<?php echo $addRecordLink;?>">
+				<div>
+					<a class="btn btn-primary btn-small pull-right mb-15" href="<?php echo $addRecordLink;?>">
 						<i class="icon-plus"></i><?php echo Text::_('COM_TJCERTIFICATE_ADD_EXTERNAL_CERTIFICATE'); ?>
 					</a>
 				</div>
 			<?php
 			}
 			?>
+			<div class="clearfix"></div>
 			<?php
 			if (empty($this->items))
 			{
@@ -167,26 +168,24 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 										</div>
 										<!-- If user have manage permission then permission to edit and delete any record -->
 										<?php
-										$editLink = 'index.php?option=com_tjcertificate&view=trainingrecord&layout=edit&id=' . $item->id;
+										$editLink = Route::_('index.php?option=com_tjcertificate&view=trainingrecord&layout=edit&id=' . $item->id);
 
 										if ($this->manage && $item->is_external) 
 										{ ?>
-												<a class="d-inline-block" href="
-												<?php echo $editLink; ?>" title="<?php echo Text::_('JACTION_EDIT'); ?>">
+												<a class="d-inline-block" href="<?php echo $editLink; ?>" title="<?php echo Text::_('JACTION_EDIT'); ?>">
 													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 												</a>										
-												<a class="d-inline-block p-5" onclick="certificate.deleteItem('<?php echo $item->id; ?>', this)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button"><i class="fa fa-trash"></i>
+												<a class="d-inline-block p-5" onclick="certificate.deleteItem('<?php echo $item->id; ?>', this)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button" title="<?php echo Text::_('JACTION_DELETE'); ?>"><i class="fa fa-trash-o"></i>
 										<?php 
 										} ?>
 
 										<?php 
 										if ((!$this->manage && $this->manageOwn) && ($item->is_external && $item->state != 1)) 
 										{ ?>
-												<a class="d-inline-block" href="
-												<?php echo $editLink; ?>" title="<?php echo Text::_('JACTION_EDIT'); ?>">
+												<a class="d-inline-block" href="<?php echo $editLink; ?>" title="<?php echo Text::_('JACTION_EDIT'); ?>">
 													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 												</a>										
-												<a class="d-inline-block p-5" onclick="certificate.deleteItem('<?php echo $item->id; ?>', this)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button"><i class="fa fa-trash"></i>
+												<a class="d-inline-block p-5" onclick="certificate.deleteItem('<?php echo $item->id; ?>', this)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button" title="<?php echo Text::_('JACTION_DELETE'); ?>"><i class="fa fa-trash-o"></i>
 										<?php 
 										} ?>
 
@@ -197,12 +196,12 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 											<?php 
 											if ($item->state == -1 || $item->state == 0) 
 											{ ?>
-												<i class="fa fa-window-close"></i>
+												<i class="fa fa-times" title="<?php echo Text::_('JPUBLISHED'); ?>"></i>
 											<?php 
 											} 
 											elseif ($item->state == 1) 
 											{ ?>
-												<i class="fa fa-check-square"></i>
+												<i class="fa fa-check-square" title="<?php echo Text::_('JUNPUBLISHED'); ?>"></i>
 											<?php 
 											} ?>
 									<?php 

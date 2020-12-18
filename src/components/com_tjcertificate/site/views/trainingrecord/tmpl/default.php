@@ -13,7 +13,6 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
-
 ?>
 <fieldset id="users-profile-core">
 	<legend>

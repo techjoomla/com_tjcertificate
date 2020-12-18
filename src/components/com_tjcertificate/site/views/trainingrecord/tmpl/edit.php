@@ -76,7 +76,7 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 								title="<?php echo $this->escape(strip_tags($this->item->mediaData[0]->title)); ?>">
 								<i class="fa fa-download" aria-hidden="true"></i>
 							</a>						
-							<i class="fa fa-trash"
+							<i class="fa fa-trash-o"
 									title="<?php echo Text::_('COM_TJCERTIFICATE_ATTACHMENT_DELETE');?>"
 									data-mid="<?php echo $this->item->mediaData[0]->media_id;?>"
 									data-aid="<?php echo $this->item->id;?>"

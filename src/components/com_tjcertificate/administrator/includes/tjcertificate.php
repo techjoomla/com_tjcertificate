@@ -15,6 +15,7 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
 use Joomla\String\StringHelper;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 
 $language = JFactory::getLanguage();
 $language->load('com_tjcertificate');
@@ -138,13 +139,20 @@ class TJCERT
 	/**
 	 * Initializes js lang constant dependencies
 	 *
+	 * @param   string  $location  The location where the assets needs to load
+	 * 
 	 * @return  void
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public static function init()
+	public static function init($location = 'site')
 	{
 		self::Language()->JsLanguageConstant();
+
+		if ($location == 'site')
+		{
+			HTMLHelper::stylesheet('media/com_tjcertificate/vendors/font-awesome-4.1.0/css/font-awesome.min.css');
+		}
 	}
 
 	/**
