@@ -150,11 +150,15 @@ var certificate = {
 
 		jQuery(document).ready(function(){
 			document.formvalidator.setHandler('expdate', function (value) {
-				if (issueDate < expDate == false)
-				{
-					certificate.renderMessage(Joomla.JText._('COM_TJCERTIFICATE_EXPIRY_DATE_VALIDATION_MESSAGE'));
-					jQuery('#jform_expired_on').val("");
+				if (issueDate > expDate) {
+				  certificate.renderMessage(Joomla.JText._('COM_TJCERTIFICATE_EXPIRY_DATE_VALIDATION_MESSAGE'));
+				  jQuery('#jform_expired_on').val("");
+
+				  return false;
 				}
+
+		    return true;
+
 			});
 		});
 	}

@@ -27,7 +27,7 @@ use Joomla\CMS\Uri\Uri;
 		</dd>
 		<?php if ($this->item->cert_url) { ?>
 		<dt>
-			<?php echo Text::_('COM_TJCERTIFICATE_FORM_LBL_CERTIFICATE_URL'); ?>
+			<?php echo Text::_('COM_TJCERTIFICATE_LBL_CERTIFICATE_URL'); ?>
 		</dt>
 		<dd>
 			<a href="<?php echo $this->escape($this->item->cert_url); ?>" target="_blank"><?php echo $this->escape($this->item->cert_url); ?></a>
