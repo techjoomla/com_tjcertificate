@@ -140,10 +140,22 @@ class TjCertificateControllerTrainingRecord extends FormController
 
 		$this->setMessage(Text::_('COM_TJCERTIFICATE_TRAINING_RECORD_SAVE_SUCCESSFULLY'));
 
-		// Redirect back to the edit screen.
-		$this->setRedirect(
-			Route::_('index.php?option=com_tjcertificate&view=trainingrecord&layout=edit&id=' . $certificateModel->getState('certificate.id'), false)
+		if ($task === "apply")
+		{
+			// Redirect back to the edit screen.
+			$this->setRedirect(
+				Route::_('index.php?option=com_tjcertificate&view=trainingrecord&layout=edit&id=' . $certificateModel->getState('certificate.id'), false)
+				);
+		}
+
+		// Save task using to "Save & Close" action which is used only in backend
+		if ($task === "save")
+		{
+			// Redirect to the list screen.
+			$this->setRedirect(
+				Route::_('index.php?option=com_tjcertificate&view=certificates', false)
 			);
+		}
 
 		// Flush the data from the session.
 		$app->setUserState('com_tjcertificate.edit.trainingrecord.data', null);
