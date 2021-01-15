@@ -48,7 +48,8 @@ class TjCertificateControllerTrainingRecord extends FormController
 		$app      = Factory::getApplication();
 		$user     = Factory::getUser();
 		$recordId = $app->input->getInt('id');
-		$params = ComponentHelper::getParams('com_tjcertificate');
+		$params   = ComponentHelper::getParams('com_tjcertificate');
+		$task     = $this->getTask();
 
 		if (!$user->id)
 		{

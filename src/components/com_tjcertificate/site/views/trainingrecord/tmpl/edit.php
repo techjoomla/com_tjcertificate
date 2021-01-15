@@ -95,7 +95,7 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 
 	<div class="control-group">
 		<div class="controls">
-			<button onclick="Joomla.submitbutton('trainingrecord.save');" type="button" class="btn btn-primary"><?php echo Text::_('JSUBMIT'); ?></button>
+			<button onclick="Joomla.submitbutton('trainingrecord.apply');" type="button" class="btn btn-primary"><?php echo Text::_('JSUBMIT'); ?></button>
 			<button type="button" class="btn btn-default"  onclick="Joomla.submitbutton('trainingrecord.cancel')">
 					<span><?php echo Text::_('JCANCEL'); ?></span>
 			</button>
