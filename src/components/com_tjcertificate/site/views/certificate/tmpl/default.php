@@ -22,7 +22,6 @@ $options['relative'] = true;
 HTMLHelper::_('jquery.framework');
 HTMLHelper::_('bootstrap.framework');
 HTMLHelper::_('behavior.framework');
-HTMLHelper::StyleSheet('media/com_tjcertificate/vendors/font-awesome-4.1.0/css/font-awesome.min.css');
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 HTMLHelper::StyleSheet('media/com_tjlms/vendors/artificiers/artficier.css');
 HTMLHelper::script('media/com_tjcertificate/vendors/html2canvas/js/html2canvas.js');
@@ -41,8 +40,8 @@ if ($this->showSearchBox)
 	<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate'); ?>" method="post" name="adminForm" id="adminForm">
 		<div class="tj-search-filters">
 			<div class="btn-wrapper input-append">
-				<input type="text" name="certificate" id="certificate" 
-					value="<?php echo $this->uniqueCertificateId;?>" 
+				<input type="text" name="certificate" id="certificate"
+					value="<?php echo $this->uniqueCertificateId;?>"
 					placeholder="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_ENTER_CERTIFICATE_ID'); ?>">
 				<button type="submit" class="btn hasTooltip" title="" aria-label="Search" data-original-title="Search">
 					<span class="icon-search" aria-hidden="true"></span>
@@ -102,10 +101,10 @@ if ($this->certificate)
 				?>
 			</div>
 			<div class="col-xs-12 col-md-5 mb-25">
-			<?php 
+			<?php
 					if ($this->certificate->getUserId() == Factory::getUser()->id)
 					{
-					?>	
+					?>
 					<div class="tj-certificate-share-download pull-right">
 						<div class="">
 						<a id="download-popover" data-container="body" data-placement="bottom" tabindex="0" class="tj-certificate-btn" role="button" data-toggle="popover" data-trigger="focus" title="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD');?>"><i class="fa fa-share-square-o mr-10" aria-hidden="true"></i>
@@ -136,7 +135,7 @@ if ($this->certificate)
 							</span>
 						</div>
 
-						<?php 
+						<?php
 						if ($this->params->get('social_sharing'))
 						{?>
 						<a id="sharing-popover" data-container="body" data-placement="bottom" tabindex="0" class="tj-certificate-btn" role="button" data-toggle="popover" data-trigger="focus" title="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_SHARE');?>"><i class="fa fa-share-square-o mr-10" aria-hidden="true"></i>
@@ -154,12 +153,13 @@ if ($this->certificate)
 						<?php
 						}
 						?>
-						<a id="copyurl" data-toggle="popover" data-placement="bottom"
-						data-alt-url="<?php echo Uri::getInstance()->toString();?>"
-						data-content="Copied!" class="tj-certificate-btn" type="button"
-						onclick="certificateImage.copyUrl('copyurl');">
-						<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL_COPY');?>
-						</a>
+						<?php if ($this->linkedInProfileUrl) {
+						?>
+							<a href="<?php echo $this->linkedInProfileUrl;?>" target="_blank">
+							<img src="media/com_tjcertificate/images/buttons/en_US.png" alt="LinkedIn Add to Profile button">
+							</a>
+						<?php }
+						?>
 					</div>
 					</div>
 					<?php
@@ -170,18 +170,18 @@ if ($this->certificate)
 		</div>
 		<div class="col-sm-12 bg-lightblue p-15">
 			<div class="fs-16">
-				<?php if ($this->item->title) 
+				<?php if ($this->item->title)
 				{ ?>
 					This certificate (ID: <?php echo $this->certificate->unique_certificate_id;?>) verifies that <strong><?php echo Factory::getUser($this->certificate->getUserId())->name; ?></strong> has successfully completed the <strong><?php echo $this->item->title; ?></strong> on <?php echo HTMLHelper::_('date', $this->certificate->issued_on, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_DATE_FORMAT'));?>.
-				<?php 
+				<?php
 				}
 				else
 				{ ?>
 					This certificate (ID: <?php echo $this->certificate->unique_certificate_id;?>) has been awarded to <strong><?php echo Factory::getUser($this->certificate->getUserId())->name; ?></strong> on <?php echo HTMLHelper::_('date', $this->certificate->issued_on, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_DATE_FORMAT'));?>.
-				<?php 
-				} 
+				<?php
+				}
 				?>
-				<?php 
+				<?php
 				if ($this->certificate->getExpiry() != '0000-00-00 00:00:00')
 				{
 				?>
@@ -211,6 +211,7 @@ if ($this->certificate)
 <script type="text/javascript">
 
 var imageExists = "<?php echo $imageUrl;?>";
+var certificateId = "<?php echo $this->certificate->id;?>";
 
 jQuery(document).ready(function() {
 	if (imageExists)
@@ -221,11 +222,18 @@ jQuery(document).ready(function() {
 	certificateImage.enableDownloadShareBtns();
 });
 
+<?php
+if (empty($this->params->get('cert_image_gen_type')) || $this->params->get('cert_image_gen_type') == 'canvas')
+{
+?>
 window.onload = function() {
-	if (!imageExists)
+	if (!imageExists && certificateId)
 	{
 		certificateImage.generateImage(document.querySelector("#certificateContent"));
 	}
 }
+<?php
+}
+?>
 
 </script>

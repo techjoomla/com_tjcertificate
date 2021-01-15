@@ -81,6 +81,7 @@ class TjCertificateModelCertificates extends ListModel
 		// Initialize variables.
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
+		$app = Factory::getApplication();
 
 		$extension = Factory::getApplication()->input->get('extension', '', 'CMD');
 
@@ -172,7 +173,11 @@ class TjCertificateModelCertificates extends ListModel
 		}
 		elseif ($state === '')
 		{
-			$query->where('(ci.state = 0 OR ci.state = 1)');
+			// Publish, Unpublish and Pending records available in frontend
+			if ($app->isSite())
+			{
+				$query->where('(ci.state IN (0,1,-1))');
+			}
 		}
 
 		// Filter by Expired certificates

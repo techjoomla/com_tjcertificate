@@ -47,6 +47,13 @@ var certificateImage = {
                 img.src = imagePath + certificateId + ".png";
                 jQuery("#previewImage").append(img);
 				setTimeout(function(){
+
+                    if (screen.width < 1200)
+                    {
+                        viewport = document.querySelector("meta[name=viewport]");
+                        viewport.setAttribute("content", "width=device-width");
+                    }
+
 					Joomla.loadingLayer('hide');
                 }, 1000);
             }
@@ -57,6 +64,13 @@ var certificateImage = {
 
     generateImage: function(element) {
 		// jQuery('#certificateContent').width(element.offsetWidth).height(element.offsetHeight);
+
+        if (screen.width < 1200)
+        {
+            viewport = document.querySelector("meta[name=viewport]");
+            viewport.setAttribute("content", "width=1200px");
+        }
+
         Joomla.loadingLayer('show');
 
         html2canvas(element, {

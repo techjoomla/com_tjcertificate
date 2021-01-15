@@ -21,6 +21,9 @@ use Joomla\Filesystem\File;
 use Joomla\Registry\Registry;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
 
 /**
  * Certificate class.  Handles all application interaction with a Certificate
@@ -57,7 +60,25 @@ class TjCertificateCertificate extends CMSObject
 
 	public $defaultCertPrefix = "CERT";
 
+	public $certImageDir = JPATH_SITE . '/media/com_tjcertificate/certificates/';
+
+	public $certTmpDir = JPATH_SITE . '/media/com_tjcertificate/tmp/';
+
 	protected static $certificateObj = array();
+
+	public $is_external = 0;
+
+	public $name = null;
+
+	public $cert_url = "";
+
+	public $cert_file = "";
+
+	public $issuing_org = "";
+
+	public $status = "";
+
+	public $created_by = "";
 
 	/**
 	 * Constructor activating the default information of the Certificate
@@ -283,6 +304,32 @@ class TjCertificateCertificate extends CMSObject
 	}
 
 	/**
+	 * Set certificate issue date
+	 *
+	 * @param   string  $value  comment.
+	 *
+	 * @return  void.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setIssuedDate($value = null)
+	{
+		$this->issued_on = $value;
+	}
+
+	/**
+	 * Get certificate issue date
+	 *
+	 * @return  string comment
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getIssuedDate()
+	{
+		return $this->issued_on;
+	}
+
+	/**
 	 * Returns the global Certificate object
 	 *
 	 * @param   integer  $id  The primary key of the certificate to load (optional).
@@ -428,6 +475,13 @@ class TjCertificateCertificate extends CMSObject
 				$table->issued_on = Factory::getDate()->toSql();
 			}
 
+			// If certificate id is not added from the form then add
+			if (empty($this->unique_certificate_id))
+			{
+				$options = new Registry;
+				$table->unique_certificate_id = $this->generateUniqueCertId($options);
+			}
+
 			// Store the user data in the database
 			if (!($table->store()))
 			{
@@ -438,8 +492,18 @@ class TjCertificateCertificate extends CMSObject
 
 			$this->id = $table->id;
 
-			// Fire the onTjCertificateAfterSave event.
 			$dispatcher = \JEventDispatcher::getInstance();
+
+			if ($table->is_external && $isNew)
+			{
+				/* Send mail on record creation */
+				JLoader::import('components.com_tjcertificate.events.record', JPATH_SITE);
+				$tjCertificateTriggerRecord = new TjCertificateTriggerRecord;
+				$tjCertificateTriggerRecord->onAfterRecordSave($this, true);
+				$dispatcher->trigger('onTrainingRecordAfterAdded', array($isNew, $this));
+			}
+
+			// Fire the onTjCertificateAfterSave event.
 
 			$dispatcher->trigger('onTjCertificateAfterSave', array($isNew, $this));
 		}
@@ -471,12 +535,31 @@ class TjCertificateCertificate extends CMSObject
 			return false;
 		}
 
-		// Bind the array
-		if (!$this->setProperties($array))
+		$getPrivateProperties = $this->_getPrivateProperties();
+
+		$getPublicProperties  = $this->_getPublicProperties();
+
+		$publicProperties = array();
+
+		foreach ($getPublicProperties as $key => $value)
+		{
+			$publicProperties[$value->name] = '';
+		}
+
+		$setPublicProperties = array_intersect_key($array, $publicProperties);
+
+		// Set public properties
+		if (!$this->setProperties($setPublicProperties))
 		{
 			$this->setError(Text::_('COM_TJCERTIFICATE_BINDING_ERROR'));
 
 			return false;
+		}
+
+		// Set private properties
+		foreach ($getPrivateProperties as $key => $value)
+		{
+			$this->{$value->name} = $array[$value->name];
 		}
 
 		// Make sure its an integer
@@ -544,13 +627,22 @@ class TjCertificateCertificate extends CMSObject
 	 *
 	 * @param   boolean  $showSearchBox  Show search box
 	 *
+	 * @param   boolean  $isExternal     Check record is external
+	 *
 	 * @return  string Certificate url.
 	 *
 	 * @since 1.0
 	 */
-	public function getUrl($options, $showSearchBox = true)
+	public function getUrl($options, $showSearchBox = true, $isExternal = false)
 	{
-		$url = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->unique_certificate_id;
+		if ($isExternal)
+		{
+			$url = 'index.php?option=com_tjcertificate&view=trainingrecord&id=' . $this->id;
+		}
+		else
+		{
+			$url = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->unique_certificate_id;
+		}
 
 		// If search box is true then only show search box param in URL
 		if ($showSearchBox)
@@ -565,7 +657,7 @@ class TjCertificateCertificate extends CMSObject
 
 		if (isset($options['absolute']))
 		{
-			return JUri::root() . substr(Route::_($url), strlen(JUri::base(true)) + 1);
+			return Route::link('site', $url, false, 0, true);
 		}
 
 		return Route::_($url);
@@ -605,7 +697,7 @@ class TjCertificateCertificate extends CMSObject
 	/**
 	 * Method to get certificate download url.
 	 *
-	 * @param   boolean  $store  Store as attachment for emails
+	 * @param   integer  $store  Store as attachment for emails
 	 *
 	 * @return  boolean|string Certificate pdf url.
 	 *
@@ -697,6 +789,10 @@ class TjCertificateCertificate extends CMSObject
 				readfile($certificatePdfName);
 				jexit();
 			}
+			elseif ($store == 2)
+			{
+				return $domPDF->output();
+			}
 
 			$domPDF->stream($certificatePdfName, array("Attachment" => 1));
 
@@ -769,8 +865,11 @@ class TjCertificateCertificate extends CMSObject
 				throw new Exception(Text::_('COM_TJCERTIFICATE_TEMPLATE_INVALID'));
 			}
 
-			// Generate unique certificate id
-			$this->unique_certificate_id = $this->generateUniqueCertId($options);
+			if (empty($this->unique_certificate_id))
+			{
+				// Generate unique certificate id
+				$this->unique_certificate_id = $this->generateUniqueCertId($options);
+			}
 
 			// Generate unique certificate id replacement
 			$replacements->certificate->cert_id = $this->unique_certificate_id;
@@ -808,9 +907,28 @@ class TjCertificateCertificate extends CMSObject
 			}
 
 			// Save certificate
-			$this->save();
+			if ($this->save())
+			{
+				// Remove old certificate image after re-generating the certificate
+				$path = JPATH_SITE . '/media/com_tjcertificate/certificates/';
+				$fileName = $this->unique_certificate_id . '.png';
 
-			return self::getInstance($this->id);
+				if (JFile::exists($path . $fileName))
+				{
+					JFile::delete($path . $fileName);
+				}
+
+				// Generate Certificate Image
+				$params = ComponentHelper::getParams('com_tjcertificate');
+
+				if ($params->get('cert_image_gen_type') == 'imagick')
+				{
+					// Generate image from PDF
+					$this->generateImageFromPDF($this->pdfDownload(2));
+				}
+
+				return self::getInstance($this->id);
+			}
 		}
 		catch (\Exception $e)
 		{
@@ -943,15 +1061,13 @@ class TjCertificateCertificate extends CMSObject
 	}
 
 	/**
-	 * This function checks the certificate download permission 
-	 *
-	 * @param   STRING  $uniqueCertificateId  certificate Id
+	 * This function checks the certificate download permission
 	 *
 	 * @return  boolean
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public static function canDownload($uniqueCertificateId)
+	public function canDownload()
 	{
 		$user = Factory::getUser();
 
@@ -962,15 +1078,123 @@ class TjCertificateCertificate extends CMSObject
 
 		if ($user->authorise('certificate.download.own', 'com_tjcertificate'))
 		{
-			$table = TJCERT::table("certificates");
-			$table->load(array('unique_certificate_id' => $uniqueCertificateId));
-
-			if ($user->get('id') == $table->user_id)
+			if ($user->get('id') == $this->user_id)
 			{
 				return true;
 			}
 		}
 
 		return false;
+	}
+
+	/**
+	 * Method to get linkedIn add to profile url.
+	 *
+	 * @return  STRING
+	 *
+	 * @since  __DEPLOY_VERSION__
+	 */
+	public function getAddToLinkedInProfileUrl()
+	{
+		$params   = ComponentHelper::getParams('com_tjcertificate');
+		$config   = Factory::getConfig();
+		$siteName = $config->get('sitename');
+
+		$issuedMonth = HTMLHelper::_('date', $this->issued_on, 'm');
+		$issuedYear  = HTMLHelper::_('date', $this->issued_on, 'Y');
+
+		$expirationDetails = null;
+
+		if ($this->expired_on != '0000-00-00 00:00:00')
+		{
+			$expirationMonth   = HTMLHelper::_('date', $this->expired_on, 'm');
+			$expirationYear    = HTMLHelper::_('date', $this->expired_on, 'Y');
+			$expirationDetails = '&expirationYear=' . $expirationYear . '&expirationMonth=' . $expirationMonth;
+		}
+
+		$orgParam = '&' . $params->get('organization_info') . '=' . $params->get('organization_id_name');
+
+		// Get client data
+		$dispatcher = JDispatcher::getInstance();
+		PluginHelper::importPlugin('content');
+		$result = $dispatcher->trigger('getCertificateClientData', array($this->client_id, $this->client));
+		$clientData = $result[0];
+
+		$urlOptions             = array();
+		$urlOptions['absolute'] = true;
+		$certificateUrl         = $this->getURL($urlOptions, false);
+
+		$certificateTitle   = $clientData->title ? $clientData->title : $siteName . ' ' . Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_HEAD');
+		$linkedInprofileUrl = 'https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=' . $certificateTitle . $orgParam
+		. '&issueYear=' . $issuedYear . '&issueMonth=' . $issuedMonth . $expirationDetails
+		. '&certUrl=' . urlencode($certificateUrl) . '&certId=' . $this->unique_certificate_id;
+
+		return $linkedInprofileUrl;
+	}
+
+	/**
+	 * Method to generate certificate image from PDF.
+	 *
+	 * @param   string  $domPDFOutput  DomPDF output.
+	 *
+	 * @return  void
+	 *
+	 * @since  __DEPLOY_VERSION__
+	 */
+	public function generateImageFromPDF($domPDFOutput)
+	{
+		if (extension_loaded('imagick'))
+		{
+			if (!JFolder::exists($this->certImageDir))
+			{
+				JFolder::create($this->certImageDir);
+			}
+
+			if (!JFolder::exists($this->certTmpDir))
+			{
+				JFolder::create($this->certTmpDir);
+			}
+
+			$tmpPDF = $this->certTmpDir . $this->unique_certificate_id . '.pdf';
+
+			file_put_contents($tmpPDF, $domPDFOutput);
+
+			$im = new Imagick;
+			$im->setResolution(72, 72);
+			$im->readimage($tmpPDF);
+			$im->setImageBackgroundColor('white');
+			$im->setImageAlphaChannel(imagick::ALPHACHANNEL_REMOVE);
+			$im->mergeImageLayers(imagick::LAYERMETHOD_FLATTEN);
+			$im->writeImage($this->certImageDir . $this->unique_certificate_id . '.png');
+			$im->clear();
+			$im->destroy();
+
+			if (JFile::exists($tmpPDF))
+			{
+				JFile::delete($tmpPDF);
+			}
+		}
+	}
+
+	/**
+	 * Get formated date
+	 *
+	 * @param   string  $datetime  The current offset
+	 *
+	 * @return  string  formatted datetime
+	 *
+	 * @since  __DEPLOY_VERSION__
+	 **/
+	public function getFormatedDate($datetime)
+	{
+		$params   = ComponentHelper::getParams('com_tjcertificate');
+		$dateFormat = $params->get('date_format_show');
+
+		if ($dateFormat == "custom")
+		{
+			$dateFormat = $params->get('custom_format');
+		}
+
+		return HTMLHelper::_('date', $datetime, $dateFormat, true);
 	}
 }

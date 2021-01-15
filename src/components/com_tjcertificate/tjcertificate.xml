@@ -2,13 +2,13 @@
 <extension type="component" version="3.0" method="upgrade">
   <name>com_tjcertificate</name>
   <creationDate>2019-08-13</creationDate>
-  <copyright>2019 Techjoomla</copyright>
+  <copyright>2020 Techjoomla</copyright>
   <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
   <author>Techjoomla</author>
   <authorEmail>extensions@techjoomla.com</authorEmail>
   <authorUrl>http://techjoomla.com</authorUrl>
   <description />
-  <version>1.0.2</version>
+  <version>1.0.3</version>
   <install>
     <!-- Runs on install -->
     <sql>
@@ -33,6 +33,7 @@
     <filename>controller.php</filename>
     <filename>router.php</filename>
     <folder>controllers</folder>
+    <folder>events</folder>
     <folder>views</folder>
     <folder>models</folder>
     <folder>languages</folder>
@@ -52,6 +53,7 @@
       <filename>controller.php</filename>
       <filename>index.html</filename>
       <filename>tjcertificate.php</filename>
+      <filename>tjcertificateTemplate.json</filename>
       <folder>controllers</folder>
       <folder>includes</folder>
       <folder>helpers</folder>
@@ -61,6 +63,7 @@
       <folder>views</folder>
       <folder>libraries</folder>
       <folder>languages</folder>
+      <folder>layouts</folder>
     </files>
     <languages folder="administrator">
       <language tag="en-GB">languages/en-GB/en-GB.com_tjcertificate.ini</language>
@@ -71,6 +74,7 @@
     <folder>certificate-templates</folder>
     <folder>css</folder>
     <folder>js</folder>
+    <folder>images</folder>
     <folder>vendors</folder>
   </media>
   <scriptfile>script.tjcertificate.php</scriptfile>

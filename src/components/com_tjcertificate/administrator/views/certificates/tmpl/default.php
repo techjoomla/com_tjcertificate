@@ -30,15 +30,8 @@ HTMLHelper::script('com_tjcertificate/certificateImage.min.js', $options);
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
-$saveOrder = $listOrder == 'ci.id';
 $dispatcher = JDispatcher::getInstance();
 PluginHelper::importPlugin('content');
-
-if ( $saveOrder )
-{
-	$saveOrderingUrl = 'index.php?option=com_tjcertificate&task=certificates.saveOrderAjax';
-	HTMLHelper::_('sortablelist.sortable', 'certificateList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
-}
 ?>
 
 <div class="tj-page">
@@ -87,7 +80,6 @@ if ( $saveOrder )
 								<th width="1%" class="nowrap center">
 									<?php echo HTMLHelper::_('searchtools.sort', 'JSTATUS', 'ci.state', $listDirn, $listOrder); ?>
 								</th>
-
 								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_CERTIFICATE_ID'); ?>
 								</th>
@@ -107,13 +99,12 @@ if ( $saveOrder )
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TYPE', 'ci.client', $listDirn, $listOrder); ?>
 								</th>
 								<th>
-									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_TEMPLATE', 'ci.certificate_template_id', $listDirn, $listOrder); ?>
-								</th>
-								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL'); ?>
 								</th>
 								<th>
-									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_COMMENT'); ?>
+									<?php echo Text::_('JGLOBAL_PREVIEW');?>
+								</th>
+								<th>
 								</th>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ID', 'ci.id', $listDirn, $listOrder); ?>
@@ -131,6 +122,7 @@ if ( $saveOrder )
 							<?php
 							foreach ($this->items as $i => $item)
 							{
+								$certificateObj = TJCERT::Certificate($item->id);
 								$data = $dispatcher->trigger('getCertificateClientData', array($item->client_id, $item->client));
 								$item->max_ordering = 0;
 
@@ -153,16 +145,15 @@ if ( $saveOrder )
 									<div class="pull-left break-word">
 										<?php if ($canEdit || $canEditOwn)
 										{
-											?>
-											<a class="hasTooltip modal" href="
-											<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate&layout=preview&tmpl=component&id=' . (int) $item->id, false);?>" title="
-											<?php echo Text::_('JGLOBAL_PREVIEW'); ?>">
+										?>
+											<a href="
+											<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate&layout=edit&id=' . (int) $item->id . '&extension=' . $this->component, false);?>">
 											<?php echo $this->escape($item->unique_certificate_id); ?></a>
 											<?php
-											}
-											else
-											{
-												?>
+										}
+										else
+										{
+										?>
 											<span title="<?php echo Text::sprintf('JFIELD_ALIAS_LABEL', $this->escape($item->unique_certificate_id)); ?>">
 											<?php echo $this->escape($item->unique_certificate_id); ?></span>
 										<?php
@@ -188,14 +179,21 @@ if ( $saveOrder )
 								</td>
 								<td>
 									<?php
-									echo (!empty($data[0]->title)) ? $data[0]->title : '-';
+										if ($item->is_external)
+										{
+											echo $item->name;									
+										}
+										else
+										{
+											echo ($data[0]->title ? $data[0]->title : "-");
+										}
 									?>
 								</td>
-								<td><?php echo HTMLHelper::date($item->issued_on, Text::_('DATE_FORMAT_LC')); ?></td>
+								<td><?php echo $certificateObj->getFormatedDate($item->issued_on); ?></td>
 								<td><?php
 									if (!empty($item->expired_on) && $item->expired_on != '0000-00-00 00:00:00')
 									{
-										echo HTMLHelper::date($item->expired_on, Text::_('DATE_FORMAT_LC'));
+										echo $certificateObj->getFormatedDate($item->expired_on);
 									}
 									else
 									{
@@ -210,16 +208,23 @@ if ( $saveOrder )
 										echo TEXT::_($client);
 									?>
 								</td>
-								<td><?php echo $this->escape($item->title); ?></td>
 								<td>
 									<?php
 									$utcNow = Factory::getDate()->toSql();
-
+									$link = "";
 									if ($item->expired_on > $utcNow || $item->expired_on == '0000-00-00 00:00:00')
 									{
 										// Get TJcertificate url for display certificate
-										$urlOpts = array ('absolute' => '');
-										$link = TJCERT::Certificate($item->id)->getUrl($urlOpts, false);
+										$urlOpts = array ('absolute' => true);
+										
+										if ($item->is_external)
+										{
+											$link = $certificateObj->getUrl($urlOpts, false, true);
+										}
+										else
+										{	
+											$link = $certificateObj->getUrl($urlOpts, false);
+										}
 									?>
 									<div class="btn-group">
 									<a id="copyurl<?php echo $item->id;?>" data-toggle="popover"
@@ -237,7 +242,24 @@ if ( $saveOrder )
 									}
 									?>
 								</td>
-								<td><?php echo $this->escape($item->comment); ?></td>
+								<td>
+									<div class="btn-group">
+									<?php if (!$item->is_external) { ?>
+										<a id="" href="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate&layout=preview&tmpl=component&id=' . (int) $item->id, false);?>" class="btn hasTooltip modal" type="button">
+											<?php echo Text::_('JGLOBAL_PREVIEW');?>
+										</a>
+									<?php } else { ?>
+										<a id="" href="<?php echo Route::_('index.php?option=com_tjcertificate&view=trainingrecord&layout=preview&tmpl=component&id=' . (int) $item->id, false);?>" class="btn hasTooltip modal" type="button">
+											<?php echo Text::_('JGLOBAL_PREVIEW');?>
+										</a>
+									<?php } ?>
+									</div>
+								</td>
+								<td>
+									<?php if ($link) { ?>
+									<a href="<?php echo $link;?>" target="_blank" title="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_FRONTEND_PREVIEW');?>"><span class="icon-out-2"></span></a>
+									<?php } ?>
+								</td>
 								<td><?php echo (int) $item->id; ?></td>
 							</tr>
 							<?php

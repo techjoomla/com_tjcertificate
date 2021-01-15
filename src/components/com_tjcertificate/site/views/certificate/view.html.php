@@ -48,6 +48,10 @@ class TjCertificateViewCertificate extends JViewLegacy
 
 	public $downloadPermission = null;
 
+	public $linkedInProfileUrl = null;
+
+	public $imagePath = null;
+
 	/**
 	 * Display the view
 	 *
@@ -70,41 +74,46 @@ class TjCertificateViewCertificate extends JViewLegacy
 		{
 			$certificate = TJCERT::Certificate();
 			$this->certificate = $certificate::validateCertificate($this->uniqueCertificateId);
+		}
 
-			if (!$this->certificate->id)
+		if (!$this->certificate->id)
+		{
+			JError::raiseWarning(500, Text::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EXPIRED'));
+		}
+		elseif ($this->certificate->id)
+		{
+			// If certificate view is private then view is available only for certificate owner
+			if (!$this->params->get('certificate_scope') && Factory::getUser()->id != $this->certificate->getUserId())
 			{
-				JError::raiseWarning(500, Text::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EXPIRED'));
+				JError::raiseWarning(500, Text::_('JERROR_ALERTNOAUTHOR'));
 
 				return false;
 			}
+
+			$this->fileName  = $this->certificate->unique_certificate_id . '.png';
+			$this->mediaPath = 'media/com_tjcertificate/certificates/';
+			$this->imagePath = Uri::root() . $this->mediaPath . $this->fileName . '?ver=' . md5($this->certificate->issued_on);
+
+			$certificateUrl = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->certificate->unique_certificate_id;
+			$this->certificateUrl = Uri::root() . substr(Route::_($certificateUrl), strlen(Uri::base(true)) + 1);
+			$this->downloadPermission = $this->certificate->canDownload();
+
+			if ($this->params->get('linkedin_profile_btn'))
+			{
+				$this->linkedInProfileUrl = $this->certificate->getAddToLinkedInProfileUrl();
+			}
+
+			// Get HTML
+			$clientId = $this->certificate->getClientId();
+			$client   = $this->certificate->getClient();
+			$model = TJCERT::model('Certificate', array('ignore_request' => true));
+			$this->contentHtml = $model->getCertificateProviderInfo($clientId, $client);
+
+			$dispatcher = JDispatcher::getInstance();
+			PluginHelper::importPlugin('content');
+			$result = $dispatcher->trigger('getCertificateClientData', array($clientId, $client));
+			$this->item = $result[0];
 		}
-
-		// If certificate view is private then view is available only for certificate owner
-		if (!$this->params->get('certificate_scope') && Factory::getUser()->id != $this->certificate->getUserId())
-		{
-			JError::raiseWarning(500, Text::_('JERROR_ALERTNOAUTHOR'));
-
-			return false;
-		}
-
-		$this->fileName  = $this->certificate->unique_certificate_id . '.png';
-		$this->mediaPath = 'media/com_tjcertificate/certificates/';
-		$this->imagePath = Uri::root() . $this->mediaPath . $this->fileName;
-
-		$certificateUrl = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->certificate->unique_certificate_id;
-		$this->certificateUrl = Uri::root() . substr(Route::_($certificateUrl), strlen(Uri::base(true)) + 1);
-		$this->downloadPermission = $certificate::canDownload($this->certificate->unique_certificate_id);
-
-		// Get HTML
-		$clientId = $this->certificate->getClientId();
-		$client   = $this->certificate->getClient();
-		$model = TJCERT::model('Certificate', array('ignore_request' => true));
-		$this->contentHtml = $model->getCertificateProviderInfo($clientId, $client);
-
-		$dispatcher = JDispatcher::getInstance();
-		PluginHelper::importPlugin('content');
-		$result = $dispatcher->trigger('getCertificateClientData', array($clientId, $client));
-		$this->item = $result[0];
 
 		parent::display($tpl);
 	}
