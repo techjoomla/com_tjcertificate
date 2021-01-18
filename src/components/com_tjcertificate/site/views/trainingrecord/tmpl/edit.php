@@ -105,7 +105,8 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 	<input type="hidden" name="jform[id]" id="id" value="<?php echo $this->item->id; ?>" />
 	<input type="hidden" name="option" value="com_tjcertificate"/>
 	<input type="hidden" name="task" value="trainingrecord.save"/>
-	<?php echo HTMLHelper::_( 'form.token'); ?>
+	<input type="hidden" name="site" value="f"/>
+	<?php echo HTMLHelper::_('form.token'); ?>
 </form>
 
 <script type="text/javascript">

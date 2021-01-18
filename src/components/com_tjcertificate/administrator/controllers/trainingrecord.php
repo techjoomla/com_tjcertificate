@@ -143,19 +143,31 @@ class TjCertificateControllerTrainingRecord extends FormController
 
 		if ($task === "apply")
 		{
-			// Redirect to the my certificates list view.
+			// Redirect back to the edit screen.
 			$this->setRedirect(
-				Route::_('index.php?option=com_tjcertificate&view=certificates&layout=my', false)
-			);
+				Route::_('index.php?option=com_tjcertificate&view=trainingrecord&layout=edit&id=' . $certificateModel->getState('certificate.id'), false)
+				);
 		}
 
 		// Save task using to "Save & Close" action which is used only in backend
 		if ($task === "save")
 		{
-			// Redirect to the list screen.
-			$this->setRedirect(
-				Route::_('index.php?option=com_tjcertificate&view=certificates', false)
-			);
+			$site = $app->input->get('site', 'f', 'string');
+
+			if ($site == 'f')
+			{
+				// Redirect to the list screen.
+				$this->setRedirect(
+					Route::_('index.php?option=com_tjcertificate&view=certificates&layout=my', false)
+				);
+			}
+			else
+			{
+				// Redirect to the list screen.
+				$this->setRedirect(
+					Route::_('index.php?option=com_tjcertificate&view=certificates', false)
+				);
+			}
 		}
 
 		// Flush the data from the session.
