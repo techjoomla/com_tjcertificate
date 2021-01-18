@@ -143,10 +143,10 @@ class TjCertificateControllerTrainingRecord extends FormController
 
 		if ($task === "apply")
 		{
-			// Redirect back to the edit screen.
+			// Redirect to the my certificates list view.
 			$this->setRedirect(
-				Route::_('index.php?option=com_tjcertificate&view=trainingrecord&layout=edit&id=' . $certificateModel->getState('certificate.id'), false)
-				);
+				Route::_('index.php?option=com_tjcertificate&view=certificates&layout=my', false)
+			);
 		}
 
 		// Save task using to "Save & Close" action which is used only in backend
