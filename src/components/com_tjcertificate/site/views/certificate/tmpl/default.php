@@ -171,21 +171,21 @@ if ($this->certificate)
 		<div class="col-sm-12 bg-lightblue p-15">
 			<div class="fs-16">
 				<?php if ($this->item->title)
-				{ ?>
-					This certificate (ID: <?php echo $this->certificate->unique_certificate_id;?>) verifies that <strong><?php echo Factory::getUser($this->certificate->getUserId())->name; ?></strong> has successfully completed the <strong><?php echo $this->item->title; ?></strong> on <?php echo HTMLHelper::_('date', $this->certificate->issued_on, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_DATE_FORMAT'));?>.
+				{
+					echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_CERTIFICATE_ID'); echo $this->certificate->unique_certificate_id; echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_VERIFY'); ?> <strong><?php echo Factory::getUser($this->certificate->getUserId())->name; ?> </strong> <?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_SUCCESSFULLY_COMPLETED'); ?> <strong><?php echo $this->item->title; ?></strong> <?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_ON'); echo HTMLHelper::_('date', $this->certificate->issued_on, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_DATE_FORMAT'));?>.
 				<?php
 				}
 				else
-				{ ?>
-					This certificate (ID: <?php echo $this->certificate->unique_certificate_id;?>) has been awarded to <strong><?php echo Factory::getUser($this->certificate->getUserId())->name; ?></strong> on <?php echo HTMLHelper::_('date', $this->certificate->issued_on, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_DATE_FORMAT'));?>.
+				{
+					echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_CERTIFICATE_ID'); echo $this->certificate->unique_certificate_id; echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_AWARDED_TO'); ?> <strong> <?php echo Factory::getUser($this->certificate->getUserId())->name; ?></strong> <?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_ON'); echo HTMLHelper::_('date', $this->certificate->issued_on, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_DATE_FORMAT'));?>.
 				<?php
 				}
 				?>
 				<?php
 				if ($this->certificate->getExpiry() != '0000-00-00 00:00:00')
 				{
-				?>
-					This Certificate expires on <strong><?php echo HTMLHelper::_('date', $this->certificate->getExpiry(), Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_DATE_FORMAT'));?></strong>.
+
+					echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_CERTIFICATE_EXPIRES');?> <strong><?php echo HTMLHelper::_('date', $this->certificate->getExpiry(), Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_DATE_FORMAT'));?></strong>.
 				<?php
 				}
 				?>
