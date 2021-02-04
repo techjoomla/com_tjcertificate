@@ -172,21 +172,16 @@ if ($this->certificate)
 			<div class="fs-16">
 				<?php if ($this->item->title)
 				{
-					echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_CERTIFICATE_ID'); echo $this->certificate->unique_certificate_id; echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_VERIFY'); ?> <strong><?php echo Factory::getUser($this->certificate->getUserId())->name; ?> </strong> <?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_SUCCESSFULLY_COMPLETED'); ?> <strong><?php echo $this->item->title; ?></strong> <?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_ON'); echo HTMLHelper::_('date', $this->certificate->issued_on, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_DATE_FORMAT'));?>.
-				<?php
+					echo Text::sprintf('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_CERTIFICATE', $this->certificate->unique_certificate_id, Factory::getUser($this->certificate->getUserId())->name, $this->item->title, HTMLHelper::_('date', $this->certificate->issued_on, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_DATE_FORMAT')));
 				}
 				else
 				{
-					echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_CERTIFICATE_ID'); echo $this->certificate->unique_certificate_id; echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_AWARDED_TO'); ?> <strong> <?php echo Factory::getUser($this->certificate->getUserId())->name; ?></strong> <?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_ON'); echo HTMLHelper::_('date', $this->certificate->issued_on, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_DATE_FORMAT'));?>.
-				<?php
+					echo Text::sprintf('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_AWARDED', $this->certificate->unique_certificate_id, Factory::getUser($this->certificate->getUserId())->name, HTMLHelper::_('date', $this->certificate->issued_on, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_DATE_FORMAT')));
 				}
-				?>
-				<?php
+
 				if ($this->certificate->getExpiry() != '0000-00-00 00:00:00')
 				{
-
-					echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_CERTIFICATE_EXPIRES');?> <strong><?php echo HTMLHelper::_('date', $this->certificate->getExpiry(), Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_DATE_FORMAT'));?></strong>.
-				<?php
+					echo Text::sprintf('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_CERTIFICATE_EXPIRES', HTMLHelper::_('date', $this->certificate->getExpiry(), Text::_('COM_TJCERTIFICATE_CERTIFICATE_DETAIL_VIEW_DATE_FORMAT')));
 				}
 				?>
 			</div>
