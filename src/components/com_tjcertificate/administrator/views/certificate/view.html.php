@@ -10,6 +10,9 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
@@ -72,7 +75,7 @@ class TjCertificateViewCertificate extends HtmlView
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
 		$this->input = Factory::getApplication()->input;
-		$this->canDo = JHelperContent::getActions('com_tjcertificate', 'certificate', $this->item->id);
+		$this->canDo = ContentHelper::getActions('com_tjcertificate', 'certificate', $this->item->id);
 
 		$layout = $this->input->get('layout', 'edit');
 
@@ -114,7 +117,7 @@ class TjCertificateViewCertificate extends HtmlView
 		$canDo = $this->canDo;
 		$layout = Factory::getApplication()->input->get("layout");
 
-		JToolbarHelper::title(
+		ToolbarHelper::title(
 			Text::_('COM_TJCERTIFICATE_PAGE_VIEW_CERTIFICATE')
 		);
 
@@ -133,17 +136,17 @@ class TjCertificateViewCertificate extends HtmlView
 		{
 			Factory::getApplication()->input->set('hidemainmenu', true);
 
-			JToolbarHelper::title(
+			ToolbarHelper::title(
 				Text::_('COM_TJCERTIFICATE_PAGE_' . ($isNew ? 'ADD_CERTIFICATE' : 'EDIT_CERTIFICATE')),
 				'pencil-2 certificate-add'
 			);
 
 			if ($isNew)
 			{
-				JToolbarHelper::apply('certificate.apply');
-				JToolbarHelper::save('certificate.save');
-				JToolbarHelper::save2new('certificate.save2new');
-				JToolbarHelper::cancel('certificate.cancel');
+				ToolbarHelper::apply('certificate.apply');
+				ToolbarHelper::save('certificate.save');
+				ToolbarHelper::save2new('certificate.save2new');
+				ToolbarHelper::cancel('certificate.cancel');
 			}
 			else
 			{
@@ -151,11 +154,11 @@ class TjCertificateViewCertificate extends HtmlView
 
 				// Can't save the record if it's checked out and editable
 				$this->canSave($itemEditable);
-				JToolbarHelper::cancel('certificate.cancel', 'JTOOLBAR_CLOSE');
+				ToolbarHelper::cancel('certificate.cancel', 'JTOOLBAR_CLOSE');
 			}
 		}
 
-		JToolbarHelper::divider();
+		ToolbarHelper::divider();
 	}
 
 	/**
@@ -169,8 +172,8 @@ class TjCertificateViewCertificate extends HtmlView
 	{
 		if ($itemEditable)
 		{
-			JToolbarHelper::apply('certificate.apply');
-			JToolbarHelper::save('certificate.save');
+			ToolbarHelper::apply('certificate.apply');
+			ToolbarHelper::save('certificate.save');
 		}
 	}
 

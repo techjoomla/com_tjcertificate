@@ -10,6 +10,7 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\Filesystem\Folder;
 
 use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Factory;
@@ -86,9 +87,9 @@ class TjCertificateControllerCertificate extends FormController
 		$canvasOutput = base64_decode($canvasOutput);
 		$filename     = $certificateId . '.png';
 
-		if (!JFolder::exists(JPATH_SITE . '/media/com_tjcertificate/certificates/'))
+		if (!Folder::exists(JPATH_SITE . '/media/com_tjcertificate/certificates/'))
 		{
-			JFolder::create(JPATH_SITE . '/media/com_tjcertificate/certificates');
+			Folder::create(JPATH_SITE . '/media/com_tjcertificate/certificates');
 		}
 
 		$filePath = 'media/com_tjcertificate/certificates/';

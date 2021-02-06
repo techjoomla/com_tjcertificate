@@ -10,13 +10,14 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\Table\Table;
 
 /**
  * Certificate table class
  *
  * @since  1.0.0
  */
-class TjCertificateTableCertificates extends JTable
+class TjCertificateTableCertificates extends Table
 {
 	/**
 	 * Constructor

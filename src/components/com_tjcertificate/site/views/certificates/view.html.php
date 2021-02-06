@@ -10,6 +10,9 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
 
 jimport('joomla.application.component.view');
 
@@ -23,7 +26,7 @@ JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADM
  *
  * @since  1.1.0
  */
-class TjCertificateViewCertificates extends JViewLegacy
+class TjCertificateViewCertificates extends HtmlView
 {
 	/**
 	 * An array of items
@@ -81,8 +84,8 @@ class TjCertificateViewCertificates extends JViewLegacy
 
 		if (!$this->user->id)
 		{
-			$url      = base64_encode(JUri::getInstance()->toString());
-			$loginUrl = JRoute::_('index.php?option=com_users&view=login&return=' . $url, false);
+			$url      = base64_encode(Uri::getInstance()->toString());
+			$loginUrl = Route::_('index.php?option=com_users&view=login&return=' . $url, false);
 			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_ERROR_LOGIN_MESSAGE'), 'error');
 			$app->redirect($loginUrl);
 

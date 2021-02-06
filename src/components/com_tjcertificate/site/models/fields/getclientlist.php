@@ -1,3 +1,6 @@
+use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
 <?php
 /**
  * @package     TJCertificate
@@ -16,7 +19,7 @@ use Joomla\CMS\Language\Text;
  *
  * @since  1.0.0
  */
-class JFormFieldGetClientList extends JFormFieldList
+class FormFieldGetClientList extends FormFieldList
 {
 	/**
 	 * Method to get a list of options for a list input.
@@ -29,12 +32,12 @@ class JFormFieldGetClientList extends JFormFieldList
 	{
 		$options = array();
 
-		$user = JFactory::getUser();
-		$db = JFactory::getDbo();
+		$user = Factory::getUser();
+		$db = Factory::getDbo();
 
 		$clientByUser = $this->getAttribute('clientByUser');
 
-		$options[] = JHtml::_('select.option', '', Text::_('COM_TJCERTIFICATE_CERTIFICATE_FILTER_CERTIFICATE_TYPE_SELECT'));
+		$options[] = HTMLHelper::_('select.option', '', Text::_('COM_TJCERTIFICATE_CERTIFICATE_FILTER_CERTIFICATE_TYPE_SELECT'));
 
 		// Get Private/Created by logged-in user's templates
 		if ($user->id)
@@ -61,7 +64,7 @@ class JFormFieldGetClientList extends JFormFieldList
 				{
 					$client    = str_replace(".", "_", $obj->client);
 					$langConst = strtoupper("COM_TJCERTIFICATE_CLIENT_" . $client);
-					$options[] = JHtml::_('select.option', $obj->client, TEXT::_($langConst));
+					$options[] = HTMLHelper::_('select.option', $obj->client, TEXT::_($langConst));
 				}
 			}
 		}

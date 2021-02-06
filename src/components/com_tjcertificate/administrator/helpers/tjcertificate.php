@@ -10,8 +10,10 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-use Joomla\CMS\Language\Text;
+use Joomla\CMS\Filesystem\Path;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 /**
  * Certificate helper.
@@ -36,7 +38,7 @@ class TjCertificateHelper
 		// Eg com_tjcertificate
 		$component = $parts[0];
 		$eName     = str_replace('com_', '', $component);
-		$file      = JPath::clean(JPATH_ADMINISTRATOR . '/components/' . $component . '/helpers/' . $eName . '.php');
+		$file      = Path::clean(JPATH_ADMINISTRATOR . '/components/' . $component . '/helpers/' . $eName . '.php');
 
 		if (empty($extension) || (!empty($extension) && !file_exists($file)))
 		{
@@ -65,14 +67,14 @@ class TjCertificateHelper
 				{
 					if (is_callable(array($cName, 'addSubmenu')))
 					{
-						$lang = JFactory::getLanguage();
+						$lang = Factory::getLanguage();
 
 						// Loading language file from the administrator/language directory then
 						// Loading language file from the administrator/components/*extension*/language directory
 						$lang->load($component, JPATH_BASE, null, false, false)
-						|| $lang->load($component, JPath::clean(JPATH_ADMINISTRATOR . '/components/' . $component), null, false, false)
+						|| $lang->load($component, Path::clean(JPATH_ADMINISTRATOR . '/components/' . $component), null, false, false)
 						|| $lang->load($component, JPATH_BASE, $lang->getDefault(), false, false)
-						|| $lang->load($component, JPath::clean(JPATH_ADMINISTRATOR . '/components/' . $component), $lang->getDefault(), false, false);
+						|| $lang->load($component, Path::clean(JPATH_ADMINISTRATOR . '/components/' . $component), $lang->getDefault(), false, false);
 
 						// Call_user_func(array($cName, 'addSubmenu'), 'categories' . (isset($section) ? '.' . $section : ''));
 						call_user_func(array($cName, 'addSubmenu'), $vName);
