@@ -11,8 +11,6 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Uri\Uri;
-use Joomla\CMS\Filesystem\File;
-
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Component\ComponentHelper;
@@ -945,7 +943,7 @@ class TjCertificateCertificate extends CMSObject
 	}
 
 	/**
-	 * This function checks the certificate download permission 
+	 * This function checks the certificate download permission
 	 *
 	 * @param   STRING  $uniqueCertificateId  certificate Id
 	 *

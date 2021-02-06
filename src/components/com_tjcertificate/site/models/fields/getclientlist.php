@@ -1,6 +1,4 @@
-use Joomla\CMS\Form\FormHelper;
-use Joomla\CMS\Factory;
-use Joomla\CMS\HTML\HTMLHelper;
+
 <?php
 /**
  * @package     TJCertificate
@@ -13,6 +11,9 @@ use Joomla\CMS\HTML\HTMLHelper;
 
 JFormHelper::loadFieldClass('list');
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
 
 /**
  * Custom field to list all public and logged-in user's private certificate templates
