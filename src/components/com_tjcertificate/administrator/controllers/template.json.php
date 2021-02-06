@@ -10,6 +10,9 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\Session\Session;
+use Joomla\CMS\Response\JsonResponse;
+use Joomla\CMS\Filesystem\Folder;
 
 use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Factory;
@@ -34,7 +37,7 @@ class TjCertificateControllerTemplate extends FormController
 	 */
 	public function loadDefaultTemplate()
 	{
-		if (!JSession::checkToken('get'))
+		if (!Session::checkToken('get'))
 		{
 			echo new JResponseJson(null, Text::_('JINVALID_TOKEN'), true);
 		}
@@ -58,7 +61,7 @@ class TjCertificateControllerTemplate extends FormController
 
 			$templatePath = MEDIA_ROOT . '/' . $component . '/' . TJ_CERTIFICATE_TEMPLATE_FOLDER . '/' . $templateFolder;
 
-			if (!JFolder::exists($templatePath))
+			if (!Folder::exists($templatePath))
 			{
 				echo new JResponseJson(null, Text::_('COM_TJCERTIFICATE_ERROR_INVALID_SAMPLE_CERTIFICATE'), true);
 
@@ -81,7 +84,7 @@ class TjCertificateControllerTemplate extends FormController
 
 			$templateData = stripslashes($templateData);
 
-			echo new JResponseJson($templateData);
+			echo new JsonResponse($templateData);
 		}
 	}
 }

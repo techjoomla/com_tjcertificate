@@ -10,7 +10,7 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
+use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Component\ComponentHelper;
@@ -565,7 +565,7 @@ class TjCertificateCertificate extends CMSObject
 
 		if (isset($options['absolute']))
 		{
-			return JUri::root() . substr(Route::_($url), strlen(JUri::base(true)) + 1);
+			return Uri::root() . substr(Route::_($url), strlen(Uri::base(true)) + 1);
 		}
 
 		return Route::_($url);
@@ -582,7 +582,7 @@ class TjCertificateCertificate extends CMSObject
 	 */
 	public function getDownloadUrl($options = array())
 	{
-		if (JFile::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
+		if (File::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
 		{
 			$url = 'index.php?option=com_tjcertificate&task=certificate.download&certificate=' . $this->unique_certificate_id;
 
@@ -593,7 +593,7 @@ class TjCertificateCertificate extends CMSObject
 
 			if (isset($options['absolute']))
 			{
-				return JUri::root() . substr(Route::_($url), strlen(JUri::base(true)) + 1);
+				return Uri::root() . substr(Route::_($url), strlen(Uri::base(true)) + 1);
 			}
 
 			return Route::_($url);
@@ -615,7 +615,7 @@ class TjCertificateCertificate extends CMSObject
 	{
 		$app  = Factory::getApplication();
 
-		if (JFile::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
+		if (File::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
 		{
 			jimport('joomla.filesystem.file');
 			jimport('joomla.filesystem.folder');
@@ -943,7 +943,7 @@ class TjCertificateCertificate extends CMSObject
 	}
 
 	/**
-	 * This function checks the certificate download permission 
+	 * This function checks the certificate download permission
 	 *
 	 * @param   STRING  $uniqueCertificateId  certificate Id
 	 *
