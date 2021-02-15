@@ -25,6 +25,7 @@ HTMLHelper::_('behavior.framework');
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 HTMLHelper::StyleSheet('media/com_tjlms/vendors/artificiers/artficier.css');
 HTMLHelper::script('media/com_tjcertificate/vendors/html2canvas/js/html2canvas.js');
+HTMLHelper::script('media/com_tjcertificate/vendors/loader/js/loadingoverlay.min.js');
 HTMLHelper::script('com_tjcertificate/certificateImage.min.js', $options);
 
 $imageUrl = "";
