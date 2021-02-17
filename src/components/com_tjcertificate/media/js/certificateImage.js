@@ -54,7 +54,7 @@ var certificateImage = {
                         viewport.setAttribute("content", "width=device-width");
                     }
 
-					Joomla.loadingLayer('hide');
+					jQuery.LoadingOverlay("hide");
                 }, 1000);
             }
         });
@@ -71,7 +71,9 @@ var certificateImage = {
             viewport.setAttribute("content", "width=1200px");
         }
 
-        Joomla.loadingLayer('show');
+		jQuery.LoadingOverlay("show", {
+			image : "media/com_tjcertificate/images/loader/loader.gif"
+		});
 
         html2canvas(element, {
             // scale: (2),
