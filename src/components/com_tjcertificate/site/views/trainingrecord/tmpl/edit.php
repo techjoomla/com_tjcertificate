@@ -12,9 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Session\Session;
 use Joomla\CMS\Uri\Uri;
 
 HTMLHelper::_('behavior.formvalidation');
@@ -24,11 +22,11 @@ HTMLHelper::_('behavior.tooltip');
 HTMLHelper::_('bootstrap.framework');
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 HTMLHelper::_('jquery.token');
+HTMLHelper::_('formbehavior.chosen', 'select');
 
 $options['relative'] = true;
 HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
 HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
-
 ?>
 <form action="" class="form-validate form-horizontal"
     method="post" name="adminForm" id="adminForm" enctype="multipart/form-data">
@@ -45,10 +43,17 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 					<div class="col-sm-6"><?php echo $this->form->getInput('id'); ?></div>
 				</div>
 				<?php
+					// Check agency is enabled
+					if ($this->isAgencyEnabled && ($this->manageOwn || $this->manage))
+					{
+						echo $this->form->renderField('agency_id'); 
+					}
+
 					if ($this->manage)
 					{
 						echo $this->form->renderField('assigned_user_id');
 					}
+
 					 echo $this->form->renderField('name'); 
 					 echo $this->form->renderField('unique_certificate_id');
 					 echo $this->form->renderField('cert_url'); 
@@ -102,6 +107,7 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 		</div>
 	</div>
 	
+	<input type="hidden" id="assigned_user_id" value="<?php echo $this->item->user_id; ?>" />
 	<input type="hidden" name="jform[id]" id="id" value="<?php echo $this->item->id; ?>" />
 	<input type="hidden" name="option" value="com_tjcertificate"/>
 	<input type="hidden" name="task" value="trainingrecord.save"/>
@@ -113,6 +119,11 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 var allowedAttachments = '<?php echo $this->allowedFileExtensions; ?>';
 var attachmentMaxSize  = '<?php echo $this->uploadLimit; ?>';
 
-
+jQuery(document).ready(function() {
+    if (jQuery('#jform_agency_id').val())
+    {
+      jQuery('#jform_agency_id').trigger("change");
+    }
+});
 
 </script>

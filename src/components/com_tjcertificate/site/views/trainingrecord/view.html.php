@@ -37,6 +37,8 @@ class TjCertificateViewTrainingRecord extends HtmlView
 
 	public $certificate = null;
 
+	public $isAgencyEnabled = false;
+
 	/**
 	 * Display the view
 	 *
@@ -55,13 +57,19 @@ class TjCertificateViewTrainingRecord extends HtmlView
 		$id     = $this->input->getInt('id');
 		$this->item  = $this->get('Item');
 		$this->certificate = TJCERT::Certificate();
-		$params = ComponentHelper::getParams('com_tjcertificate');
+		$this->params = ComponentHelper::getParams('com_tjcertificate');
 		$this->manage = $this->user->authorise('certificate.external.manage', 'com_tjcertificate');
+		$this->manageOwn = $this->user->authorise('certificate.external.manageown', 'com_tjcertificate');
+
+		if (ComponentHelper::isEnabled('com_multiagency') && $this->params->get('enable_multiagency'))
+		{
+			$this->isAgencyEnabled = true;
+		}
 
 		if (!$this->manage)
 		{
 			// If certificate view is private then view is available only for record owner
-			if (!$params->get('certificate_scope') && Factory::getUser()->id != $this->item->user_id)
+			if (!$this->params->get('certificate_scope') && Factory::getUser()->id != $this->item->user_id)
 			{
 				JError::raiseWarning(500, Text::_('JERROR_ALERTNOAUTHOR'));
 

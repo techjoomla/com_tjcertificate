@@ -15,6 +15,7 @@ jimport('joomla.application.component.view');
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Component\ComponentHelper;
 
 JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
 
@@ -89,6 +90,15 @@ class TjCertificateViewCertificates extends JViewLegacy
 	public $create;
 
 	/**
+	 * The view parameters
+	 *
+	 * @var    Registry
+	 */
+	protected $params;
+
+	public $isAgencyEnabled = false;
+
+	/**
 	 * Display the  view
 	 *
 	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
@@ -97,8 +107,14 @@ class TjCertificateViewCertificates extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$app = Factory::getApplication();
-		$this->user	= Factory::getUser();
+		$app          = Factory::getApplication();
+		$this->user	  = Factory::getUser();
+		$this->params = ComponentHelper::getParams('com_tjcertificate');
+
+		if (ComponentHelper::isEnabled('com_multiagency') && $this->params->get('enable_multiagency'))
+		{
+			$this->isAgencyEnabled = true;
+		}
 
 		if (!$this->user->id)
 		{

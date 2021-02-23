@@ -87,6 +87,15 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_NAME'); ?>
 								</th>
+
+								<?php if ($this->isAgencyEnabled) { ?>
+									<th>
+										<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_USERNAME'); ?>
+									</th>
+									<th>
+										<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ORG_NAME'); ?>
+									</th>
+								<?php } ?>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ISSUED_DATE', 'ci.issued_on', $listDirn, $listOrder); ?>
 								</th>
@@ -149,6 +158,13 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 										}
 									?>
 								</td>
+								<?php 
+								if ($this->isAgencyEnabled)
+								{ ?>
+									<td><?php echo $item->uname; ?></td>
+									<td><?php echo $item->title; ?></td>
+								<?php 
+								} ?>
 								<td><?php echo $certificateObj->getFormatedDate($item->issued_on); ?></td>
 								<td>
 									<?php
@@ -242,3 +258,24 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 		display: inline-flex;
 	}
 </style>
+
+<script type="text/javascript">
+
+var isAgencyEnable = '<?php echo $this->isAgencyEnabled; ?>'; 
+
+// Hide agency drop-down if multi-agency is not enable
+if (!isAgencyEnable)
+{
+	jQuery(document).ready(function() {
+		jQuery('#filter_agency_id').closest("div").remove();
+	});
+}
+else
+{
+	// Hide all users drop-down if multi-agency is enable
+	jQuery(document).ready(function() {
+		jQuery('#filter_user_id').closest("div").remove();
+	});
+}
+
+</script>
