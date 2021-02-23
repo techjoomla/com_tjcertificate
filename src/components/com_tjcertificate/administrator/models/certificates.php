@@ -13,6 +13,8 @@ defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
 /**
  * Methods supporting a list of records.
@@ -40,9 +42,12 @@ class TjCertificateModelCertificates extends ListModel
 				'user_id', 'ci.user_id',
 				'state', 'ci.state',
 				'issued_on', 'ci.issued_on',
-				'expired_on', 'ci.expired_on'
+				'expired_on', 'ci.expired_on',
+				'agency_id'
 			);
 		}
+
+		$this->params = ComponentHelper::getParams('com_tjcertificate');
 
 		parent::__construct($config);
 	}
@@ -81,18 +86,81 @@ class TjCertificateModelCertificates extends ListModel
 		// Initialize variables.
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
-		$app = Factory::getApplication();
+		$app   = Factory::getApplication();
+		$user  = Factory::getUser();
 
 		$extension = Factory::getApplication()->input->get('extension', '', 'CMD');
 
 		$this->setState('filter.component', $extension);
 
+		// Filter by client
+		$client = $this->getState('filter.client');
+
 		// Create the base select statement.
 		$query->select(array('ci.*', 'ct.title', 'users.name as uname'));
 		$query->from($db->quoteName('#__tj_certificate_issue', 'ci'));
+
 		$query->join('LEFT', $db->quoteName('#__tj_certificate_templates', 'ct') .
 			' ON (' . $db->quoteName('ci.certificate_template_id') . ' = ' . $db->quoteName('ct.id') . ')');
-		$query->join('LEFT', $db->quoteName('#__users', 'users') . ' ON (' . $db->quoteName('ci.user_id') . ' = ' . $db->quoteName('users.id') . ')');
+
+		$query->join('LEFT', $db->quoteName('#__users', 'users') .
+			' ON (' . $db->quoteName('ci.user_id') . ' = ' . $db->quoteName('users.id') . ')');
+
+		if (ComponentHelper::isEnabled('com_multiagency') && $this->params->get('enable_multiagency'))
+		{
+			$canManageAllAgencyUser = $user->authorise('core.manage.all.agency.user', 'com_multiagency');
+
+			// Subquery to get agency users
+			$subquery  = $db->getQuery(true);
+			$subquery->select($db->quoteName('ml.id'));
+			$subquery->from($db->quoteName('#__tjmultiagency_multiagency', 'ml'));
+			$subquery->join('INNER', $db->quoteName('#__tj_clusters', 'c') . ' ON ' . $db->quoteName('c.client_id') . '=' . $db->quoteName('ml.id'));
+			$subquery->join('INNER', $db->quoteName('#__tj_cluster_nodes', 'cn') . ' ON ' . $db->quoteName('cn.cluster_id') . '=' . $db->quoteName('c.id'));
+			$subquery->Where($db->qn('ml.state') . '=' . 1);
+			$subquery->where($db->quoteName('cn.user_id') . ' = ' . (int) $user->id);
+
+			$query->select('(CASE WHEN ml.title IS NULL THEN agency.title ELSE ml.title END) as title');
+
+			$query->join('INNER', $db->qn('#__tj_cluster_nodes', 'nodes') .
+				' ON (' . $db->qn('users.id') . ' = ' . $db->qn('nodes.user_id') . ')');
+
+			$query->join('INNER', $db->qn('#__tj_clusters', 'clusters') .
+				' ON (' . $db->qn('clusters.id') . ' = ' . $db->qn('nodes.cluster_id') .
+				' AND ' . $db->qn('clusters.client') . " = 'com_multiagency' )");
+
+			$query->join('LEFT', $db->qn('#__tjmultiagency_multiagency', 'agency') .
+				' ON (' . $db->qn('agency.id') . ' = ' . $db->qn('clusters.client_id') . ')');
+
+			$query->join('LEFT', $db->qn('#__tjmultiagency_multiagency', 'ml') .
+				' ON (' . $db->qn('ml.id') . ' = ' . $db->qn('ci.agency_id') . ')');
+
+			$agencyId = $this->getState('filter.agency_id');
+
+			// If don't have manage all user permission then get users of own agency
+			if (!$canManageAllAgencyUser && !$agencyId)
+			{
+				$query->where($db->quoteName('agency.id') . ' in (' . $subquery . ')');
+			}
+
+			// Get external records as well as course certificate for selected organization users
+			if ($agencyId && !$client)
+			{
+				$query->where(
+				$db->quoteName('agency.id') . ' = ' . (int) $agencyId
+				. ' AND ' . '(' . $db->quoteName('ci.agency_id') . ' = ' . (int) $agencyId . ' OR ' . $db->quoteName('ci.agency_id') . ' =  ""' . ')'
+				);
+			}
+
+			if ($agencyId && $client != 'external')
+			{
+				$query->where($db->quoteName('agency.id') . ' = ' . (int) $agencyId);
+			}
+
+			if ($client == 'external' && $agencyId)
+			{
+				$query->where($db->quoteName('ml.id') . ' = ' . (int) $agencyId);
+			}
+		}
 
 		// Filter by certificate id
 		$id = $this->getState('filter.id');
@@ -109,9 +177,6 @@ class TjCertificateModelCertificates extends ListModel
 		{
 			$query->where($db->quoteName('ci.certificate_template_id') . ' = ' . (int) $certificateTemplateId);
 		}
-
-		// Filter by client
-		$client = $this->getState('filter.client');
 
 		if (!empty($client))
 		{
@@ -193,6 +258,8 @@ class TjCertificateModelCertificates extends ListModel
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering', 'ci.id');
 		$orderDirn = $this->state->get('list.direction', 'desc');
+
+		$query->group('ci.id');
 
 		if ($orderCol && $orderDirn)
 		{

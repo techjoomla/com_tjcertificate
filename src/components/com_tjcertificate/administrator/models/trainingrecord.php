@@ -78,6 +78,21 @@ class TjCertificateModelTrainingRecord extends AdminModel
 	{
 		// Get the form.
 		$form = $this->loadForm('com_tjcertificate.trainingrecord', 'trainingrecord', array('control' => 'jform', 'load_data' => $loadData));
+		$loggedInuser = Factory::getUser();
+
+		$app                  = Factory::getApplication();
+		$params               = ComponentHelper::getParams('com_tjcertificate');
+		$integrateMultiagency = $params->get('enable_multiagency');
+
+		if (!$integrateMultiagency)
+		{
+			$form->setFieldAttribute('agency_id', 'required', 'false');
+		}
+
+		if (!$loggedInuser->authorise('certificate.external.manage', 'com_tjcertificate'))
+		{
+			$form->setFieldAttribute('assigned_user_id', 'required', 'false');
+		}
 
 		return empty($form) ? false : $form;
 	}

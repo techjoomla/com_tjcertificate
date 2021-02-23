@@ -15,6 +15,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Object\CMSObject;
+use Joomla\CMS\Component\ComponentHelper;
 
 /**
  * Certificates view
@@ -82,6 +83,15 @@ class TjCertificateViewCertificates extends HtmlView
 	protected $canDo;
 
 	/**
+	 * The view parameters
+	 *
+	 * @var    Registry
+	 */
+	protected $params;
+
+	public $isAgencyEnabled = false;
+
+	/**
 	 * Display the view
 	 *
 	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
@@ -115,6 +125,13 @@ class TjCertificateViewCertificates extends HtmlView
 
 		// Set sidebar
 		$this->sidebar = JHtmlSidebar::render();
+
+		$this->params = ComponentHelper::getParams('com_tjcertificate');
+
+		if (ComponentHelper::isEnabled('com_multiagency') && $this->params->get('enable_multiagency'))
+		{
+			$this->isAgencyEnabled = true;
+		}
 
 		// Display the view
 		parent::display($tpl);
