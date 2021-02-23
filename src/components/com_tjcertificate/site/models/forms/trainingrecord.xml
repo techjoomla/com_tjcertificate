@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
-	<fieldset>
+	<fieldset addfieldpath="components/com_tjcertificate/models/fields">
 		<field
 			name="id"
 			type="hidden"
