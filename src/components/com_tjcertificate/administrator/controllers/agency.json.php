@@ -28,7 +28,7 @@ class TjCertificateControllerAgency extends FormController
 	/**
 	 * Function to get agency users
 	 *
-	 * @return  void
+	 * @return  void|boolean
 	 *
 	 * @since  __DEPLOY_VERSION__
 	 */
@@ -116,7 +116,7 @@ class TjCertificateControllerAgency extends FormController
 	 *
 	 * @param   int  $agencyId  agency id
 	 * 
-	 * @return  void
+	 * @return  integer  The integer of the primary key
 	 *
 	 * @since  __DEPLOY_VERSION__
 	 */

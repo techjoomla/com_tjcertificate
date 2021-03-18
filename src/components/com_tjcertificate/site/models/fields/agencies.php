@@ -33,7 +33,6 @@ class JFormFieldAgencies extends JFormFieldList
 	 */
 	protected $loadExternally = 0;
 
-	protected $params;
 	/**
 	 * Method to get a list of options for a list input.
 	 *
@@ -46,7 +45,6 @@ class JFormFieldAgencies extends JFormFieldList
 		$db     = Factory::getDbo();
 		$user   = Factory::getUser();
 		$query  = $db->getQuery(true);
-		$params = ComponentHelper::getParams('com_multiagency');
 
 		$canManageAllAgencyUser = $user->authorise('core.manage.all.agency.user', 'com_multiagency');
 
