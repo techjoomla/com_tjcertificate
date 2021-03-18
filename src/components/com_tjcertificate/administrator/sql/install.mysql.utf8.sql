@@ -41,7 +41,6 @@ CREATE TABLE IF NOT EXISTS `#__tj_certificate_issue` (
   `created_by` int(11) NOT NULL,
   `access` tinyint(1) NOT NULL DEFAULT '0',
   `status` varchar(64) NULL,
-  `agency_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY unqk_certificate_id (`unique_certificate_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;

@@ -20,7 +20,7 @@ JFormHelper::loadFieldClass('list');
 /**
  * Supports an HTML select list of courses
  *
- * @since  1.0.0
+ * @since  __DEPLOY_VERSION__
  */
 class JFormFieldAllUsers extends JFormFieldList
 {
@@ -28,7 +28,7 @@ class JFormFieldAllUsers extends JFormFieldList
 	 * The form field type.
 	 *
 	 * @var		string
-	 * @since	1.6
+	 * @since	__DEPLOY_VERSION__
 	 */
 	protected $type = 'allusers';
 
@@ -36,7 +36,7 @@ class JFormFieldAllUsers extends JFormFieldList
 	 * Fiedd to decide if options are being loaded externally and from xml
 	 *
 	 * @var		integer
-	 * @since	2.2
+	 * @since	__DEPLOY_VERSION__
 	 */
 	protected $loadExternally = 0;
 
@@ -45,49 +45,36 @@ class JFormFieldAllUsers extends JFormFieldList
 	 *
 	 * @return	array		An array of JHtml options.
 	 *
-	 * @since   11.4
+	 * @since   __DEPLOY_VERSION__
 	 */
 	protected function getOptions()
 	{
+		$db = Factory::getDbo();
+		$query = $db->getQuery(true);
 
-		$params = ComponentHelper::getParams('com_tjcertificate');
-		$isAgencyEnabled = false;
+		// Select the required fields from the table.
+		$query->select('u.id, u.name, u.username');
+		$query->from('`#__users` AS u');
+		$query->where($db->qn('u.block') . ' = 0');
+		$query->order($db->escape('u.name' . ' ' . 'asc'));
+		$db->setQuery($query);
 
-		if (ComponentHelper::isEnabled('com_multiagency') && $params->get('enable_multiagency'))
+		// Get all users.
+		$allUsers = $db->loadObjectList();
+
+		$options = array();
+
+		$options[] = HTMLHelper::_('select.option', "", Text::_('COM_TJCERTIFICATE_AGENCY_USER_SELECT'));
+
+		foreach ($allUsers as $u)
 		{
-			$isAgencyEnabled = true;
+			$options[] = HTMLHelper::_('select.option', $u->id, $u->name);
 		}
 
-		if (!$isAgencyEnabled)
+		if (!$this->loadExternally)
 		{
-			$db = JFactory::getDbo();
-			$query = $db->getQuery(true);
-
-			// Select the required fields from the table.
-			$query->select('u.id, u.name, u.username');
-			$query->from('`#__users` AS u');
-			$query->order($db->escape('u.name ASC'));
-
-			$db->setQuery($query);
-
-			// Get all users.
-			$allUsers = $db->loadObjectList();
-
-			$options = array();
-
-			$options[] = HTMLHelper::_('select.option', "", Text::_('COM_TJCERTIFICATE_AGENCY_USER_SELECT'));
-
-			foreach ($allUsers as $u)
-			{
-				$options[] = HTMLHelper::_('select.option', $u->id, $u->name);
-			}
-
-			if (!$this->loadExternally)
-			{
-				// Merge any additional options in the XML definition.
-				$options = array_merge(parent::getOptions(), $options);
-			}
-			
+			// Merge any additional options in the XML definition.
+			$options = array_merge(parent::getOptions(), $options);
 		}
 
 		return $options;
@@ -98,7 +85,7 @@ class JFormFieldAllUsers extends JFormFieldList
 	 *
 	 * @return	array		An array of JHtml options.
 	 *
-	 * @since   2.2
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function getOptionsExternally()
 	{

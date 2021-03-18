@@ -3,11 +3,9 @@
 	<fieldset>
 		<field name="id" type="hidden"/>
 
-
 		<field 
 			name="agency_id" 
-			type="agencies" 
-			required="true" 
+			type="agencies"
 			label="COM_TJCERTIFICATE_FORM_CLUSTER_LBL" 
 			onchange="certificate.getAgencyUsers(this)"
 			addfieldpath="components/com_tjcertificate/models/fields"

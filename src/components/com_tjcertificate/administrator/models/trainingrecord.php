@@ -84,11 +84,6 @@ class TjCertificateModelTrainingRecord extends AdminModel
 		$params               = ComponentHelper::getParams('com_tjcertificate');
 		$integrateMultiagency = $params->get('enable_multiagency');
 
-		if (!$integrateMultiagency)
-		{
-			$form->setFieldAttribute('agency_id', 'required', 'false');
-		}
-
 		if (!$loggedInuser->authorise('certificate.external.manage', 'com_tjcertificate'))
 		{
 			$form->setFieldAttribute('assigned_user_id', 'required', 'false');

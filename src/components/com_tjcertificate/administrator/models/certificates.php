@@ -119,7 +119,7 @@ class TjCertificateModelCertificates extends ListModel
 			$subquery->Where($db->qn('ml.state') . '=' . 1);
 			$subquery->where($db->quoteName('cn.user_id') . ' = ' . (int) $user->id);
 
-			$query->select('(CASE WHEN ml.title IS NULL THEN agency.title ELSE ml.title END) as title');
+			$query->select('agency.title as title');
 
 			$query->join('INNER', $db->qn('#__tj_cluster_nodes', 'nodes') .
 				' ON (' . $db->qn('users.id') . ' = ' . $db->qn('nodes.user_id') . ')');
@@ -131,9 +131,6 @@ class TjCertificateModelCertificates extends ListModel
 			$query->join('LEFT', $db->qn('#__tjmultiagency_multiagency', 'agency') .
 				' ON (' . $db->qn('agency.id') . ' = ' . $db->qn('clusters.client_id') . ')');
 
-			$query->join('LEFT', $db->qn('#__tjmultiagency_multiagency', 'ml') .
-				' ON (' . $db->qn('ml.id') . ' = ' . $db->qn('ci.agency_id') . ')');
-
 			$agencyId = $this->getState('filter.agency_id');
 
 			// If don't have manage all user permission then get users of own agency
@@ -142,23 +139,9 @@ class TjCertificateModelCertificates extends ListModel
 				$query->where($db->quoteName('agency.id') . ' in (' . $subquery . ')');
 			}
 
-			// Get external records as well as course certificate for selected organization users
-			if ($agencyId && !$client)
-			{
-				$query->where(
-				$db->quoteName('agency.id') . ' = ' . (int) $agencyId
-				. ' AND ' . '(' . $db->quoteName('ci.agency_id') . ' = ' . (int) $agencyId . ' OR ' . $db->quoteName('ci.agency_id') . ' =  ""' . ')'
-				);
-			}
-
-			if ($agencyId && $client != 'external')
+			if ($agencyId)
 			{
 				$query->where($db->quoteName('agency.id') . ' = ' . (int) $agencyId);
-			}
-
-			if ($client == 'external' && $agencyId)
-			{
-				$query->where($db->quoteName('ml.id') . ' = ' . (int) $agencyId);
 			}
 		}
 

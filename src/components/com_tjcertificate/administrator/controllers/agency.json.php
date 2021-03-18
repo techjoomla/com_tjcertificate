@@ -58,14 +58,17 @@ class TjCertificateControllerAgency extends FormController
 
 		$agencyId = $app->input->get('agency_id', 0, 'INT');
 
-		if (!$user->authorise('core.manage.all.agency.user', 'com_multiagency'))
+		if ($agencyId)
 		{
-			$result = $this->checkUserAgency($agencyId);
-
-			if (!$result)
+			if (!$user->authorise('core.manage.all.agency.user', 'com_multiagency'))
 			{
-				echo new JsonResponse(null, Text::_('JERROR_ERROR'), true);
-				$app->close();
+				$result = $this->checkUserAgency($agencyId);
+
+				if (!$result)
+				{
+					echo new JsonResponse(null, Text::_('JERROR_ERROR'), true);
+					$app->close();
+				}
 			}
 		}
 
@@ -78,13 +81,18 @@ class TjCertificateControllerAgency extends FormController
 		$query = $db->getQuery(true);
 		$query->select('distinct(u.id), u.name');
 		$query->from($db->quoteName('#__users', 'u'));
-		$query->join('INNER', '#__tj_cluster_nodes AS cn ON cn.user_id = u.id');
-		$query->join('INNER', $db->qn('#__tj_clusters', 'clusters') .
-				' ON (' . $db->qn('clusters.id') . ' = ' . $db->qn('cn.cluster_id') .
-				' AND ' . $db->qn('clusters.client') . " = 'com_multiagency' ) ");
-		$query->join('INNER', $db->qn('#__tjmultiagency_multiagency', 'ml') .
-				' ON (' . $db->qn('ml.id') . ' = ' . $db->qn('clusters.client_id') . ')');
-		$query->where($db->qn('ml.id') . ' = ' . (int) $agencyId);
+
+		if ($agencyId)
+		{
+			$query->join('INNER', '#__tj_cluster_nodes AS cn ON cn.user_id = u.id');
+			$query->join('INNER', $db->qn('#__tj_clusters', 'clusters') .
+					' ON (' . $db->qn('clusters.id') . ' = ' . $db->qn('cn.cluster_id') .
+					' AND ' . $db->qn('clusters.client') . " = 'com_multiagency' ) ");
+			$query->join('INNER', $db->qn('#__tjmultiagency_multiagency', 'ml') .
+					' ON (' . $db->qn('ml.id') . ' = ' . $db->qn('clusters.client_id') . ')');
+			$query->where($db->qn('ml.id') . ' = ' . (int) $agencyId);
+		}
+
 		$query->order($db->escape('u.name' . ' ' . 'asc'));
 
 		$db->setQuery($query);
