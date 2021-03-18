@@ -23,6 +23,8 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
  */
 class TjCertificateModelCertificates extends ListModel
 {
+	protected $params;
+
 	/**
 	 * Constructor.
 	 *

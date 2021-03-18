@@ -89,11 +89,6 @@ class TjCertificateViewCertificates extends JViewLegacy
 	 */
 	public $create;
 
-	/**
-	 * The view parameters
-	 *
-	 * @var    Registry
-	 */
 	protected $params;
 
 	public $isAgencyEnabled = false;

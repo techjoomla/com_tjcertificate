@@ -40,6 +40,20 @@ class TjCertificateViewTrainingRecord extends HtmlView
 	public $isAgencyEnabled = false;
 
 	/**
+	 * Manage own  Permissions
+	 *
+	 * @var  boolean
+	 */
+	public $manageOwn;
+
+	/**
+	 * Manage Permissions
+	 *
+	 * @var  boolean
+	 */
+	public $manage;
+
+	/**
 	 * Display the view
 	 *
 	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
@@ -50,16 +64,16 @@ class TjCertificateViewTrainingRecord extends HtmlView
 	 */
 	public function display($tpl = null)
 	{
-		$app         = Factory::getApplication();
-		$this->input = $app->input;
-		$this->user  = Factory::getUser();
-		$layout = $this->input->get('layout');
-		$id     = $this->input->getInt('id');
-		$this->item  = $this->get('Item');
+		$app               = Factory::getApplication();
+		$this->input       = $app->input;
+		$this->user        = Factory::getUser();
+		$layout            = $this->input->get('layout');
+		$id                = $this->input->getInt('id');
+		$this->item        = $this->get('Item');
 		$this->certificate = TJCERT::Certificate();
-		$this->params = ComponentHelper::getParams('com_tjcertificate');
-		$this->manage = $this->user->authorise('certificate.external.manage', 'com_tjcertificate');
-		$this->manageOwn = $this->user->authorise('certificate.external.manageown', 'com_tjcertificate');
+		$this->params      = ComponentHelper::getParams('com_tjcertificate');
+		$this->manage 	   = $this->user->authorise('certificate.external.manage', 'com_tjcertificate');
+		$this->manageOwn   = $this->user->authorise('certificate.external.manageown', 'com_tjcertificate');
 
 		if (ComponentHelper::isEnabled('com_multiagency') && $this->params->get('enable_multiagency'))
 		{

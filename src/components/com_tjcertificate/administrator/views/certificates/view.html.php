@@ -82,11 +82,6 @@ class TjCertificateViewCertificates extends HtmlView
 	 */
 	protected $canDo;
 
-	/**
-	 * The view parameters
-	 *
-	 * @var    Registry
-	 */
 	protected $params;
 
 	public $isAgencyEnabled = false;
