@@ -105,7 +105,7 @@ class TjCertificateModelCertificates extends ListModel
 		$query->join('LEFT', $db->quoteName('#__tj_certificate_templates', 'ct') .
 			' ON (' . $db->quoteName('ci.certificate_template_id') . ' = ' . $db->quoteName('ct.id') . ')');
 
-		$query->join('LEFT', $db->quoteName('#__users', 'users') .
+		$query->join('INNER', $db->quoteName('#__users', 'users') .
 			' ON (' . $db->quoteName('ci.user_id') . ' = ' . $db->quoteName('users.id') . ')');
 
 		if (ComponentHelper::isEnabled('com_multiagency') && $this->params->get('enable_multiagency'))
