@@ -64,11 +64,9 @@ class JFormFieldAllUsers extends JFormFieldList
 
 		$options = array();
 
-		$options[] = HTMLHelper::_('select.option', "", Text::_('COM_TJCERTIFICATE_AGENCY_USER_SELECT'));
-
-		foreach ($allUsers as $u)
+		foreach ($allUsers as $user)
 		{
-			$options[] = HTMLHelper::_('select.option', $u->id, $u->name);
+			$options[] = HTMLHelper::_('select.option', $user->id, $user->name);
 		}
 
 		if (!$this->loadExternally)

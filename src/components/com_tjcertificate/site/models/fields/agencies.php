@@ -11,12 +11,10 @@
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Component\ComponentHelper;
 
-FormHelper::loadFieldClass('list');
+JFormHelper::loadFieldClass('list');
 
 /**
  * Supports an HTML select list of agencies
