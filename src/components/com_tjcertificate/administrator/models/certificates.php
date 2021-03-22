@@ -243,6 +243,8 @@ class TjCertificateModelCertificates extends ListModel
 		$orderCol  = $this->state->get('list.ordering', 'ci.id');
 		$orderDirn = $this->state->get('list.direction', 'desc');
 
+		$query->group('ci.id');
+
 		if ($orderCol && $orderDirn)
 		{
 			$query->order($db->escape($orderCol . ' ' . $orderDirn));

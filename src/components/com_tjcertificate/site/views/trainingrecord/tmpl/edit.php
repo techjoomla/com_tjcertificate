@@ -44,7 +44,7 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 				</div>
 				<?php
 					// Check agency is enabled
-					if ($this->isAgencyEnabled && ($this->manageOwn || $this->manage))
+					if ($this->isAgencyEnabled && $this->manage)
 					{
 						echo $this->form->renderField('agency_id'); 
 					}
