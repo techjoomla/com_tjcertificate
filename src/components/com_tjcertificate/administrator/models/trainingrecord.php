@@ -270,17 +270,18 @@ class TjCertificateModelTrainingRecord extends AdminModel
 	/**
 	 * Method to validate the form data.
 	 *
-	 * @param   \JForm  $form  The form to validate against.
-	 * @param   Array   $data  The data to validate.
+	 * @param   \JForm  $form   The form to validate against.
+	 * @param   Array   $data   The data to validate.
+	 * @param   string  $group  The name of the field group to validate.
 	 *
 	 * @return  array|boolean  Array of filtered data if valid, false otherwise.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function validate($form, $data)
+	public function validate($form, $data, $group = null)
 	{
 		$return = true;
-		$return = parent::validate($form, $data);
+		$return = parent::validate($form, $data, $group);
 
 		if (!empty($data['expired_on']) && $data['expired_on'] != '0000-00-00 00:00:00')
 		{
