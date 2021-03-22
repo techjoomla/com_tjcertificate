@@ -49,7 +49,12 @@
 		</field>
 		<field name="custom_format" class="inputbox" type="text" label="COM_TJCERTIFICATE_CUSTOM_DATE_FORMAT"
 			showon="date_format_show:custom" description="COM_TJCERTIFICATE_CUSTOM_DATE_FORMAT_DESC" />
-		</fieldset>
+
+		<field menu="hide" name="" type="legend" default="COM_TJCERTIFICATE_QR_CODE_SETTING" label="" description="" />
+		<field name="qr_code_width" class="validate-numeric" type="text" default="80" label="COM_TJCERTIFICATE_QR_CODE_WIDTH" description="COM_TJCERTIFICATE_QR_CODE_WIDTH_DESC" />
+		<field name="qr_code_height" class="validate-numeric" type="text" default="80" label="COM_TJCERTIFICATE_QR_CODE_HEIGHT" description="COM_TJCERTIFICATE_QR_CODE_HEIGHT_DESC" />
+
+	</fieldset>
 
 	<!-- Social sharing -->
 	<fieldset name="social_sharing" label="COM_TJCERTIFICATE_SOCIAL_SHARING_SETINGS">
