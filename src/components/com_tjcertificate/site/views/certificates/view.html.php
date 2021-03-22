@@ -144,6 +144,15 @@ class TjCertificateViewCertificates extends JViewLegacy
 		$this->manageOwn     = $this->user->authorise('certificate.external.manageown', 'com_tjcertificate');
 		$this->create	     = $this->user->authorise('certificate.external.create', 'com_tjcertificate');
 
+		if ($this->isAgencyEnabled)
+		{
+			$this->filterForm->removeField('user_id', 'filter');
+		}
+		else
+		{
+			$this->filterForm->removeField('agency_id', 'filter');
+		}
+
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{

@@ -58,20 +58,6 @@ class TjCertificateControllerAgency extends FormController
 
 		$agencyId = $app->input->get('agency_id', 0, 'INT');
 
-		if ($agencyId)
-		{
-			if (!$user->authorise('core.manage.all.agency.user', 'com_multiagency'))
-			{
-				$result = $this->checkUserAgency($agencyId);
-
-				if (!$result)
-				{
-					echo new JsonResponse(null, Text::_('JERROR_ERROR'), true);
-					$app->close();
-				}
-			}
-		}
-
 		$userOptions = array();
 
 		// Initialize array to store dropdown options
@@ -109,33 +95,5 @@ class TjCertificateControllerAgency extends FormController
 
 		echo new JsonResponse($userOptions);
 		$app->close();
-	}
-
-	/**
-	 * Function to check user agency
-	 *
-	 * @param   int  $agencyId  agency id
-	 * 
-	 * @return  integer  The integer of the primary key
-	 *
-	 * @since  __DEPLOY_VERSION__
-	 */
-	private function checkUserAgency($agencyId)
-	{
-		$db    = Factory::getDBO();
-		$user  = Factory::getuser();
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName('u.id'));
-		$query->from($db->quoteName('#__users', 'u'));
-		$query->join('INNER', $db->quoteName('#__tj_cluster_nodes', 'cn') . ' ON ' . $db->quoteName('cn.user_id') . '=' . $db->quoteName('u.id'));
-		$query->join('INNER', $db->quoteName('#__tj_clusters', 'c') . ' ON ' . $db->quoteName('c.id') . '=' . $db->quoteName('cn.cluster_id'));
-		$query->join('INNER', $db->quoteName('#__tjmultiagency_multiagency', 'ml') .
-			' ON ' . $db->quoteName('ml.id') . ' = ' . $db->quoteName('c.client_id')
-			);
-		$query->where($db->qn('ml.id') . ' = ' . (int) $agencyId);
-		$query->where($db->qn('cn.user_id') . ' = ' . (int) $user->id);
-		$db->setQuery($query);
-
-		return $db->loadResult();
 	}
 }

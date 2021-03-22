@@ -128,6 +128,15 @@ class TjCertificateViewCertificates extends HtmlView
 			$this->isAgencyEnabled = true;
 		}
 
+		if ($this->isAgencyEnabled)
+		{
+			$this->filterForm->removeField('user_id', 'filter');
+		}
+		else
+		{
+			$this->filterForm->removeField('agency_id', 'filter');
+		}
+
 		// Display the view
 		parent::display($tpl);
 	}

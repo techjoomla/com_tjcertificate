@@ -77,8 +77,8 @@ class TjCertificateModelTrainingRecord extends AdminModel
 	public function getForm($data = array(), $loadData = true)
 	{
 		// Get the form.
-		$form                 = $this->loadForm('com_tjcertificate.trainingrecord', 'trainingrecord', array('control' => 'jform', 'load_data' => $loadData));
-		$loggedInuser         = Factory::getUser();
+		$form         = $this->loadForm('com_tjcertificate.trainingrecord', 'trainingrecord', array('control' => 'jform', 'load_data' => $loadData));
+		$loggedInuser = Factory::getUser();
 
 		if (!$loggedInuser->authorise('certificate.external.manage', 'com_tjcertificate'))
 		{

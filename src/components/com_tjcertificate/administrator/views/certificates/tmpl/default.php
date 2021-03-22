@@ -291,22 +291,3 @@ PluginHelper::importPlugin('content');
 		</form>
 	</div>
 </div>
-<script type="text/javascript">
-
-var isAgencyEnable = '<?php echo $this->isAgencyEnabled; ?>'; 
-
-// Hide agency drop-down if multi-agency is not enable
-if (!isAgencyEnable)
-{
-	jQuery(document).ready(function() {
-		jQuery('#filter_agency_id').closest("div").remove();
-	});
-}
-else
-{
-	// Hide all users drop-down if multi-agency is enable
-	jQuery(document).ready(function() {
-		jQuery('#filter_user_id').closest("div").remove();
-	});
-}
-</script>

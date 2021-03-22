@@ -119,11 +119,4 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 var allowedAttachments = '<?php echo $this->allowedFileExtensions; ?>';
 var attachmentMaxSize  = '<?php echo $this->uploadLimit; ?>';
 
-jQuery(document).ready(function() {
-    if (jQuery('#jform_agency_id').val())
-    {
-      jQuery('#jform_agency_id').trigger("change");
-    }
-});
-
 </script>

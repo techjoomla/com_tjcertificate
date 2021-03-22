@@ -23,7 +23,7 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
  */
 class TjCertificateModelCertificates extends ListModel
 {
-	protected $params;
+	protected $multiagency = 'com_multiagency';
 
 	/**
 	 * Constructor.
@@ -105,21 +105,12 @@ class TjCertificateModelCertificates extends ListModel
 		$query->join('LEFT', $db->quoteName('#__tj_certificate_templates', 'ct') .
 			' ON (' . $db->quoteName('ci.certificate_template_id') . ' = ' . $db->quoteName('ct.id') . ')');
 
-		$query->join('INNER', $db->quoteName('#__users', 'users') .
+		$query->join('LEFT', $db->quoteName('#__users', 'users') .
 			' ON (' . $db->quoteName('ci.user_id') . ' = ' . $db->quoteName('users.id') . ')');
 
-		if (ComponentHelper::isEnabled('com_multiagency') && $this->params->get('enable_multiagency'))
+		if (ComponentHelper::isEnabled($this->multiagency) && $this->params->get('enable_multiagency'))
 		{
-			$canManageAllAgencyUser = $user->authorise('core.manage.all.agency.user', 'com_multiagency');
-
-			// Subquery to get agency users
-			$subquery  = $db->getQuery(true);
-			$subquery->select($db->quoteName('ml.id'));
-			$subquery->from($db->quoteName('#__tjmultiagency_multiagency', 'ml'));
-			$subquery->join('INNER', $db->quoteName('#__tj_clusters', 'c') . ' ON ' . $db->quoteName('c.client_id') . '=' . $db->quoteName('ml.id'));
-			$subquery->join('INNER', $db->quoteName('#__tj_cluster_nodes', 'cn') . ' ON ' . $db->quoteName('cn.cluster_id') . '=' . $db->quoteName('c.id'));
-			$subquery->Where($db->qn('ml.state') . '=' . 1);
-			$subquery->where($db->quoteName('cn.user_id') . ' = ' . (int) $user->id);
+			$canManageAllAgencyUser = $user->authorise('core.manage.all.agency.user', $this->multiagency);
 
 			$query->select('agency.title as title');
 
@@ -128,7 +119,7 @@ class TjCertificateModelCertificates extends ListModel
 
 			$query->join('INNER', $db->qn('#__tj_clusters', 'clusters') .
 				' ON (' . $db->qn('clusters.id') . ' = ' . $db->qn('nodes.cluster_id') .
-				' AND ' . $db->qn('clusters.client') . " = 'com_multiagency' )");
+				' AND ' . $db->qn('clusters.client') . " = " . $db->q($this->multiagency) . ')');
 
 			$query->join('LEFT', $db->qn('#__tjmultiagency_multiagency', 'agency') .
 				' ON (' . $db->qn('agency.id') . ' = ' . $db->qn('clusters.client_id') . ')');
@@ -138,10 +129,18 @@ class TjCertificateModelCertificates extends ListModel
 			// If don't have manage all user permission then get users of own agency
 			if (!$canManageAllAgencyUser && !$agencyId)
 			{
+				// Subquery to get agency users
+				$subquery  = $db->getQuery(true);
+				$subquery->select($db->quoteName('ml.id'));
+				$subquery->from($db->quoteName('#__tjmultiagency_multiagency', 'ml'));
+				$subquery->join('INNER', $db->quoteName('#__tj_clusters', 'c') . ' ON ' . $db->quoteName('c.client_id') . '=' . $db->quoteName('ml.id'));
+				$subquery->join('INNER', $db->quoteName('#__tj_cluster_nodes', 'cn') . ' ON ' . $db->quoteName('cn.cluster_id') . '=' . $db->quoteName('c.id'));
+				$subquery->Where($db->qn('ml.state') . '=' . 1);
+				$subquery->where($db->quoteName('cn.user_id') . ' = ' . (int) $user->id);
+
 				$query->where($db->quoteName('agency.id') . ' in (' . $subquery . ')');
 			}
-
-			if ($agencyId)
+			elseif ($agencyId)
 			{
 				$query->where($db->quoteName('agency.id') . ' = ' . (int) $agencyId);
 			}

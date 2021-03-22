@@ -1,10 +1,11 @@
 <?php
 /**
- * @version    SVN: <svn_id>
- * @package    Com_Tjlms
- * @author     Techjoomla <extensions@techjoomla.com>
- * @copyright  Copyright (c) 2009-2015 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @package     TJCertificate
+ * @subpackage  com_tjcertificate
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access.
@@ -14,11 +15,12 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
 JFormHelper::loadFieldClass('list');
 
 /**
- * Supports an HTML select list of courses
+ * Supports an HTML select list of users
  *
  * @since  __DEPLOY_VERSION__
  */
@@ -49,22 +51,14 @@ class JFormFieldAllUsers extends JFormFieldList
 	 */
 	protected function getOptions()
 	{
-		$db = Factory::getDbo();
-		$query = $db->getQuery(true);
-
-		// Select the required fields from the table.
-		$query->select('u.id, u.name, u.username');
-		$query->from('`#__users` AS u');
-		$query->where($db->qn('u.block') . ' = 0');
-		$query->order($db->escape('u.name' . ' ' . 'asc'));
-		$db->setQuery($query);
-
-		// Get all users.
-		$allUsers = $db->loadObjectList();
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_users/models/', 'UsersModel');
+		$userModel = BaseDatabaseModel::getInstance('Users', 'UsersModel', $config = array("ignore_request" => 1));
+		$userModel->setState('filter.state', 0);
+		$usersObject = $userModel->getItems();
 
 		$options = array();
 
-		foreach ($allUsers as $user)
+		foreach ($usersObject as $user)
 		{
 			$options[] = HTMLHelper::_('select.option', $user->id, $user->name);
 		}
