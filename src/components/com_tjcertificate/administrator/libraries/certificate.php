@@ -883,9 +883,8 @@ class TjCertificateCertificate extends CMSObject
 			$qrString  = Uri::base() . 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->unique_certificate_id;
 			$qrString  = urlencode($qrString);
 			$qrUrl     = "https://chart.apis.google.com/chart?cht=qr&chs=";
-			$qrimage   = $qrUrl . $qrCodeWidth . "x" . $qrCodeHeight . "&chl=" . $qrString . "&chld=H|0";
-			$qrPathUrl = $qrimage;
-			$replacements->certificate->qr_code = '<img src="' . $qrPathUrl . '" class="qrimg" >';
+			$qrImage   = $qrUrl . $qrCodeWidth . "x" . $qrCodeHeight . "&chl=" . $qrString . "&chld=H|0";
+			$replacements->certificate->qr_code = '<img src="' . $qrImage . '" class="qrimg" >';
 
 			// Generate certificate body
 			$this->generated_body = $this->generateCertificateBody($template->body, $replacements);
