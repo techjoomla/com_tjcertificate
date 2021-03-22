@@ -31,6 +31,8 @@ class JFormFieldAgencies extends JFormFieldList
 	 */
 	protected $loadExternally = 0;
 
+	protected $comMultiAgency = 'com_multiagency';
+
 	/**
 	 * Method to get a list of options for a list input.
 	 *
@@ -44,7 +46,7 @@ class JFormFieldAgencies extends JFormFieldList
 		$user   = Factory::getUser();
 		$query  = $db->getQuery(true);
 
-		$canManageAllAgencyUser = $user->authorise('core.manage.all.agency.user', 'com_multiagency');
+		$canManageAllAgencyUser = $user->authorise('core.manage.all.agency.user', $this->comMultiAgency);
 
 		// Select the required fields from the table.
 		$query->select('DISTINCT ml.id, ml.title');

@@ -86,6 +86,7 @@ class TjCertificateViewCertificates extends HtmlView
 
 	public $isAgencyEnabled = false;
 
+	protected $comMultiAgency = 'com_multiagency';
 	/**
 	 * Display the view
 	 *
@@ -123,13 +124,9 @@ class TjCertificateViewCertificates extends HtmlView
 
 		$this->params = ComponentHelper::getParams('com_tjcertificate');
 
-		if (ComponentHelper::isEnabled('com_multiagency') && $this->params->get('enable_multiagency'))
+		if (ComponentHelper::isEnabled($this->comMultiAgency) && $this->params->get('enable_multiagency'))
 		{
 			$this->isAgencyEnabled = true;
-		}
-
-		if ($this->isAgencyEnabled)
-		{
 			$this->filterForm->removeField('user_id', 'filter');
 		}
 		else

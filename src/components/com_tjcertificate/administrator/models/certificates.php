@@ -23,7 +23,7 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
  */
 class TjCertificateModelCertificates extends ListModel
 {
-	protected $multiagency = 'com_multiagency';
+	protected $comMultiAgency = 'com_multiagency';
 
 	/**
 	 * Constructor.
@@ -108,10 +108,8 @@ class TjCertificateModelCertificates extends ListModel
 		$query->join('LEFT', $db->quoteName('#__users', 'users') .
 			' ON (' . $db->quoteName('ci.user_id') . ' = ' . $db->quoteName('users.id') . ')');
 
-		if (ComponentHelper::isEnabled($this->multiagency) && $this->params->get('enable_multiagency'))
+		if (ComponentHelper::isEnabled($this->comMultiagency) && $this->params->get('enable_multiagency'))
 		{
-			$canManageAllAgencyUser = $user->authorise('core.manage.all.agency.user', $this->multiagency);
-
 			$query->select('agency.title as title');
 
 			$query->join('INNER', $db->qn('#__tj_cluster_nodes', 'nodes') .
@@ -119,12 +117,14 @@ class TjCertificateModelCertificates extends ListModel
 
 			$query->join('INNER', $db->qn('#__tj_clusters', 'clusters') .
 				' ON (' . $db->qn('clusters.id') . ' = ' . $db->qn('nodes.cluster_id') .
-				' AND ' . $db->qn('clusters.client') . " = " . $db->q($this->multiagency) . ')');
+				' AND ' . $db->qn('clusters.client') . " = " . $db->q($this->comMultiAgency) . ')');
 
 			$query->join('LEFT', $db->qn('#__tjmultiagency_multiagency', 'agency') .
 				' ON (' . $db->qn('agency.id') . ' = ' . $db->qn('clusters.client_id') . ')');
 
 			$agencyId = $this->getState('filter.agency_id');
+
+			$canManageAllAgencyUser = $user->authorise('core.manage.all.agency.user', $this->comMultiAgency);
 
 			// If don't have manage all user permission then get users of own agency
 			if (!$canManageAllAgencyUser && !$agencyId)
@@ -242,8 +242,6 @@ class TjCertificateModelCertificates extends ListModel
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering', 'ci.id');
 		$orderDirn = $this->state->get('list.direction', 'desc');
-
-		$query->group('ci.id');
 
 		if ($orderCol && $orderDirn)
 		{

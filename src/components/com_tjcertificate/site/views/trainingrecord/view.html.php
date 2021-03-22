@@ -53,6 +53,8 @@ class TjCertificateViewTrainingRecord extends HtmlView
 	 */
 	public $manage;
 
+	protected $comMultiAgency = 'com_multiagency';
+
 	/**
 	 * Display the view
 	 *
@@ -75,7 +77,7 @@ class TjCertificateViewTrainingRecord extends HtmlView
 		$this->manage 	   = $this->user->authorise('certificate.external.manage', 'com_tjcertificate');
 		$this->manageOwn   = $this->user->authorise('certificate.external.manageown', 'com_tjcertificate');
 
-		if (ComponentHelper::isEnabled('com_multiagency') && $this->params->get('enable_multiagency'))
+		if (ComponentHelper::isEnabled($this->comMultiAgency) && $this->params->get('enable_multiagency'))
 		{
 			$this->isAgencyEnabled = true;
 		}

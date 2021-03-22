@@ -93,6 +93,7 @@ class TjCertificateViewCertificates extends JViewLegacy
 
 	public $isAgencyEnabled = false;
 
+	protected $comMultiAgency = 'com_multiagency';
 	/**
 	 * Display the  view
 	 *
@@ -105,11 +106,6 @@ class TjCertificateViewCertificates extends JViewLegacy
 		$app          = Factory::getApplication();
 		$this->user	  = Factory::getUser();
 		$this->params = ComponentHelper::getParams('com_tjcertificate');
-
-		if (ComponentHelper::isEnabled('com_multiagency') && $this->params->get('enable_multiagency'))
-		{
-			$this->isAgencyEnabled = true;
-		}
 
 		if (!$this->user->id)
 		{
@@ -144,8 +140,9 @@ class TjCertificateViewCertificates extends JViewLegacy
 		$this->manageOwn     = $this->user->authorise('certificate.external.manageown', 'com_tjcertificate');
 		$this->create	     = $this->user->authorise('certificate.external.create', 'com_tjcertificate');
 
-		if ($this->isAgencyEnabled)
+		if (ComponentHelper::isEnabled($this->comMultiAgency) && $this->params->get('enable_multiagency'))
 		{
+			$this->isAgencyEnabled = true;
 			$this->filterForm->removeField('user_id', 'filter');
 		}
 		else

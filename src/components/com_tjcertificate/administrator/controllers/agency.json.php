@@ -25,6 +25,8 @@ use Joomla\CMS\HTML\HTMLHelper;
  */
 class TjCertificateControllerAgency extends FormController
 {
+	protected $comMultiAgency = 'com_multiagency';
+
 	/**
 	 * Function to get agency users
 	 *
@@ -51,7 +53,7 @@ class TjCertificateControllerAgency extends FormController
 			return false;
 		}
 
-		if (!$user->authorise('core.manage.own.agency.user', 'com_multiagency'))
+		if (!$user->authorise('core.manage.own.agency.user', $this->comMultiAgency))
 		{
 			return false;
 		}
@@ -73,7 +75,7 @@ class TjCertificateControllerAgency extends FormController
 			$query->join('INNER', '#__tj_cluster_nodes AS cn ON cn.user_id = u.id');
 			$query->join('INNER', $db->qn('#__tj_clusters', 'clusters') .
 					' ON (' . $db->qn('clusters.id') . ' = ' . $db->qn('cn.cluster_id') .
-					' AND ' . $db->qn('clusters.client') . " = 'com_multiagency' ) ");
+					' AND ' . $db->qn('clusters.client') . " = " . $db->q($this->comMultiAgency) . ')');
 			$query->join('INNER', $db->qn('#__tjmultiagency_multiagency', 'ml') .
 					' ON (' . $db->qn('ml.id') . ' = ' . $db->qn('clusters.client_id') . ')');
 			$query->where($db->qn('ml.id') . ' = ' . (int) $agencyId);
