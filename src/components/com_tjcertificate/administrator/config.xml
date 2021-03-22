@@ -53,7 +53,6 @@
 		<field menu="hide" name="" type="legend" default="COM_TJCERTIFICATE_QR_CODE_SETTING" label="" description="" />
 		<field name="qr_code_width" class="validate-numeric" type="text" default="80" label="COM_TJCERTIFICATE_QR_CODE_WIDTH" description="COM_TJCERTIFICATE_QR_CODE_WIDTH_DESC" />
 		<field name="qr_code_height" class="validate-numeric" type="text" default="80" label="COM_TJCERTIFICATE_QR_CODE_HEIGHT" description="COM_TJCERTIFICATE_QR_CODE_HEIGHT_DESC" />
-
 	</fieldset>
 
 	<!-- Social sharing -->
