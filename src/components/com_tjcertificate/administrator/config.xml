@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
-    <fieldset name="component" label="COM_TJCERTIFICATE_GENEARAL_SETINGS" description="" >
+    <fieldset name="component" label="COM_TJCERTIFICATE_GENEARAL_SETINGS" description="" addfieldpath="/media/com_tjcertificate/fields">
 		<field
 			name="certificate_prefix"
 			type="text"
