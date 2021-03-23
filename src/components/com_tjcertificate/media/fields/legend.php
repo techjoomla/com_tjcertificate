@@ -19,7 +19,7 @@ FormHelper::loadFieldClass('list');
 /**
  * Custom Legend field for component params.
  *
- * @package  Com_Tjlms
+ * @package  Com_Tjcertificate
  * @since    1.0
  */
 class JFormFieldLegend extends \JFormFieldList
@@ -28,7 +28,7 @@ class JFormFieldLegend extends \JFormFieldList
 	 * The form field type.
 	 *
 	 * @var		string
-	 * @since	1.6
+	 * @since	1.0
 	 */
 	protected $type = 'Legend';
 
@@ -37,7 +37,7 @@ class JFormFieldLegend extends \JFormFieldList
 	 *
 	 * @return   string  The field input markup.
 	 *
-	 * @since    1.6
+	 * @since    1.0
 	 */
 	public function getInput()
 	{
@@ -52,9 +52,8 @@ class JFormFieldLegend extends \JFormFieldList
 		{
 			$hint = $this->hint;
 
-			/* Tada...
-			// Let's remove controls class from parent
-			// And, remove control-group class from grandparent*/
+			/*Let's remove controls class from parent
+			And, remove control-group class from grandparent*/
 			$script = 'jQuery(document).ready(function(){
 				jQuery("#' . $this->id . '").parent().removeClass("controls");
 				jQuery("#' . $this->id . '").parent().parent().removeClass("control-group");
