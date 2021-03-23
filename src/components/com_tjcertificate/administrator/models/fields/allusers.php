@@ -51,10 +51,8 @@ class JFormFieldAllUsers extends JFormFieldList
 	 */
 	protected function getOptions()
 	{
-		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_users/models/', 'UsersModel');
-		$userModel = BaseDatabaseModel::getInstance('Users', 'UsersModel', $config = array("ignore_request" => 1));
-		$userModel->setState('filter.state', 0);
-		$usersObject = $userModel->getItems();
+		$model = TJCERT::model('Agency', array('ignore_request' => true));
+		$usersObject = $model->getUsers();
 
 		$options = array();
 

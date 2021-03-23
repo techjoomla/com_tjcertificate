@@ -20,7 +20,9 @@
 			label="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_CERTIFICATE_ISSUED_USER"
 			description="COM_TJCERTIFICATE_CERTIFICATE_FORM_DESC_CERTIFICATE_ISSUED_USER"
 			addfieldpath="administrator/components/com_tjcertificate/models/fields"
-		/>
+			>
+			<option value="">COM_TJCERTIFICATE_AGENCY_USER_SELECT</option>
+		</field>
 
 		<field
 			name="name"

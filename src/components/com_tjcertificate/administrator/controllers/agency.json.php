@@ -60,32 +60,21 @@ class TjCertificateControllerAgency extends FormController
 
 		$agencyId = $app->input->get('agency_id', 0, 'INT');
 
+		$model = $this->getModel();
+
+		if (!$model->validateUserAgency($agencyId))
+		{
+			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_AGENCY_INVALID_USER'), 'error');
+			echo new JsonResponse(null, null, true);
+			$app->close();
+		}
+
 		$userOptions = array();
 
 		// Initialize array to store dropdown options
 		$userOptions[] = HTMLHelper::_('select.option', "", Text::_('COM_TJCERTIFICATE_AGENCY_USER_SELECT'));
 
-		$db = Factory::getDBO();
-		$query = $db->getQuery(true);
-		$query->select('distinct(u.id), u.name');
-		$query->from($db->quoteName('#__users', 'u'));
-
-		if ($agencyId)
-		{
-			$query->join('INNER', '#__tj_cluster_nodes AS cn ON cn.user_id = u.id');
-			$query->join('INNER', $db->qn('#__tj_clusters', 'clusters') .
-					' ON (' . $db->qn('clusters.id') . ' = ' . $db->qn('cn.cluster_id') .
-					' AND ' . $db->qn('clusters.client') . " = " . $db->q($this->comMultiAgency) . ')');
-			$query->join('INNER', $db->qn('#__tjmultiagency_multiagency', 'ml') .
-					' ON (' . $db->qn('ml.id') . ' = ' . $db->qn('clusters.client_id') . ')');
-			$query->where($db->qn('ml.id') . ' = ' . (int) $agencyId);
-		}
-
-		$query->order($db->escape('u.name' . ' ' . 'asc'));
-
-		$db->setQuery($query);
-
-		$users = $db->loadObjectList();
+		$users = $model->getUsers($agencyId);
 
 		if (!empty($users))
 		{

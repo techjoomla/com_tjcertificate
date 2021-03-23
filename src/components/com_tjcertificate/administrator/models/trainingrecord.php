@@ -33,6 +33,27 @@ class TjCertificateModelTrainingRecord extends AdminModel
 	 */
 	protected $item = null;
 
+	protected $comMultiAgency = 'com_multiagency';
+
+	public $params;
+
+	public $user;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param   array  $config  An optional associative array of configuration settings.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function __construct($config = array())
+	{
+		$this->params = ComponentHelper::getParams('com_tjcertificate');
+		$this->user   = Factory::getuser();
+
+		parent::__construct($config);
+	}
+
 	/**
 	 * Method to get a certificate.
 	 *
@@ -79,6 +100,9 @@ class TjCertificateModelTrainingRecord extends AdminModel
 		// Get the form.
 		$form         = $this->loadForm('com_tjcertificate.trainingrecord', 'trainingrecord', array('control' => 'jform', 'load_data' => $loadData));
 		$loggedInuser = Factory::getUser();
+
+		$app                  = Factory::getApplication();
+		$integrateMultiagency = $this->params->get('enable_multiagency');
 
 		if (!$loggedInuser->authorise('certificate.external.manage', 'com_tjcertificate'))
 		{
@@ -140,17 +164,15 @@ class TjCertificateModelTrainingRecord extends AdminModel
 	{
 		$user = Factory::getUser();
 
-		$params = ComponentHelper::getParams('com_tjcertificate');
-
 		if (!empty($file['cert_file']))
 		{
 			$filePath = TJCERT::getMediaPath();
-			$uploadedFileExtension = strtolower($params->get('upload_extensions', '', 'STRING'));
+			$uploadedFileExtension = strtolower($this->params->get('upload_extensions', '', 'STRING'));
 			$fileExtensionType     = explode(',', $uploadedFileExtension);
 
 			$config               = array();
 			$config['type']       = $fileExtensionType;
-			$config['size']       = $params->get('upload_maxsize', '10');
+			$config['size']       = $this->params->get('upload_maxsize', '10');
 			$config['auth']       = true;
 
 			if (!empty($file['cert_file']['name']))
@@ -289,6 +311,41 @@ class TjCertificateModelTrainingRecord extends AdminModel
 			{
 				$this->setError(Text::_('COM_TJCERTIFICATE_EXPIRY_DATE_VALIDATION_MESSAGE'));
 				$return = false;
+			}
+		}
+
+		if (ComponentHelper::isEnabled($this->comMultiAgency) && $this->params->get('enable_multiagency'))
+		{
+			$manageOwn = $this->user->authorise('core.manage.own.agency.user', $this->comMultiAgency);
+			$manage    = $this->user->authorise('core.manage.all.agency.user', $this->comMultiAgency);
+
+			if ($manageOwn && empty($manage))
+			{
+				$model = TJCERT::model('Agency', array('ignore_request' => true));
+
+				// Get agencies of logged-in user and assigned user
+				$assignedUserAgencies = $model->getUserAgencies($data['assigned_user_id']);
+				$loggedInUserAgencies = $model->getUserAgencies($this->user->id);
+
+				// Convert object to array
+				foreach ($assignedUserAgencies as $assignedUserAgency)
+				{
+					$assignedUserAgencyArr[] = $assignedUserAgency->id;
+				}
+
+				foreach ($loggedInUserAgencies as $loggedInUserAgency)
+				{
+					$loggedInUserAgencyArr[] = $loggedInUserAgency->id;
+				}
+
+				// Compare both users agencies
+				$result = array_intersect($loggedInUserAgencyArr, $assignedUserAgencyArr);
+
+				if (empty($result))
+				{
+					$this->setError(Text::_('COM_TJCERTIFICATE_ORGANIZATION_INVALID_USER'));
+					$return = false;
+				}
 			}
 		}
 

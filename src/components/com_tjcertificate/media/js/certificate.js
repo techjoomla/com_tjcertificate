@@ -163,13 +163,10 @@ var certificate = {
 		});
 	},
 	getAgencyUsers: function(agencyObj) {
-		var agencyId = jQuery(agencyObj).val();
 		var formData = {};
 		var clusterusers = jQuery('#jform_assigned_user_id');
-		clusterusers.empty();
-		clusterusers.trigger("liszt:updated");
 		var assignedUser = jQuery('#assigned_user_id').val();
-		formData['agency_id'] = agencyId;
+		formData['agency_id'] = jQuery(agencyObj).val();
 
 		var promise = tjCertificateService.getAgencyUsers(formData);
 
@@ -188,6 +185,9 @@ var certificate = {
 				}
 
 				if (response.success) {
+					clusterusers.empty();
+					clusterusers.trigger("liszt:updated");
+
 					var data = response.data;
 
 					for(var index = 0; index < data.length; ++index)

@@ -127,7 +127,6 @@ class TjCertificateViewCertificates extends HtmlView
 		if (ComponentHelper::isEnabled($this->comMultiAgency) && $this->params->get('enable_multiagency'))
 		{
 			$this->isAgencyEnabled = true;
-			$this->filterForm->removeField('user_id', 'filter');
 		}
 		else
 		{
