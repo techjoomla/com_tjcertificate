@@ -151,14 +151,14 @@ class TjCertificateModelAgency extends AdminModel
 	public function getUserAgencies($userId)
 	{
 		$db       = Factory::getDBO();
-		$subquery = $db->getQuery(true);
-		$subquery->select($db->quoteName('agency.id'));
-		$subquery->from($db->quoteName('#__tjmultiagency_multiagency', 'agency'));
-		$subquery->join('INNER', $db->quoteName('#__tj_clusters', 'c') . ' ON ' . $db->quoteName('c.client_id') . '=' . $db->quoteName('agency.id'));
-		$subquery->join('INNER', $db->quoteName('#__tj_cluster_nodes', 'cn') . ' ON ' . $db->quoteName('cn.cluster_id') . '=' . $db->quoteName('c.id'));
-		$subquery->Where($db->qn('agency.state') . '=' . 1);
-		$subquery->where($db->quoteName('cn.user_id') . ' = ' . (int) $userId);
-		$db->setQuery($subquery);
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('agency.id'));
+		$query->from($db->quoteName('#__tjmultiagency_multiagency', 'agency'));
+		$query->join('INNER', $db->quoteName('#__tj_clusters', 'c') . ' ON ' . $db->quoteName('c.client_id') . '=' . $db->quoteName('agency.id'));
+		$query->join('INNER', $db->quoteName('#__tj_cluster_nodes', 'cn') . ' ON ' . $db->quoteName('cn.cluster_id') . '=' . $db->quoteName('c.id'));
+		$query->Where($db->qn('agency.state') . '=' . 1);
+		$query->where($db->quoteName('cn.user_id') . ' = ' . (int) $userId);
+		$db->setQuery($query);
 
 		return $db->loadObjectList();
 	}

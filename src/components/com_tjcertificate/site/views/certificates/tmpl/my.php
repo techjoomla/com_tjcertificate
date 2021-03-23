@@ -192,36 +192,36 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 
 										if ($this->manage && $item->is_external) 
 										{ ?>
-												<a class="btn btn-micro d-inline-block" href="<?php echo $editLink; ?>" title="<?php echo Text::_('JACTION_EDIT'); ?>">
-													<i class="icon-edit" aria-hidden="true"></i>
+												<a class="d-inline-block" href="<?php echo $editLink; ?>" title="<?php echo Text::_('JACTION_EDIT'); ?>">
+													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 												</a>										
-												<a class="btn btn-micro d-inline-block p-5" onclick="certificate.deleteItem('<?php echo $item->id; ?>', this)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button" title="<?php echo Text::_('JACTION_DELETE'); ?>"><i class="icon-trash"></i>
+												<a class="d-inline-block p-5" onclick="certificate.deleteItem('<?php echo $item->id; ?>', this)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button" title="<?php echo Text::_('JACTION_DELETE'); ?>"><i class="fa fa-trash-o"></i>
 										<?php 
 										} ?>
 
 										<?php 
 										if ((!$this->manage && $this->manageOwn) && ($item->is_external && $item->state != 1)) 
 										{ ?>
-												<a class="btn btn-micro d-inline-block" href="<?php echo $editLink; ?>" title="<?php echo Text::_('JACTION_EDIT'); ?>">
-													<i class="icon-edit" aria-hidden="true"></i>
+												<a class="d-inline-block" href="<?php echo $editLink; ?>" title="<?php echo Text::_('JACTION_EDIT'); ?>">
+													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 												</a>										
-												<a class="btn btn-micro d-inline-block p-5" onclick="certificate.deleteItem('<?php echo $item->id; ?>', this)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button" title="<?php echo Text::_('JACTION_DELETE'); ?>"><i class="icon-trash"></i>
+												<a class="d-inline-block p-5" onclick="certificate.deleteItem('<?php echo $item->id; ?>', this)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button" title="<?php echo Text::_('JACTION_DELETE'); ?>"><i class="fa fa-trash-o"></i>
 										<?php 
 										} ?>
 
 										<?php 
 										if ($this->manage && $item->is_external) 
 										{ ?> 
-											<a class="btn btn-micro d-inline-block" onclick="listItemTask('cb<?php echo $i;?>', 'certificates.<?php echo ($item->state == -1 ||$item->state == 0)  ? 'publish' : 'unpublish';?>')" class="btn btn-mini" type="button">
+											<a class="btn btn-micro hasTooltip d-inline-block" onclick="listItemTask('cb<?php echo $i;?>', 'certificates.<?php echo ($item->state == -1 ||$item->state == 0)  ? 'publish' : 'unpublish';?>')" class="btn btn-mini" type="button">
 											<?php 
 											if ($item->state == -1 || $item->state == 0) 
 											{ ?>
-												<i class="icon-unpublish" title="<?php echo Text::_('JPUBLISHED'); ?>"></i>
+												<i class="fa fa-times" title="<?php echo Text::_('JPUBLISHED'); ?>"></i>
 											<?php 
 											} 
 											elseif ($item->state == 1) 
 											{ ?>
-												<i class="icon-publish" title="<?php echo Text::_('JUNPUBLISHED'); ?>"></i>
+												<i class="fa fa-check-square" title="<?php echo Text::_('JUNPUBLISHED'); ?>"></i>
 											<?php 
 											} ?>
 									<?php 
