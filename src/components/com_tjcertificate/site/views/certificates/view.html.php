@@ -15,6 +15,7 @@ jimport('joomla.application.component.view');
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Component\ComponentHelper;
 
 JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
 
@@ -88,6 +89,11 @@ class TjCertificateViewCertificates extends JViewLegacy
 	 */
 	public $create;
 
+	protected $params;
+
+	public $isAgencyEnabled = false;
+
+	protected $comMultiAgency = 'com_multiagency';
 	/**
 	 * Display the  view
 	 *
@@ -97,8 +103,9 @@ class TjCertificateViewCertificates extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$app = Factory::getApplication();
-		$this->user	= Factory::getUser();
+		$app          = Factory::getApplication();
+		$this->user	  = Factory::getUser();
+		$this->params = ComponentHelper::getParams('com_tjcertificate');
 
 		if (!$this->user->id)
 		{
@@ -132,6 +139,16 @@ class TjCertificateViewCertificates extends JViewLegacy
 		$this->activeFilters = $this->get('ActiveFilters');
 		$this->manageOwn     = $this->user->authorise('certificate.external.manageown', 'com_tjcertificate');
 		$this->create	     = $this->user->authorise('certificate.external.create', 'com_tjcertificate');
+
+		if (ComponentHelper::isEnabled($this->comMultiAgency) && $this->params->get('enable_multiagency'))
+		{
+			$this->isAgencyEnabled = true;
+			$this->filterForm->removeField('user_id', 'filter');
+		}
+		else
+		{
+			$this->filterForm->removeField('agency_id', 'filter');
+		}
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

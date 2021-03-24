@@ -49,6 +49,10 @@
 		</field>
 		<field name="custom_format" class="inputbox" type="text" label="COM_TJCERTIFICATE_CUSTOM_DATE_FORMAT"
 			showon="date_format_show:custom" description="COM_TJCERTIFICATE_CUSTOM_DATE_FORMAT_DESC" />
+		<field name="enable_multiagency" class="btn-group" type="radio"  default="0" description="COM_TJCERTIFICATE_INTEGRATE_MULTIAGENCY_DESC" label="COM_TJCERTIFICATE_INTEGRATE_MULTIAGENCY" >
+			<option value="1">JYES</option>
+			<option value="0">JNo</option>
+		</field>
 		</fieldset>
 
 	<!-- Social sharing -->

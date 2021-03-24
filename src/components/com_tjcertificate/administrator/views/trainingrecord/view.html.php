@@ -51,6 +51,10 @@ class TjCertificateViewTrainingRecord extends HtmlView
 	 */
 	protected $canDo;
 
+	public $isAgencyEnabled = false;
+
+	protected $comMultiAgency = 'com_multiagency';
+
 	/**
 	 * Display the view
 	 *
@@ -71,6 +75,11 @@ class TjCertificateViewTrainingRecord extends HtmlView
 		$this->allowedFileExtensions = $this->params->get('upload_extensions');
 		$this->uploadLimit      = $this->params->get('upload_maxsize', '1024');
 		$this->certificate = TJCERT::Certificate();
+
+		if (ComponentHelper::isEnabled($this->comMultiAgency) && $this->params->get('enable_multiagency'))
+		{
+			$this->isAgencyEnabled = true;
+		}
 
 		$layout = $this->input->get('layout', 'edit');
 

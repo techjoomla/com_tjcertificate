@@ -87,6 +87,17 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_NAME'); ?>
 								</th>
+
+								<?php if ($this->isAgencyEnabled) { ?>
+									<?php if (empty($this->manageOwn)) { ?>
+									<th>
+										<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_USERNAME'); ?>
+									</th>
+								<?php } ?>
+									<th>
+										<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ORG_NAME'); ?>
+									</th>
+								<?php } ?>
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ISSUED_DATE', 'ci.issued_on', $listDirn, $listOrder); ?>
 								</th>
@@ -149,6 +160,15 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 										}
 									?>
 								</td>
+								<?php 
+								if ($this->isAgencyEnabled)
+								{ ?>
+									<?php if (empty($this->manageOwn)) { ?>
+									<td><?php echo $item->uname; ?></td>
+									<?php } ?>
+									<td><?php echo $item->title; ?></td>
+								<?php 
+								} ?>
 								<td><?php echo $certificateObj->getFormatedDate($item->issued_on); ?></td>
 								<td>
 									<?php
@@ -192,7 +212,7 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 										<?php 
 										if ($this->manage && $item->is_external) 
 										{ ?> 
-											<a class="d-inline-block" onclick="listItemTask('cb<?php echo $i;?>', 'certificates.<?php echo ($item->state == -1 ||$item->state == 0)  ? 'publish' : 'unpublish';?>')" class="btn btn-mini" type="button">
+											<a class="btn btn-micro hasTooltip d-inline-block" onclick="listItemTask('cb<?php echo $i;?>', 'certificates.<?php echo ($item->state == -1 ||$item->state == 0)  ? 'publish' : 'unpublish';?>')" class="btn btn-mini" type="button">
 											<?php 
 											if ($item->state == -1 || $item->state == 0) 
 											{ ?>

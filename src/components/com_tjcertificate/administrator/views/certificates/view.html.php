@@ -15,6 +15,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Object\CMSObject;
+use Joomla\CMS\Component\ComponentHelper;
 
 /**
  * Certificates view
@@ -81,6 +82,11 @@ class TjCertificateViewCertificates extends HtmlView
 	 */
 	protected $canDo;
 
+	protected $params;
+
+	public $isAgencyEnabled = false;
+
+	protected $comMultiAgency = 'com_multiagency';
 	/**
 	 * Display the view
 	 *
@@ -115,6 +121,17 @@ class TjCertificateViewCertificates extends HtmlView
 
 		// Set sidebar
 		$this->sidebar = JHtmlSidebar::render();
+
+		$this->params = ComponentHelper::getParams('com_tjcertificate');
+
+		if (ComponentHelper::isEnabled($this->comMultiAgency) && $this->params->get('enable_multiagency'))
+		{
+			$this->isAgencyEnabled = true;
+		}
+		else
+		{
+			$this->filterForm->removeField('agency_id', 'filter');
+		}
 
 		// Display the view
 		parent::display($tpl);
