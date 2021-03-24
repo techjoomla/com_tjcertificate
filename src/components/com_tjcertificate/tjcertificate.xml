@@ -89,6 +89,7 @@
         <field name="certificate_scope" default="1" />
         <field name="show_search_box" default="0" />
         <field name="date_format_show" default="Y-m-d H:i:s" />
+        <field name="enable_multiagency" default="0" />
         <field name="qr_code_width" default="130" />
         <field name="qr_code_height" default="130" />
 
