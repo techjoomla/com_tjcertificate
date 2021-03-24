@@ -328,15 +328,8 @@ class TjCertificateModelTrainingRecord extends AdminModel
 				$loggedInUserAgencies = $model->getUserAgencies($this->user->id);
 
 				// Convert object to array
-				foreach ($assignedUserAgencies as $assignedUserAgency)
-				{
-					$assignedUserAgencyArr[] = $assignedUserAgency->id;
-				}
-
-				foreach ($loggedInUserAgencies as $loggedInUserAgency)
-				{
-					$loggedInUserAgencyArr[] = $loggedInUserAgency->id;
-				}
+				$assignedUserAgencyArr = array_column($assignedUserAgencies, 'id');
+				$loggedInUserAgencyArr = array_column($loggedInUserAgencies, 'id');
 
 				// Compare both users agencies
 				$result = array_intersect($loggedInUserAgencyArr, $assignedUserAgencyArr);
