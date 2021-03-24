@@ -55,6 +55,15 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 		<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', Text::_('COM_TJCERTIFICATE_TITLE_CERTIFICATE')); ?>
 		<div class="row-fluid">
 			<?php echo $this->form->renderField('id'); ?>
+
+			<?php
+				if ($this->isAgencyEnabled)
+				{
+				
+					echo $this->form->renderField('agency_id');
+				}
+			?>
+
 			<?php echo $this->form->renderField('assigned_user_id'); ?>
 			<?php echo $this->form->renderField('name'); ?>
 			<?php echo $this->form->renderField('unique_certificate_id'); ?>
@@ -95,6 +104,7 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 			<?php echo $this->form->renderField('comment'); ?>
 
 		</div>
+		<input type="hidden" id="assigned_user_id" value="<?php echo $this->item->user_id; ?>" />
 		<input type="hidden" name="jform[created_by]" value="<?php echo Factory::getUser()->id;?>" />
 		<input type="hidden" name="task" value="" />
 		<?php echo HTMLHelper::_('form.token'); ?>
@@ -108,4 +118,5 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 <script type="text/javascript">
 var allowedAttachments = '<?php echo $this->allowedFileExtensions; ?>';
 var attachmentMaxSize  = '<?php echo $this->uploadLimit; ?>';
+
 </script>

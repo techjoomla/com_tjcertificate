@@ -19,9 +19,17 @@
 			clientByUser="1"
 			onchange="this.form.submit();" />
 
+		<field name="agency_id"
+			type="agencies"
+			filter="integer"
+			label="COM_TJCERTIFICATE_CERTIFICATE_FILTER_CERTIFICATE_CLIENT"
+			description="COM_TJCERTIFICATE_CERTIFICATE_FILTER_DESC_CERTIFICATE_CLIENT"
+			addfieldpath="/components/com_tjcertificate/models/fields"
+			onchange="this.form.submit();" />
+
 		<field name="user_id"
 			type="users"
-			filter="safehtml"
+			filter="integer"
 			label="COM_TJCERTIFICATE_CERTIFICATE_FILTER_USER"
 			description="COM_TJCERTIFICATE_CERTIFICATE_FILTER_USER"
 			addfieldpath="/components/com_tjcertificate/models/fields"
