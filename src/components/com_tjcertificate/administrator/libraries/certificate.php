@@ -877,8 +877,8 @@ class TjCertificateCertificate extends CMSObject
 			$params = ComponentHelper::getParams('com_tjcertificate');
 
 			// Generate QR code of certificate.
-			$qrCodeWidth  = $params->get('qr_code_width', 80);
-			$qrCodeHeight = $params->get('qr_code_height', 80);
+			$qrCodeWidth  = $params->get('qr_code_width', 130);
+			$qrCodeHeight = $params->get('qr_code_height', 130);
 
 			$qrString = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->unique_certificate_id;
 			$qrString = Uri::root() . substr(Route::_($qrString, false), strlen(Uri::base(true)) + 1);
