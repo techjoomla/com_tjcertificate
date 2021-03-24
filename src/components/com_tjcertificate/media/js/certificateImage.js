@@ -79,7 +79,8 @@ var certificateImage = {
             // scale: (2),
             scrollX: 0,
             scrollY: -window.scrollY,
-            allowTaint: true
+            allowTaint: true,
+            useCORS: true
         }).then(function(canvas) {
 			certificateImage.enableDownloadShareBtns();
             certificateImage.uploadImage(canvas.toDataURL('image/png'));

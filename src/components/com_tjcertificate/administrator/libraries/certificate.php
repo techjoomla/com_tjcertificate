@@ -874,6 +874,19 @@ class TjCertificateCertificate extends CMSObject
 			// Generate unique certificate id replacement
 			$replacements->certificate->cert_id = $this->unique_certificate_id;
 
+			$params = ComponentHelper::getParams('com_tjcertificate');
+
+			// Generate QR code of certificate.
+			$qrCodeWidth  = $params->get('qr_code_width', 80);
+			$qrCodeHeight = $params->get('qr_code_height', 80);
+
+			$qrString = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->unique_certificate_id;
+			$qrString = Uri::root() . substr(Route::_($qrString, false), strlen(Uri::base(true)) + 1);
+			$qrString = urlencode($qrString);
+			$qrUrl    = "https://chart.apis.google.com/chart?cht=qr&chs=";
+			$qrImage  = $qrUrl . $qrCodeWidth . "x" . $qrCodeHeight . "&chl=" . $qrString . "&chld=H|0";
+			$replacements->certificate->qr_code = '<img src="' . $qrImage . '" class="qrimg" >';
+
 			// Generate certificate body
 			$this->generated_body = $this->generateCertificateBody($template->body, $replacements);
 
@@ -919,8 +932,6 @@ class TjCertificateCertificate extends CMSObject
 				}
 
 				// Generate Certificate Image
-				$params = ComponentHelper::getParams('com_tjcertificate');
-
 				if ($params->get('cert_image_gen_type') == 'imagick')
 				{
 					// Generate image from PDF
