@@ -86,6 +86,13 @@ PluginHelper::importPlugin('content');
 								<th>
 									<?php echo HTMLHelper::_('searchtools.sort', 'COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_USER_NAME', 'ci.user_id', $listDirn, $listOrder); ?>
 								</th>
+
+								<?php if ($this->isAgencyEnabled) { ?>
+									<th>
+										<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ORG_NAME'); ?>
+									</th>
+								<?php } ?>
+
 								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TYPE_NAME'); ?>
 								</th>
@@ -177,6 +184,12 @@ PluginHelper::importPlugin('content');
 										echo $userName;
 										?>
 								</td>
+								<?php 
+								if ($this->isAgencyEnabled)
+								{ ?>
+									<td><?php echo $item->title; ?></td>
+								<?php 
+								} ?>
 								<td>
 									<?php
 										if ($item->is_external)

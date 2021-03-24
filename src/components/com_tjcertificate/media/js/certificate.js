@@ -161,5 +161,49 @@ var certificate = {
 
 			});
 		});
-	}
+	},
+	getAgencyUsers: function(agencyObj) {
+		var formData = {};
+		var clusterusers = jQuery('#jform_assigned_user_id');
+		var assignedUser = jQuery('#assigned_user_id').val();
+		formData['agency_id'] = jQuery(agencyObj).val();
+
+		var promise = tjCertificateService.getAgencyUsers(formData);
+
+			promise.fail(
+				function(response) {
+					var messages = {
+						"error": [response.responseText]
+					};
+					Joomla.renderMessage(messages);
+				}
+			).done(function(response) {
+
+				if (!response)
+				{
+					return false;
+				}
+
+				if (response.success) {
+					clusterusers.empty();
+					clusterusers.trigger("liszt:updated");
+
+					var data = response.data;
+
+					for(var index = 0; index < data.length; ++index)
+					{
+						selectOption = '';
+						if (assignedUser == data[index].value)
+						{
+							selectOption = ' selected="selected" ';
+						}
+						op="<option value='"+data[index].value+"' "+selectOption+" > " + data[index]['text'] + "</option>" ;
+						clusterusers.append(op);
+					}
+
+					/* IMP : to update to chz-done selects*/
+					clusterusers.trigger("liszt:updated");
+				}
+			});
+		}
 };
