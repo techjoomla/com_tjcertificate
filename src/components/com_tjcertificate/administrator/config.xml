@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
-    <fieldset name="component" label="COM_TJCERTIFICATE_GENEARAL_SETINGS" description="" >
+    <fieldset name="component" label="COM_TJCERTIFICATE_GENEARAL_SETINGS" description="" addfieldpath="/media/com_tjcertificate/fields">
 		<field
 			name="certificate_prefix"
 			type="text"
@@ -53,7 +53,12 @@
 			<option value="1">JYES</option>
 			<option value="0">JNo</option>
 		</field>
-		</fieldset>
+
+		<field menu="hide" name="" type="legend" default="COM_TJCERTIFICATE_QR_CODE_SETTING" label="" description="" />
+		<field name="qr_code_width" class="validate-numeric" type="text" default="130" label="COM_TJCERTIFICATE_QR_CODE_WIDTH" description="COM_TJCERTIFICATE_QR_CODE_WIDTH_DESC" />
+		<field name="qr_code_height" class="validate-numeric" type="text" default="130" label="COM_TJCERTIFICATE_QR_CODE_HEIGHT" description="COM_TJCERTIFICATE_QR_CODE_HEIGHT_DESC" />
+		<field type="note" name="qr-code-settings-note" label="COM_TJCERTIFICATE_QR_CODE_SETTINGS_NOTE" />
+	</fieldset>
 
 	<!-- Social sharing -->
 	<fieldset name="social_sharing" label="COM_TJCERTIFICATE_SOCIAL_SHARING_SETINGS">
