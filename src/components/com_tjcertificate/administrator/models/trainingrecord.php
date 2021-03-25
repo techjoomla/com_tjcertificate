@@ -336,7 +336,7 @@ class TjCertificateModelTrainingRecord extends AdminModel
 
 				if (empty($result))
 				{
-					$this->setError(Text::_('COM_TJCERTIFICATE_ORGANIZATION_INVALID_USER'));
+					$this->setError(Text::_('COM_TJCERTIFICATE_INVALID_ORGANIZATION_USER'));
 					$return = false;
 				}
 			}

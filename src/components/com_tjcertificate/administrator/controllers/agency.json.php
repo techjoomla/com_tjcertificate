@@ -62,11 +62,14 @@ class TjCertificateControllerAgency extends FormController
 
 		$model = $this->getModel();
 
-		if (!$model->validateUserAgency($agencyId))
+		if ($agencyId)
 		{
-			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_AGENCY_INVALID_USER'), 'error');
-			echo new JsonResponse(null, null, true);
-			$app->close();
+			if (!$model->validateUserAgency($agencyId))
+			{
+				$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_INVALID_ORGANIZATION'), 'error');
+				echo new JsonResponse(null, null, true);
+				$app->close();
+			}
 		}
 
 		$userOptions = array();
