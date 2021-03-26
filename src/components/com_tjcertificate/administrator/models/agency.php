@@ -28,6 +28,10 @@ class TjCertificateModelAgency extends AdminModel
 
 	public $user;
 
+	public $manageOwn;
+
+	public $manage;
+
 	/**
 	 * Constructor.
 	 *
@@ -37,8 +41,10 @@ class TjCertificateModelAgency extends AdminModel
 	 */
 	public function __construct($config = array())
 	{
-		$this->params = ComponentHelper::getParams('com_tjcertificate');
-		$this->user   = Factory::getuser();
+		$this->params    = ComponentHelper::getParams('com_tjcertificate');
+		$this->user      = Factory::getuser();
+		$this->manageOwn = $this->user->authorise('core.manage.own.agency.user', $this->comMultiAgency);
+		$this->manage    = $this->user->authorise('core.manage.all.agency.user', $this->comMultiAgency);
 
 		parent::__construct($config);
 	}
@@ -84,12 +90,15 @@ class TjCertificateModelAgency extends AdminModel
 			$query->join('INNER', $db->qn('#__tjmultiagency_multiagency', 'ml') .
 					' ON (' . $db->qn('ml.id') . ' = ' . $db->qn('clusters.client_id') . ')');
 
-			$manageOwn = $this->user->authorise('core.manage.own.agency.user', $this->comMultiAgency);
-			$manage    = $this->user->authorise('core.manage.all.agency.user', $this->comMultiAgency);
-
-			// If user have only manage own permission and agency is not set then load own agency users
-			if ($manageOwn && empty($manage) && empty($agencyId))
+			// If user have manage all permission and no org selected then show all users
+			if ($this->manage && empty($agencyId))
 			{
+				$query->clear('join');
+			}
+			elseif ($this->manageOwn && empty($this->manage) && empty($agencyId))
+			{
+				// If user have only manage own permission and agency is not set then load own agency users
+
 				$loggedInUserAgencies = $this->getUserAgencies($this->user->id);
 
 				foreach ($loggedInUserAgencies as $loggedInUserAgency)
@@ -117,12 +126,18 @@ class TjCertificateModelAgency extends AdminModel
 	 *
 	 * @param   int  $agencyId  agency id
 	 * 
-	 * @return  integer  The integer of the primary key
+	 * @return  integer|boolean
 	 *
 	 * @since  __DEPLOY_VERSION__
 	 */
 	public function validateUserAgency($agencyId)
 	{
+		// If user having multiagency manage all permission then return true
+		if ($this->manage)
+		{
+			return true;
+		}
+
 		$db    = Factory::getDBO();
 		$query = $db->getQuery(true);
 		$query->select($db->quoteName('u.id'));
@@ -144,7 +159,7 @@ class TjCertificateModelAgency extends AdminModel
 	 *
 	 * @param   int  $userId  user id
 	 * 
-	 * @return  integer  The integer of the primary key
+	 * @return  object
 	 *
 	 * @since  __DEPLOY_VERSION__
 	 */
