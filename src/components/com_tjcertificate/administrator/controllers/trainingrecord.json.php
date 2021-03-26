@@ -109,9 +109,11 @@ class TjCertificateControllerTrainingRecord extends FormController
 		$certificateId = $app->input->getInt('certificateId');
 		$manageOwn     = $user->authorise('certificate.external.manageown', $client);
 		$manage        = $user->authorise('certificate.external.manage', $client);
+		$deleteOwn     = $user->authorise('certificate.external.deleteown', $client);
+		$delete        = $user->authorise('certificate.external.delete', $client);
 
 		// If manageOwn permission then check record owner can only deleting own record
-		if ($manageOwn && !$manage)
+		if (($manageOwn && $deleteOwn) && (empty($manage) || ($manage && empty($delete))))
 		{
 			$table = TJCERT::table("certificates");
 			$table->load(array('id' => (int) $certificateId, 'user_id' => $user->id));
@@ -125,7 +127,7 @@ class TjCertificateControllerTrainingRecord extends FormController
 
 		$model = TJCERT::model('Certificate', array('ignore_request' => true));
 
-		if ($manageOwn || $manage)
+		if (($manageOwn && $deleteOwn) || ($manage && $delete))
 		{
 			// Remove the item
 			if ($model->delete($certificateId))

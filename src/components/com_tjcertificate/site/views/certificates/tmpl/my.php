@@ -36,6 +36,9 @@ $options['relative'] = true;
 HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
 HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
+
+// Don't show username column if user only have manage own permission 
+$showUserName    = (($this->manage && empty($this->manageOwn)) || ($this->manage && $this->manageOwn));
 ?>
 
 <div class="tj-page tjBs3">
@@ -89,7 +92,7 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 								</th>
 
 								<?php if ($this->isAgencyEnabled) { ?>
-									<?php if (empty($this->manageOwn)) { ?>
+									<?php if ($showUserName) { ?>
 									<th>
 										<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_USERNAME'); ?>
 									</th>
@@ -125,6 +128,9 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 							{
 								$certificateObj = TJCERT::Certificate($item->id);
 								$data = $dispatcher->trigger('getCertificateClientData', array($item->client_id, $item->client));
+
+								// Delete own record
+								$deleteOwnRecord = ($this->deleteOwn && $item->user_id == $this->user->id);
 								?>
 								<tr class="row <?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->id; ?>">
 								<td class="has-context">
@@ -162,8 +168,9 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 								</td>
 								<?php 
 								if ($this->isAgencyEnabled)
-								{ ?>
-									<?php if (empty($this->manageOwn)) { ?>
+								{
+								?>
+									<?php if ($showUserName) { ?>
 									<td><?php echo $item->uname; ?></td>
 									<?php } ?>
 									<td><?php echo $item->title; ?></td>
@@ -194,8 +201,16 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 										{ ?>
 												<a class="d-inline-block" href="<?php echo $editLink; ?>" title="<?php echo Text::_('JACTION_EDIT'); ?>">
 													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-												</a>										
-												<a class="d-inline-block p-5" onclick="certificate.deleteItem('<?php echo $item->id; ?>', this)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button" title="<?php echo Text::_('JACTION_DELETE'); ?>"><i class="fa fa-trash-o"></i>
+												</a>
+												<?php
+												// If user have mange all permission and delete own permission then can delete own records only
+												if ($this->delete || $deleteOwnRecord)
+												{
+												?>
+													<a class="d-inline-block p-5" onclick="certificate.deleteItem('<?php echo $item->id; ?>', this)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button" title="<?php echo Text::_('JACTION_DELETE'); ?>"><i class="fa fa-trash-o"></i>
+												<?php
+												}
+												?>
 										<?php 
 										} ?>
 
@@ -204,9 +219,14 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 										{ ?>
 												<a class="d-inline-block" href="<?php echo $editLink; ?>" title="<?php echo Text::_('JACTION_EDIT'); ?>">
 													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-												</a>										
-												<a class="d-inline-block p-5" onclick="certificate.deleteItem('<?php echo $item->id; ?>', this)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button" title="<?php echo Text::_('JACTION_DELETE'); ?>"><i class="fa fa-trash-o"></i>
-										<?php 
+												</a>
+												<?php
+												if ($deleteOwnRecord)
+												{ ?>
+													<a class="d-inline-block p-5" onclick="certificate.deleteItem('<?php echo $item->id; ?>', this)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button" title="<?php echo Text::_('JACTION_DELETE'); ?>"><i class="fa fa-trash-o"></i>
+												<?php
+												} ?>
+										<?php
 										} ?>
 
 										<?php 
@@ -226,8 +246,9 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 											} ?>
 									<?php 
 										} ?>
-									<?php 
-										if (!$item->is_external || !$this->manageOwn) 
+									<?php
+										// If no external record and don't have manage and mangeown permission then show "-" in action column
+										if (!$item->is_external || (empty($this->manageOwn) || empty($this->manage)))
 										{
 											echo "-";
 										}
