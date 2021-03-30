@@ -244,7 +244,7 @@ $showUserName    = (($this->manage && empty($this->manageOwn)) || ($this->manage
 									<?php 
 										} ?>
 									<?php 
-										if (!$item->is_external || !($this->manageOwn && $this->manage)))
+										if (!$item->is_external || !($this->manageOwn || $this->manage))
 										{
 											echo "-";
 										}
