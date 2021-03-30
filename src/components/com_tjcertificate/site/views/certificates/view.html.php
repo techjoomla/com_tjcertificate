@@ -147,7 +147,7 @@ class TjCertificateViewCertificates extends JViewLegacy
 		$this->manageOwn     = $this->user->authorise('certificate.external.manageown', $this->comTjcertificate);
 		$this->create	     = $this->user->authorise('certificate.external.create', $this->comTjcertificate);
 		$this->delete	     = $this->user->authorise('certificate.external.delete', $this->comTjcertificate);
-		$this->deleteOwn	 = $this->user->authorise('certificate.external.deleteown', $this->comTjcertificate);
+		$this->deleteOwn     = $this->user->authorise('certificate.external.deleteown', $this->comTjcertificate);
 
 		if (ComponentHelper::isEnabled($this->comMultiAgency) && $this->params->get('enable_multiagency'))
 		{
