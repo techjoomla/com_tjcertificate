@@ -88,12 +88,10 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_NAME'); ?>
 								</th>
 
+								<th>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_USERNAME'); ?>
+								</th>
 								<?php if ($this->isAgencyEnabled) { ?>
-									<?php if (empty($this->manageOwn)) { ?>
-									<th>
-										<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_USERNAME'); ?>
-									</th>
-								<?php } ?>
 									<th>
 										<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ORG_NAME'); ?>
 									</th>
@@ -160,12 +158,11 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 										}
 									?>
 								</td>
+								<td><?php echo $item->uname; ?></td>
 								<?php 
 								if ($this->isAgencyEnabled)
-								{ ?>
-									<?php if (empty($this->manageOwn)) { ?>
-									<td><?php echo $item->uname; ?></td>
-									<?php } ?>
+								{
+								?>
 									<td><?php echo $item->title; ?></td>
 								<?php 
 								} ?>
@@ -194,8 +191,16 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 										{ ?>
 												<a class="d-inline-block" href="<?php echo $editLink; ?>" title="<?php echo Text::_('JACTION_EDIT'); ?>">
 													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-												</a>										
-												<a class="d-inline-block p-5" onclick="certificate.deleteItem('<?php echo $item->id; ?>', this)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button" title="<?php echo Text::_('JACTION_DELETE'); ?>"><i class="fa fa-trash-o"></i>
+												</a>
+												<?php
+												// If user have delete all permission then can delete all records
+												if ($this->delete)
+												{
+												?>
+													<a class="d-inline-block p-5" onclick="certificate.deleteItem('<?php echo $item->id; ?>', this)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button" title="<?php echo Text::_('JACTION_DELETE'); ?>"><i class="fa fa-trash-o"></i>
+												<?php
+												}
+												?>
 										<?php 
 										} ?>
 
@@ -204,9 +209,14 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 										{ ?>
 												<a class="d-inline-block" href="<?php echo $editLink; ?>" title="<?php echo Text::_('JACTION_EDIT'); ?>">
 													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-												</a>										
-												<a class="d-inline-block p-5" onclick="certificate.deleteItem('<?php echo $item->id; ?>', this)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button" title="<?php echo Text::_('JACTION_DELETE'); ?>"><i class="fa fa-trash-o"></i>
-										<?php 
+												</a>
+												<?php
+												if ($this->deleteOwn && $item->user_id == $this->user->id)
+												{ ?>
+													<a class="d-inline-block p-5" onclick="certificate.deleteItem('<?php echo $item->id; ?>', this)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button" title="<?php echo Text::_('JACTION_DELETE'); ?>"><i class="fa fa-trash-o"></i>
+												<?php
+												} ?>
+										<?php
 										} ?>
 
 										<?php 
@@ -227,7 +237,7 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 									<?php 
 										} ?>
 									<?php 
-										if (!$item->is_external || !$this->manageOwn) 
+										if (!$item->is_external || !($this->manageOwn || $this->manage))
 										{
 											echo "-";
 										}

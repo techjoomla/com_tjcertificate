@@ -94,6 +94,13 @@ class TjCertificateViewCertificates extends JViewLegacy
 	public $isAgencyEnabled = false;
 
 	protected $comMultiAgency = 'com_multiagency';
+
+	public $delete;
+
+	public $deleteOwn;
+
+	protected $comTjcertificate = 'com_tjcertificate';
+
 	/**
 	 * Display the  view
 	 *
@@ -105,7 +112,7 @@ class TjCertificateViewCertificates extends JViewLegacy
 	{
 		$app          = Factory::getApplication();
 		$this->user	  = Factory::getUser();
-		$this->params = ComponentHelper::getParams('com_tjcertificate');
+		$this->params = ComponentHelper::getParams($this->comTjcertificate);
 
 		if (!$this->user->id)
 		{
@@ -121,7 +128,7 @@ class TjCertificateViewCertificates extends JViewLegacy
 		$this->state = $this->get('State');
 
 		$layout       = $app->input->get('layout', "my");
-		$this->manage = $this->user->authorise('certificate.external.manage', 'com_tjcertificate');
+		$this->manage = $this->user->authorise('certificate.external.manage', $this->comTjcertificate);
 
 		if ($layout == 'my' && !$this->manage)
 		{
@@ -137,8 +144,10 @@ class TjCertificateViewCertificates extends JViewLegacy
 
 		$this->filterForm    = $this->get('FilterForm');
 		$this->activeFilters = $this->get('ActiveFilters');
-		$this->manageOwn     = $this->user->authorise('certificate.external.manageown', 'com_tjcertificate');
-		$this->create	     = $this->user->authorise('certificate.external.create', 'com_tjcertificate');
+		$this->manageOwn     = $this->user->authorise('certificate.external.manageown', $this->comTjcertificate);
+		$this->create	     = $this->user->authorise('certificate.external.create', $this->comTjcertificate);
+		$this->delete	     = $this->user->authorise('certificate.external.delete', $this->comTjcertificate);
+		$this->deleteOwn     = $this->user->authorise('certificate.external.deleteown', $this->comTjcertificate);
 
 		if (ComponentHelper::isEnabled($this->comMultiAgency) && $this->params->get('enable_multiagency'))
 		{
