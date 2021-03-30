@@ -204,7 +204,7 @@ $showUserName    = (($this->manage && empty($this->manageOwn)) || ($this->manage
 												</a>
 												<?php
 												// If user have mange all permission and delete own permission then can delete own records only
-												if ($this->delete || $deleteOwnRecord)
+												if ($this->delete)
 												{
 												?>
 													<a class="d-inline-block p-5" onclick="certificate.deleteItem('<?php echo $item->id; ?>', this)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button" title="<?php echo Text::_('JACTION_DELETE'); ?>"><i class="fa fa-trash-o"></i>
@@ -246,9 +246,8 @@ $showUserName    = (($this->manage && empty($this->manageOwn)) || ($this->manage
 											} ?>
 									<?php 
 										} ?>
-									<?php
-										// If no external record and don't have manage and mangeown permission then show "-" in action column
-										if (!$item->is_external || (empty($this->manageOwn) || empty($this->manage)))
+									<?php 
+										if (!$item->is_external || (empty($this->manageOwn) && empty($this->manage)))
 										{
 											echo "-";
 										}

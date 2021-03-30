@@ -111,24 +111,33 @@ class TjCertificateControllerTrainingRecord extends FormController
 		$manage        = $user->authorise('certificate.external.manage', $client);
 		$deleteOwn     = $user->authorise('certificate.external.deleteown', $client);
 		$delete        = $user->authorise('certificate.external.delete', $client);
+		$allowDelete   = false;
 
-		// If manageOwn permission then check record owner can only deleting own record
-		if (($manageOwn && $deleteOwn) && (empty($manage) || ($manage && empty($delete))))
+		// If manageOwn and delete own permission then check own record and allow to delete record
+		if ($manageOwn && !$manage)
 		{
-			$table = TJCERT::table("certificates");
-			$table->load(array('id' => (int) $certificateId, 'user_id' => $user->id));
-
-			if (!$table->id)
+			if ($deleteOwn)
 			{
-				echo new JsonResponse(null, Text::_('COM_TJCERTIFICATE_ERROR_SOMETHING_WENT_WRONG'), true);
-				$app->close();
+				$table = TJCERT::table("certificates");
+				$table->load(array('id' => (int) $certificateId, 'user_id' => $user->id));
+
+				if ($table->id)
+				{
+					$allowDelete = true;
+				}
+				else
+				{
+					echo new JsonResponse(null, Text::_('COM_TJCERTIFICATE_ERROR_SOMETHING_WENT_WRONG'), true);
+					$app->close();
+				}
 			}
 		}
 
-		$model = TJCERT::model('Certificate', array('ignore_request' => true));
-
-		if (($manageOwn && $deleteOwn) || ($manage && $delete))
+		// If user have manage all and delete all or allow to delete then delete the record
+		if (($manage && $delete) || $allowDelete)
 		{
+			$model = TJCERT::model('Certificate', array('ignore_request' => true));
+
 			// Remove the item
 			if ($model->delete($certificateId))
 			{
@@ -143,12 +152,12 @@ class TjCertificateControllerTrainingRecord extends FormController
 					$model->deleteMedia($tableXref->media_id, $mediaPath, $client, $certificateId);
 				}
 
-				echo new JResponseJson($result, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DELETED_SUCCESSFULLY'), false);
+				echo new JsonResponse($result, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DELETED_SUCCESSFULLY'), false);
 				$app->close();
 			}
 			else
 			{
-				echo new JResponseJson(null, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DELETED_FAILED'), true);
+				echo new JsonResponse(null, Text::_('COM_TJCERTIFICATE_CERTIFICATE_DELETED_FAILED'), true);
 				$app->close();
 			}
 		}
