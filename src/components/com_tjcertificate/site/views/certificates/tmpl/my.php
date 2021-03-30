@@ -128,9 +128,6 @@ $showUserName    = (($this->manage && empty($this->manageOwn)) || ($this->manage
 							{
 								$certificateObj = TJCERT::Certificate($item->id);
 								$data = $dispatcher->trigger('getCertificateClientData', array($item->client_id, $item->client));
-
-								// Delete own record
-								$deleteOwnRecord = ($this->deleteOwn && $item->user_id == $this->user->id);
 								?>
 								<tr class="row <?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->id; ?>">
 								<td class="has-context">
@@ -203,7 +200,7 @@ $showUserName    = (($this->manage && empty($this->manageOwn)) || ($this->manage
 													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 												</a>
 												<?php
-												// If user have mange all permission and delete own permission then can delete own records only
+												// If user have delete all permission then can delete all records
 												if ($this->delete)
 												{
 												?>
@@ -221,7 +218,7 @@ $showUserName    = (($this->manage && empty($this->manageOwn)) || ($this->manage
 													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 												</a>
 												<?php
-												if ($deleteOwnRecord)
+												if ($this->deleteOwn && $item->user_id == $this->user->id)
 												{ ?>
 													<a class="d-inline-block p-5" onclick="certificate.deleteItem('<?php echo $item->id; ?>', this)" data-message="<?php echo Text::_('COM_TJCERTIFICATE_DELETE_CERTIFICATE_MESSAGE');?>" class="btn btn-mini delete-button" type="button" title="<?php echo Text::_('JACTION_DELETE'); ?>"><i class="fa fa-trash-o"></i>
 												<?php
