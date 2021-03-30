@@ -36,9 +36,6 @@ $options['relative'] = true;
 HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
 HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
-
-// Don't show username column if user only have manage own permission 
-$showUserName    = (($this->manage && empty($this->manageOwn)) || ($this->manage && $this->manageOwn));
 ?>
 
 <div class="tj-page tjBs3">
@@ -91,12 +88,10 @@ $showUserName    = (($this->manage && empty($this->manageOwn)) || ($this->manage
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_NAME'); ?>
 								</th>
 
+								<th>
+									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_USERNAME'); ?>
+								</th>
 								<?php if ($this->isAgencyEnabled) { ?>
-									<?php if ($showUserName) { ?>
-									<th>
-										<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_USERNAME'); ?>
-									</th>
-								<?php } ?>
 									<th>
 										<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_ORG_NAME'); ?>
 									</th>
@@ -163,13 +158,11 @@ $showUserName    = (($this->manage && empty($this->manageOwn)) || ($this->manage
 										}
 									?>
 								</td>
+								<td><?php echo $item->uname; ?></td>
 								<?php 
 								if ($this->isAgencyEnabled)
 								{
 								?>
-									<?php if ($showUserName) { ?>
-									<td><?php echo $item->uname; ?></td>
-									<?php } ?>
 									<td><?php echo $item->title; ?></td>
 								<?php 
 								} ?>
