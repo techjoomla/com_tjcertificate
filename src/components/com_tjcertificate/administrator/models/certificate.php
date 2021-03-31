@@ -198,7 +198,7 @@ class TjCertificateModelCertificate extends AdminModel
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function delete($certificateIds)
+	public function delete(&$certificateIds)
 	{
 		$certificateIds  = (array) $certificateIds;
 		$table    = $this->getTable('Certificates');
@@ -244,7 +244,7 @@ class TjCertificateModelCertificate extends AdminModel
 	 * 
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function publish($ids, $state = 1)
+	public function publish(&$ids, $state = 1)
 	{
 		$table = $this->getTable();
 
