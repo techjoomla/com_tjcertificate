@@ -54,8 +54,21 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 				$recordFormLink = 'index.php?option=com_tjcertificate&view=trainingrecord&layout=edit';
 				$addRecordLink = Route::_($recordFormLink);?>
 				<div>
-					<a class="btn btn-primary btn-small pull-right mb-15" href="<?php echo $addRecordLink;?>">
+					<a class="btn btn-primary btn-small pull-right mb-15 m-5" href="<?php echo $addRecordLink;?>">
 						<i class="icon-plus"></i><?php echo Text::_('COM_TJCERTIFICATE_ADD_EXTERNAL_CERTIFICATE'); ?>
+					</a>
+				</div>
+			<?php
+			}
+			?>
+			<?php
+			if ($this->manage)
+			{
+				$recordsFormLink = 'index.php?option=com_tjcertificate&view=trainingrecords&layout=edit';
+				$addRecordsLink = Route::_($recordsFormLink);?>
+				<div>
+					<a class="btn btn-primary btn-small pull-right mb-15 m-5" href="<?php echo $addRecordsLink;?>">
+						<i class="icon-plus"></i><?php echo Text::_('COM_TJCERTIFICATE_ADD_EXTERNAL_CERTIFICATES'); ?>
 					</a>
 				</div>
 			<?php

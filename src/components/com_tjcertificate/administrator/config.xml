@@ -55,6 +55,19 @@
 			<option value="0">JNo</option>
 		</field>
 
+		<field name="tjqueue_records" class="btn-group" type="radio"  default="0" description="COM_TJCERTIFICATE_TJQUEUE_SETTING_DESC" label="COM_TJCERTIFICATE_TJQUEUE_SETTING" >
+			<option value="1">JYES</option>
+			<option value="0">JNo</option>
+		</field>
+
+		<field
+			name="users_select_limit"
+			type="text"
+			default="40"
+			label="COM_TJCERTIFICATE_RECORDS_USER_SELECT_LIMIT"
+			description="COM_TJCERTIFICATE_RECORDS_USER_SELECT_LIMIT_DESC"
+		/>
+
 		<field menu="hide" name="" type="legend" default="COM_TJCERTIFICATE_QR_CODE_SETTING" label="" description="" />
 		<field name="qr_code_width" class="validate-numeric" type="text" default="130" label="COM_TJCERTIFICATE_QR_CODE_WIDTH" description="COM_TJCERTIFICATE_QR_CODE_WIDTH_DESC" />
 		<field name="qr_code_height" class="validate-numeric" type="text" default="130" label="COM_TJCERTIFICATE_QR_CODE_HEIGHT" description="COM_TJCERTIFICATE_QR_CODE_HEIGHT_DESC" />

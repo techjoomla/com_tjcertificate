@@ -205,5 +205,35 @@ var certificate = {
 					clusterusers.trigger("liszt:updated");
 				}
 			});
-		}
+		},
+		addRecords: function() {
+			jQuery.LoadingOverlay("show", {
+				image : Joomla.getOptions('system.paths').root + "/media/com_tjcertificate/images/loader/loader.gif",
+			});
+
+			var formData    = jQuery('.add-records').serialize();
+			var params      = {};
+			params['async'] = true;
+			var promise     = tjCertificateService.addRecords(formData,params);
+
+			promise.fail(
+				function(response) {
+					var messages = {"error": [response.responseText]};
+					Joomla.renderMessages(messages);
+				}
+			).done(function(response) {
+				jQuery.LoadingOverlay("hide");
+
+				if (!response.success && response.message){
+					var messages = { "error": [response.message]};
+					Joomla.renderMessages(messages);
+				}
+
+				if (response.success) {
+					certificate.renderMessage(response.data.msg);
+					jQuery('#adminForm').trigger("reset");
+					jQuery('#jform_assigned_user_id').trigger("liszt:updated");
+				}
+			});
+		},
 };

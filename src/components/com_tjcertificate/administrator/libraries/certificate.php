@@ -80,6 +80,8 @@ class TjCertificateCertificate extends CMSObject
 
 	public $created_by = "";
 
+	public $notify = 1;
+
 	/**
 	 * Constructor activating the default information of the Certificate
 	 *
@@ -494,7 +496,7 @@ class TjCertificateCertificate extends CMSObject
 
 			$dispatcher = \JEventDispatcher::getInstance();
 
-			if ($table->is_external && $isNew)
+			if ($table->is_external && $isNew )
 			{
 				/* Send mail on record creation */
 				JLoader::import('components.com_tjcertificate.events.record', JPATH_SITE);
