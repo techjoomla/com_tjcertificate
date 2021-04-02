@@ -24,18 +24,12 @@ if (ComponentHelper::getComponent('com_tjqueue', true)->enabled)
 }
 
 /**
- * TjCertificate Training Record Model.
+ * TjCertificate Bulk Training Record Model.
  *
  * @since  __DEPLOY_VERSION__
  */
 class TjCertificateModelBulkTrainingRecord extends AdminModel
 {
-	/**
-	 * @var null  Item data
-	 * @since  __DEPLOY_VERSION__
-	 */
-	protected $item = null;
-
 	protected $comMultiAgency = 'com_multiagency';
 
 	public $params;
