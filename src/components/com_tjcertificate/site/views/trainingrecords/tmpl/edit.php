@@ -25,8 +25,8 @@ HTMLHelper::_('formbehavior.chosen', 'select');
 
 $options['relative'] = true;
 HTMLHelper::_('script', 'media/com_tjcertificate/vendors/loader/js/loadingoverlay.min.js');
-HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.js', $options);
-HTMLHelper::_('script', 'com_tjcertificate/certificate.js', $options);
+HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
+HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 
 $userLimit = $this->params->get('users_select_limit');
 $message = Text::sprintf("COM_TJCERTIFICATE_USER_LIMIT_MESSAGE", $userLimit);
