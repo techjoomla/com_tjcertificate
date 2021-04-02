@@ -23,7 +23,7 @@ use Joomla\CMS\Toolbar\Toolbar;
  *
  * @since  __DEPLOY_VERSION__
  */
-class TjCertificateViewTrainingRecords extends HtmlView
+class TjCertificateViewBulkTrainingRecord extends HtmlView
 {
 	/**
 	 * The JForm object
@@ -88,9 +88,9 @@ class TjCertificateViewTrainingRecords extends HtmlView
 	 */
 	protected function addToolbar()
 	{
-		$layout = Factory::getApplication()->input->get("layout");
-
 		$app = Factory::getApplication();
+
+		$layout = $app->input->get("layout");
 
 		JLoader::import('administrator.components.com_tjcertificate.helpers.tjcertificate', JPATH_SITE);
 		TjCertificateHelper::addSubmenu('certificates');
@@ -102,7 +102,7 @@ class TjCertificateViewTrainingRecords extends HtmlView
 
 		if ($layout != "default")
 		{
-			Factory::getApplication()->input->set('hidemainmenu', true);
+			$app->input->set('hidemainmenu', true);
 
 			ToolbarHelper::title(
 				Text::_('COM_TJCERTIFICATE_PAGE_ADD_TRAINING_RECORDS'),

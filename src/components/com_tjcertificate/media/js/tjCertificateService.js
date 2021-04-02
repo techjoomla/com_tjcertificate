@@ -15,7 +15,7 @@ var tjCertificateService = {
 	deleteAttachmentUrl: '/index.php?option=com_tjcertificate&task=trainingrecord.deleteAttachment&format=json',
 	deleteItemUrl: '/index.php?option=com_tjcertificate&task=trainingrecord.delete&format=json',
 	getAgencyUsersUrl: '/index.php?option=com_tjcertificate&task=agency.getAgencyUsers&format=json',
-	addRecordsUrl: '/index.php?option=com_tjcertificate&task=trainingrecords.addRecords&format=json',
+	addRecordsUrl: '/index.php?option=com_tjcertificate&task=bulktrainingrecord.addRecords&format=json',
 
 	postData: function(url, formData, params) {
 		if(!params){

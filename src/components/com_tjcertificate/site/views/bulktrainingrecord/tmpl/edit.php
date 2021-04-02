@@ -72,7 +72,7 @@ $message = Text::sprintf("COM_TJCERTIFICATE_USER_LIMIT_MESSAGE", $userLimit);
 		</div>
 	</div>
 	<input type="hidden" name="option" value="com_tjcertificate"/>
-	<input type="hidden" name="task" value="trainingrecords.addRecords"/>
+	<input type="hidden" name="task" value="bulktrainingrecord.addRecords"/>
 	<input type="hidden" name="site" value="f"/>
 	<?php echo HTMLHelper::_('form.token'); ?>
 </form>
@@ -83,7 +83,7 @@ $message = Text::sprintf("COM_TJCERTIFICATE_USER_LIMIT_MESSAGE", $userLimit);
 
 	jQuery("#jform_assigned_user_id").chosen({max_selected_options: userLimit});
 	jQuery("#jform_assigned_user_id").bind("liszt:maxselected", function () {
-		alert(message);
+		Joomla.renderMessages({'error': [message] });
 	});
 
 </script>

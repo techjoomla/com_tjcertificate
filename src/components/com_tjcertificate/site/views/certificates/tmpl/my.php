@@ -64,7 +64,7 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 			<?php
 			if ($this->manage)
 			{
-				$recordsFormLink = 'index.php?option=com_tjcertificate&view=trainingrecords&layout=edit';
+				$recordsFormLink = 'index.php?option=com_tjcertificate&view=bulktrainingrecord&layout=edit';
 				$addRecordsLink = Route::_($recordsFormLink);?>
 				<div>
 					<a class="btn btn-primary btn-small pull-right mb-15 m-5" href="<?php echo $addRecordsLink;?>">

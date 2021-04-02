@@ -75,7 +75,7 @@ $message = Text::sprintf("COM_TJCERTIFICATE_USER_LIMIT_MESSAGE", $userLimit);
 
 		</div>
 		<input type="hidden" name="jform[created_by]" value="<?php echo Factory::getUser()->id;?>" />
-		<input type="hidden" name="task" value="trainingrecords.addRecords" />
+		<input type="hidden" name="task" value="bulktrainingrecord.addRecords" />
 		<?php echo HTMLHelper::_('form.token'); ?>
 	</div>
 	</form>
@@ -88,7 +88,7 @@ $message = Text::sprintf("COM_TJCERTIFICATE_USER_LIMIT_MESSAGE", $userLimit);
 
 	jQuery("#jform_assigned_user_id").chosen({max_selected_options: userLimit});
 	jQuery("#jform_assigned_user_id").bind("liszt:maxselected", function () {
-		alert(message);
+		Joomla.renderMessages({'error': [message] });
 	});
 
 </script>

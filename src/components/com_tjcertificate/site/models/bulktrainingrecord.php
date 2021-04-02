@@ -11,4 +11,4 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-require_once JPATH_ADMINISTRATOR . '/components/com_tjcertificate/controllers/trainingrecords.json.php';
+JLoader::import('components.com_tjcertificate.models.bulktrainingrecord', JPATH_ADMINISTRATOR);

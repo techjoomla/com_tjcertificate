@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
-	<fieldset>
+	<fieldset addfieldpath="administrator/components/com_tjcertificate/models/fields">
 		<field
 			name="id"
 			type="hidden"
@@ -19,7 +19,6 @@
 			type="agencies"
 			label="COM_TJCERTIFICATE_FORM_CLUSTER_LBL" 
 			onchange="certificate.getAgencyUsers(this)"
-			addfieldpath="components/com_tjcertificate/models/fields"
 			/>
 
 		<field
@@ -27,7 +26,6 @@
 			type="allusers"
 			required="true"
 			label="COM_TJCERTIFICATE_FORM_LBL_ASSIGNED_USER"
-			addfieldpath="administrator/components/com_tjcertificate/models/fields"
 			>
 			<option value="">COM_TJCERTIFICATE_AGENCY_USER_SELECT</option>
 		</field>

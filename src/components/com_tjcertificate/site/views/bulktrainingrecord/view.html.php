@@ -21,7 +21,7 @@ use Joomla\CMS\Component\ComponentHelper;
  *
  * @since  __DEPLOY_VERSION__
  */
-class TjCertificateViewTrainingRecords extends HtmlView
+class TjCertificateViewBulkTrainingRecord extends HtmlView
 {
 	protected $form;
 

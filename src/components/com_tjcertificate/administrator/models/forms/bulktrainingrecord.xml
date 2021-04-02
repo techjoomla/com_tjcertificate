@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
-	<fieldset>
+	<fieldset addfieldpath="administrator/components/com_tjcertificate/models/fields">
 		<field 
 			name="agency_id" 
 			type="agencies"
 			label="COM_TJCERTIFICATE_FORM_CLUSTER_LBL" 
 			onchange="certificate.getAgencyUsers(this)"
-			addfieldpath="components/com_tjcertificate/models/fields"
 			/>
 
 		<field
@@ -15,7 +14,6 @@
 			required="true"
 			multiple="true"
 			label="COM_TJCERTIFICATE_BULK_ADD_FORM_LBL_ASSIGNED_USERS"
-			addfieldpath="administrator/components/com_tjcertificate/models/fields"
 			/>
 
 		<field
@@ -24,7 +22,6 @@
 			default="0"
 			label="COM_TJCERTIFICATE_BULK_ADD_FORM_LBL_NOTIFY_USERS"
 			description="COM_TJCERTIFICATE_BULK_ADD_FORM_LBL_NOTIFY_USERS_DESC"
-			addfieldpath="administrator/components/com_tjcertificate/models/fields"
 			/>
 
 		<field

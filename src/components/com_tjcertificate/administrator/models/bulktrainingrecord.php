@@ -28,7 +28,7 @@ if (ComponentHelper::getComponent('com_tjqueue', true)->enabled)
  *
  * @since  __DEPLOY_VERSION__
  */
-class TjCertificateModelTrainingRecords extends AdminModel
+class TjCertificateModelBulkTrainingRecord extends AdminModel
 {
 	/**
 	 * @var null  Item data
@@ -70,46 +70,9 @@ class TjCertificateModelTrainingRecords extends AdminModel
 	public function getForm($data = array(), $loadData = true)
 	{
 		// Get the form.
-		$form         = $this->loadForm('com_tjcertificate.trainingrecords', 'trainingrecords', array('control' => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm('com_tjcertificate.bulktrainingrecord', 'bulktrainingrecord', array('control' => 'jform', 'load_data' => $loadData));
 
 		return empty($form) ? false : $form;
-	}
-
-	/**
-	 * Returns a Table object, always creating it.
-	 *
-	 * @param   string  $type    The table type to instantiate
-	 * @param   string  $prefix  A prefix for the table class name. Optional.
-	 * @param   array   $config  Configuration array for model. Optional.
-	 *
-	 * @return  JTable    A database object
-	 */
-	public function getTable($type = 'Certificates', $prefix = 'TjCertificateTable', $config = array())
-	{
-		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjcertificate/tables');
-
-		return Table::getInstance($type, $prefix, $config);
-	}
-
-	/**
-	 * Method to get the data that should be injected in the form.
-	 *
-	 * @return	mixed	The data for the form.
-	 *
-	 * @since	__DEPLOY_VERSION__
-	 */
-	protected function loadFormData()
-	{
-		// Check the session for previously entered form data.
-		$data = Factory::getApplication()->getUserState('com_tjcertificate.edit.trainingrecords.data', array());
-
-		if (empty($data))
-		{
-			$data = $this->getItem();
-			$data->assigned_user_id = $data->user_id;
-		}
-
-		return $data;
 	}
 
 	/**
@@ -151,20 +114,8 @@ class TjCertificateModelTrainingRecords extends AdminModel
 	 */
 	public function queueRecords($data)
 	{
-		$return = [];
-
-		$messageBody = new stdClass;
-		$messageBody->user_id      = $data['user_id'];
-		$messageBody->name         = $data['name'];
-		$messageBody->issuing_org  = $data['issuing_org'];
-		$messageBody->issued_on    = $data['issued_on'];
-		$messageBody->expired_on   = $data['expired_on'];
-		$messageBody->status       = $data['status'];
-		$messageBody->client       = $data['client'];
-		$messageBody->is_external  = $data['is_external'];
-		$messageBody->state        = $data['state'];
-		$messageBody->created_by   = $data['created_by'];
-		$messageBody->notify       = $data['notify'];
+		$return      = [];
+		$messageBody = (object) $data;
 
 		try
 		{
