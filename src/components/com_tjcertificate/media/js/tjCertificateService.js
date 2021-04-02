@@ -32,7 +32,7 @@ var tjCertificateService = {
 
 		var promise = jQuery.ajax(params);
 		return promise;
-	},	
+	},
 	loadDefaultTemplate: function (formData, params) {
 		return this.postData(this.loadDefaultTemplateUrl, formData, params);
 	},
