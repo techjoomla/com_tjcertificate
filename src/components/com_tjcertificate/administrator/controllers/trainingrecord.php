@@ -111,7 +111,13 @@ class TjCertificateControllerTrainingRecord extends FormController
 		}
 
 		$validData['client'] = "external";
-		$validData['state'] = $validData['state'] ? $validData['state'] : "-1";
+
+		// Don't update state on frontend edit
+		if (!$validData['id'])
+		{
+			$validData['state'] = $validData['state'] ? $validData['state'] : "-1";
+		}
+
 		$validData['is_external'] = 1;
 
 		$file = $app->input->files->get('jform', array(), 'array');

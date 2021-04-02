@@ -32,20 +32,6 @@ class TjCertificateViewBulkTrainingRecord extends HtmlView
 	 */
 	protected $form;
 
-	/**
-	 * The active item
-	 *
-	 * @var  object
-	 */
-	protected $item;
-
-	/**
-	 * The model state
-	 *
-	 * @var  object
-	 */
-	protected $state;
-
 	public $isAgencyEnabled = false;
 
 	protected $comMultiAgency = 'com_multiagency';
@@ -61,8 +47,6 @@ class TjCertificateViewBulkTrainingRecord extends HtmlView
 	 */
 	public function display($tpl = null)
 	{
-		$this->state  = $this->get('State');
-		$this->item   = $this->get('Item');
 		$this->form   = $this->get('Form');
 		$this->input  = Factory::getApplication()->input;
 		$this->params = ComponentHelper::getParams('com_tjcertificate');

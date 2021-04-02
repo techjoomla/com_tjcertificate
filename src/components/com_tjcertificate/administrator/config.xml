@@ -55,19 +55,6 @@
 			<option value="0">JNo</option>
 		</field>
 
-		<field name="tjqueue_records" class="btn-group" type="radio"  default="0" description="COM_TJCERTIFICATE_TJQUEUE_SETTING_DESC" label="COM_TJCERTIFICATE_TJQUEUE_SETTING" >
-			<option value="1">JYES</option>
-			<option value="0">JNo</option>
-		</field>
-
-		<field
-			name="users_select_limit"
-			type="text"
-			default="40"
-			label="COM_TJCERTIFICATE_RECORDS_USER_SELECT_LIMIT"
-			description="COM_TJCERTIFICATE_RECORDS_USER_SELECT_LIMIT_DESC"
-		/>
-
 		<field menu="hide" name="" type="legend" default="COM_TJCERTIFICATE_QR_CODE_SETTING" label="" description="" />
 		<field name="qr_code_width" class="validate-numeric" type="text" default="130" label="COM_TJCERTIFICATE_QR_CODE_WIDTH" description="COM_TJCERTIFICATE_QR_CODE_WIDTH_DESC" />
 		<field name="qr_code_height" class="validate-numeric" type="text" default="130" label="COM_TJCERTIFICATE_QR_CODE_HEIGHT" description="COM_TJCERTIFICATE_QR_CODE_HEIGHT_DESC" />
@@ -117,6 +104,22 @@
 			<option value="imagick">COM_TJCERTIFICATE_IMAGE_GENERATION_TYPE_IMAGICK</option>
 		</field>
 		<field type="note" id="tjcert-certificate-image-settings-note" name="tjcert-certificate-image-settings-note" label="COM_TJCERTIFICATE_IMAGE_GENERATION_SETTINGS_NOTE" showon="cert_image_gen_type:imagick" />
+	</fieldset>
+
+	<!-- Bulk record setting  -->
+	<fieldset name="bulk_record" label="COM_TJCERTIFICATE_BULK_RECORD_SETINGS">
+		<field
+			name="users_select_limit"
+			type="text"
+			default="40"
+			label="COM_TJCERTIFICATE_RECORDS_USER_SELECT_LIMIT"
+			description="COM_TJCERTIFICATE_RECORDS_USER_SELECT_LIMIT_DESC"
+		/>
+		<field name="tjqueue_records" class="btn-group" type="radio"  default="0" description="COM_TJCERTIFICATE_TJQUEUE_SETTING_DESC" label="COM_TJCERTIFICATE_TJQUEUE_SETTING" >
+			<option value="1">JYES</option>
+			<option value="0">JNo</option>
+		</field>
+		<field type="note" label="COM_TJCERTIFICATE_BULK_RECORD_SETTINGS_NOTE" showon="tjqueue_records:1" />
 	</fieldset>
 
 	<!-- Permission setting  -->
