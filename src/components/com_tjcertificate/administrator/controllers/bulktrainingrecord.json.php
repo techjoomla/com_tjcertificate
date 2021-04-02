@@ -138,8 +138,6 @@ class TjCertificateControllerBulkTrainingRecord extends FormController
 					$certificateModel->save($data);
 					$certificateIds[] = $certificateModel->getState('certificate.id');
 
-					$returnData = array();
-
 					if ($certificateIds)
 					{
 						$error             = false;
