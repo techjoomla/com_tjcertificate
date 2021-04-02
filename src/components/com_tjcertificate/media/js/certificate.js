@@ -207,10 +207,7 @@ var certificate = {
 			});
 		},
 		addRecords: function() {
-			jQuery.LoadingOverlay("show", {
-				image : Joomla.getOptions('system.paths').root + "/media/com_tjcertificate/images/loader/loader.gif",
-			});
-
+			certificate.showLoader();
 			var formData    = jQuery('.add-records').serialize();
 			var params      = {};
 			params['async'] = true;
@@ -236,4 +233,9 @@ var certificate = {
 				}
 			});
 		},
+		showLoader: function() {
+			jQuery.LoadingOverlay("show", {
+				image : Joomla.getOptions('system.paths').root + "/media/com_tjcertificate/images/loader/loader.gif",
+			});
+		}
 };
