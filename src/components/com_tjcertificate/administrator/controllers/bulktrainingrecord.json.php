@@ -140,7 +140,6 @@ class TjCertificateControllerBulkTrainingRecord extends FormController
 
 					if ($certificateIds)
 					{
-						$error             = false;
 						$returnData['msg'] = Text::sprintf('COM_TJCERTIFICATE_TOTAL_RECORDS_ADDED', count($certificateIds));
 					}
 				}
