@@ -107,7 +107,7 @@
 	</fieldset>
 
 	<!-- Bulk record setting  -->
-	<fieldset name="bulk_record" label="COM_TJCERTIFICATE_BULK_RECORD_SETINGS">
+	<fieldset name="bulk_record" label="COM_TJCERTIFICATE_BULK_RECORD_SETTINGS">
 		<field
 			name="users_select_limit"
 			type="text"
