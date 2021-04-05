@@ -75,13 +75,13 @@ $message = Text::sprintf("COM_TJCERTIFICATE_USER_LIMIT_MESSAGE", $userLimit);
 
 		</div>
 		<input type="hidden" name="jform[created_by]" value="<?php echo Factory::getUser()->id;?>" />
-		<input type="hidden" name="task" value="bulktrainingrecord.addRecords" />
+		<input type="hidden" name="task" value="bulktrainingrecord.save" />
 		<?php echo HTMLHelper::_('form.token'); ?>
 	</div>
 	</form>
 </div>
 </div>
-<script>
+<script type="text/javascript">
 
 	var userLimit = '<?php echo $userLimit;?>';
 	var message = '<?php echo $message;?>';

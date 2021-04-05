@@ -72,11 +72,11 @@ $message = Text::sprintf("COM_TJCERTIFICATE_USER_LIMIT_MESSAGE", $userLimit);
 		</div>
 	</div>
 	<input type="hidden" name="option" value="com_tjcertificate"/>
-	<input type="hidden" name="task" value="bulktrainingrecord.addRecords"/>
+	<input type="hidden" name="task" value="bulktrainingrecord.save"/>
 	<input type="hidden" name="site" value="f"/>
 	<?php echo HTMLHelper::_('form.token'); ?>
 </form>
-<script>
+<script type="text/javascript">
 
 	var userLimit = '<?php echo $userLimit;?>';
 	var message = '<?php echo $message;?>';

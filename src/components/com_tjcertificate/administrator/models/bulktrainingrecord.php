@@ -102,13 +102,13 @@ class TjCertificateModelBulkTrainingRecord extends AdminModel
 	 *
 	 * @param   array  $data  record data
 	 *
-	 * @return  boolean value.
+	 * @return  array
 	 *
 	 * @since __DEPLOY_VERSION__
 	 */
-	public function queueRecords($data)
+	public function addToQueue($data)
 	{
-		$return      = [];
+		$return      = array();
 		$messageBody = (object) $data;
 
 		try

@@ -4,7 +4,7 @@
  * @subpackage  com_tjcertificate
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2020 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -28,13 +28,17 @@ class TjCertificateControllerBulkTrainingRecord extends FormController
 	protected $comMultiAgency = 'com_multiagency';
 
 	/**
-	 * Function to add multiple records
+	 * Function to save multiple records
 	 *
+	 * @param   string  $key     The name of the primary key of the URL variable.
+	 * 
+	 * @param   string  $urlVar  The name of the URL variable if different from the primary key (sometimes required to avoid router collisions).
+	 * 
 	 * @return  void
 	 *
 	 * @since  __DEPLOY_VERSION__
 	 */
-	public function addRecords()
+	public function save($key = null, $urlVar = null)
 	{
 		$app = Factory::getApplication();
 
@@ -103,7 +107,7 @@ class TjCertificateControllerBulkTrainingRecord extends FormController
 						$assignedUserAgencies = $agencyModel->getUserAgencies($userId);
 						$loggedInUserAgencies = $agencyModel->getUserAgencies($user->id);
 
-						$result = '';
+						$result = array();
 
 						if (!empty($assignedUserAgencies && $loggedInUserAgencies))
 						{
@@ -128,7 +132,7 @@ class TjCertificateControllerBulkTrainingRecord extends FormController
 				if (ComponentHelper::isEnabled('com_tjqueue') && $params->get('tjqueue_records'))
 				{
 					$recordsModel      = TJCERT::model('BulkTrainingRecord', array('ignore_request' => true));
-					$response          = $recordsModel->queueRecords($data);
+					$response          = $recordsModel->addToQueue($data);
 					$msg               = $response ? Text::_("COM_TJCERTIFICATE_RECORDS_ADDED_TO_QUEUE_SUCCESSFULLY") : Text::_("COM_TJCERTIFICATE_RECORDS_FAILED");
 					$returnData['msg'] = $msg;
 				}
