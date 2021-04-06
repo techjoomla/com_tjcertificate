@@ -132,6 +132,19 @@
 			rows="10"
 		/>
 
+		<field
+			name="state"
+			type="list"
+			filter="int"
+			label="JSTATUS"
+			description=""
+			default="1"
+			class="inputbox"
+			size="1">
+				<option value="1">JPUBLISHED</option>
+				<option value="0">JUNPUBLISHED</option>
+		</field>
+
 		<field name="created_by" type="createdby" default=""
 			label="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_COUPON_CREATED_BY"
 			description="COM_TJCERTIFICATE_CERTIFICATE_FORM_LBL_COUPON_CREATED_BY_DESC"  />

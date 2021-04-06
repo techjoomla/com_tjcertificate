@@ -9,6 +9,8 @@
 // No direct access
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Plugin\CMSPlugin;
+
 /**
  * TjQueue
  *
@@ -16,7 +18,7 @@ defined('_JEXEC') or die;
  * @subpackage  Tjqueue
  * @since       1.0
  */
-class PlgTjqueueRecords extends JPlugin
+class PlgTjqueueRecords extends CMSPlugin
 {
 	/**
 	 * Load the language file on instantiation. Note this is only available in Joomla 3.1 and higher.
