@@ -4,12 +4,14 @@
  * @subpackage  com_tjcertificate
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Table\Table;
 
 /**
  * Templates table class
@@ -29,5 +31,36 @@ class TjCertificateTableTemplates extends JTable
 	{
 		parent::__construct('#__tj_certificate_templates', 'id', $db);
 		$this->setColumnAlias('published', 'state');
+	}
+
+	/**
+	 * Overloaded check function
+	 *
+	 * @return  true|false
+	 *
+	 * @since  __DEPLOY_VERSION__
+	 */
+	public function check()
+	{
+		$db   = Factory::getDbo();
+		$task = Factory::getApplication()->input->get('task');
+
+		if ($task == 'save2copy')
+		{
+			$this->unique_code = trim($this->unique_code);
+
+			// Check if certificate template with same unique code is present
+			$table = Table::getInstance('Templates', 'TjCertificateTable', array('dbo', $db));
+
+			if ($table->load(array('unique_code' => $this->unique_code)) && ($table->id != $this->id || $this->id == 0))
+			{
+				while ($table->load(array('unique_code' => $this->unique_code)))
+				{
+					$this->unique_code = JString::increment($this->unique_code, 'dash');
+				}
+			}
+		}
+
+		return parent::check();
 	}
 }
