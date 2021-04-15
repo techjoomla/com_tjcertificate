@@ -56,6 +56,10 @@ $message = Text::sprintf("COM_TJCERTIFICATE_USER_LIMIT_MESSAGE", $userLimit);
 					echo $this->form->renderField('expired_on');
 					echo $this->form->renderField('status');
 					echo $this->form->renderField('state');
+					?>
+					<!-- hidden field is added to take care saving an unchecked checkbox from a form -->
+					<input type="hidden" name="jform[notify_users]" value="0">
+					<?php
 					echo $this->form->renderField('notify_users');
 					echo $this->form->renderField('created_by', null, null, ['class' => 'hidden']);
 				?>
