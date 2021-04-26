@@ -80,6 +80,8 @@ class TjCertificateCertificate extends CMSObject
 
 	public $created_by = "";
 
+	public $notify = 1;
+
 	/**
 	 * Constructor activating the default information of the Certificate
 	 *
