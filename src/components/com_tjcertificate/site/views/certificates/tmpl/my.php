@@ -176,7 +176,7 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 								if ($this->isAgencyEnabled)
 								{
 								?>
-									<td><?php echo $item->agency_title; ?></td>
+									<td><?php echo $item->title; ?></td>
 								<?php 
 								} ?>
 								<td><?php echo $certificateObj->getFormatedDate($item->issued_on); ?></td>

@@ -110,42 +110,39 @@ class TjCertificateModelCertificates extends ListModel
 
 		if (ComponentHelper::isEnabled($this->comMultiAgency) && $this->params->get('enable_multiagency'))
 		{
-			$agencyId               = $this->getState('filter.agency_id');
+			$query->select('agency.title as title');
+
+			$query->join('INNER', $db->qn('#__tj_cluster_nodes', 'nodes') .
+				' ON (' . $db->qn('users.id') . ' = ' . $db->qn('nodes.user_id') . ')');
+
+			$query->join('INNER', $db->qn('#__tj_clusters', 'clusters') .
+				' ON (' . $db->qn('clusters.id') . ' = ' . $db->qn('nodes.cluster_id') .
+				' AND ' . $db->qn('clusters.client') . " = " . $db->q($this->comMultiAgency) . ')');
+
+			$query->join('LEFT', $db->qn('#__tjmultiagency_multiagency', 'agency') .
+				' ON (' . $db->qn('agency.id') . ' = ' . $db->qn('clusters.client_id') . ')');
+
+			$agencyId = $this->getState('filter.agency_id');
+
 			$canManageAllAgencyUser = $user->authorise('core.manage.all.agency.user', $this->comMultiAgency);
 
-			// If user have manage all permission and no org selected then show all certificates
-			if (!$canManageAllAgencyUser || $canManageAllAgencyUser && $agencyId)
+			// If don't have manage all user permission then get users of own agency
+			if (!$canManageAllAgencyUser && !$agencyId)
 			{
-				$query->select('agency.title as agency_title');
+				// Subquery to get agency users
+				$subquery  = $db->getQuery(true);
+				$subquery->select($db->quoteName('ml.id'));
+				$subquery->from($db->quoteName('#__tjmultiagency_multiagency', 'ml'));
+				$subquery->join('INNER', $db->quoteName('#__tj_clusters', 'c') . ' ON ' . $db->quoteName('c.client_id') . '=' . $db->quoteName('ml.id'));
+				$subquery->join('INNER', $db->quoteName('#__tj_cluster_nodes', 'cn') . ' ON ' . $db->quoteName('cn.cluster_id') . '=' . $db->quoteName('c.id'));
+				$subquery->Where($db->qn('ml.state') . '=' . 1);
+				$subquery->where($db->quoteName('cn.user_id') . ' = ' . (int) $user->id);
 
-				$query->join('INNER', $db->qn('#__tj_cluster_nodes', 'nodes') .
-					' ON (' . $db->qn('users.id') . ' = ' . $db->qn('nodes.user_id') . ')');
-
-				$query->join('INNER', $db->qn('#__tj_clusters', 'clusters') .
-					' ON (' . $db->qn('clusters.id') . ' = ' . $db->qn('nodes.cluster_id') .
-					' AND ' . $db->qn('clusters.client') . " = " . $db->q($this->comMultiAgency) . ')');
-
-				$query->join('LEFT', $db->qn('#__tjmultiagency_multiagency', 'agency') .
-					' ON (' . $db->qn('agency.id') . ' = ' . $db->qn('clusters.client_id') . ')');
-
-				// If don't have manage all user permission then get users of own agency
-				if (!$canManageAllAgencyUser && !$agencyId)
-				{
-					// Subquery to get agency users
-					$subquery  = $db->getQuery(true);
-					$subquery->select($db->quoteName('ml.id'));
-					$subquery->from($db->quoteName('#__tjmultiagency_multiagency', 'ml'));
-					$subquery->join('INNER', $db->quoteName('#__tj_clusters', 'c') . ' ON ' . $db->quoteName('c.client_id') . '=' . $db->quoteName('ml.id'));
-					$subquery->join('INNER', $db->quoteName('#__tj_cluster_nodes', 'cn') . ' ON ' . $db->quoteName('cn.cluster_id') . '=' . $db->quoteName('c.id'));
-					$subquery->Where($db->qn('ml.state') . '=' . 1);
-					$subquery->where($db->quoteName('cn.user_id') . ' = ' . (int) $user->id);
-
-					$query->where($db->quoteName('agency.id') . ' in (' . $subquery . ')');
-				}
-				elseif ($agencyId)
-				{
-					$query->where($db->quoteName('agency.id') . ' = ' . (int) $agencyId);
-				}
+				$query->where($db->quoteName('agency.id') . ' in (' . $subquery . ')');
+			}
+			elseif ($agencyId)
+			{
+				$query->where($db->quoteName('agency.id') . ' = ' . (int) $agencyId);
 			}
 		}
 
@@ -254,60 +251,5 @@ class TjCertificateModelCertificates extends ListModel
 		}
 
 		return $query;
-	}
-
-	/**
-	 * Get Items functions
-	 *
-	 * @return	Object
-	 *
-	 * @since	1.0.0
-	 */
-	public function getItems()
-	{
-		$items = parent::getItems();
-
-		foreach ($items as $item)
-		{
-			$orgNames = $this->getOrgNames($item->user_id);
-
-			if ($orgNames)
-			{
-				$item->agency_title = $orgNames;
-			}
-		}
-
-		return $items;
-	}
-
-	/**
-	 * function to get organisation names of user
-	 *
-	 * @param   int  $userId  user id
-	 *
-	 * @return	Object
-	 *
-	 * @since	1.0.0
-	 */
-	public function getOrgNames($userId)
-	{
-		$db    = $this->getDbo();
-		$query = $db->getQuery(true);
-
-		$query->select("agency.title");
-		$query->from($db->quoteName('#__tjmultiagency_multiagency', 'agency'));
-
-		$query->join('INNER', $db->qn('#__tj_clusters', 'clusters') .
-			' ON (' . $db->qn('clusters.client_id') . ' = ' . $db->qn('agency.id') .
-			' AND ' . $db->qn('clusters.client') . " = " . $db->q($this->comMultiAgency) . ')');
-
-		$query->join('INNER', $db->qn('#__tj_cluster_nodes', 'nodes') .
-			' ON (' . $db->qn('nodes.cluster_id') . ' = ' . $db->qn('clusters.id') . ')');
-
-		$query->where($db->quoteName('nodes.user_id') . ' = ' . (int) $userId);
-
-		$db->setQuery($query);
-
-		return $db->loadResult();
 	}
 }
