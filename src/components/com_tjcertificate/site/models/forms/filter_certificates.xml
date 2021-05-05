@@ -24,7 +24,7 @@
 			filter="integer"
 			label="COM_TJCERTIFICATE_CERTIFICATE_FILTER_CERTIFICATE_CLIENT"
 			description="COM_TJCERTIFICATE_CERTIFICATE_FILTER_DESC_CERTIFICATE_CLIENT"
-			addfieldpath="/components/com_tjcertificate/models/fields"
+			addfieldpath="administrator/components/com_tjcertificate/models/fields"
 			onchange="this.form.submit();" />
 
 		<field name="user_id"
