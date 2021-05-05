@@ -112,10 +112,10 @@ class TjCertificateModelCertificates extends ListModel
 		{
 			$query->select('agency.title as title');
 
-			$query->join('INNER', $db->qn('#__tj_cluster_nodes', 'nodes') .
+			$query->join('LEFT', $db->qn('#__tj_cluster_nodes', 'nodes') .
 				' ON (' . $db->qn('users.id') . ' = ' . $db->qn('nodes.user_id') . ')');
 
-			$query->join('INNER', $db->qn('#__tj_clusters', 'clusters') .
+			$query->join('LEFT', $db->qn('#__tj_clusters', 'clusters') .
 				' ON (' . $db->qn('clusters.id') . ' = ' . $db->qn('nodes.cluster_id') .
 				' AND ' . $db->qn('clusters.client') . " = " . $db->q($this->comMultiAgency) . ')');
 
