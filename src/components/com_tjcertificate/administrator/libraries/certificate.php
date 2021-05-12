@@ -472,7 +472,8 @@ class TjCertificateCertificate extends CMSObject
 			// Check if new record
 			$isNew = empty($this->id);
 
-			if ($isNew)
+			// Set current date if issued_on date is not set
+			if ($isNew && !$table->issued_on)
 			{
 				$table->issued_on = Factory::getDate()->toSql();
 			}
