@@ -51,14 +51,15 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 		}
 		?>
 		<div class="form-horizontal">
-
+		<?php
+			echo HTMLHelper::_('bootstrap.startTabSet', 'myTab', array('active' => 'general'));
+			echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', Text::_('COM_TJCERTIFICATE_TITLE_CERTIFICATE')); ?>
 		<div class="row-fluid">
 			<?php echo $this->form->renderField('id'); ?>
 
 			<?php
 				if ($this->isAgencyEnabled)
 				{
-				
 					echo $this->form->renderField('agency_id');
 				}
 			?>
