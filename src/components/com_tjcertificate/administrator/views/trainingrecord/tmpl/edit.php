@@ -52,7 +52,6 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 		?>
 		<div class="form-horizontal">
 
-		<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', Text::_('COM_TJCERTIFICATE_TITLE_CERTIFICATE')); ?>
 		<div class="row-fluid">
 			<?php echo $this->form->renderField('id'); ?>
 
@@ -77,7 +76,7 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 				<div class="controls ">
 					<?php echo $this->form->getInput('cert_file'); ?>
 					 <?php 	
-					 if ($this->item->mediaData[0]) 
+					 if (!empty($this->item->mediaData[0]))
 					 {
 						$downloadAttachmentLink = Uri::root() . 'index.php?option=com_tjcertificate&task=trainingrecord.downloadAttachment&id=' . $this->item->mediaData[0]->media_id . '&recordId=' . $this->item->id;
 						echo '<input type="hidden" name="oldFiles" value="'. $this->item->mediaData[0]->media_id . '">';
