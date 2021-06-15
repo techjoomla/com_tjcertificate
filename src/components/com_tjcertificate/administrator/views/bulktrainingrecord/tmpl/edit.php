@@ -54,12 +54,13 @@ $message = Text::sprintf("COM_TJCERTIFICATE_USER_LIMIT_MESSAGE", $userLimit);
 		?>
 		<div class="form-horizontal">
 
-		<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', Text::_('COM_TJCERTIFICATE_TITLE_CERTIFICATE')); ?>
+		<?php
+		echo HTMLHelper::_('bootstrap.startTabSet', 'myTab', array('active' => 'general'));
+		echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', Text::_('COM_TJCERTIFICATE_TITLE_CERTIFICATE')); ?>
 		<div class="row-fluid">
 			<?php
 				if ($this->isAgencyEnabled)
 				{
-				
 					echo $this->form->renderField('agency_id');
 				}
 			?>

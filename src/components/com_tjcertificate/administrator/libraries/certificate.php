@@ -562,7 +562,10 @@ class TjCertificateCertificate extends CMSObject
 		// Set private properties
 		foreach ($getPrivateProperties as $key => $value)
 		{
-			$this->{$value->name} = $array[$value->name];
+			if (!empty($array[$value->name]))
+			{
+				$this->{$value->name} = $array[$value->name];
+			}
 		}
 
 		// Make sure its an integer
