@@ -162,7 +162,7 @@ class TJCERT
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getClient()
+	public static function getClient()
 	{
 		return self::$client;
 	}
