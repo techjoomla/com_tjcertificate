@@ -469,8 +469,25 @@ class TjCertificateCertificate extends CMSObject
 				return false;
 			}
 
+			$isNew = 0;
+
 			// Check if new record
-			$isNew = empty($this->id);
+			if (!empty($this->id))
+			{
+				$table->load(array('id' => (int) $this->id));
+			}
+			else
+			{
+				$isNew = 1;
+			}
+
+			if (isset($table->expired_on) && $table->expired_on != "0000-00-00 00:00:00")
+			{
+				$table->id = "";
+				$this->unique_certificate_id = "";
+				$table->expired_on = '0000-00-00 00:00:00';
+				$isNew = 1;
+			}
 
 			// Set current date if issued_on date is not set
 			if ($isNew && !$table->issued_on)
