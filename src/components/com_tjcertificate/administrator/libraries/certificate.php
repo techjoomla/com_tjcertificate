@@ -483,10 +483,11 @@ class TjCertificateCertificate extends CMSObject
 
 			if (isset($table->expired_on) && $table->expired_on != "0000-00-00 00:00:00")
 			{
-				$table->id = "";
+				$isNew                       = 1;
+				$table->id                   = "";
 				$this->unique_certificate_id = "";
-				$table->expired_on = '0000-00-00 00:00:00';
-				$isNew = 1;
+				$table->issued_on            = Factory::getDate()->toSql();
+				$table->expired_on           = '0000-00-00 00:00:00';
 			}
 
 			// Set current date if issued_on date is not set
