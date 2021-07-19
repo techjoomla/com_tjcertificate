@@ -20,7 +20,7 @@ use Joomla\CMS\Language\Text;
 	    overflow-y: auto;
 	}
 </style>
-<div id="templatePreview" class="modal fade" role="dialog">
+<div id="templatePreview" class="modal fade hide" role="dialog">
 	<div class="modal-dialog">
 		<button type="button" class="close" data-dismiss="modal" style="width: 40px;opacity: 0.7;">&times;</button>
 		<!-- Modal content-->
