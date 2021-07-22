@@ -44,7 +44,7 @@ var certificateImage = {
                 var imagePath     = certRootUrl + 'media/com_tjcertificate/certificates/';
                 var img           = document.createElement('img');
                 jQuery('#certificateContent').hide();
-                img.src = imagePath + certificateId + ".png";
+                img.src = imagePath + certificateId + ".png?ver=" + tjCertVersion;
                 jQuery("#previewImage").append(img);
 				setTimeout(function(){
 
