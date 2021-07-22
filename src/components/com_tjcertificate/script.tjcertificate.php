@@ -148,12 +148,6 @@ class Com_TjcertificateInstallerScript
 						$installer = new JInstaller;
 						$result    = $installer->install($path);
 
-						$status->plugins[] = array(
-							'name' => 'plg_' . $plugin,
-							'group' => $folder,
-							'result' => $result
-						);
-
 						if ($published && !$count)
 						{
 							$query = $db->getQuery(true)->update($db->qn('#__extensions'))->set($db->qn('enabled') . ' = ' . $db->q('1'))->where($db->qn('element') . ' = ' . $db->q($plugin))->where($db->qn('folder') . ' = ' . $db->q($folder));
