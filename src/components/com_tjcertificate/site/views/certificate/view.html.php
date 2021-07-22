@@ -90,9 +90,10 @@ class TjCertificateViewCertificate extends JViewLegacy
 				return false;
 			}
 
-			$this->fileName  = $this->certificate->unique_certificate_id . '.png';
-			$this->mediaPath = 'media/com_tjcertificate/certificates/';
-			$this->imagePath = Uri::root() . $this->mediaPath . $this->fileName . '?ver=' . md5($this->certificate->issued_on);
+			$this->fileName    = $this->certificate->unique_certificate_id . '.png';
+			$this->mediaPath   = 'media/com_tjcertificate/certificates/';
+			$this->certVersion = md5($this->certificate->issued_on);
+			$this->imagePath   = Uri::root() . $this->mediaPath . $this->fileName . '?ver=' . $this->certVersion;
 
 			$certificateUrl = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->certificate->unique_certificate_id;
 			$this->certificateUrl = Uri::root() . substr(Route::_($certificateUrl), strlen(Uri::base(true)) + 1);

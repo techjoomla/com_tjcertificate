@@ -207,8 +207,9 @@ if ($this->certificate)
 ?>
 <script type="text/javascript">
 
-var imageExists = "<?php echo $imageUrl;?>";
+var imageExists   = "<?php echo $imageUrl;?>";
 var certificateId = "<?php echo $this->certificate->id;?>";
+tjCertVersion     = "<?php echo $this->certVersion; ?>";
 
 jQuery(document).ready(function() {
 	if (imageExists)
