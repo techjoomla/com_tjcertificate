@@ -181,7 +181,7 @@ class TjCertificateControllerTrainingRecord extends FormController
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function cancel()
+	public function cancel($key = null)
 	{
 		// Check for request forgeries.
 		$this->checkToken('request');
