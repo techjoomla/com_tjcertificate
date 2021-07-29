@@ -110,8 +110,8 @@ class TjCertificateControllerTrainingRecord extends FormController
 			$validData['user_id'] = $user->id;
 		}
 
-		$validData['client'] = "external";
-		$validData['state'] = $validData['state'] ? $validData['state'] : "-1";
+		$validData['client']      = "external";
+		$validData['state']       = isset($validData['state']) ? $validData['state'] : "-1";
 		$validData['is_external'] = 1;
 
 		$file = $app->input->files->get('jform', array(), 'array');
@@ -181,7 +181,7 @@ class TjCertificateControllerTrainingRecord extends FormController
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function cancel()
+	public function cancel($key = null)
 	{
 		// Check for request forgeries.
 		$this->checkToken('request');

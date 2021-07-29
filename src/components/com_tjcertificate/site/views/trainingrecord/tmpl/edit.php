@@ -54,13 +54,18 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 						echo $this->form->renderField('assigned_user_id');
 					}
 
-					 echo $this->form->renderField('name'); 
+					 echo $this->form->renderField('name');
 					 echo $this->form->renderField('unique_certificate_id');
-					 echo $this->form->renderField('cert_url'); 
-					 echo $this->form->renderField('issuing_org'); 
-					 echo $this->form->renderField('issued_on'); 
-					 echo $this->form->renderField('expired_on'); 
-					 echo $this->form->renderField('status'); 
+					 echo $this->form->renderField('cert_url');
+					 echo $this->form->renderField('issuing_org');
+					 echo $this->form->renderField('issued_on');
+					 echo $this->form->renderField('expired_on');
+					 echo $this->form->renderField('status');
+
+					 if ($this->manage)
+					 {
+						echo $this->form->renderField('state');
+					 }
 					 ?>
 				<div class="control-group">
 					<div class="control-label"><?php echo $this->form->getLabel('cert_file'); ?></div>

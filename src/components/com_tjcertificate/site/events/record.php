@@ -15,6 +15,8 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 
 JLoader::import('components.com_tjcertificate.libraries.mails', JPATH_ADMINISTRATOR);
+jimport('techjoomla.tjnotifications.tjnotifications');
+
 /**
  * Tjcertificate triggers class for record.
  *
@@ -52,7 +54,7 @@ class TjCertificateTriggerRecord
 	 */
 	public function onAfterRecordSave($recordDetails, $isNew)
 	{
-		switch ($isNew)
+		switch ($isNew && $recordDetails->notify)
 		{
 			case true:
 					/* Send mail on record create */

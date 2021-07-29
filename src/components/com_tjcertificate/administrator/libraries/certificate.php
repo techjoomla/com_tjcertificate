@@ -80,6 +80,8 @@ class TjCertificateCertificate extends CMSObject
 
 	public $created_by = "";
 
+	public $notify = 1;
+
 	/**
 	 * Constructor activating the default information of the Certificate
 	 *
@@ -470,7 +472,8 @@ class TjCertificateCertificate extends CMSObject
 			// Check if new record
 			$isNew = empty($this->id);
 
-			if ($isNew)
+			// Set current date if issued_on date is not set
+			if ($isNew && !$table->issued_on)
 			{
 				$table->issued_on = Factory::getDate()->toSql();
 			}
@@ -559,7 +562,10 @@ class TjCertificateCertificate extends CMSObject
 		// Set private properties
 		foreach ($getPrivateProperties as $key => $value)
 		{
-			$this->{$value->name} = $array[$value->name];
+			if (!empty($array[$value->name]))
+			{
+				$this->{$value->name} = $array[$value->name];
+			}
 		}
 
 		// Make sure its an integer

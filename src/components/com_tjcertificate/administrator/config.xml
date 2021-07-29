@@ -106,6 +106,22 @@
 		<field type="note" id="tjcert-certificate-image-settings-note" name="tjcert-certificate-image-settings-note" label="COM_TJCERTIFICATE_IMAGE_GENERATION_SETTINGS_NOTE" showon="cert_image_gen_type:imagick" />
 	</fieldset>
 
+	<!-- Bulk record setting  -->
+	<fieldset name="bulk_record" label="COM_TJCERTIFICATE_BULK_RECORD_SETTINGS">
+		<field
+			name="users_select_limit"
+			type="text"
+			default="40"
+			label="COM_TJCERTIFICATE_RECORDS_USER_SELECT_LIMIT"
+			description="COM_TJCERTIFICATE_RECORDS_USER_SELECT_LIMIT_DESC"
+		/>
+		<field name="tjqueue_records" class="btn-group" type="radio"  default="0" description="COM_TJCERTIFICATE_TJQUEUE_SETTING_DESC" label="COM_TJCERTIFICATE_TJQUEUE_SETTING" >
+			<option value="1">JYES</option>
+			<option value="0">JNo</option>
+		</field>
+		<field type="note" label="COM_TJCERTIFICATE_BULK_RECORD_SETTINGS_NOTE" showon="tjqueue_records:1" />
+	</fieldset>
+
 	<!-- Permission setting  -->
 	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
 		<field name="rules" type="rules" label="JCONFIG_PERMISSIONS_LABEL" class="inputbox" validate="rules" filter="rules" component="com_tjcertificate" section="component" />

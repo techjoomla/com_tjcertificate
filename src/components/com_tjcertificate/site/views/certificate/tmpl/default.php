@@ -57,7 +57,8 @@ if ($this->showSearchBox)
 if ($this->certificate)
 {
 	$document = Factory::getDocument();
-	$description = $this->item->description ? $this->item->description : $this->item->short_desc;
+	$description = !empty($this->item->description) ? $this->item->description :
+	(!empty($this->item->short_desc)? $this->item->short_desc: '');
 	$document->addScriptDeclaration("var certRootUrl = '" . JUri::root() . "'");
 
 	// For facebook and linkedin
@@ -206,8 +207,9 @@ if ($this->certificate)
 ?>
 <script type="text/javascript">
 
-var imageExists = "<?php echo $imageUrl;?>";
+var imageExists   = "<?php echo $imageUrl;?>";
 var certificateId = "<?php echo $this->certificate->id;?>";
+tjCertVersion     = "<?php echo $this->certVersion; ?>";
 
 jQuery(document).ready(function() {
 	if (imageExists)

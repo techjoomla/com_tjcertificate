@@ -157,6 +157,7 @@ class TjCertificateViewCertificates extends HtmlView
 		if ($canDo->get('certificate.external.create'))
 		{
 			JToolbarHelper::addNew('trainingrecord.add', 'COM_TJCERTIFICATE_ADD_EXTERNAL_CERTIFICATE');
+			JToolbarHelper::addNew('bulktrainingrecord.add', 'COM_TJCERTIFICATE_ADD_EXTERNAL_CERTIFICATES');
 		}
 
 		if ($canDo->get('core.edit'))
