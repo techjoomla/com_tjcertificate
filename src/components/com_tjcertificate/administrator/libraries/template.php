@@ -276,8 +276,8 @@ class TjCertificateTemplate extends CMSObject
 		}
 
 		$clientDetails   = explode(".", $client);
-		$component       = $clientDetails[0];
-		$replacementFile = $clientDetails[1];
+		$component       = !empty($clientDetails[0]) ? $clientDetails[0] : '';
+		$replacementFile = !empty($clientDetails[1]) ? $clientDetails[1] : '';
 
 		return TJ_CERTIFICATE_REPLACEMENT_TAG . '/' . $component . '/' . self::$replacementFolder . '/' . $replacementFile . '.json';
 	}
