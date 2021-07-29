@@ -54,9 +54,11 @@ class TjCertificateTableTemplates extends JTable
 
 			if ($table->load(array('unique_code' => $this->unique_code)) && ($table->id != $this->id || $this->id == 0))
 			{
+				$this->unique_code = JString::increment($this->unique_code, 'dash', mt_rand(100, 1000000));
+
 				while ($table->load(array('unique_code' => $this->unique_code)))
 				{
-					$this->unique_code = JString::increment($this->unique_code, 'dash');
+					$this->unique_code = JString::increment($this->unique_code, 'dash', mt_rand(100, 1000000));
 				}
 			}
 		}
