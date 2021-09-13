@@ -15,6 +15,7 @@ jimport('joomla.application.component.view');
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Component\ComponentHelper;
 
 JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
 
@@ -68,6 +69,39 @@ class TjCertificateViewCertificates extends JViewLegacy
 	public $activeFilters;
 
 	/**
+	 * Manage own  Permissions
+	 *
+	 * @var  boolean
+	 */
+	public $manageOwn;
+
+	/**
+	 * Manage Permissions
+	 *
+	 * @var  boolean
+	 */
+	public $manage;
+
+	/**
+	 * Create Permissions
+	 *
+	 * @var  boolean
+	 */
+	public $create;
+
+	protected $params;
+
+	public $isAgencyEnabled = false;
+
+	protected $comMultiAgency = 'com_multiagency';
+
+	public $delete;
+
+	public $deleteOwn;
+
+	protected $comTjcertificate = 'com_tjcertificate';
+
+	/**
 	 * Display the  view
 	 *
 	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
@@ -76,8 +110,9 @@ class TjCertificateViewCertificates extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$app = Factory::getApplication();
-		$this->user	= Factory::getUser();
+		$app          = Factory::getApplication();
+		$this->user	  = Factory::getUser();
+		$this->params = ComponentHelper::getParams($this->comTjcertificate);
 
 		if (!$this->user->id)
 		{
@@ -92,9 +127,10 @@ class TjCertificateViewCertificates extends JViewLegacy
 		// Get state
 		$this->state = $this->get('State');
 
-		$layout = $app->input->get('layout', "my");
+		$layout       = $app->input->get('layout', "my");
+		$this->manage = $this->user->authorise('certificate.external.manage', $this->comTjcertificate);
 
-		if ($layout == 'my')
+		if ($layout == 'my' && !$this->manage)
 		{
 			// Show only logged-in user certificates
 			$this->state->set('filter.user_id', $this->user->id);
@@ -108,6 +144,20 @@ class TjCertificateViewCertificates extends JViewLegacy
 
 		$this->filterForm    = $this->get('FilterForm');
 		$this->activeFilters = $this->get('ActiveFilters');
+		$this->manageOwn     = $this->user->authorise('certificate.external.manageown', $this->comTjcertificate);
+		$this->create	     = $this->user->authorise('certificate.external.create', $this->comTjcertificate);
+		$this->delete	     = $this->user->authorise('certificate.external.delete', $this->comTjcertificate);
+		$this->deleteOwn     = $this->user->authorise('certificate.external.deleteown', $this->comTjcertificate);
+
+		if (ComponentHelper::isEnabled($this->comMultiAgency) && $this->params->get('enable_multiagency'))
+		{
+			$this->isAgencyEnabled = true;
+			$this->filterForm->removeField('user_id', 'filter');
+		}
+		else
+		{
+			$this->filterForm->removeField('agency_id', 'filter');
+		}
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

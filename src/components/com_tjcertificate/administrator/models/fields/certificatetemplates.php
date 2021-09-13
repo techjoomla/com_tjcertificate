@@ -10,6 +10,7 @@
 
 JFormHelper::loadFieldClass('list');
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
 
 JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
 
@@ -31,10 +32,16 @@ class JFormFieldCertificateTemplates extends JFormFieldList
 	{
 		$options = array();
 
-		$user = JFactory::getUser();
-		$db = JFactory::getDbo();
+		$app  = Factory::getApplication()->input;
+		$user = Factory::getUser();
+		$db   = Factory::getDbo();
 
 		$client = $this->getAttribute('client');
+
+		if (empty($client))
+		{
+			$client = $app->get('extension', '');
+		}
 
 		$options[] = JHtml::_('select.option', '', Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FIELD_SELECT'));
 

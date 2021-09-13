@@ -15,6 +15,7 @@ use Joomla\CMS\Factory;
 use \Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\Registry\Registry;
 
 /**
  * Item Model for an Certificate.
@@ -23,6 +24,29 @@ use Joomla\CMS\Plugin\PluginHelper;
  */
 class TjCertificateModelCertificate extends AdminModel
 {
+	/**
+	 * Method to get a certificate.
+	 *
+	 * @param   integer  $pk  An optional id of the object to get, otherwise the id from the model state is used.
+	 *
+	 * @return  mixed    certificate data object on success, false on failure.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getItem($pk = null)
+	{
+		if ($result = parent::getItem($pk))
+		{
+			// Prime required properties.
+			if (empty($result->id))
+			{
+				$result->client = $this->getState('certificate.client');
+			}
+		}
+
+		return $result;
+	}
+
 	/**
 	 * Method to get the record form.
 	 *
@@ -130,6 +154,18 @@ class TjCertificateModelCertificate extends AdminModel
 		$jinput = Factory::getApplication()->input;
 		$id = ($jinput->get('id'))?$jinput->get('id'):$jinput->get('id');
 		$this->setState('certificate.id', $id);
+
+		$client    = $jinput->get('client', '');
+		$extension = $jinput->get('extension', '');
+
+		if (!empty($extension))
+		{
+			$this->setState('certificate.client', $extension);
+		}
+		else
+		{
+			$this->setState('certificate.client', $client);
+		}
 	}
 
 	/**
@@ -151,5 +187,100 @@ class TjCertificateModelCertificate extends AdminModel
 		$html = $dispatcher->trigger('onContentPrepareTjHtml', array($contentId, $client));
 
 		return trim(implode("\n", $html));
+	}
+
+	/**
+	 * Method to delete record
+	 *
+	 * @param   array  $certificateIds  post data
+	 *
+	 * @return  boolean  True on success.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function delete(&$certificateIds)
+	{
+		$certificateIds  = (array) $certificateIds;
+		$table    = $this->getTable('Certificates');
+
+		foreach ($certificateIds as $certificateId)
+		{
+			$table->load(array('id' => (int) $certificateId));
+
+			if ($table->delete($table->id))
+			{
+				if ($table->is_external)
+				{
+					$dispatcher = \JEventDispatcher::getInstance();
+					$dispatcher->trigger('onTrainingRecordAfterDelete', array($table));
+				}
+
+				// Delete media
+				$model = TJCERT::model('TrainingRecord', array('ignore_request' => true));
+				JLoader::import("/techjoomla/media/tables/xref", JPATH_LIBRARIES);
+				$tableXref = Table::getInstance('Xref', 'TJMediaTable');
+				$tableXref->load(array('client_id' => $table->id));
+				$mediaPath = TJCERT::getMediaPath();
+				$client    = TJCERT::getClient();
+
+				if ($tableXref->media_id)
+				{
+					$model->deleteMedia($tableXref->media_id, $mediaPath, $client, $table->id);
+				}
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Publish the element
+	 *
+	 * @param   array  $ids    Item id
+	 * 
+	 * @param   int    $state  Publish state
+	 *
+	 * @return  boolean
+	 * 
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function publish(&$ids, $state = 1)
+	{
+		$table = $this->getTable();
+
+		foreach ($ids as $id)
+		{
+			$table->load($id);
+			$oldState = $table->state;
+			$table->state = $state;
+
+			if ($table->store())
+			{
+				if ($table->is_external)
+				{
+					JLoader::import('components.com_tjcertificate.events.record', JPATH_SITE);
+					$tjCertificateTriggerRecord = new TjCertificateTriggerRecord;
+
+					// If record state is pending then only send the approval email
+					if ($oldState == -1)
+					{
+						$tjCertificateTriggerRecord->onRecordStateChange($table, $table->state);
+					}
+
+					$dispatcher = \JEventDispatcher::getInstance();
+
+					if ($table->state == 1)
+					{
+						$dispatcher->trigger('onTrainingRecordAfterPublished', array($table));
+					}
+					elseif ($table->state == 0)
+					{
+						$dispatcher->trigger('onTrainingRecordAfterUnpublished', array($table));
+					}
+				}
+			}
+		}
+
+		return true;
 	}
 }

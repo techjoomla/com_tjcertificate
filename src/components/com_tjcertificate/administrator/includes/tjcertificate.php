@@ -15,6 +15,7 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
 use Joomla\String\StringHelper;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 
 $language = JFactory::getLanguage();
 $language->load('com_tjcertificate');
@@ -43,6 +44,10 @@ class TJCERT
 	 * @since  1.0.0
 	 */
 	private static $config = null;
+
+	public static $client = "com_tjcertificate";
+
+	public static $mediaPath = "media/com_tjcertificate/external";
 
 	/**
 	 * Retrieves a table from the table folder
@@ -129,5 +134,48 @@ class TJCERT
 		}
 
 		return self::$loadedClass[$className];
+	}
+
+	/**
+	 * Initializes js lang constant dependencies
+	 *
+	 * @param   string  $location  The location where the assets needs to load
+	 * 
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public static function init($location = 'site')
+	{
+		self::Language()->JsLanguageConstant();
+
+		if ($location == 'site')
+		{
+			HTMLHelper::stylesheet('media/com_tjcertificate/vendors/font-awesome-4.1.0/css/font-awesome.min.css');
+		}
+	}
+
+	/**
+	 * Method to get client
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public static function getClient()
+	{
+		return self::$client;
+	}
+
+	/**
+	 * Method to get external media path
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public static function getMediaPath()
+	{
+		return self::$mediaPath;
 	}
 }

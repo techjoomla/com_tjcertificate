@@ -15,16 +15,41 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Layout\LayoutHelper;
 
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
+HTMLHelper::_('jquery.token');
+HTMLHelper::_('behavior.framework');
 HTMLHelper::_('behavior.formvalidator');
 HTMLHelper::_('behavior.keepalive');
 HTMLHelper::_('formbehavior.chosen', 'select');
+
+$options['relative'] = true;
+HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
+HTMLHelper::_('script', 'com_tjcertificate/template.min.js', $options);
+
+$app = Factory::getApplication();
+$input = $app->input;
+
+$client    = $input->getCmd('client', '');
+$extension = $input->getCmd('extension', '');
+
+$clientUrlAppend = '';
+
+if (!empty($extension))
+{
+	$clientUrlAppend = '&extension=' . $extension;
+}
+elseif (!empty($client))
+{
+	$clientUrlAppend = '&client=' . $client;
+}
+
 ?>
 <div class="tj-page">
 	<div class="row-fluid">
-	<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate&layout=edit&id=' . (int) $this->item->id, false);?>"
+	<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate&layout=edit&id=' . (int) $this->item->id . $clientUrlAppend, false);?>"
 	 method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
 	 <?php if (!empty( $this->sidebar))
 		{
@@ -43,8 +68,6 @@ HTMLHelper::_('formbehavior.chosen', 'select');
 		}
 		?>
 		<div class="form-horizontal">
-
-		<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', Text::_('COM_TJCERTIFICATE_TITLE_CERTIFICATE')); ?>
 		<div class="row-fluid">
 			<?php echo $this->form->renderField('unique_certificate_id'); ?>
 			<?php echo $this->form->renderField('certificate_template_id'); ?>
@@ -63,3 +86,19 @@ HTMLHelper::_('formbehavior.chosen', 'select');
 	</form>
 </div>
 </div>
+<!-- Modal -->
+<?php
+	echo LayoutHelper::render('preview');
+?>
+<script type="text/javascript">
+
+	jQuery(document).ready(function () {
+
+		template.previewTemplate('jform_generated_body');
+
+		jQuery(document).on("change", "#jform_certificate_template_id", function () {
+			template.loadCustomTemplate(this.value);
+		});
+	});
+
+</script>

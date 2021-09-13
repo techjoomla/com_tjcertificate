@@ -44,10 +44,17 @@ var certificateImage = {
                 var imagePath     = certRootUrl + 'media/com_tjcertificate/certificates/';
                 var img           = document.createElement('img');
                 jQuery('#certificateContent').hide();
-                img.src = imagePath + certificateId + ".png";
+                img.src = imagePath + certificateId + ".png?ver=" + tjCertVersion;
                 jQuery("#previewImage").append(img);
 				setTimeout(function(){
-					Joomla.loadingLayer('hide');
+
+                    if (screen.width < 1200)
+                    {
+                        viewport = document.querySelector("meta[name=viewport]");
+                        viewport.setAttribute("content", "width=device-width");
+                    }
+
+					jQuery.LoadingOverlay("hide");
                 }, 1000);
             }
         });
@@ -57,13 +64,23 @@ var certificateImage = {
 
     generateImage: function(element) {
 		// jQuery('#certificateContent').width(element.offsetWidth).height(element.offsetHeight);
-        Joomla.loadingLayer('show');
+
+        if (screen.width < 1200)
+        {
+            viewport = document.querySelector("meta[name=viewport]");
+            viewport.setAttribute("content", "width=1200px");
+        }
+
+		jQuery.LoadingOverlay("show", {
+			image : "media/com_tjcertificate/images/loader/loader.gif"
+		});
 
         html2canvas(element, {
             // scale: (2),
             scrollX: 0,
             scrollY: -window.scrollY,
-            allowTaint: true
+            allowTaint: true,
+            useCORS: true
         }).then(function(canvas) {
 			certificateImage.enableDownloadShareBtns();
             certificateImage.uploadImage(canvas.toDataURL('image/png'));

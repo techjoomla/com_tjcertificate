@@ -15,6 +15,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Object\CMSObject;
+use Joomla\CMS\Component\ComponentHelper;
 
 /**
  * Certificates view
@@ -81,6 +82,11 @@ class TjCertificateViewCertificates extends HtmlView
 	 */
 	protected $canDo;
 
+	protected $params;
+
+	public $isAgencyEnabled = false;
+
+	protected $comMultiAgency = 'com_multiagency';
 	/**
 	 * Display the view
 	 *
@@ -116,6 +122,17 @@ class TjCertificateViewCertificates extends HtmlView
 		// Set sidebar
 		$this->sidebar = JHtmlSidebar::render();
 
+		$this->params = ComponentHelper::getParams('com_tjcertificate');
+
+		if (ComponentHelper::isEnabled($this->comMultiAgency) && $this->params->get('enable_multiagency'))
+		{
+			$this->isAgencyEnabled = true;
+		}
+		else
+		{
+			$this->filterForm->removeField('agency_id', 'filter');
+		}
+
 		// Display the view
 		parent::display($tpl);
 	}
@@ -132,9 +149,15 @@ class TjCertificateViewCertificates extends HtmlView
 		JToolBarHelper::title(Text::_('COM_TJCERTIFICATE_VIEW_CERTIFICATES'), '');
 		$canDo = $this->canDo;
 
-		/*if ($canDo->get('core.create'))
+		if ($canDo->get('core.create'))
 		{
 			JToolbarHelper::addNew('certificate.add');
+		}
+
+		if ($canDo->get('certificate.external.create'))
+		{
+			JToolbarHelper::addNew('trainingrecord.add', 'COM_TJCERTIFICATE_ADD_EXTERNAL_CERTIFICATE');
+			JToolbarHelper::addNew('bulktrainingrecord.add', 'COM_TJCERTIFICATE_ADD_EXTERNAL_CERTIFICATES');
 		}
 
 		if ($canDo->get('core.edit'))
@@ -156,7 +179,6 @@ class TjCertificateViewCertificates extends HtmlView
 			JToolbarHelper::deleteList('JGLOBAL_CONFIRM_DELETE', 'certificates.delete', 'JTOOLBAR_DELETE');
 			JToolbarHelper::divider();
 		}
-		*/
 
 		if ($canDo->get('core.admin') || $canDo->get('core.options'))
 		{
