@@ -10,7 +10,6 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\Registry\Registry;
@@ -187,7 +186,7 @@ class TjCertificateControllerTrainingRecord extends FormController
 		$this->checkToken('request');
 
 		// Clear data from session.
-		\JFactory::getApplication()->setUserState('com_tjcertificate.edit.trainingrecord.data', null);
+		\Factory::getApplication()->setUserState('com_tjcertificate.edit.trainingrecord.data', null);
 
 		$this->setRedirect(Route::_('index.php?option=com_tjcertificate&view=certificates&layout=my', false));
 	}

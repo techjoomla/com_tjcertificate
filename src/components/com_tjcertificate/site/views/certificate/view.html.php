@@ -10,9 +10,6 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
-jimport('joomla.application.component.view');
-
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
@@ -20,6 +17,7 @@ use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\MVC\View\HtmlView;
 
 JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
 
@@ -28,7 +26,7 @@ JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADM
  *
  * @since  1.0.0
  */
-class TjCertificateViewCertificate extends JViewLegacy
+class TjCertificateViewCertificate extends HtmlView
 {
 	public $certificate = null;
 

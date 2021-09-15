@@ -10,7 +10,9 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Component\ComponentHelper;
@@ -23,7 +25,6 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Uri\Uri;
 
 /**
  * Certificate class.  Handles all application interaction with a Certificate
@@ -680,7 +681,7 @@ class TjCertificateCertificate extends CMSObject
 	 */
 	public function getDownloadUrl($options = array())
 	{
-		if (JFile::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
+		if (File::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
 		{
 			$url = 'index.php?option=com_tjcertificate&task=certificate.download&certificate=' . $this->unique_certificate_id;
 
@@ -691,7 +692,7 @@ class TjCertificateCertificate extends CMSObject
 
 			if (isset($options['absolute']))
 			{
-				return JUri::root() . substr(Route::_($url), strlen(JUri::base(true)) + 1);
+				return Uri::root() . substr(Route::_($url), strlen(Uri::base(true)) + 1);
 			}
 
 			return Route::_($url);
@@ -713,7 +714,7 @@ class TjCertificateCertificate extends CMSObject
 	{
 		$app  = Factory::getApplication();
 
-		if (JFile::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
+		if (File::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
 		{
 			jimport('joomla.filesystem.file');
 			jimport('joomla.filesystem.folder');
@@ -932,9 +933,9 @@ class TjCertificateCertificate extends CMSObject
 				$path = JPATH_SITE . '/media/com_tjcertificate/certificates/';
 				$fileName = $this->unique_certificate_id . '.png';
 
-				if (JFile::exists($path . $fileName))
+				if (File::exists($path . $fileName))
 				{
-					JFile::delete($path . $fileName);
+					File::delete($path . $fileName);
 				}
 
 				// Generate Certificate Image
@@ -1162,14 +1163,14 @@ class TjCertificateCertificate extends CMSObject
 	{
 		if (extension_loaded('imagick'))
 		{
-			if (!JFolder::exists($this->certImageDir))
+			if (!Folder::exists($this->certImageDir))
 			{
-				JFolder::create($this->certImageDir);
+				Folder::create($this->certImageDir);
 			}
 
-			if (!JFolder::exists($this->certTmpDir))
+			if (!Folder::exists($this->certTmpDir))
 			{
-				JFolder::create($this->certTmpDir);
+				Folder::create($this->certTmpDir);
 			}
 
 			$tmpPDF = $this->certTmpDir . $this->unique_certificate_id . '.pdf';
@@ -1186,9 +1187,9 @@ class TjCertificateCertificate extends CMSObject
 			$im->clear();
 			$im->destroy();
 
-			if (JFile::exists($tmpPDF))
+			if (File::exists($tmpPDF))
 			{
-				JFile::delete($tmpPDF);
+				File::delete($tmpPDF);
 			}
 		}
 	}

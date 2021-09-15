@@ -9,8 +9,8 @@
  */
 
 defined('JPATH_BASE') or die;
-
-JFormHelper::loadFieldClass('list');
+use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Form\Field\UserField;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -20,7 +20,7 @@ use Joomla\CMS\HTML\HTMLHelper;
  *
  * @since  __DEPLOY_VERSION__
  */
-class JFormFieldUsers extends JFormFieldList
+class JFormFieldUsers extends FormFieldList
 {
 	/**
 	 * The form field type.

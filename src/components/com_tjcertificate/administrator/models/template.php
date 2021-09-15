@@ -10,6 +10,7 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\Registry\Registry;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
@@ -124,7 +125,7 @@ class TjCertificateModelTemplate extends AdminModel
 		// PDF options
 		if (isset($data['params']) && is_array($data['params']))
 		{
-			$registry = new JRegistry;
+			$registry = new Registry;
 			$registry->loadArray($data['params']);
 			$data['params'] = (string) $registry;
 		}

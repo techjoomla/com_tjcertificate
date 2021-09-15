@@ -10,7 +10,9 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
@@ -70,7 +72,7 @@ class TjCertificateViewTrainingRecord extends HtmlView
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
 		$this->input = Factory::getApplication()->input;
-		$this->canDo = JHelperContent::getActions('com_tjcertificate', 'certificate', $this->item->id);
+		$this->canDo = ContentHelper::getActions('com_tjcertificate', 'certificate', $this->item->id);
 		$this->params = ComponentHelper::getParams('com_tjcertificate');
 		$this->allowedFileExtensions = $this->params->get('upload_extensions');
 		$this->uploadLimit      = $this->params->get('upload_maxsize', '1024');
@@ -126,16 +128,16 @@ class TjCertificateViewTrainingRecord extends HtmlView
 		{
 			Factory::getApplication()->input->set('hidemainmenu', true);
 
-			JToolbarHelper::title(
+			ToolbarHelper::title(
 				Text::_('COM_TJCERTIFICATE_PAGE_' . ($isNew ? 'ADD_TRAINING_RECORD' : 'EDIT_TRAINING_RECORD')),
 				'pencil-2 certificate-add'
 			);
 
 			if ($isNew)
 			{
-				JToolbarHelper::apply('trainingrecord.apply');
-				JToolbarHelper::save('trainingrecord.save');
-				JToolbarHelper::save2new('trainingrecord.save2new');
+				ToolbarHelper::apply('trainingrecord.apply');
+				ToolbarHelper::save('trainingrecord.save');
+				ToolbarHelper::save2new('trainingrecord.save2new');
 			}
 			else
 			{
@@ -147,15 +149,15 @@ class TjCertificateViewTrainingRecord extends HtmlView
 
 			if (empty($this->item->id))
 			{
-				JToolbarHelper::cancel('certificate.cancel');
+				ToolbarHelper::cancel('certificate.cancel');
 			}
 			else
 			{
-				JToolbarHelper::cancel('certificate.cancel', 'JTOOLBAR_CLOSE');
+				ToolbarHelper::cancel('certificate.cancel', 'JTOOLBAR_CLOSE');
 			}
 		}
 
-		JToolbarHelper::divider();
+		ToolbarHelper::divider();
 	}
 
 	/**
@@ -169,8 +171,8 @@ class TjCertificateViewTrainingRecord extends HtmlView
 	{
 		if ($itemEditable)
 		{
-			JToolbarHelper::apply('trainingrecord.apply');
-			JToolbarHelper::save('trainingrecord.save');
+			ToolbarHelper::apply('trainingrecord.apply');
+			ToolbarHelper::save('trainingrecord.save');
 		}
 	}
 

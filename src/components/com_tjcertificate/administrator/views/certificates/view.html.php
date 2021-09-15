@@ -10,6 +10,9 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
@@ -111,7 +114,7 @@ class TjCertificateViewCertificates extends HtmlView
 		$this->activeFilters = $this->get('ActiveFilters');
 
 		$this->user  = Factory::getUser();
-		$this->canDo = JHelperContent::getActions('com_tjcertificate');
+		$this->canDo = ContentHelper::getActions('com_tjcertificate');
 
 		// Add submenu
 		TjCertificateHelper::addSubmenu('certificates');
@@ -151,39 +154,39 @@ class TjCertificateViewCertificates extends HtmlView
 
 		if ($canDo->get('core.create'))
 		{
-			JToolbarHelper::addNew('certificate.add');
+			ToolbarHelper::addNew('certificate.add');
 		}
 
 		if ($canDo->get('certificate.external.create'))
 		{
-			JToolbarHelper::addNew('trainingrecord.add', 'COM_TJCERTIFICATE_ADD_EXTERNAL_CERTIFICATE');
-			JToolbarHelper::addNew('bulktrainingrecord.add', 'COM_TJCERTIFICATE_ADD_EXTERNAL_CERTIFICATES');
+			ToolbarHelper::addNew('trainingrecord.add', 'COM_TJCERTIFICATE_ADD_EXTERNAL_CERTIFICATE');
+			ToolbarHelper::addNew('bulktrainingrecord.add', 'COM_TJCERTIFICATE_ADD_EXTERNAL_CERTIFICATES');
 		}
 
 		if ($canDo->get('core.edit'))
 		{
-			JToolbarHelper::editList('certificate.edit');
+			ToolbarHelper::editList('certificate.edit');
 		}
 
 		if ($canDo->get('core.edit.state'))
 		{
-			JToolbarHelper::divider();
-			JToolbarHelper::publish('certificates.publish', 'JTOOLBAR_PUBLISH', true);
-			JToolbarHelper::unpublish('certificates.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+			ToolbarHelper::divider();
+			ToolbarHelper::publish('certificates.publish', 'JTOOLBAR_PUBLISH', true);
+			ToolbarHelper::unpublish('certificates.unpublish', 'JTOOLBAR_UNPUBLISH', true);
 			JToolBarHelper::archiveList('certificates.archive', 'JTOOLBAR_ARCHIVE');
-			JToolbarHelper::divider();
+			ToolbarHelper::divider();
 		}
 
 		if ($canDo->get('core.delete'))
 		{
-			JToolbarHelper::deleteList('JGLOBAL_CONFIRM_DELETE', 'certificates.delete', 'JTOOLBAR_DELETE');
-			JToolbarHelper::divider();
+			ToolbarHelper::deleteList('JGLOBAL_CONFIRM_DELETE', 'certificates.delete', 'JTOOLBAR_DELETE');
+			ToolbarHelper::divider();
 		}
 
 		if ($canDo->get('core.admin') || $canDo->get('core.options'))
 		{
-			JToolbarHelper::preferences('com_tjcertificate');
-			JToolbarHelper::divider();
+			ToolbarHelper::preferences('com_tjcertificate');
+			ToolbarHelper::divider();
 		}
 	}
 

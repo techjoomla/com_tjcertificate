@@ -10,6 +10,10 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Installer\Installer;
 
 jimport('joomla.filesystem.folder');
 jimport('joomla.filesystem.file');
@@ -73,9 +77,9 @@ class Com_TjcertificateInstallerScript
 	public function installNotificationsTemplates()
 	{
 		jimport('joomla.application.component.model');
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjnotifications/tables');
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjnotifications/models');
-		$notificationsModel = JModelLegacy::getInstance('Notification', 'TJNotificationsModel');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjnotifications/tables');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjnotifications/models');
+		$notificationsModel = BaseDatabaseModel::getInstance('Notification', 'TJNotificationsModel');
 
 		$filePath = JPATH_ADMINISTRATOR . '/components/com_tjcertificate/tjcertificateTemplate.json';
 		$str = file_get_contents($filePath);
@@ -107,7 +111,7 @@ class Com_TjcertificateInstallerScript
 	{
 		$src = $parent->getParent()->getPath('source');
 
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 
 		// Plugins installation
 		if (count($this->installation_queue['plugins']))
@@ -145,7 +149,7 @@ class Com_TjcertificateInstallerScript
 						$db->setQuery($query);
 						$count = $db->loadResult();
 
-						$installer = new JInstaller;
+						$installer = new Installer;
 						$result    = $installer->install($path);
 
 						if ($published && !$count)

@@ -10,7 +10,7 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
+use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Object\CMSObject;
@@ -293,7 +293,7 @@ class TjCertificateTemplate extends CMSObject
 	{
 		$replacementTagPath = $this->getReplacementTagFile($client);
 
-		if (JFile::exists($replacementTagPath))
+		if (File::exists($replacementTagPath))
 		{
 			return file_get_contents($replacementTagPath);
 		}

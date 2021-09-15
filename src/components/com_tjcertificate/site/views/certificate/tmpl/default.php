@@ -10,13 +10,13 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\Uri\Uri;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Uri\Uri;
 
 $options['relative'] = true;
 HTMLHelper::_('jquery.framework');
@@ -59,7 +59,7 @@ if ($this->certificate)
 	$document = Factory::getDocument();
 	$description = !empty($this->item->description) ? $this->item->description :
 	(!empty($this->item->short_desc)? $this->item->short_desc: '');
-	$document->addScriptDeclaration("var certRootUrl = '" . JUri::root() . "'");
+	$document->addScriptDeclaration("var certRootUrl = '" . Uri::root() . "'");
 
 	// For facebook and linkedin
 	$config = Factory::getConfig();
