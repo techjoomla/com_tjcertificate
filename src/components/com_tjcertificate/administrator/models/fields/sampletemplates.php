@@ -1,7 +1,3 @@
-use Joomla\CMS\Form\FormHelper;
-use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Filesystem\Folder;
-use Joomla\CMS\Filesystem\Path;
 <?php
 /**
  * @package     TJCertificate
@@ -15,6 +11,10 @@ use Joomla\CMS\Filesystem\Path;
 JFormHelper::loadFieldClass('list');
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Filesystem\Path;
 
 /**
  * Custom field to list default sample templates and client based if client is set

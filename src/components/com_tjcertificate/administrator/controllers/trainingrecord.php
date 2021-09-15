@@ -186,7 +186,7 @@ class TjCertificateControllerTrainingRecord extends FormController
 		$this->checkToken('request');
 
 		// Clear data from session.
-		\Factory::getApplication()->setUserState('com_tjcertificate.edit.trainingrecord.data', null);
+		Factory::getApplication()->setUserState('com_tjcertificate.edit.trainingrecord.data', null);
 
 		$this->setRedirect(Route::_('index.php?option=com_tjcertificate&view=certificates&layout=my', false));
 	}

@@ -22,7 +22,7 @@ FormHelper::loadFieldClass('list');
  * @package  Com_Tjcertificate
  * @since    1.0
  */
-class FormFieldLegend extends \FormFieldList
+class FormFieldLegend extends FormFieldList
 {
 	/**
 	 * The form field type.

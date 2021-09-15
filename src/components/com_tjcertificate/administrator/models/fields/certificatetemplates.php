@@ -1,5 +1,3 @@
-use Joomla\CMS\Form\FormHelper;
-use Joomla\CMS\HTML\HTMLHelper;
 <?php
 /**
  * @package     TJCertificate
@@ -13,6 +11,8 @@ use Joomla\CMS\HTML\HTMLHelper;
 JFormHelper::loadFieldClass('list');
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 
 JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
 
