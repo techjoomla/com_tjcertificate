@@ -10,7 +10,9 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
@@ -113,7 +115,7 @@ class TjCertificateViewTemplates extends HtmlView
 		$this->activeFilters = $this->get('ActiveFilters');
 
 		$this->user  = Factory::getUser();
-		$this->canDo = JHelperContent::getActions('com_tjcertificate');
+		$this->canDo = ContentHelper::getActions('com_tjcertificate');
 
 		// Add submenu
 		TjCertificateHelper::addSubmenu('templates');
@@ -142,33 +144,33 @@ class TjCertificateViewTemplates extends HtmlView
 
 		if ($canDo->get('core.create'))
 		{
-			JToolbarHelper::addNew('template.add');
+			ToolbarHelper::addNew('template.add');
 		}
 
 		if ($canDo->get('core.edit'))
 		{
-			JToolbarHelper::editList('template.edit');
+			ToolbarHelper::editList('template.edit');
 		}
 
 		if ($canDo->get('core.edit.state'))
 		{
-			JToolbarHelper::divider();
-			JToolbarHelper::publish('templates.publish', 'JTOOLBAR_PUBLISH', true);
-			JToolbarHelper::unpublish('templates.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+			ToolbarHelper::divider();
+			ToolbarHelper::publish('templates.publish', 'JTOOLBAR_PUBLISH', true);
+			ToolbarHelper::unpublish('templates.unpublish', 'JTOOLBAR_UNPUBLISH', true);
 			JToolBarHelper::archiveList('templates.archive', 'JTOOLBAR_ARCHIVE');
-			JToolbarHelper::divider();
+			ToolbarHelper::divider();
 		}
 
 		if ($canDo->get('core.delete'))
 		{
-			JToolbarHelper::deleteList('JGLOBAL_CONFIRM_DELETE', 'templates.delete', 'JTOOLBAR_DELETE');
-			JToolbarHelper::divider();
+			ToolbarHelper::deleteList('JGLOBAL_CONFIRM_DELETE', 'templates.delete', 'JTOOLBAR_DELETE');
+			ToolbarHelper::divider();
 		}
 
 		if ($canDo->get('core.admin') || $canDo->get('core.options'))
 		{
-			JToolbarHelper::preferences('com_tjcertificate');
-			JToolbarHelper::divider();
+			ToolbarHelper::preferences('com_tjcertificate');
+			ToolbarHelper::divider();
 		}
 	}
 

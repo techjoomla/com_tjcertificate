@@ -10,14 +10,14 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
+use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
 use Joomla\String\StringHelper;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 
-$language = JFactory::getLanguage();
+$language = Factory::getLanguage();
 $language->load('com_tjcertificate');
 
 /**

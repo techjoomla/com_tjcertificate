@@ -10,9 +10,10 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
-use Joomla\CMS\Factory;
+use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\View\HtmlView;
 
 /**
@@ -79,11 +80,11 @@ class TjCertificateViewTemplate extends HtmlView
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
 		$this->input = Factory::getApplication()->input;
-		$this->canDo = JHelperContent::getActions('com_tjcertificate');
+		$this->canDo = ContentHelper::getActions('com_tjcertificate');
 
 		if ($this->item->id && !$this->isEditable($this->canDo, Factory::getUser()->id))
 		{
-			JError::raiseNotice(403, JText::_('COM_TJCERTIFICATE_ERROR_CANNOT_ACCESS_PRIVATE_TEMPLATE'));
+			JError::raiseNotice(403, Text::_('COM_TJCERTIFICATE_ERROR_CANNOT_ACCESS_PRIVATE_TEMPLATE'));
 
 			return false;
 		}
@@ -127,7 +128,7 @@ class TjCertificateViewTemplate extends HtmlView
 		$canDo = $this->canDo;
 		$layout = $app->input->get("layout");
 
-		JToolbarHelper::title(
+		ToolbarHelper::title(
 			Text::_('COM_TJCERTIFICATE_PAGE_VIEW_CERTIFICATE_TEMPLATE')
 		);
 
@@ -139,7 +140,7 @@ class TjCertificateViewTemplate extends HtmlView
 		{
 			$app->input->set('hidemainmenu', true);
 
-			JToolbarHelper::title(
+			ToolbarHelper::title(
 				Text::_('COM_TJCERTIFICATE_PAGE_' . ($checkedOut ? 'VIEW_CERTIFICATE_TEMPLATE' :
 					($isNew ? 'ADD_CERTIFICATE_TEMPLATE' : 'EDIT_CERTIFICATE_TEMPLATE'))
 			), 'pencil-2 template-add'
@@ -147,9 +148,9 @@ class TjCertificateViewTemplate extends HtmlView
 
 			if ($isNew)
 			{
-				JToolbarHelper::apply('template.apply');
-				JToolbarHelper::save('template.save');
-				JToolbarHelper::save2new('template.save2new');
+				ToolbarHelper::apply('template.apply');
+				ToolbarHelper::save('template.save');
+				ToolbarHelper::save2new('template.save2new');
 			}
 			else
 			{
@@ -160,12 +161,12 @@ class TjCertificateViewTemplate extends HtmlView
 			}
 
 			// Add preview toolbar
-			JToolbarHelper::modal('templatePreview', 'icon-eye', 'COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_TOOLBAR_PREVIEW');
+			ToolbarHelper::modal('templatePreview', 'icon-eye', 'COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_TOOLBAR_PREVIEW');
 
-			JToolbarHelper::cancel('template.cancel');
+			ToolbarHelper::cancel('template.cancel');
 		}
 
-		JToolbarHelper::divider();
+		ToolbarHelper::divider();
 	}
 
 	/**
@@ -181,10 +182,10 @@ class TjCertificateViewTemplate extends HtmlView
 	{
 		if (!$checkedOut && $itemEditable)
 		{
-			JToolbarHelper::apply('template.apply');
-			JToolbarHelper::save('template.save');
-			JToolbarHelper::save2new('template.save2new');
-			JToolbarHelper::save2copy('template.save2copy');
+			ToolbarHelper::apply('template.apply');
+			ToolbarHelper::save('template.save');
+			ToolbarHelper::save2new('template.save2new');
+			ToolbarHelper::save2copy('template.save2copy');
 		}
 	}
 

@@ -10,6 +10,7 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\Component\Router\RouterBase;
 
 JLoader::registerPrefix('TjCertificate', JPATH_SITE . '/components/com_tjcertificate/');
 
@@ -18,7 +19,7 @@ JLoader::registerPrefix('TjCertificate', JPATH_SITE . '/components/com_tjcertifi
  *
  * @since  1.0.0
  */
-class TjCertificateRouter extends JComponentRouterBase
+class TjCertificateRouter extends RouterBase
 {
 	/**
 	 * Build method for URLs

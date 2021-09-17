@@ -11,13 +11,17 @@
 JFormHelper::loadFieldClass('list');
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Filesystem\Path;
 
 /**
  * Custom field to list default sample templates and client based if client is set
  *
  * @since  1.0.0
  */
-class JFormFieldSampleTemplates extends JFormFieldList
+class JFormFieldSampleTemplates extends FormFieldList
 {
 	/**
 	 * Method to get a list of options for a list input.
@@ -38,7 +42,7 @@ class JFormFieldSampleTemplates extends JFormFieldList
 
 		$client = $input->get('extension', '');
 
-		$options[] = JHtml::_('select.option', '', Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_SELECT_SAMPLE_TEMPLATE'));
+		$options[] = HTMLHelper::_('select.option', '', Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_SELECT_SAMPLE_TEMPLATE'));
 
 		// Get client based default templates
 		if (!empty($client))
@@ -48,17 +52,17 @@ class JFormFieldSampleTemplates extends JFormFieldList
 			// Get client based sample templates
 			$clientSampleTemplatePath = MEDIA_ROOT . '/' . $component . "/" . TJ_CERTIFICATE_TEMPLATE_FOLDER;
 
-			if (JFolder::exists($clientSampleTemplatePath))
+			if (Folder::exists($clientSampleTemplatePath))
 			{
-				$clientSampleTemplatePath = JPath::clean($clientSampleTemplatePath);
+				$clientSampleTemplatePath = Path::clean($clientSampleTemplatePath);
 
 				// Get a list of folders in the search path with the given filter.
-				$clientSampleFolders = JFolder::folders($clientSampleTemplatePath, '', false, true);
+				$clientSampleFolders = Folder::folders($clientSampleTemplatePath, '', false, true);
 
 				// Build the options list from the list of folders.
 				if (is_array($clientSampleFolders))
 				{
-					$options[] = JHtml::_('select.option', '<OPTGROUP>',
+					$options[] = HTMLHelper::_('select.option', '<OPTGROUP>',
 						Text::sprintf('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_SELECT_CLIENT_SAMPLE_TEMPLATE_DEFAULT', $component)
 					);
 
@@ -67,7 +71,7 @@ class JFormFieldSampleTemplates extends JFormFieldList
 						// Remove the root part and the leading /
 						$folder = trim(str_replace($clientSampleTemplatePath, '', $folder), '/');
 
-						$options[] = JHtml::_('select.option', $component . '.' . $folder, $folder);
+						$options[] = HTMLHelper::_('select.option', $component . '.' . $folder, $folder);
 					}
 				}
 			}
@@ -77,24 +81,24 @@ class JFormFieldSampleTemplates extends JFormFieldList
 		// Get default sample templates
 		$defaultSampleTemplatePath = TJ_CERTIFICATE_DEFAULT_TEMPLATE;
 
-		if (JFolder::exists($defaultSampleTemplatePath))
+		if (Folder::exists($defaultSampleTemplatePath))
 		{
-			$defaultSampleTemplatePath = JPath::clean($defaultSampleTemplatePath);
+			$defaultSampleTemplatePath = Path::clean($defaultSampleTemplatePath);
 
 			// Get a list of folders in the search path with the given filter.
-			$defaultSampleFolders = JFolder::folders($defaultSampleTemplatePath, '', false, true);
+			$defaultSampleFolders = Folder::folders($defaultSampleTemplatePath, '', false, true);
 
 			// Build the options list from the list of folders.
 			if (is_array($defaultSampleFolders))
 			{
-				$options[] = JHtml::_('select.option', '<OPTGROUP>', Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_SELECT_SAMPLE_TEMPLATE_DEFAULT'));
+				$options[] = HTMLHelper::_('select.option', '<OPTGROUP>', Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FORM_SELECT_SAMPLE_TEMPLATE_DEFAULT'));
 
 				foreach ($defaultSampleFolders as $folder)
 				{
 					// Remove the root part and the leading /
 					$folder = trim(str_replace($defaultSampleTemplatePath, '', $folder), '/');
 
-					$options[] = JHtml::_('select.option', 'com_tjcertificate.' . $folder, $folder);
+					$options[] = HTMLHelper::_('select.option', 'com_tjcertificate.' . $folder, $folder);
 					}
 				}
 			}

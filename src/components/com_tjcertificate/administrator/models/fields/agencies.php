@@ -9,6 +9,7 @@
  */
 
 defined('_JEXEC') or die();
+use Joomla\CMS\Form\FormHelper;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -21,7 +22,7 @@ JFormHelper::loadFieldClass('list');
  *
  * @since  __DEPLOY_VERSION__
  */
-class JFormFieldAgencies extends JFormFieldList
+class JFormFieldAgencies extends FormFieldList
 {
 	/**
 	 * Fiedd to decide if options are being loaded externally and from xml

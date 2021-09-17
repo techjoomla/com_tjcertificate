@@ -11,6 +11,8 @@
 JFormHelper::loadFieldClass('list');
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 
 JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
 
@@ -19,7 +21,7 @@ JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADM
  *
  * @since  1.0.0
  */
-class JFormFieldCertificateTemplates extends JFormFieldList
+class JFormFieldCertificateTemplates extends FormFieldList
 {
 	/**
 	 * Method to get a list of options for a list input.
@@ -43,7 +45,7 @@ class JFormFieldCertificateTemplates extends JFormFieldList
 			$client = $app->get('extension', '');
 		}
 
-		$options[] = JHtml::_('select.option', '', Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FIELD_SELECT'));
+		$options[] = HTMLHelper::_('select.option', '', Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FIELD_SELECT'));
 
 		// Get Private/Created by logged-in user's templates
 		if ($user->id)
@@ -64,11 +66,11 @@ class JFormFieldCertificateTemplates extends JFormFieldList
 
 			if (!empty($certlist))
 			{
-				$options[] = JHtml::_('select.option', '<OPTGROUP>', Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FIELD_PRIVATE'));
+				$options[] = HTMLHelper::_('select.option', '<OPTGROUP>', Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FIELD_PRIVATE'));
 
 				foreach ($certlist as $cert)
 				{
-					$options[] = JHtml::_('select.option', $cert->id, $cert->title);
+					$options[] = HTMLHelper::_('select.option', $cert->id, $cert->title);
 				}
 			}
 		}
@@ -89,11 +91,11 @@ class JFormFieldCertificateTemplates extends JFormFieldList
 
 		if (!empty($certlist))
 		{
-			$options[] = JHtml::_('select.option', '<OPTGROUP>', Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FIELD_PUBLIC'));
+			$options[] = HTMLHelper::_('select.option', '<OPTGROUP>', Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_FIELD_PUBLIC'));
 
 			foreach ($certlist as $cert)
 			{
-				$options[] = JHtml::_('select.option', $cert->id, $cert->title);
+				$options[] = HTMLHelper::_('select.option', $cert->id, $cert->title);
 			}
 		}
 

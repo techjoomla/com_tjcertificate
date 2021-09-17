@@ -7,6 +7,8 @@
  */
 
 defined('JPATH_BASE') or die;
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Factory;
 
 jimport('joomla.form.formfield');
 
@@ -15,7 +17,7 @@ jimport('joomla.form.formfield');
  *
  * @since  __DEPLOY_VERSION__
  */
-class JFormFieldCreatedby extends JFormField
+class JFormFieldCreatedby extends FormField
 {
 	/**
 	 * The form field type.
@@ -42,11 +44,11 @@ class JFormFieldCreatedby extends JFormField
 
 		if ($user_id)
 		{
-			$user = JFactory::getUser($user_id);
+			$user = Factory::getUser($user_id);
 		}
 		else
 		{
-			$user = JFactory::getUser();
+			$user = Factory::getUser();
 			$html[] = '<input type="hidden" name="' . $this->name . '" value="' . $user->id . '" />';
 		}
 

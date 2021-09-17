@@ -10,7 +10,7 @@
 
 // No direct access.
 defined('_JEXEC') or die();
-
+use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -24,7 +24,7 @@ JFormHelper::loadFieldClass('list');
  *
  * @since  __DEPLOY_VERSION__
  */
-class JFormFieldAllUsers extends JFormFieldList
+class JFormFieldAllUsers extends FormFieldList
 {
 	/**
 	 * The form field type.

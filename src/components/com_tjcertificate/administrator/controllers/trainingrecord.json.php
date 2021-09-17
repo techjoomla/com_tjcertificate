@@ -21,8 +21,8 @@ use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Session\Session;
 use Joomla\CMS\Router\Route;
-use Joomla\CMS\Response\JsonResponse;
 use Joomla\CMS\Table\Table;
+use Joomla\CMS\Response\JsonResponse;
 
 JLoader::import("/techjoomla/media/storage/local", JPATH_LIBRARIES);
 

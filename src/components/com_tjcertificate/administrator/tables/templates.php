@@ -10,15 +10,15 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-use Joomla\CMS\Factory;
 use Joomla\CMS\Table\Table;
+use Joomla\CMS\Factory;
 
 /**
  * Templates table class
  *
  * @since  1.0.0
  */
-class TjCertificateTableTemplates extends JTable
+class TjCertificateTableTemplates extends Table
 {
 	/**
 	 * Constructor
