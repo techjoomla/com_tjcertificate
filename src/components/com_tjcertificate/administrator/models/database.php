@@ -14,7 +14,18 @@ use Joomla\CMS\Table\Table;
 
 use Joomla\CMS\Factory;
 
-require_once JPATH_ADMINISTRATOR . '/components/com_installer/models/database.php';
+if (JVERSION >= '4.0.0')
+{
+       require_once JPATH_ADMINISTRATOR . '/components/com_installer/src/Model/DatabaseModel.php';
+       require_once JPATH_ADMINISTRATOR . '/components/com_config/src/Model/ApplicationModel.php';
+}
+else
+{
+       require_once JPATH_SITE . '/components/com_config/model/cms.php';
+       require_once JPATH_SITE . '/components/com_config/model/form.php';
+       require_once JPATH_ADMINISTRATOR . '/components/com_installer/models/database.php';
+       require_once JPATH_ADMINISTRATOR . '/components/com_config/models/application.php';
+}
 
 /**
  * Manage TjCertificate database operations
