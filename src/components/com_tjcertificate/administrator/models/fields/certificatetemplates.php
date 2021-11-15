@@ -13,6 +13,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Form\Field\ListField;
 
 JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
 
@@ -21,7 +22,7 @@ JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADM
  *
  * @since  1.0.0
  */
-class JFormFieldCertificateTemplates extends FormFieldList
+class JFormFieldCertificateTemplates extends ListField
 {
 	/**
 	 * Method to get a list of options for a list input.
