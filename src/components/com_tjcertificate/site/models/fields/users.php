@@ -14,13 +14,14 @@ use Joomla\CMS\Form\Field\UserField;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Form\Field\ListField;
 
 /**
  * Supports an HTML select list of allocated agencies
  *
  * @since  __DEPLOY_VERSION__
  */
-class JFormFieldUsers extends FormFieldList
+class JFormFieldUsers extends ListField
 {
 	/**
 	 * The form field type.

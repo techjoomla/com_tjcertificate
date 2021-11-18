@@ -15,13 +15,14 @@ use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Filesystem\Path;
+use Joomla\CMS\Form\Field\ListField;
 
 /**
  * Custom field to list default sample templates and client based if client is set
  *
  * @since  1.0.0
  */
-class JFormFieldSampleTemplates extends FormFieldList
+class JFormFieldSampleTemplates extends ListField
 {
 	/**
 	 * Method to get a list of options for a list input.

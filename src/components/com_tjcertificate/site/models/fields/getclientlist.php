@@ -13,13 +13,14 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Form\Field\ListField;
 
 /**
  * Custom field to list all public and logged-in user's private certificate templates
  *
  * @since  1.0.0
  */
-class JFormFieldGetClientList extends FormFieldList
+class JFormFieldGetClientList extends ListField
 {
 	/**
 	 * Method to get a list of options for a list input.
