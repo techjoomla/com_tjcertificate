@@ -130,7 +130,7 @@ PluginHelper::importPlugin('content');
 							foreach ($this->items as $i => $item)
 							{
 								$certificateObj = TJCERT::Certificate($item->id);
-								$data = $dispatcher->trigger('getCertificateClientData', array($item->client_id, $item->client));
+								$data = Factory::getApplication()->triggerEvent('getCertificateClientData', array($item->client_id, $item->client));
 								$item->max_ordering = 0;
 
 								$canEdit    = $this->canDo->get('core.edit');
