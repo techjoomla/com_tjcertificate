@@ -25,12 +25,12 @@ HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
 HTMLHelper::_('formbehavior.chosen', 'select');
-HTMLHelper::_('behavior.modal', 'a.modal');
+HTMLHelper::_('bootstrap.renderModal', 'a.modal');
 HTMLHelper::script('com_tjcertificate/certificateImage.min.js', $options);
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
-$dispatcher = JDispatcher::getInstance();
+
 PluginHelper::importPlugin('content');
 ?>
 

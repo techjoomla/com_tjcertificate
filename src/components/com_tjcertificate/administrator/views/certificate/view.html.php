@@ -130,7 +130,7 @@ class TjCertificateViewCertificate extends HtmlView
 		JLoader::import('administrator.components.com_tjcertificate.helpers.tjcertificate', JPATH_SITE);
 		TjCertificateHelper::addSubmenu('certificates');
 
-		if ($app->isAdmin())
+		if ($app->isClient('administrator'))
 		{
 			$this->sidebar = JHtmlSidebar::render();
 		}
