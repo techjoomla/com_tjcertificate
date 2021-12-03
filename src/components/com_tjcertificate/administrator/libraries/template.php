@@ -181,9 +181,7 @@ class TjCertificateTemplate extends CMSObject
 			$this->id = $table->id;
 
 			// Fire the onTjCertificateTemplateAfterSave event.
-			$dispatcher = \JEventDispatcher::getInstance();
-
-			$dispatcher->trigger('onTjCertificateTemplateAfterSave', array($isNew, $this));
+			Factory::getApplication()->triggerEvent('onTjCertificateTemplateAfterSave', array($isNew, $this));
 		}
 		catch (\Exception $e)
 		{
