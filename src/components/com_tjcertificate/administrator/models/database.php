@@ -23,10 +23,10 @@ if (JVERSION < '4.0.0')
 }
 
 /**
-* Manage TjCertificate database operations
-*
-* @since  1.0.0
-*/
+ * Manage TjCertificate database operations
+ *
+ * @since  1.0.0
+ */
 class TjCertificateModelDatabase extends BaseDatabaseModel
 {
 	protected $extensionName = 'com_tjcertificate';
@@ -66,7 +66,7 @@ class TjCertificateModelDatabase extends BaseDatabaseModel
 			'rule'      => $managerGroup->id,
 			'value'     => '1',
 			'title'     => $this->extensionName
-									);
+			);
 
 			if (JVERSION < 4.0)
 			{
