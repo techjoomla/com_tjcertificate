@@ -17,9 +17,9 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 if (JVERSION < '4.0.0')
 {
 	require_once JPATH_ADMINISTRATOR . '/components/com_installer/models/database.php';
-    require_once JPATH_ADMINISTRATOR . '/components/com_config/models/application.php';
-    require_once JPATH_SITE . '/components/com_config/model/cms.php';
+	require_once JPATH_SITE . '/components/com_config/model/cms.php';
 	require_once JPATH_SITE . '/components/com_config/model/form.php';
+	require_once JPATH_ADMINISTRATOR . '/components/com_config/models/application.php';
 }
 
 /**
