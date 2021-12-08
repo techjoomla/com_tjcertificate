@@ -19,7 +19,6 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Router\Route;
-use Joomla\Filesystem\File;
 use Joomla\Registry\Registry;
 use Dompdf\Dompdf;
 use Dompdf\Options;
