@@ -11,20 +11,16 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Table\Table;
-
 use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\Component\Config\Administrator\Model\ApplicationModel;
 
-if (JVERSION >= '4.0.0')
+if (JVERSION < '4.0.0')
 {
-       require_once JPATH_ADMINISTRATOR . '/components/com_installer/src/Model/DatabaseModel.php';
-       require_once JPATH_ADMINISTRATOR . '/components/com_config/src/Model/ApplicationModel.php';
-}
-else
-{
-       require_once JPATH_SITE . '/components/com_config/model/cms.php';
-       require_once JPATH_SITE . '/components/com_config/model/form.php';
-       require_once JPATH_ADMINISTRATOR . '/components/com_installer/models/database.php';
-       require_once JPATH_ADMINISTRATOR . '/components/com_config/models/application.php';
+	require_once JPATH_ADMINISTRATOR . '/components/com_installer/models/database.php';
+	require_once JPATH_SITE . '/components/com_config/model/cms.php';
+	require_once JPATH_SITE . '/components/com_config/model/form.php';
+	require_once JPATH_ADMINISTRATOR . '/components/com_config/models/application.php';
 }
 
 /**
@@ -32,7 +28,7 @@ else
  *
  * @since  1.0.0
  */
-class TjCertificateModelDatabase extends InstallerModelDatabase
+class TjCertificateModelDatabase extends BaseDatabaseModel
 {
 	protected $extensionName = 'com_tjcertificate';
 
@@ -64,22 +60,27 @@ class TjCertificateModelDatabase extends InstallerModelDatabase
 			$managerGroup = Table::getInstance('Usergroup', 'JTable');
 			$managerGroup->load(array('title' => 'Manager'));
 
-			require_once JPATH_SITE . '/components/com_config/model/cms.php';
-			require_once JPATH_SITE . '/components/com_config/model/form.php';
-			require_once JPATH_ADMINISTRATOR . '/components/com_config/models/application.php';
-
 			// Get Post DATA
 			$permissions = array(
-				'component' => $this->extensionName,
-				'action'    => $templateEditOwn,
-				'rule'      => $managerGroup->id,
-				'value'     => '1',
-				'title'     => $this->extensionName
+			'component' => $this->extensionName,
+			'action'    => $templateEditOwn,
+			'rule'      => $managerGroup->id,
+			'value'     => '1',
+			'title'     => $this->extensionName
 			);
 
-			// Load Permissions from Session and send to Model
-			$model    = new ConfigModelApplication;
-			$response = $model->storePermissions($permissions);
+			if (JVERSION < 4.0)
+			{
+				// Load Permissions from Session and send to Model
+				$model    = new ConfigModelApplication;
+				$response = $model->storePermissions($permissions);
+			}
+			else
+			{
+				// Load Permissions from Session and send to Model
+				$model    = new ApplicationModel;
+				$response = $model->storePermissions($permissions);
+			}
 		}
 	}
 }
