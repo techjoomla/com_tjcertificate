@@ -20,7 +20,7 @@ use Joomla\CMS\Layout\LayoutHelper;
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
 HTMLHelper::_('jquery.token');
-HTMLHelper::_('behavior.framework');
+// HTMLHelper::_('behavior.framework');
 HTMLHelper::_('behavior.formvalidator');
 HTMLHelper::_('behavior.keepalive');
 HTMLHelper::_('formbehavior.chosen', 'select');
