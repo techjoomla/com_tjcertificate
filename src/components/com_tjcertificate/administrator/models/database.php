@@ -13,6 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\Component\Config\Administrator\Model\ApplicationModel;
 
 if (JVERSION < '4.0.0')
 {
@@ -77,7 +78,7 @@ class TjCertificateModelDatabase extends BaseDatabaseModel
 			else
 			{
 				// Load Permissions from Session and send to Model
-				$model    = new Joomla\Component\Config\Administrator\Model\ApplicationModel;
+				$model    = new ApplicationModel;
 				$response = $model->storePermissions($permissions);
 			}
 		}
