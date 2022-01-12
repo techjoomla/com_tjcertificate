@@ -135,7 +135,7 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 							foreach ($this->items as $i => $item)
 							{
 								$certificateObj = TJCERT::Certificate($item->id);
-								$data = $dispatcher->trigger('getCertificateClientData', array($item->client_id, $item->client));
+								$data = $dispatcher->trigger('onGetCertificateClientData', array($item->client_id, $item->client));
 								?>
 								<tr class="row <?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->id; ?>">
 								<td class="has-context">

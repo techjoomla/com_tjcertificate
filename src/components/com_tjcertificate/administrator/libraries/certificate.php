@@ -19,7 +19,6 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Router\Route;
-use Joomla\Filesystem\File;
 use Joomla\Registry\Registry;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -1135,7 +1134,7 @@ class TjCertificateCertificate extends CMSObject
 		// Get client data
 		$dispatcher = JDispatcher::getInstance();
 		PluginHelper::importPlugin('content');
-		$result = $dispatcher->trigger('getCertificateClientData', array($this->client_id, $this->client));
+		$result = $dispatcher->trigger('onGetCertificateClientData', array($this->client_id, $this->client));
 		$clientData = $result[0];
 
 		$urlOptions             = array();
