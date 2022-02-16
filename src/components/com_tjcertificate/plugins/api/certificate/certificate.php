@@ -37,6 +37,6 @@ class PlgAPICertificate extends ApiPlugin
 		$lang->load('plg_api_certificate', JPATH_ADMINISTRATOR,'',true);
 
 		// Set the login resource to be public
-		$this->setResourceAccess('download', 'public', 'get');
+		$this->setResourceAccess('download', 'public', 'post');
 	}
 }
