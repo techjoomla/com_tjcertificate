@@ -21,7 +21,6 @@ HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 HTMLHelper::_('jquery.token');
 HTMLHelper::_('behavior.formvalidator');
 HTMLHelper::_('behavior.keepalive');
-HTMLHelper::_('formbehavior.chosen', 'select');
 
 $options['relative'] = true;
 JHtml::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
@@ -50,14 +49,14 @@ $layout  = $isModal ? 'modal' : 'edit';
 $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=component' : '';
 ?>
 <div class="tj-page">
-	<div class="row-fluid">
+	<div class="row">
 		<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=template&layout=edit&id=' . (int) $this->item->id . $clientUrlAppend, false);
 		?>" method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
 			<div class="form-vertical">
 				<?php echo HTMLHelper::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
 				<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', Text::_('COM_TJCERTIFICATE_VIEW_CERTIFICATE_TEMPLATES')); ?>
-				<div class="row-fluid">
-					<div class="span8">
+				<div class="row">
+					<div class="col-md-8">
 						<?php echo $this->form->renderField('title'); ?>
 						<?php
 
@@ -84,7 +83,7 @@ $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=c
 						<?php echo $this->form->getInput('checked_out'); ?>
 						<?php echo $this->form->getInput('checked_out_time'); ?>
 					</div>
-					<div class="span4">
+					<div class="col-md-4">
 						<div class="alert alert-info">
 							<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_CSS_EDITOR_INFO'); ?>
 						</div>
@@ -97,8 +96,6 @@ $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=c
 								</tr>
 							</thead>
 						</table>
-					</div>
-					<div class="span4">
 						<div class="alert alert-info">
 							<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_REPLACEMENT_TAG_INFO'); ?>
 						</div>
