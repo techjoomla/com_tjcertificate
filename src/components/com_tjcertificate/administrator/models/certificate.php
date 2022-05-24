@@ -185,7 +185,7 @@ class TjCertificateModelCertificate extends AdminModel
 	{
 		$dispatcher = JDispatcher::getInstance();
 		PluginHelper::importPlugin('content');
-		$html = $dispatcher->trigger('onContentPrepareTjHtml', array($contentId, $client));
+		$html = Factory::getApplication()->triggerEvent('onContentPrepareTjHtml', array($contentId, $client));
 
 		return trim(implode("\n", $html));
 	}
@@ -212,8 +212,7 @@ class TjCertificateModelCertificate extends AdminModel
 			{
 				if ($table->is_external)
 				{
-					$dispatcher = \JEventDispatcher::getInstance();
-					$dispatcher->trigger('onTrainingRecordAfterDelete', array($table));
+					Factory::getApplication()->triggerEvent('onTrainingRecordAfterDelete', array($table));
 				}
 
 				// Delete media
@@ -268,15 +267,14 @@ class TjCertificateModelCertificate extends AdminModel
 						$tjCertificateTriggerRecord->onRecordStateChange($table, $table->state);
 					}
 
-					$dispatcher = \JEventDispatcher::getInstance();
 
 					if ($table->state == 1)
 					{
-						$dispatcher->trigger('onTrainingRecordAfterPublished', array($table));
+						Factory::getApplication()->triggerEvent('onTrainingRecordAfterPublished', array($table));
 					}
 					elseif ($table->state == 0)
 					{
-						$dispatcher->trigger('onTrainingRecordAfterUnpublished', array($table));
+						Factory::getApplication()->triggerEvent('onTrainingRecordAfterUnpublished', array($table));
 					}
 				}
 			}

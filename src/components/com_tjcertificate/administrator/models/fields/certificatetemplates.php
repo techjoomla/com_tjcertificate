@@ -24,7 +24,7 @@ JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADM
  *
  * @since  1.0.0
  */
-class FormFieldCertificateTemplates extends ListField
+class JFormFieldCertificateTemplates extends ListField
 {
 	/**
 	 * Method to get a list of options for a list input.

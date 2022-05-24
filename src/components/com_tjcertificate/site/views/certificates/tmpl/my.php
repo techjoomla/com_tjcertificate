@@ -22,7 +22,7 @@ HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
 HTMLHelper::_('formbehavior.chosen', 'select');
-HTMLHelper::_('behavior.modal', 'a.modal');
+HTMLHelper::_('bootstrap.renderModal', 'a.modal');
 HTMLHelper::_('jquery.token');
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
@@ -135,7 +135,7 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 							foreach ($this->items as $i => $item)
 							{
 								$certificateObj = TJCERT::Certificate($item->id);
-								$data = $dispatcher->trigger('onGetCertificateClientData', array($item->client_id, $item->client));
+								$data = Factory::getApplication()->triggerEvent('onGetCertificateClientData', array($item->client_id, $item->client));
 								?>
 								<tr class="row <?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->id; ?>">
 								<td class="has-context">

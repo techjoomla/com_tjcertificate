@@ -22,7 +22,7 @@ FormHelper::loadFieldClass('list');
  *
  * @since  __DEPLOY_VERSION__
  */
-class FormFieldAgencies extends FormFieldList
+class JFormFieldAgencies extends JFormFieldList
 {
 	/**
 	 * Fiedd to decide if options are being loaded externally and from xml

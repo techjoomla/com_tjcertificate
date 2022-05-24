@@ -21,7 +21,10 @@ use Joomla\CMS\Uri\Uri;
 $options['relative'] = true;
 HTMLHelper::_('jquery.framework');
 HTMLHelper::_('bootstrap.framework');
+if (JVERSION < '4.0.0')
+{
 HTMLHelper::_('behavior.framework');
+}
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 HTMLHelper::StyleSheet('media/com_tjlms/vendors/artificiers/artficier.css');
 HTMLHelper::script('media/com_tjcertificate/vendors/html2canvas/js/html2canvas.js');

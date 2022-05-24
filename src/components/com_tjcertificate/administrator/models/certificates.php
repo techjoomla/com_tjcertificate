@@ -224,7 +224,7 @@ class TjCertificateModelCertificates extends ListModel
 		elseif ($state === '')
 		{
 			// Publish, Unpublish and Pending records available in frontend
-			if ($app->isSite())
+			if ($app->isClient("site"))
 			{
 				$query->where('(ci.state IN (0,1,-1))');
 			}

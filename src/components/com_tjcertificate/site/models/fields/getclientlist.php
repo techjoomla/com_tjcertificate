@@ -23,7 +23,7 @@ FormHelper::loadFieldClass('list');
  *
  * @since  1.0.0
  */
-class FormFieldGetClientList extends ListField
+class JFormFieldGetClientList extends ListField
 {
 	/**
 	 * Method to get a list of options for a list input.

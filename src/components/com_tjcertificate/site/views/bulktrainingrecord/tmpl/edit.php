@@ -14,10 +14,10 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 
-HTMLHelper::_('behavior.formvalidation');
-HTMLHelper::_('behavior.modal');
+HTMLHelper::_('behavior.formvalidator');
+HTMLHelper::_('bootstrap.renderModal');
 HTMLHelper::_('behavior.keepalive');
-HTMLHelper::_('behavior.tooltip');
+HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('bootstrap.framework');
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 HTMLHelper::_('jquery.token');

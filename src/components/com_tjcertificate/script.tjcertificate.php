@@ -75,7 +75,6 @@ class Com_TjcertificateInstallerScript
 	 */
 	public function installNotificationsTemplates()
 	{
-		jimport('joomla.application.component.model');
 		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjnotifications/tables');
 		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjnotifications/models');
 		$notificationsModel = BaseDatabaseModel::getInstance('Notification', 'TJNotificationsModel');
