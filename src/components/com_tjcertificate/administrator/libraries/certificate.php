@@ -495,7 +495,6 @@ class TjCertificateCertificate extends CMSObject
 
 			$this->id = $table->id;
 
-			$dispatcher = \JEventDispatcher::getInstance();
 
 			if ($table->is_external && $isNew)
 			{
@@ -503,12 +502,12 @@ class TjCertificateCertificate extends CMSObject
 				JLoader::import('components.com_tjcertificate.events.record', JPATH_SITE);
 				$tjCertificateTriggerRecord = new TjCertificateTriggerRecord;
 				$tjCertificateTriggerRecord->onAfterRecordSave($this, true);
-				$dispatcher->trigger('onTrainingRecordAfterAdded', array($isNew, $this));
+				Factory::getApplication()->triggerEvent('onTrainingRecordAfterAdded', array($isNew, $this));
 			}
 
 			// Fire the onTjCertificateAfterSave event.
 
-			$dispatcher->trigger('onTjCertificateAfterSave', array($isNew, $this));
+			Factory::getApplication()->triggerEvent('onTjCertificateAfterSave', array($isNew, $this));
 		}
 		catch (\Exception $e)
 		{
@@ -715,8 +714,6 @@ class TjCertificateCertificate extends CMSObject
 
 		if (File::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
 		{
-			jimport('joomla.filesystem.file');
-			jimport('joomla.filesystem.folder');
 
 			$html = $this->generated_body;
 
@@ -1134,7 +1131,7 @@ class TjCertificateCertificate extends CMSObject
 		// Get client data
 		$dispatcher = JDispatcher::getInstance();
 		PluginHelper::importPlugin('content');
-		$result = $dispatcher->trigger('onGetCertificateClientData', array($this->client_id, $this->client));
+		$result = Factory::getApplication()->triggerEvent('onGetCertificateClientData', array($this->client_id, $this->client));
 		$clientData = $result[0];
 
 		$urlOptions             = array();

@@ -10,21 +10,22 @@
 
 // No direct access.
 defined('_JEXEC') or die();
+
 use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
-JFormHelper::loadFieldClass('list');
+FormHelper::loadFieldClass('list');
 
 /**
  * Supports an HTML select list of users
  *
  * @since  __DEPLOY_VERSION__
  */
-class JFormFieldAllUsers extends FormFieldList
+class JFormFieldAllUsers extends JFormFieldList
 {
 	/**
 	 * The form field type.
@@ -45,7 +46,7 @@ class JFormFieldAllUsers extends FormFieldList
 	/**
 	 * Method to get a list of options for a list input.
 	 *
-	 * @return	array		An array of JHtml options.
+	 * @return	array		An array of HTMLHelper options.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -73,7 +74,7 @@ class JFormFieldAllUsers extends FormFieldList
 	/**
 	 * Method to get a list of options for a list input externally and not from xml.
 	 *
-	 * @return	array		An array of JHtml options.
+	 * @return	array		An array of HTMLHelper options.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */

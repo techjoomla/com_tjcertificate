@@ -24,8 +24,8 @@ HTMLHelper::_('behavior.keepalive');
 HTMLHelper::_('formbehavior.chosen', 'select');
 
 $options['relative'] = true;
-JHtml::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
-JHtml::_('script', 'com_tjcertificate/template.min.js', $options);
+HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
+HTMLHelper::_('script', 'com_tjcertificate/template.min.js', $options);
 
 $app = Factory::getApplication();
 $input = $app->input;

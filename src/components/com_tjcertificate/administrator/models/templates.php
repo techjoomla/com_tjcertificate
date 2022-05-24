@@ -11,6 +11,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\Data\DataObject;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\ListModel;
@@ -73,7 +74,7 @@ class TjCertificateModelTemplates extends ListModel
 	/**
 	 * Build an SQL query to load the list data.
 	 *
-	 * @return   JDatabaseQuery
+	 * @return   DataObjectbaseQuery
 	 *
 	 * @since    1.0.0
 	 */

@@ -110,7 +110,7 @@ class TjCertificateViewCertificate extends HtmlView
 
 			$dispatcher = JDispatcher::getInstance();
 			PluginHelper::importPlugin('content');
-			$result = $dispatcher->trigger('onGetCertificateClientData', array($clientId, $client));
+			$result = Factory::getApplication()->triggerEvent('onGetCertificateClientData', array($clientId, $client));
 			$this->item = $result[0];
 		}
 

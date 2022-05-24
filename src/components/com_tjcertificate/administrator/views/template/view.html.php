@@ -10,6 +10,9 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Toolbar\ToolbarHelper;
@@ -24,9 +27,9 @@ use Joomla\CMS\MVC\View\HtmlView;
 class TjCertificateViewTemplate extends HtmlView
 {
 	/**
-	 * The JForm object
+	 * The Form object
 	 *
-	 * @var  JForm
+	 * @var  Form
 	 */
 	protected $form;
 
@@ -54,14 +57,14 @@ class TjCertificateViewTemplate extends HtmlView
 	/**
 	 * The actions the user is authorised to perform
 	 *
-	 * @var  JObject
+	 * @var  CMSObject
 	 */
 	protected $canDo;
 
 	/**
 	 * Replacement tags based on clients
 	 *
-	 * @var  JObject
+	 * @var  CMSObject
 	 */
 	protected $replacementTags;
 

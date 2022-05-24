@@ -11,8 +11,9 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Form\Form;
 use Joomla\CMS\Table\Table;
+use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
@@ -91,7 +92,7 @@ class TjCertificateModelTrainingRecord extends AdminModel
 	 * @param   array    $data      Data for the form.
 	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
 	 *
-	 * @return  JForm|boolean  A JForm object on success, false on failure
+	 * @return  Form|boolean  A Form object on success, false on failure
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -119,7 +120,7 @@ class TjCertificateModelTrainingRecord extends AdminModel
 	 * @param   string  $prefix  A prefix for the table class name. Optional.
 	 * @param   array   $config  Configuration array for model. Optional.
 	 *
-	 * @return  JTable    A database object
+	 * @return  Table    A database object
 	 */
 	public function getTable($type = 'Certificates', $prefix = 'TjCertificateTable', $config = array())
 	{
@@ -292,7 +293,7 @@ class TjCertificateModelTrainingRecord extends AdminModel
 	/**
 	 * Method to validate the form data.
 	 *
-	 * @param   \JForm  $form   The form to validate against.
+	 * @param   \Form  $form   The form to validate against.
 	 * @param   Array   $data   The data to validate.
 	 * @param   string  $group  The name of the field group to validate.
 	 *

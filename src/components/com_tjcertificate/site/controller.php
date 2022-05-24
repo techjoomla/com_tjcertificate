@@ -11,11 +11,12 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Filter\InputFilter;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\BaseController;
 
-\JLoader::load(JPATH_COMPONENT_ADMINISTRATOR . '/includes/tjcertificate');
-\JLoader::register('TjCertificateHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/tjcertificate.php');
+JLoader::load(JPATH_COMPONENT_ADMINISTRATOR . '/includes/tjcertificate');
+JLoader::register('TjCertificateHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/tjcertificate.php');
 
 /**
  * Class TjCertificateController
@@ -28,7 +29,7 @@ class TjCertificateController extends BaseController
 	 * Method to display a view.
 	 *
 	 * @param   boolean  $cachable   If true, the view output will be cached
-	 * @param   mixed    $urlparams  An array of safe url parameters and their variable types, for valid values see {@link JFilterInput::clean()}.
+	 * @param   mixed    $urlparams  An array of safe url parameters and their variable types, for valid values see {@link InputFilter::clean()}.
 	 *
 	 * @return  JController   This object to support chaining.
 	 *

@@ -10,6 +10,9 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Toolbar\ToolbarHelper;
@@ -26,9 +29,9 @@ use Joomla\CMS\Component\ComponentHelper;
 class TjCertificateViewTrainingRecord extends HtmlView
 {
 	/**
-	 * The JForm object
+	 * The Form object
 	 *
-	 * @var  JForm
+	 * @var  Form
 	 */
 	protected $form;
 
@@ -49,7 +52,7 @@ class TjCertificateViewTrainingRecord extends HtmlView
 	/**
 	 * The actions the user is authorised to perform
 	 *
-	 * @var  JObject
+	 * @var  CMSObject
 	 */
 	protected $canDo;
 
@@ -118,7 +121,7 @@ class TjCertificateViewTrainingRecord extends HtmlView
 		JLoader::import('administrator.components.com_tjcertificate.helpers.tjcertificate', JPATH_SITE);
 		TjCertificateHelper::addSubmenu('certificates');
 
-		if ($app->isAdmin())
+		if ($app->isClient("administrator"))
 		{
 			$this->sidebar = JHtmlSidebar::render();
 		}
