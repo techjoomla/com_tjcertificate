@@ -18,6 +18,14 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\PluginHelper;
 
+$doc = Factory::getDocument();
+
+$style     = "
+.table th {
+	white-space: inherit !important;
+}";
+$doc->addStyleDeclaration($style);
+
 $options = array();
 $options['relative'] = true;
 
@@ -35,7 +43,7 @@ PluginHelper::importPlugin('content');
 ?>
 
 <div class="tj-page">
-	<div class="row-fluid">
+	<div class="row">
 		<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificates'); ?>" method="post" name="adminForm" id="adminForm">
 
 			<?php if (!empty( $this->sidebar))
@@ -71,8 +79,6 @@ PluginHelper::importPlugin('content');
 					<table class="table table-striped" id="certificateList">
 						<thead>
 							<tr>
-								<th width="1%" class="nowrap center hidden-phone"></th>
-
 								<th width="1%" class="center">
 									<?php echo HTMLHelper::_('grid.checkall'); ?>
 								</th>
@@ -118,13 +124,6 @@ PluginHelper::importPlugin('content');
 								</th>
 							</tr>
 						</thead>
-						<tfoot>
-							<tr>
-								<td colspan="10">
-									<?php echo $this->pagination->getListFooter(); ?>
-								</td>
-							</tr>
-						</tfoot>
 						<tbody>
 							<?php
 							foreach ($this->items as $i => $item)
@@ -141,7 +140,7 @@ PluginHelper::importPlugin('content');
 
 								$canEditOwn = $this->canDo->get('core.edit.own');
 								?>
-								<tr class="row <?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->id; ?>">
+								<tr class="<?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->id; ?>">
 								<td class="center">
 									<?php echo HTMLHelper::_('grid.id', $i, $item->id); ?>
 								</td>
@@ -225,11 +224,12 @@ PluginHelper::importPlugin('content');
 									<?php
 									$utcNow = Factory::getDate()->toSql();
 									$link = "";
+
 									if ($item->expired_on > $utcNow || $item->expired_on == '0000-00-00 00:00:00')
 									{
 										// Get TJcertificate url for display certificate
 										$urlOpts = array ('absolute' => true);
-										
+
 										if ($item->is_external)
 										{
 											$link = $certificateObj->getUrl($urlOpts, false, true);
@@ -280,6 +280,7 @@ PluginHelper::importPlugin('content');
 							?>
 						<tbody>
 					</table>
+					<?php echo $this->pagination->getListFooter(); ?>
 					<?php
 					}
 					?>
