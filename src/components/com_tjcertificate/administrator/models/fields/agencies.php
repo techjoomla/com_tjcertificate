@@ -9,20 +9,20 @@
  */
 
 defined('_JEXEC') or die();
-use Joomla\CMS\Form\FormHelper;
 
+use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 
-JFormHelper::loadFieldClass('list');
+FormHelper::loadFieldClass('list');
 
 /**
  * Supports an HTML select list of agencies
  *
  * @since  __DEPLOY_VERSION__
  */
-class JFormFieldAgencies extends FormFieldList
+class FormFieldAgencies extends FormFieldList
 {
 	/**
 	 * Fiedd to decide if options are being loaded externally and from xml

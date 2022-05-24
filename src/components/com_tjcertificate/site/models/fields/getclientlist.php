@@ -8,24 +8,27 @@
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-JFormHelper::loadFieldClass('list');
-use Joomla\CMS\Language\Text;
+defined('JPATH_BASE') or die;
+
 use Joomla\CMS\Form\FormHelper;
-use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Field\ListField;
+
+FormHelper::loadFieldClass('list');
 
 /**
  * Custom field to list all public and logged-in user's private certificate templates
  *
  * @since  1.0.0
  */
-class JFormFieldGetClientList extends ListField
+class FormFieldGetClientList extends ListField
 {
 	/**
 	 * Method to get a list of options for a list input.
 	 *
-	 * @return	array		An array of JHtml options.
+	 * @return	array		An array of HTMLHelper options.
 	 *
 	 * @since   11.4
 	 */

@@ -11,6 +11,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Response\JsonResponse;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\Registry\Registry;
@@ -22,7 +23,6 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Session\Session;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Table\Table;
-use Joomla\CMS\Response\JsonResponse;
 
 JLoader::import("/techjoomla/media/storage/local", JPATH_LIBRARIES);
 

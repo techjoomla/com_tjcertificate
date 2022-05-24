@@ -10,13 +10,14 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Form\Form;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Toolbar\ToolbarHelper;
-use Joomla\CMS\Toolbar\Toolbar;
 
 /**
  * View to edit
@@ -26,9 +27,9 @@ use Joomla\CMS\Toolbar\Toolbar;
 class TjCertificateViewBulkTrainingRecord extends HtmlView
 {
 	/**
-	 * The JForm object
+	 * The Form object
 	 *
-	 * @var  JForm
+	 * @var  Form
 	 */
 	protected $form;
 

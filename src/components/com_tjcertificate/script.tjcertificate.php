@@ -10,13 +10,12 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Installer\Installer;
-
-jimport('joomla.filesystem.folder');
-jimport('joomla.filesystem.file');
 
 /**
  * TjCertificateInstallerScript class.
@@ -42,7 +41,7 @@ class Com_TjcertificateInstallerScript
 	 * Runs after install, update or discover_update
 	 *
 	 * @param   string      $type    install, update or discover_update
-	 * @param   JInstaller  $parent  parent
+	 * @param   Installer  $parent  parent
 	 *
 	 * @return  boolean
 	 */
@@ -103,9 +102,9 @@ class Com_TjcertificateInstallerScript
 	/**
 	 * Installs subextensions (modules, plugins) bundled with the main extension
 	 *
-	 * @param   JInstaller $parent
+	 * @param   Installer $parent
 	 * 
-	 * @return JObject The subextension installation status
+	 * @return CMSObject The subextension installation status
 	 */
 	private function _installSubextensions($parent)
 	{

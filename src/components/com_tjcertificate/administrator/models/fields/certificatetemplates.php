@@ -8,13 +8,15 @@
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-JFormHelper::loadFieldClass('list');
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\Factory;
+defined('_JEXEC') or die();
+
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Field\ListField;
 
+FormHelper::loadFieldClass('list');
 JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
 
 /**
@@ -22,12 +24,12 @@ JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADM
  *
  * @since  1.0.0
  */
-class JFormFieldCertificateTemplates extends ListField
+class FormFieldCertificateTemplates extends ListField
 {
 	/**
 	 * Method to get a list of options for a list input.
 	 *
-	 * @return	array		An array of JHtml options.
+	 * @return	array		An array of HTMLHelper options.
 	 *
 	 * @since   11.4
 	 */

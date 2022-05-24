@@ -8,26 +8,29 @@
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-JFormHelper::loadFieldClass('list');
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\Factory;
+defined('_JEXEC') or die();
+
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Filesystem\Path;
 use Joomla\CMS\Form\Field\ListField;
+
+FormHelper::loadFieldClass('list');
 
 /**
  * Custom field to list default sample templates and client based if client is set
  *
  * @since  1.0.0
  */
-class JFormFieldSampleTemplates extends ListField
+class FormFieldSampleTemplates extends ListField
 {
 	/**
 	 * Method to get a list of options for a list input.
 	 *
-	 * @return	array		An array of JHtml options.
+	 * @return	array		An array of HTMLHelper options.
 	 *
 	 * @since   11.4
 	 */

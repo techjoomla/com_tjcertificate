@@ -10,13 +10,16 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Pagination\Pagination;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
-use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\Component\ComponentHelper;
 
 /**
@@ -36,7 +39,7 @@ class TjCertificateViewCertificates extends HtmlView
 	/**
 	 * The pagination object
 	 *
-	 * @var  JPagination
+	 * @var  Pagination
 	 */
 	protected $pagination;
 
@@ -50,14 +53,14 @@ class TjCertificateViewCertificates extends HtmlView
 	/**
 	 * Form object for search filters
 	 *
-	 * @var  JForm
+	 * @var  Form
 	 */
 	public $filterForm;
 
 	/**
 	 * Logged in User
 	 *
-	 * @var  JObject
+	 * @var  CMSObject
 	 */
 	public $user;
 
