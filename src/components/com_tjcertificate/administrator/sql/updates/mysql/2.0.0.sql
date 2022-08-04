@@ -46,7 +46,7 @@ ALTER TABLE `#__tj_media_files` CHANGE `storage` `storage` varchar(250) NOT NULL
 ALTER TABLE `#__tj_media_files` CHANGE `created_by` `created_by` int(11) NOT NULL DEFAULT 0;
 ALTER TABLE `#__tj_media_files` CHANGE `access` `access` tinyint(1) NOT NULL DEFAULT 0;
 ALTER TABLE `#__tj_media_files` CHANGE `created_date` `created_date` datetime DEFAULT NULL;
-ALTER TABLE `#__tj_media_files` CHANGE `params` `params` varchar(500) NOT NULL DEFAULT '';
+ALTER TABLE `#__tj_media_files` CHANGE `params` `params` text DEFAULT NULL;
 
 ALTER TABLE `#__tj_media_files_xref` CHANGE `media_id` `media_id` int(11) NOT NULL DEFAULT 0;
 ALTER TABLE `#__tj_media_files_xref` CHANGE `client_id` `client_id` int(11) NOT NULL DEFAULT 0;

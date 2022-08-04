@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `#__tj_media_files` (
   `created_by` int(11) NOT NULL DEFAULT 0,
   `access` tinyint(1) NOT NULL DEFAULT 0,
   `created_date` datetime DEFAULT NULL,
-  `params` varchar(500) NOT NULL DEFAULT '',
+  `params` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1;
 
