@@ -891,7 +891,7 @@ class TjCertificateCertificate extends CMSObject
 			$qrString = urlencode($qrString);
 			$qrUrl    = "https://chart.apis.google.com/chart?cht=qr&chs=";
 			$qrImage  = $qrUrl . $qrCodeWidth . "x" . $qrCodeHeight . "&chl=" . $qrString . "&chld=H|0";
-			$replacements->certificate->qr_code = '<img src="' . $qrImage . '" class="qrimg" >';
+			$replacements->certificate->qr_code = '<img src="data:image/png;base64,' . base64_encode(file_get_contents($qrImage)) . '" class="qrimg">';
 
 			// Generate certificate body
 			$this->generated_body = $this->generateCertificateBody($template->body, $replacements);
