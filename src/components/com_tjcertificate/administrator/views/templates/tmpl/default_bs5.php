@@ -43,11 +43,20 @@ elseif (!empty($client))
 {
 	$clientUrlAppend = '&client=' . $client;
 }
+
+if ($this->displayExtension)
+{
+	$link = 'index.php?option=com_tjcertificate&view=templates&extension=' . $this->displayExtension;
+}
+else
+{
+	$link = 'index.php?option=com_tjcertificate&view=templates';
+}
 ?>
 
 <div class="tj-page">
 	<div class="row">
-		<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=templates'); ?>" method="post" name="adminForm" id="adminForm">
+		<form action="<?php echo Route::_($link); ?>" method="post" name="adminForm" id="adminForm">
 			<?php if (!empty( $this->sidebar))
 			{
 				?>
