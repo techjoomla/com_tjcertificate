@@ -120,6 +120,8 @@ class TjCertificateViewTemplates extends HtmlView
 		$this->user  = Factory::getUser();
 		$this->canDo = ContentHelper::getActions('com_tjcertificate');
 
+		$this->displayExtension = $app->input->getCmd('extension', '', 'string');
+
 		// Add submenu
 		TjCertificateHelper::addSubmenu('templates');
 
