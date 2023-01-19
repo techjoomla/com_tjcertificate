@@ -74,16 +74,23 @@ class TjCertificateViewCertificate extends HtmlView
 			$this->certificate = $certificate::validateCertificate($this->uniqueCertificateId);
 		}
 
-		if (!$this->certificate->id)
+		if (!$this->certificate)
 		{
-			JError::raiseWarning(500, Text::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EXPIRED'));
+			$app = Factory::getApplication();
+			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EXPIRED'), 'error');
+		}
+		else if (!$this->certificate->id)
+		{
+			$app = Factory::getApplication();
+			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EXPIRED'), 'error');
 		}
 		elseif ($this->certificate->id)
 		{
 			// If certificate view is private then view is available only for certificate owner
 			if (!$this->params->get('certificate_scope', '1') && Factory::getUser()->id != $this->certificate->getUserId())
 			{
-				JError::raiseWarning(500, Text::_('JERROR_ALERTNOAUTHOR'));
+				$app = Factory::getApplication();
+				$app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'error');
 
 				return false;
 			}
@@ -108,7 +115,6 @@ class TjCertificateViewCertificate extends HtmlView
 			$model = TJCERT::model('Certificate', array('ignore_request' => true));
 			$this->contentHtml = $model->getCertificateProviderInfo($clientId, $client);
 
-			$dispatcher = JDispatcher::getInstance();
 			PluginHelper::importPlugin('content');
 			$result = Factory::getApplication()->triggerEvent('onGetCertificateClientData', array($clientId, $client));
 			$this->item = $result[0];

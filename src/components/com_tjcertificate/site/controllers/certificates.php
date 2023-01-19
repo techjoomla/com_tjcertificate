@@ -64,7 +64,7 @@ class TjCertificateControllerCertificates extends AdminController
 		);
 
 		$task = $this->getTask();
-		$value = JArrayHelper::getValue($data, $task, 0, 'int');
+		$value = ArrayHelper::getValue($data, $task, 0, 'int');
 
 		// Get some variables from the request
 		if (empty($cid))
@@ -77,7 +77,7 @@ class TjCertificateControllerCertificates extends AdminController
 			$model = $this->getModel();
 
 			// Make sure the item ids are integers
-			JArrayHelper::toInteger($cid);
+			ArrayHelper::toInteger($cid);
 
 			// Publish the items.
 			try

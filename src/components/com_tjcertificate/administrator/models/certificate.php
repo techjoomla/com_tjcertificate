@@ -183,7 +183,6 @@ class TjCertificateModelCertificate extends AdminModel
 	 */
 	public function getCertificateProviderInfo($contentId, $client)
 	{
-		$dispatcher = JDispatcher::getInstance();
 		PluginHelper::importPlugin('content');
 		$html = Factory::getApplication()->triggerEvent('onContentPrepareTjHtml', array($contentId, $client));
 
