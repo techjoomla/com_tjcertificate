@@ -29,7 +29,6 @@ $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
 $saveOrder = $listOrder == 'ci.id';
 
-$dispatcher = JDispatcher::getInstance();
 PluginHelper::importPlugin('content');
 
 $options['relative'] = true;
@@ -90,7 +89,6 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 					<table class="table table-striped" id="certificateList">
 						<thead>
 							<tr>
-								<th width="1%" class="nowrap center hidden-phone"></th>
 								<th>
 									<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_LIST_VIEW_CERTIFICATE_ID'); ?>
 								</th>
@@ -137,9 +135,9 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 								$certificateObj = TJCERT::Certificate($item->id);
 								$data = Factory::getApplication()->triggerEvent('onGetCertificateClientData', array($item->client_id, $item->client));
 								?>
-								<tr class="row <?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->id; ?>">
+								<tr class="row<?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->id; ?>">
 								<td class="has-context">
-									<div class="pull-left break-word">
+									<div class="pull-left float-start break-word">
 										<?php if (!$item->is_external) {?>
 										<a href="<?php echo $certificateObj->getUrl('',false); ?>">
 											<?php echo $this->escape($item->unique_certificate_id); ?>
@@ -167,7 +165,7 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 										}
 										else
 										{
-											echo ($data[0]->title ? $data[0]->title : "-");
+											echo (($data && $data[0] && $data[0]->title) ? $data[0]->title : "-");
 										}
 									?>
 								</td>
@@ -193,7 +191,7 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 									?>
 								</td>
 									<td>
-										<div class="hide">
+										<div class="hide d-none">
 										<?php echo HTMLHelper::_('grid.id', $i, $item->id); ?>
 										</div>
 										<!-- If user have manage permission then permission to edit and delete any record -->
@@ -235,7 +233,7 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 										<?php 
 										if ($this->manage && $item->is_external) 
 										{ ?> 
-											<a class="btn btn-micro hasTooltip d-inline-block" onclick="listItemTask('cb<?php echo $i;?>', 'certificates.<?php echo ($item->state == -1 ||$item->state == 0)  ? 'publish' : 'unpublish';?>')" class="btn btn-mini" type="button">
+											<a class="btn btn-micro hasTooltip d-inline-block" onclick="Joomla.listItemTask('cb<?php echo $i;?>', 'certificates.<?php echo ($item->state == -1 ||$item->state == 0)  ? 'publish' : 'unpublish';?>')" class="btn btn-mini" type="button">
 											<?php 
 											if ($item->state == -1 || $item->state == 0) 
 											{ ?>

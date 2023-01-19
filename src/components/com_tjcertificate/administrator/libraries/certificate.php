@@ -1129,7 +1129,6 @@ class TjCertificateCertificate extends CMSObject
 		$orgParam = '&' . $params->get('organization_info') . '=' . $params->get('organization_id_name');
 
 		// Get client data
-		$dispatcher = JDispatcher::getInstance();
 		PluginHelper::importPlugin('content');
 		$result = Factory::getApplication()->triggerEvent('onGetCertificateClientData', array($this->client_id, $this->client));
 		$clientData = $result[0];
