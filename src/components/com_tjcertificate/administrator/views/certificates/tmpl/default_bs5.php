@@ -197,7 +197,7 @@ PluginHelper::importPlugin('content');
 										}
 										else
 										{
-											echo (($data && $data[0] && $data[0]->title) ? $data[0]->title : "-");
+											echo ((isset($data[0]) && isset($data[0]->title)) ? $data[0]->title : "-");
 										}
 									?>
 								</td>
