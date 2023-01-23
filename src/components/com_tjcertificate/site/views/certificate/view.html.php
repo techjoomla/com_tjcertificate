@@ -68,6 +68,9 @@ class TjCertificateViewCertificate extends HtmlView
 		$this->showSearchBox       = $input->getInt('show_search', $this->params->get('show_search_box'));
 		$this->tmpl                = $input->get('tmpl', '', 'STRING');
 
+		$app = Factory::getApplication();
+		$redirectBackUrl = Route::_('index.php?option=com_tjcertificate&view=certificates&layout=my', false);
+
 		if (!empty($this->uniqueCertificateId))
 		{
 			$certificate = TJCERT::Certificate();
@@ -76,23 +79,24 @@ class TjCertificateViewCertificate extends HtmlView
 
 		if (!$this->certificate)
 		{
-			$app = Factory::getApplication();
 			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EXPIRED'), 'error');
+
+			$app->redirect($redirectBackUrl);
 		}
 		else if (!$this->certificate->id)
 		{
-			$app = Factory::getApplication();
 			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EXPIRED'), 'error');
+
+			$app->redirect($redirectBackUrl);
 		}
 		elseif ($this->certificate->id)
 		{
 			// If certificate view is private then view is available only for certificate owner
 			if (!$this->params->get('certificate_scope', '1') && Factory::getUser()->id != $this->certificate->getUserId())
 			{
-				$app = Factory::getApplication();
 				$app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'error');
 
-				return false;
+				$app->redirect($redirectBackUrl);
 			}
 
 			$this->fileName    = $this->certificate->unique_certificate_id . '.png';
