@@ -68,8 +68,12 @@ class TjCertificateViewCertificate extends HtmlView
 		$this->showSearchBox       = $input->getInt('show_search', $this->params->get('show_search_box'));
 		$this->tmpl                = $input->get('tmpl', '', 'STRING');
 
+		include_once  JPATH_SITE . '/components/com_tjcertificate/helper/common.php';
+
 		$app = Factory::getApplication();
-		$redirectBackUrl = Route::_('index.php?option=com_tjcertificate&view=certificates&layout=my', false);
+		$tjcertificatehelper = new TJCertificateHelper();
+		$itemId   = $tjcertificatehelper->getItemId('index.php?option=com_tjcertificate&view=certificates&layout=my');
+		$redirectBackUrl = Route::_('index.php?option=com_tjcertificate&view=certificates&layout=my&Itemid=' . $itemId, false);
 
 		if (!empty($this->uniqueCertificateId))
 		{
