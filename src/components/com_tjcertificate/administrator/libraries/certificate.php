@@ -754,10 +754,7 @@ class TjCertificateCertificate extends CMSObject
 
 			$html = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>' . $style . '</head><body>' . $html . '</body></html>';
 
-			if (get_magic_quotes_gpc())
-			{
-				$html = stripslashes($html);
-			}
+			$html = stripslashes($html);
 
 			// Set font for the pdf download.
 			$options = new Options;
