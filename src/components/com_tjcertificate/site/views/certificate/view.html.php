@@ -68,7 +68,7 @@ class TjCertificateViewCertificate extends HtmlView
 		$this->showSearchBox       = $input->getInt('show_search', $this->params->get('show_search_box'));
 		$this->tmpl                = $input->get('tmpl', '', 'STRING');
 
-		include_once  JPATH_SITE . '/components/com_tjcertificate/helper/common.php';
+		include_once  JPATH_SITE . '/components/com_tjcertificate/helpers/common.php';
 
 		$app = Factory::getApplication();
 		$tjcertificatehelper = new TJCertificateHelper();
