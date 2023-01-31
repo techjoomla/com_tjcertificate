@@ -257,20 +257,57 @@ PluginHelper::importPlugin('content');
 								</td>
 								<td>
 									<div class="btn-group">
-									<?php if (!$item->is_external) { ?>
-										<a id="" href="<?php echo Route::_('index.php?option=com_tjcertificate&view=certificate&layout=preview&tmpl=component&id=' . (int) $item->id, false);?>" class="btn hasTooltip modal" type="button">
-											<?php echo Text::_('JGLOBAL_PREVIEW');?>
+									<?php if (!$item->is_external) {
+
+										$certLink = Route::_('index.php?option=com_tjcertificate&view=certificate&layout=preview&tmpl=component&id=' . (int) $item->id, false);
+										?>
+
+										<a id =""
+											onclick="document.getElementById('previewModal' + <?php echo $item->id; ?>).open();"
+											href="javascript:void(0);" >
+											<?php echo Text::_('JGLOBAL_PREVIEW'); ?>
 										</a>
-									<?php } else { ?>
-										<a id="" href="<?php echo Route::_('index.php?option=com_tjcertificate&view=trainingrecord&layout=preview&tmpl=component&id=' . (int) $item->id, false);?>" class="btn hasTooltip modal" type="button">
-											<?php echo Text::_('JGLOBAL_PREVIEW');?>
+
+										<?php
+										echo HTMLHelper::_('bootstrap.renderModal', 'previewModal' . $item->id,
+											array(
+												'url' => $certLink,
+												'width' => '800px',
+												'height' => '300px',
+												'modalWidth' => '80',
+												'bodyHeight' => '70'
+											)
+										);
+										?>
+
+									<?php } else {
+
+										$certLink = Route::_('index.php?option=com_tjcertificate&view=trainingrecord&layout=preview&tmpl=component&id=' . (int) $item->id, false);
+										?>
+
+										<a id =""
+											onclick="document.getElementById('previewModal' + <?php echo $item->id; ?>).open();"
+											href="javascript:void(0);" >
+											<?php echo Text::_('JGLOBAL_PREVIEW'); ?>
 										</a>
+
+										<?php
+										echo HTMLHelper::_('bootstrap.renderModal', 'previewModal' . $item->id,
+											array(
+												'url' => $certLink,
+												'width' => '800px',
+												'height' => '300px',
+												'modalWidth' => '80',
+												'bodyHeight' => '70'
+											)
+										);
+										?>
 									<?php } ?>
 									</div>
 								</td>
 								<td>
 									<?php if ($link) { ?>
-									<a href="<?php echo $link;?>" target="_blank" title="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_FRONTEND_PREVIEW');?>"><span class="icon-out-2"></span></a>
+									<a href="<?php echo $link;?>" target="_blank" title="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_FRONTEND_PREVIEW');?>"></a>
 									<?php } ?>
 								</td>
 								<td><?php echo (int) $item->id; ?></td>
