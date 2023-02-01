@@ -268,30 +268,17 @@ PluginHelper::importPlugin('content');
 											<?php echo Text::_('JGLOBAL_PREVIEW'); ?>
 										</a>
 
-										<?php
-										echo HTMLHelper::_('bootstrap.renderModal', 'previewModal' . $item->id,
-											array(
-												'url' => $certLink,
-												'width' => '800px',
-												'height' => '300px',
-												'modalWidth' => '80',
-												'bodyHeight' => '70'
-											)
-										);
-										?>
-
 									<?php } else {
 
 										$certLink = Route::_('index.php?option=com_tjcertificate&view=trainingrecord&layout=preview&tmpl=component&id=' . (int) $item->id, false);
 										?>
-
 										<a id =""
 											onclick="document.getElementById('previewModal' + <?php echo $item->id; ?>).open();"
 											href="javascript:void(0);" >
 											<?php echo Text::_('JGLOBAL_PREVIEW'); ?>
 										</a>
+									<?php }
 
-										<?php
 										echo HTMLHelper::_('bootstrap.renderModal', 'previewModal' . $item->id,
 											array(
 												'url' => $certLink,
@@ -301,8 +288,8 @@ PluginHelper::importPlugin('content');
 												'bodyHeight' => '70'
 											)
 										);
-										?>
-									<?php } ?>
+									?>
+
 									</div>
 								</td>
 								<td>
