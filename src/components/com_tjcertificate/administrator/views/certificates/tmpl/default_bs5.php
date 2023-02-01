@@ -257,27 +257,23 @@ PluginHelper::importPlugin('content');
 								</td>
 								<td>
 									<div class="btn-group">
-									<?php if (!$item->is_external) {
-
+									<?php if (!$item->is_external)
+									{
 										$certLink = Route::_('index.php?option=com_tjcertificate&view=certificate&layout=preview&tmpl=component&id=' . (int) $item->id, false);
-										?>
-
-										<a id =""
-											onclick="document.getElementById('previewModal' + <?php echo $item->id; ?>).open();"
-											href="javascript:void(0);" >
-											<?php echo Text::_('JGLOBAL_PREVIEW'); ?>
-										</a>
-
-									<?php } else {
+									}
+									else
+									{
 
 										$certLink = Route::_('index.php?option=com_tjcertificate&view=trainingrecord&layout=preview&tmpl=component&id=' . (int) $item->id, false);
-										?>
+									} ?>
+
 										<a id =""
 											onclick="document.getElementById('previewModal' + <?php echo $item->id; ?>).open();"
 											href="javascript:void(0);" >
 											<?php echo Text::_('JGLOBAL_PREVIEW'); ?>
 										</a>
-									<?php }
+
+									<?php
 
 										echo HTMLHelper::_('bootstrap.renderModal', 'previewModal' . $item->id,
 											array(
