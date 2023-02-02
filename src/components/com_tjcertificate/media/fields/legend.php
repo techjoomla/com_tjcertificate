@@ -14,6 +14,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Form\FormHelper;
 
 FormHelper::loadFieldClass('list');
 
