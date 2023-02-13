@@ -107,7 +107,7 @@ $sharingOptions = $this->params->get('sharing_option');
 				}
 				?>
 					<li>
-						<a href="https://web.whatsapp.com/send?text=<?php echo $deviceUrl;?>" target="_blank" >
+						<a href=<?php echo $deviceUrl; ?> target="_blank" >
 							<i class="fa fa-whatsapp fa-2x" aria-hidden="true" title="Share on Whatsapp"></i>
 						</a>
 					</li>
