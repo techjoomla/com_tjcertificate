@@ -95,9 +95,19 @@ $sharingOptions = $this->params->get('sharing_option');
 			<?php
 			if (in_array("whatsapp", $sharingOptions))
 			{
+				$deviceUrl = "";
+
+				if (preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]))
+				{
+					$deviceUrl = "https://wa.me/?text=" . urlencode($this->certificateUrl);
+				}
+				else
+				{
+					$deviceUrl = "https://web.whatsapp.com/send?text=" . urlencode($this->certificateUrl);
+				}
 				?>
 					<li>
-						<a href="https://web.whatsapp.com/send?text=<?php echo urlencode($this->certificateUrl);?>" target="_blank" >
+						<a href="https://web.whatsapp.com/send?text=<?php echo $deviceUrl;?>" target="_blank" >
 							<i class="fa fa-whatsapp fa-2x" aria-hidden="true" title="Share on Whatsapp"></i>
 						</a>
 					</li>
