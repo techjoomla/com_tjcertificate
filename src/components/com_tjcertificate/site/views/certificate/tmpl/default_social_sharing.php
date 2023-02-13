@@ -92,6 +92,18 @@ $sharingOptions = $this->params->get('sharing_option');
 			<?php
 			}
 			?>
+			<?php
+			if (in_array("whatsapp", $sharingOptions))
+			{
+				?>
+					<li>
+						<a href="https://web.whatsapp.com/send?text=<?php echo urlencode($this->certificateUrl);?>" target="_blank" >
+							<i class="fa fa-whatsapp fa-2x" aria-hidden="true" title="Share on Whatsapp"></i>
+						</a>
+					</li>
+				<?php
+			}
+			?>
 				<li>
 					<a id="copyurl" data-toggle="popover" data-placement="bottom" data-alt-url="<?php echo Uri::getInstance()->toString();?>" data-content="Copied!" onclick="certificateImage.copyUrl('copyurl');" title="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL_COPY');?>">
 					<i class="fa fa-clipboard fa-2x" aria-hidden="true"></i>
