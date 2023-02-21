@@ -92,6 +92,29 @@ $sharingOptions = $this->params->get('sharing_option');
 			<?php
 			}
 			?>
+			<?php
+			if (in_array("whatsapp", $sharingOptions))
+			{
+				$deviceUrl = "";
+
+				// Check Mobile devices
+				if (preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]))
+				{
+					$deviceUrl = "https://wa.me/?text=" . urlencode($this->certificateUrl);
+				}
+				else
+				{
+					$deviceUrl = "https://web.whatsapp.com/send?text=" . urlencode($this->certificateUrl);
+				}
+				?>
+					<li>
+						<a href=<?php echo $deviceUrl; ?> target="_blank" >
+							<i class="fa fa-whatsapp fa-2x" aria-hidden="true" title="Share on Whatsapp"></i>
+						</a>
+					</li>
+				<?php
+			}
+			?>
 				<li>
 					<a id="copyurl" data-toggle="popover" data-placement="bottom" data-alt-url="<?php echo Uri::getInstance()->toString();?>" data-content="Copied!" onclick="certificateImage.copyUrl('copyurl');" title="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL_COPY');?>">
 					<i class="fa fa-clipboard fa-2x" aria-hidden="true"></i>

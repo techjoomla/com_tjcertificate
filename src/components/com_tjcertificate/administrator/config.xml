@@ -71,6 +71,7 @@
 		   <option value="facebook">COM_TJCERTIFICATE_SOCIAL_SHARING_FACEBOOK</option>
 		   <option value="linkedin">COM_TJCERTIFICATE_SOCIAL_SHARING_LINKEDIN</option>
 		   <option value="twitter">COM_TJCERTIFICATE_SOCIAL_SHARING_TWITTER</option>
+		   <option value="whatsapp">COM_TJCERTIFICATE_SOCIAL_SHARING_WHATSAPP</option>
 		</field>
 		<field name="linkedin_profile_btn" class="btn-group" type="radio"  default="1" description="COM_TJCERTIFICATE_LINKEDIN_PROFILE_BTN_DESC" label="COM_TJCERTIFICATE_LINKEDIN_PROFILE_BTN" >
 			<option value="1">JYES</option>
