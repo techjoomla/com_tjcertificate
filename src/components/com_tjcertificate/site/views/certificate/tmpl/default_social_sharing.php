@@ -97,6 +97,7 @@ $sharingOptions = $this->params->get('sharing_option');
 			{
 				$deviceUrl = "";
 
+				// Check Mobile devices
 				if (preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]))
 				{
 					$deviceUrl = "https://wa.me/?text=" . urlencode($this->certificateUrl);
