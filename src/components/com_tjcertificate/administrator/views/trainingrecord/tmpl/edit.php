@@ -34,7 +34,7 @@ HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $option
 HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 ?>
 <div class="tj-page">
-	<div class="row-fluid">
+	<div class="row">
 	<form action="<?php echo Route::_('index.php?option=com_tjcertificate&view=trainingrecord&layout=edit&id=' . (int) $this->item->id, false);?>"
 	 method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
 	 <?php if (!empty( $this->sidebar))
@@ -57,7 +57,7 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 		<?php
 			echo HTMLHelper::_('bootstrap.startTabSet', 'myTab', array('active' => 'general'));
 			echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', Text::_('COM_TJCERTIFICATE_TITLE_CERTIFICATE')); ?>
-		<div class="row-fluid">
+		<div class="row ptb-20 plr-10">
 			<?php echo $this->form->renderField('id'); ?>
 
 			<?php
@@ -123,3 +123,25 @@ var allowedAttachments = '<?php echo $this->allowedFileExtensions; ?>';
 var attachmentMaxSize  = '<?php echo $this->uploadLimit; ?>';
 
 </script>
+<style type="text/css">
+.ptb-20 {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.plr-10{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.chosen-container-single .chosen-single {
+   height: 40px;
+    border: 1px solid #457abc52;
+}
+.chosen-container-multi .chosen-choices {
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+ 
+    border: 1px solid #457abc52; 
+}
+.chosen-container {
+	width: 100%!important;
+}
+</style>
