@@ -32,7 +32,9 @@ use Joomla\CMS\Language\Text;
 			<div class="modal-body" id="previewTempl">
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-secondary" onclick="document.getElementById('batch-group-id').value=''" data-bs-dismiss="modal">
+    			<?php echo Text::_('JCLOSE'); ?>
+			</button>
 			</div>
 		</div>
 	</div>
