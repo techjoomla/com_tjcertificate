@@ -235,7 +235,8 @@ class TjCertificateModelCertificates extends ListModel
 
 		if ($expired)
 		{
-			$query->where($db->quoteName('ci.expired_on') . ' <> ""');
+			
+			
 			$query->where($db->quoteName('ci.expired_on') . ' <> ' . $db->quote('0000-00-00 00:00:00'));
 			$query->where($db->quoteName('ci.expired_on') . ' < ' . $db->quote(Factory::getDate()->toSql()));
 		}
