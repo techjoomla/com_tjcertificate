@@ -21,7 +21,11 @@ HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('bootstrap.framework');
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 HTMLHelper::_('jquery.token');
-HTMLHelper::_('formbehavior.chosen', 'select');
+
+if (version_compare(JVERSION, '4', 'lt'))
+{
+	HTMLHelper::_('formbehavior.chosen', 'select');
+}
 
 $options['relative'] = true;
 HTMLHelper::_('script', 'media/com_tjcertificate/vendors/loader/js/loadingoverlay.min.js');
