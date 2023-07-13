@@ -478,7 +478,7 @@ class TjCertificateCertificate extends CMSObject
 				$table->issued_on = Factory::getDate()->toSql();
 			}
 
-			$table->created_by = !empty($this->created_by) ? $this->created_by : 0;
+			$table->created_by = !empty($this->created_by) ? $this->created_by : Factory::getUser()->id;
 
 			// If certificate id is not added from the form then add
 			if (empty($this->unique_certificate_id))
