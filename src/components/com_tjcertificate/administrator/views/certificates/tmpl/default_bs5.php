@@ -34,6 +34,7 @@ HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
 HTMLHelper::_('bootstrap.renderModal', 'a.modal');
 HTMLHelper::script('com_tjcertificate/certificateImage.min.js', $options);
+HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
@@ -240,9 +241,9 @@ PluginHelper::importPlugin('content');
 										}
 									?>
 									<div class="btn-group">
-									<a id="copyurl<?php echo $item->id;?>" data-toggle="popover"
-										data-placement="bottom" data-content="Copied!"
-										data-alt-url="<?php echo $link;?>" class="btn" type="button"
+									<a id="copyurl<?php echo $item->id;?>" data-bs-toggle="popover"
+										data-bs-placement="bottom" data-bs-content="Copied!"
+										data-alt-url="<?php echo $link;?>" class="btn border-btn" type="button"
 										onclick="certificateImage.copyUrl('copyurl<?php echo $item->id;?>');">
 										<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_URL_COPY');?>
 									</a>
