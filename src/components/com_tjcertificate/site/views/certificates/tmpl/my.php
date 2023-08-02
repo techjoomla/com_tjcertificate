@@ -29,6 +29,12 @@ $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
 $saveOrder = $listOrder == 'ci.id';
 
+if ($saveOrder)
+{
+	$saveOrderingUrl = 'index.php?option=com_tjdashboard&task=certificates.saveOrderAjax&tmpl=component';
+	HTMLHelper::_('sortablelist.sortable', 'certificateList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
+}
+
 PluginHelper::importPlugin('content');
 
 $options['relative'] = true;
