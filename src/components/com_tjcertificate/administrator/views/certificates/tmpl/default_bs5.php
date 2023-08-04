@@ -33,6 +33,7 @@ HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
 HTMLHelper::_('bootstrap.renderModal', 'a.modal');
+HTMLHelper::script('media/vendor/jquery/js/jquery.min.js');
 HTMLHelper::script('com_tjcertificate/certificateImage.min.js', $options);
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 
