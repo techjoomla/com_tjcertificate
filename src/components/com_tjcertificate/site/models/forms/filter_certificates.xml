@@ -25,24 +25,15 @@
 			label="COM_TJCERTIFICATE_CERTIFICATE_FILTER_CERTIFICATE_CLIENT"
 			description="COM_TJCERTIFICATE_CERTIFICATE_FILTER_DESC_CERTIFICATE_CLIENT"
 			addfieldpath="administrator/components/com_tjcertificate/models/fields"
+			class="btn-group"
 			onchange="this.form.submit();" />
-
-		<field name="user_id"
-			type="users"
-			filter="integer"
-			label="COM_TJCERTIFICATE_CERTIFICATE_FILTER_USER"
-			description="COM_TJCERTIFICATE_CERTIFICATE_FILTER_USER"
-			addfieldpath="/components/com_tjcertificate/models/fields"
-			onchange="this.form.submit();" />
-
-		<input type="hidden" name="form_submited" value="1"/>
 
         <field
 			name="state"
 			type="list"
 			label="JSTATUS"
 			description="JFIELD_PUBLISHED_DESC"
-			class="inputbox"
+			class="btn-group"
 			size="1"
 			onchange="this.form.submit();"
 			>
@@ -51,6 +42,18 @@
 			<option value="0">JUNPUBLISHED</option>
 			<option value="-1">COM_TJCERTIFICATE_STATUS_PENDING</option>
 		</field> 
+
+		<field name="user_id"
+			type="users"
+			filter="integer"
+			label="COM_TJCERTIFICATE_CERTIFICATE_FILTER_USER"
+			description="COM_TJCERTIFICATE_CERTIFICATE_FILTER_USER"
+			addfieldpath="/components/com_tjcertificate/models/fields"
+			class="btn-group"
+			onchange="this.form.submit();" />
+
+		<input type="hidden" name="form_submited" value="1"/>
+
 
 	</fields>
 
