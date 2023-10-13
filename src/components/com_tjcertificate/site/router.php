@@ -65,6 +65,7 @@ class TjCertificateRouter extends RouterBase
 		{
 			if ($menuItem->query['view'] == $query['view'] && in_array($query['view'], $menu_views))
 			{
+				$segments[] = $query['view'];
 				unset($query['view']);
 			}
 		}
