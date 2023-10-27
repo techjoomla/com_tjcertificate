@@ -66,6 +66,12 @@ class TjCertificateModelCertificates extends ListModel
 		$client = $app->getUserStateFromRequest($this->context . '.filter.client', 'client');
 		$this->setState('filter.client', $client);
 
+		$courses = $app->getUserStateFromRequest($this->context . '.filter.courses', 'courses');
+		$this->setState('filter.courses', $courses);
+
+		$events = $app->getUserStateFromRequest($this->context . '.filter.events', 'events');
+		$this->setState('filter.events', $events);
+
 		parent::populateState($ordering, $direction);
 	}
 
@@ -123,10 +129,16 @@ class TjCertificateModelCertificates extends ListModel
 
 		// Filter by client id
 		$clientId = $this->getState('filter.client_id');
+		$courses = $this->getState('filter.courses');
+		$events = $this->getState('filter.events');
 
-		if (!empty($clientId))
+		$courseORevent = !empty($courses) ? $courses : $events;
+
+		$clientIdVal = !empty($courseORevent) ? $courseORevent : $clientId;
+
+		if (!empty($clientIdVal))
 		{
-			$query->where($db->quoteName('ci.client_id') . ' = ' . $db->quote($clientId));
+			$query->where($db->quoteName('ci.client_id') . ' = ' . $db->quote($clientIdVal));
 		}
 
 		// Filter by user id
