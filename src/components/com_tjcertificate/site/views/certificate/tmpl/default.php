@@ -115,8 +115,8 @@ if ($this->certificate)
 						<a id="download-popover" data-container="body" data-placement="bottom" tabindex="0" class="tj-certificate-btn" role="button" data-toggle="popover" data-trigger="focus" title="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD');?>"><i class="fa fa-share-square-o mr-10" aria-hidden="true"></i>
 						<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD');?>
 						</a>
-						<div id="download-popover-content" class="hide">
-							<a class="d-block mb-15" id="downloadImage" href="<?php echo $this->imagePath;?>" download ><i class="fa fa-download mr-5" aria-hidden="true"></i>
+						<div id="download-popover-content" class="hide downloadboxcert">
+							<a class="d-block mb-15" id="downloadImage" href="#<?php echo $this->imagePath;?>"  ><i class="fa fa-download mr-5" aria-hidden="true"></i>
 								<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_DOWNLOAD_AS_IMAGE'); ?>
 							</a>
 							<?php
@@ -135,9 +135,12 @@ if ($this->certificate)
 									}
 								}
 							?>
-							<span class="btn-print">
-							<input type="button" class="btn-print" onclick="certificateImage.printCertificate('certificateContent')" value="<?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_PRINT');?>" />
-							</span>
+							
+							 <a id ='printcertificate'type="button"class="d-block mb-15" >
+						        <i class="fa fa-print mr-5" aria-hidden="true"></i>
+						        <?php echo Text::_('COM_TJCERTIFICATE_CERTIFICATE_PRINT'); ?>
+						    </a>
+						    
 						</div>
 
 						<?php
@@ -236,5 +239,41 @@ window.onload = function() {
 <?php
 }
 ?>
+
+// Get the certificate Download options working correctly.
+
+$(document).on("click", "#printcertificate", function() {
+        var printContent = document.getElementById('certificateContent').innerHTML;
+        var originalContent = document.body.innerHTML;
+        document.body.innerHTML = printContent;
+        window.print();
+        document.body.innerHTML = originalContent;
+
+        certificateImage.enableDownloadShareBtns();
+                      window.location.reload(true);
+
+});
+
+$('#download').click(function(){
+
+if ($('#download-content').hasClass('hide')) {
+	$('#download-content').removeClass('hide');
+}
+else
+{
+	$('#download-content').addClass('hide');
+
+}
+
+})
+
+jQuery(document).on("click","#downloadImage",function	(){
+var a = document.createElement('a');
+a.href = "<?php echo $this->imagePath;?>";
+a.download = "output.png";
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+})
 
 </script>
