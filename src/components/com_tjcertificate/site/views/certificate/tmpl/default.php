@@ -254,19 +254,6 @@ $(document).on("click", "#printcertificate", function() {
 
 });
 
-$('#download').click(function(){
-
-if ($('#download-content').hasClass('hide')) {
-	$('#download-content').removeClass('hide');
-}
-else
-{
-	$('#download-content').addClass('hide');
-
-}
-
-})
-
 jQuery(document).on("click","#downloadImage",function	(){
 var a = document.createElement('a');
 a.href = "<?php echo $this->imagePath;?>";
