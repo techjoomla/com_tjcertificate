@@ -24,6 +24,7 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Menu\SiteMenu;
 
 /**
  * Certificate class.  Handles all application interaction with a Certificate
@@ -478,6 +479,8 @@ class TjCertificateCertificate extends CMSObject
 				$table->issued_on = Factory::getDate()->toSql();
 			}
 
+			$table->created_by = !empty($this->created_by) ? $this->created_by : Factory::getUser()->id;
+
 			// If certificate id is not added from the form then add
 			if (empty($this->unique_certificate_id))
 			{
@@ -640,6 +643,9 @@ class TjCertificateCertificate extends CMSObject
 	 */
 	public function getUrl($options, $showSearchBox = true, $isExternal = false)
 	{
+		$app  = Factory::getApplication();
+		$link = 'index.php?option=com_tjcertificate&view=certificates&layout=my';
+	
 		if ($isExternal)
 		{
 			$url = 'index.php?option=com_tjcertificate&view=trainingrecord&id=' . $this->id;
@@ -658,6 +664,30 @@ class TjCertificateCertificate extends CMSObject
 		if (isset($options['popup']))
 		{
 			$url .= '&tmpl=component';
+		}
+		
+		if ($app->isClient('site'))
+		{
+			// Get the menu instance
+			$menu = new SiteMenu();
+
+			// Get all menu items
+			$menuItems = $menu->getItems('','');
+
+			foreach ($menuItems as $menuItem) 
+			{
+				$menuItemLink = $menuItem->link;
+
+				if (stripos($menuItemLink, $link) !== false) {
+					$menuItemId = $menuItem->id;
+					break;
+				}
+			}
+
+			if (!empty($menuItemId))
+			{
+				$url .= '&Itemid=' . $menuItemId;
+			}
 		}
 
 		if (isset($options['absolute']))
