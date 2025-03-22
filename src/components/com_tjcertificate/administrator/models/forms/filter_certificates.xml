@@ -30,6 +30,26 @@
 			clientByUser="0"
 			onchange="this.form.submit();" />
 
+		<field
+			name="courses"
+			type="courses"
+			label="COM_TJCERTIFICATE_CERTIFICATE_FILTER_SELECT_COURSE"
+			description="COM_TJCERTIFICATE_CERTIFICATE_FILTER_SELECT_COURSE_DESC"
+			onchange="this.form.submit();"
+			showon="client:com_tjlms.course"
+			>
+		</field>
+
+		<field
+			name="events"
+			type="eventslist"
+			label="COM_TJCERTIFICATE_CERTIFICATE_FILTER_TITLE_LABEL"
+			description="COM_TJCERTIFICATE_CERTIFICATE_FILTER_TITLE_DESC"
+			onchange="this.form.submit();"
+			showon="client:com_jticketing.event"
+			>
+		</field>
+		
 		<!-- <field
 			name="user_id"
 			type="sql"
