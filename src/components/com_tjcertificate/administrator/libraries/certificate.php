@@ -786,9 +786,10 @@ class TjCertificateCertificate extends CMSObject
 
 			$html = stripslashes($html);
 
-			// Set font for the pdf download.
+			// Set font for the pdf download and access for remote files.
 			$options = new Options;
 			$options->setDefaultFont($font);
+			$options->setIsRemoteEnabled(true);
 
 			$domPDF = new DOMPDF($options);
 			$domPDF->loadHTML($html);
