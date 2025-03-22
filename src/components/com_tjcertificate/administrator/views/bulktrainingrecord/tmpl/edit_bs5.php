@@ -36,7 +36,7 @@ $message = Text::sprintf("COM_TJCERTIFICATE_USER_LIMIT_MESSAGE", $userLimit);
 
 ?>
 <div class="tj-page">
-	<div class="row-fluid">
+	<div class="row">
 	<form action=""
 	 method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate add-records">
 	 <?php if (!empty( $this->sidebar))
@@ -60,7 +60,7 @@ $message = Text::sprintf("COM_TJCERTIFICATE_USER_LIMIT_MESSAGE", $userLimit);
 		<?php
 		echo HTMLHelper::_('bootstrap.startTabSet', 'myTab', array('active' => 'general'));
 		echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', Text::_('COM_TJCERTIFICATE_TITLE_CERTIFICATE')); ?>
-		<div class="row-fluid">
+		<div class="row ptb-20 plr-10">
 			<?php
 				if ($this->isAgencyEnabled)
 				{
@@ -96,3 +96,25 @@ $message = Text::sprintf("COM_TJCERTIFICATE_USER_LIMIT_MESSAGE", $userLimit);
 	});
 
 </script>
+
+<style type="text/css">
+.ptb-20 {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.plr-10{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.chosen-container-single .chosen-single {
+    height: 40px;
+    border: 1px solid #457abc52;
+}
+.chosen-container-multi .chosen-choices {
+	padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+	border: 1px solid #457abc52; 
+}
+.chosen-container {
+	width: 100%!important;
+}
+</style>
