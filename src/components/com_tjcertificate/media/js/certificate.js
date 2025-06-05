@@ -239,3 +239,144 @@ var certificate = {
 			});
 		}
 };
+
+
+jQuery(document).ready(function ($) {
+    const config = Joomla.getOptions('tjcertificate.bulkDownload');
+
+    $('#bulkCertBtn').on('click', function (e) {
+        e.preventDefault();
+
+        $('#ziploader').fadeIn();
+
+        $.ajax({
+            url: Joomla.getOptions('system.paths').base + '/index.php?option=com_tjcertificate&task=certificates.fetchCertificatesForBulkDownload',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                user_id: config.user_id,
+                client: config.client,
+                state: config.state,
+                [config.token]: 1
+            },
+            success: function (response) {
+                if (response.success && response.data.length > 0) {
+                    let html = '<h4>Downloaded Certificates</h4><ul>';
+                    $('#certificateModalOverlay').fadeIn();
+
+                    response.data.forEach(function (cert) {
+                        html += '<div id="certificateContent' + cert.id + '" style="width: 1196px; height: auto;">' + cert.generated_body + '</div>';
+                    });
+
+                    $('#certificateModalContent').html(html);
+
+                    const generatePromises = response.data.map(cert => {
+                        const imageUrl = `${config.certRootUrl}media/com_tjcertificate/certificates/${cert.unique_certificate_id}.png`;
+                        const certEl = document.getElementById('certificateContent' + cert.id);
+
+                        return checkImageExists(imageUrl).then(exists => {
+                            return exists ? Promise.resolve() : generateImage(certEl, cert.unique_certificate_id);
+                        });
+                    });
+
+                    Promise.all(generatePromises).then(() => {
+                        const form = $('<form>', {
+                            method: 'POST',
+                            action: Joomla.getOptions('system.paths').base + '/index.php?option=com_tjcertificate&task=certificates.bulkCertificateDownload',
+                            style: 'display: none;'
+                        });
+
+                        form.append($('<input>', {
+                            type: 'hidden',
+                            name: 'user_id',
+                            value: config.user_id
+                        }));
+
+                        response.data.forEach((cert, index) => {
+                            form.append($('<input>', {
+                                type: 'hidden',
+                                name: 'certificates[' + index + '][unique_certificate_id]',
+                                value: cert.unique_certificate_id
+                            }));
+                        });
+
+                        form.append($('<input>', {
+                            type: 'hidden',
+                            name: config.token,
+                            value: 1
+                        }));
+
+                        $('body').append(form);
+                        $('#ziploader').fadeOut();
+                        form.submit();
+                        form.remove();
+
+                        $('#certificateModalContent').html('<div class="alert alert-success">Certificates downloaded successfully.</div>');
+                        setTimeout(() => $('#certificateModalOverlay').fadeOut(), 2000);
+                    });
+
+                } else {
+                    $('#ziploader').fadeOut();
+                    alert(response.message || 'No certificates found.');
+                }
+            },
+            error: function (xhr) {
+                $('#ziploader').fadeOut();
+                console.error("AJAX Error", xhr.responseText);
+            }
+        });
+    });
+
+    $('#closeModalBtn').on('click', function () {
+        $('#certificateModalOverlay').fadeOut();
+    });
+});
+
+function generateImage($html, $item) {
+    return new Promise((resolve, reject) => {
+        if (typeof html2canvas === 'undefined') {
+            console.error('html2canvas is not available');
+            reject('Missing html2canvas');
+            return;
+        }
+
+        html2canvas($html, {
+            scrollX: 0,
+            scrollY: -window.scrollY,
+            allowTaint: true,
+            useCORS: true
+        }).then(function (canvas) {
+            const imageData = canvas.toDataURL('image/png');
+
+            jQuery.ajax({
+                url: Joomla.getOptions('system.paths').base + '/index.php?option=com_tjcertificate&task=certificate.uploadCertificate',
+                type: 'POST',
+                data: {
+                    image: imageData,
+                    certificateId: $item
+                },
+                success: function () {
+                    resolve();
+                },
+                error: function (xhr) {
+                    console.error("Upload failed for certificate " + $item, xhr.responseText);
+                    reject(xhr.responseText);
+                }
+            });
+
+        }).catch(function (error) {
+            console.error("html2canvas failed:", error);
+            reject(error);
+        });
+    });
+}
+
+function checkImageExists(imageUrl) {
+    return new Promise((resolve) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('HEAD', imageUrl, true);
+        xhr.onload = () => resolve(xhr.status === 200);
+        xhr.onerror = () => resolve(false);
+        xhr.send();
+    });
+}
