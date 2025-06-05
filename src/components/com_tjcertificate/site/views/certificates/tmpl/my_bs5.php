@@ -17,6 +17,7 @@ use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
 
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 HTMLHelper::_('bootstrap.tooltip');
@@ -41,7 +42,33 @@ $options['relative'] = true;
 HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
 HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
+HTMLHelper::script('media/com_tjcertificate/vendors/html2canvas/js/html2canvas.js');
+
+$client = $this->state->get('filter.client');
+$user_id = $this->state->get('filter.user_id');    
+$state =   $this->state->get('filter.state'); 
+
+// Pass variables to JavaScript
+Factory::getDocument()->addScriptOptions('tjcertificate.bulkDownload', [
+    'user_id'      => (int) $user_id,
+    'client'       => $client,
+    'state'        => $state,
+    'certRootUrl'  => Uri::root(),
+    'token'        => Factory::getSession()->getFormToken()
+]);
 ?>
+
+<div id="ziploader" style="display: none;">
+    <div class="zipspinner">Loading...</div>
+</div>
+<!-- Custom Modal -->
+<div id="certificateModalOverlay">
+  <div id="certificateModalContainer">
+	<button id="closeModalBtn">×</button>
+    <div id="certificateModalContent" style="padding-top: 20px;">
+    </div>
+  </div>
+</div>
 
 <div class="tj-page tjBs5">
 	<div class="row">
@@ -64,7 +91,17 @@ HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 
 			<?php
 			if ($this->create)
-			{
+			{?>
+
+				<div>
+					<a href=""
+					id="bulkCertBtn"
+					class="btn btn-primary btn-sm pull-right mb-15 m-5">
+					<i class="fa fa-download" aria-hidden="true"></i>
+					<?php echo Text::_("COM_TJCERTIFICATE_BULK_CERTIFICATE_DOWNLOAD"); ?>
+					</a>
+				</div>
+				<?php
 				$recordFormLink = 'index.php?option=com_tjcertificate&view=trainingrecord&layout=edit';
 				$addRecordLink = Route::_($recordFormLink);?>
 				<div>

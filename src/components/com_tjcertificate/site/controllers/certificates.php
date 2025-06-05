@@ -16,6 +16,9 @@ use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Session\Session;	
+use Joomla\CMS\Response\JsonResponse;
+use Joomla\CMS\Uri\Uri;
 
 /**
  * Certificate list controller class.
@@ -102,5 +105,153 @@ class TjCertificateControllerCertificates extends AdminController
 		}
 
 		$this->setRedirect('index.php?option=com_tjcertificate&view=certificates&layout=my');
+	}
+
+	/**
+	 * Fetch certificate data for bulk download.
+	 *
+	 * Validates the request for CSRF token and user permissions, then applies
+	 * filters based on agency, client, and state. Returns matching certificate
+	 * records as a JSON response.
+	 *
+	 * @return void
+	 *
+	 * @since __DEPLOY_VERSION__
+	 */
+	public function fetchCertificatesForBulkDownload()
+	{
+
+
+		$app = Factory::getApplication();
+
+		// CSRF token check
+		if (!Session::checkToken('get')) {
+			echo new JsonResponse(null, Text::_('JINVALID_TOKEN'), true);
+			$app->close();
+		}
+
+
+		// Authorization check
+		$user = Factory::getUser();
+		if (
+			!$user->authorise('certificate.external.manage', 'com_tjcertificate') &&
+			!$user->authorise('core.manageall', 'com_cluster')
+		) {
+			echo new JsonResponse(null, Text::_('JERROR_ALERTNOAUTHOR'), true);
+			$app->close();
+		}
+
+
+		// Input retrieval
+		$user_id = $app->input->getInt('user_id', 0);
+		$client   = $app->input->get('client', '', 'STRING');
+		$state    = $app->input->get('state', '', 'STRING');
+
+		// Validation checks
+		if (empty($client)) {
+			echo new JsonResponse(null, Text::_('COM_TJCERTIFICATE_CERTIFICATE_FILTER_CERTIFICATE_TYPE_OR_TYPE_SELECT'), true);
+			$app->close();
+		}
+
+		if ($client === 'external') {
+			echo new JsonResponse(null, Text::_('COM_TJCERTIFICATE_CERTIFICATE_FILTER_CERTIFICATE_CLIENT_IS_EXTERNAL'), true);
+			$app->close();
+		}
+
+		if ($state != 1) {
+			echo new JsonResponse(null, Text::_('COM_TJCERTIFICATE_CERTIFICATE_FILTER_CERTIFICATE_CLIENT_IS_USED_STATE'), true);
+			$app->close();
+		}
+
+		if ($user_id === 0) {
+			echo new JsonResponse(null, Text::_('COM_TJCERTIFICATE_CERTIFICATE_FILTER_CERTIFICATE_CLIENT_OR_SCHOOL_SELECT'), true);
+			$app->close();
+		}
+
+		// Load model and set filters
+		$model = $this->getModel('Certificates', 'TjCertificateModel', []);
+		$model->setState('filter.client', $client);
+		$model->setState('filter.user_id', $user_id);
+		$model->setState('filter.state', $state);
+		$model->setState('list.limit', 0);
+
+		// Fetch certificate data
+		$certificateDatas = $model->getItems();
+
+		// Output as JSON
+		echo new JsonResponse($certificateDatas);
+		$app->close();
+	}
+
+
+	/**
+	 * 
+	 * Function to download bulk certificate
+	 * 
+	 * @return  Null
+	 *
+	 * @since  __DEPLOY_VERSION__
+	 */
+	public function bulkCertificateDownload()
+	{
+		$app = Factory::getApplication();
+
+		$certificateDatas = $app->input->get('certificates', [], 'array');
+		$user_id         = $app->input->getInt('user_id', 0);
+	
+		$user= Factory::getUser($user_id);
+	
+		$folderPath   = JPATH_SITE . '/media/com_tjcertificate/certificates';
+		$zipFileName  = $user->name . '.zip';
+		$zipFilePath  = $folderPath . '/' . $zipFileName;
+	
+		$zip = new ZipArchive();
+	
+		if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true)
+		{
+			foreach ($certificateDatas as $certificateData)
+			{
+				$filePath = $folderPath . '/' . $certificateData['unique_certificate_id'] . '.png';
+	
+				if (file_exists($filePath))
+				{
+					$zip->addFile($filePath, basename($filePath));
+				}
+				else
+				{
+					error_log("Missing file: " . $filePath);
+				}
+			}
+	
+			$zip->close();
+	
+			if (file_exists($zipFilePath))
+			{
+				if (ob_get_level())
+				{
+					ob_end_clean();
+				}
+	
+				header('Content-Type: application/zip');
+				header('Content-Disposition: attachment; filename="' . basename($zipFilePath) . '"');
+				header('Content-Length: ' . filesize($zipFilePath));
+				header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+				header('Expires: 0');
+				header('Pragma: no-cache');
+	
+				readfile($zipFilePath);
+				unlink($zipFilePath);
+			}
+			else
+			{
+				$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_CERTIFICATE_ZIP_FILE_NOT_FOUND'), 'error');
+				$this->setRedirect('index.php?option=com_tjcertificate&view=certificates&layout=my');
+			}
+		}
+		else
+		{
+			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_CERTIFICATE_ZIP_FILE_CREATION_FAILED'), 'error');
+			$this->setRedirect('index.php?option=com_tjcertificate&view=certificates&layout=my');
+		}
 	}
 }
