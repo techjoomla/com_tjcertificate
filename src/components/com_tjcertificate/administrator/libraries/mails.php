@@ -9,7 +9,7 @@
  */
 
 defined('_JEXEC') or die;
-jimport('techjoomla.tjnotifications.tjnotifications');
+require_once JPATH_LIBRARIES . '/techjoomla/tjnotifications/tjnotifications.php';
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\User\User;
@@ -71,7 +71,7 @@ class TjCertificateMails
 	public function onAfterCreateRecord($recordDetails)
 	{
 		$adminRecipients = array();
-		$db = Factory::getDBO();
+		$db = Factory::getDbo();
 
 		// Get all admin users
 		$query = $db->getQuery(true);

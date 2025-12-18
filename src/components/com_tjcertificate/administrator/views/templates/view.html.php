@@ -11,10 +11,15 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Pagination\Pagination;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Object\CMSObject;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
-use Joomla\CMS\Object\CMSObject;
 
 /**
  * Templates view
@@ -33,7 +38,7 @@ class TjCertificateViewTemplates extends HtmlView
 	/**
 	 * The pagination object
 	 *
-	 * @var  JPagination
+	 * @var  Pagination
 	 */
 	protected $pagination;
 
@@ -47,14 +52,14 @@ class TjCertificateViewTemplates extends HtmlView
 	/**
 	 * Form object for search filters
 	 *
-	 * @var  JForm
+	 * @var  Form
 	 */
 	public $filterForm;
 
 	/**
 	 * Logged in User
 	 *
-	 * @var  JObject
+	 * @var  CMSObject
 	 */
 	public $user;
 
@@ -91,7 +96,7 @@ class TjCertificateViewTemplates extends HtmlView
 	public function display($tpl = null)
 	{
 		$app  = Factory::getApplication();
-		$client = $app->input->get('client', "");
+		$client = $app->getInput()->get('client', "");
 
 		// This calls model function getItems()
 		$this->items = $this->get('Items');
@@ -113,7 +118,9 @@ class TjCertificateViewTemplates extends HtmlView
 		$this->activeFilters = $this->get('ActiveFilters');
 
 		$this->user  = Factory::getUser();
-		$this->canDo = JHelperContent::getActions('com_tjcertificate');
+		$this->canDo = ContentHelper::getActions('com_tjcertificate');
+
+		$this->displayExtension = $app->getInput()->getCmd('extension', '', 'string');
 
 		// Add submenu
 		TjCertificateHelper::addSubmenu('templates');
@@ -121,8 +128,7 @@ class TjCertificateViewTemplates extends HtmlView
 		// Add Toolbar
 		$this->addToolbar();
 
-		// Set sidebar
-		$this->sidebar = JHtmlSidebar::render();
+		// Sidebar is automatically rendered by the admin template in Joomla 4/6
 
 		// Display the view
 		parent::display($tpl);
@@ -137,38 +143,38 @@ class TjCertificateViewTemplates extends HtmlView
 	 */
 	protected function addToolbar()
 	{
-		JToolBarHelper::title(Text::_('COM_TJCERTIFICATE_VIEW_CERTIFICATE_TEMPLATES'), '');
+		ToolbarHelper::title(Text::_('COM_TJCERTIFICATE_VIEW_CERTIFICATE_TEMPLATES'), '');
 		$canDo = $this->canDo;
 
 		if ($canDo->get('core.create'))
 		{
-			JToolbarHelper::addNew('template.add');
+			ToolbarHelper::addNew('template.add');
 		}
 
 		if ($canDo->get('core.edit'))
 		{
-			JToolbarHelper::editList('template.edit');
+			ToolbarHelper::editList('template.edit');
 		}
 
 		if ($canDo->get('core.edit.state'))
 		{
-			JToolbarHelper::divider();
-			JToolbarHelper::publish('templates.publish', 'JTOOLBAR_PUBLISH', true);
-			JToolbarHelper::unpublish('templates.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-			JToolBarHelper::archiveList('templates.archive', 'JTOOLBAR_ARCHIVE');
-			JToolbarHelper::divider();
+			ToolbarHelper::divider();
+			ToolbarHelper::publish('templates.publish', 'JTOOLBAR_PUBLISH', true);
+			ToolbarHelper::unpublish('templates.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+			ToolbarHelper::archiveList('templates.archive');
+			ToolbarHelper::divider();
 		}
 
 		if ($canDo->get('core.delete'))
 		{
-			JToolbarHelper::deleteList('JGLOBAL_CONFIRM_DELETE', 'templates.delete', 'JTOOLBAR_DELETE');
-			JToolbarHelper::divider();
+			ToolbarHelper::deleteList('JGLOBAL_CONFIRM_DELETE', 'templates.delete', 'JTOOLBAR_DELETE');
+			ToolbarHelper::divider();
 		}
 
 		if ($canDo->get('core.admin') || $canDo->get('core.options'))
 		{
-			JToolbarHelper::preferences('com_tjcertificate');
-			JToolbarHelper::divider();
+			ToolbarHelper::preferences('com_tjcertificate');
+			ToolbarHelper::divider();
 		}
 	}
 

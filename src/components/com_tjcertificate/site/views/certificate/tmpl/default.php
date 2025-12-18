@@ -15,13 +15,16 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Filesystem\File;
+use Joomla\Filesystem\File;
 use Joomla\CMS\Uri\Uri;
 
 $options['relative'] = true;
 HTMLHelper::_('jquery.framework');
 HTMLHelper::_('bootstrap.framework');
+if (JVERSION < '4.0.0')
+{
 HTMLHelper::_('behavior.framework');
+}
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 HTMLHelper::StyleSheet('media/com_tjlms/vendors/artificiers/artficier.css');
 HTMLHelper::script('media/com_tjcertificate/vendors/html2canvas/js/html2canvas.js');
@@ -57,8 +60,9 @@ if ($this->showSearchBox)
 if ($this->certificate)
 {
 	$document = Factory::getDocument();
-	$description = $this->item->description ? $this->item->description : $this->item->short_desc;
-	$document->addScriptDeclaration("var certRootUrl = '" . JUri::root() . "'");
+	$description = !empty($this->item->description) ? $this->item->description :
+	(!empty($this->item->short_desc)? $this->item->short_desc: '');
+	$document->addScriptDeclaration("var certRootUrl = '" . Uri::root() . "'");
 
 	// For facebook and linkedin
 	$config = Factory::getConfig();
@@ -206,8 +210,9 @@ if ($this->certificate)
 ?>
 <script type="text/javascript">
 
-var imageExists = "<?php echo $imageUrl;?>";
+var imageExists   = "<?php echo $imageUrl;?>";
 var certificateId = "<?php echo $this->certificate->id;?>";
+tjCertVersion     = "<?php echo $this->certVersion; ?>";
 
 jQuery(document).ready(function() {
 	if (imageExists)

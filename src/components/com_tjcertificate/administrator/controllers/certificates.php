@@ -33,7 +33,7 @@ class TjCertificateControllerCertificates extends AdminController
 	 *
 	 * @since  1.0.0
 	 */
-	public function getModel($name = 'Certificate', $prefix = 'TjCertificateModel')
+	public function getModel($name = 'Certificate', $prefix = 'TjCertificateModel', $config = [])
 	{
 		return parent::getModel($name, $prefix, array('ignore_request' => true));
 	}
@@ -56,7 +56,7 @@ class TjCertificateControllerCertificates extends AdminController
 
 		if (!is_array($cid) || count($cid) < 1)
 		{
-			JError::raiseWarning(500, Text::_($this->text_prefix . '_NO_ITEM_SELECTED'));
+			$this->setMessage(Text::_($this->text_prefix . '_NO_ITEM_SELECTED'), 'warning');
 		}
 		else
 		{

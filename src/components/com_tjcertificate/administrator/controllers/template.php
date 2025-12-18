@@ -11,6 +11,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\MVC\Controller\BaseController;
 use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Factory;
 
@@ -43,7 +44,7 @@ class TjCertificateControllerTemplate extends FormController
 	 * @param   array  $config  An optional associative array of configuration settings.
 	 *
 	 * @since  1.6
-	 * @see    JControllerLegacy
+	 * @see    BaseController
 	 */
 	public function __construct($config = array())
 	{

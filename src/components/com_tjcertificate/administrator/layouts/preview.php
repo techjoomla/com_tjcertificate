@@ -20,7 +20,7 @@ use Joomla\CMS\Language\Text;
 	    overflow-y: auto;
 	}
 </style>
-<div id="templatePreview" class="modal fade" role="dialog">
+<div id="templatePreview" class="modal fade hide" role="dialog">
 	<div class="modal-dialog">
 		<button type="button" class="close" data-dismiss="modal" style="width: 40px;opacity: 0.7;">&times;</button>
 		<!-- Modal content-->
@@ -32,7 +32,9 @@ use Joomla\CMS\Language\Text;
 			<div class="modal-body" id="previewTempl">
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+    			<?php echo Text::_('JCLOSE'); ?>
+			</button>
 			</div>
 		</div>
 	</div>

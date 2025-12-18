@@ -12,23 +12,21 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Session\Session;
 use Joomla\CMS\Uri\Uri;
 
-HTMLHelper::_('behavior.formvalidation');
-HTMLHelper::_('behavior.modal');
+HTMLHelper::_('behavior.formvalidator');
+HTMLHelper::_('bootstrap.renderModal');
 HTMLHelper::_('behavior.keepalive');
-HTMLHelper::_('behavior.tooltip');
+HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('bootstrap.framework');
 HTMLHelper::StyleSheet('media/com_tjcertificate/css/tjCertificate.css');
 HTMLHelper::_('jquery.token');
+HTMLHelper::_('formbehavior.chosen', 'select');
 
 $options['relative'] = true;
 HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
 HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
-
 ?>
 <form action="" class="form-validate form-horizontal"
     method="post" name="adminForm" id="adminForm" enctype="multipart/form-data">
@@ -45,24 +43,36 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 					<div class="col-sm-6"><?php echo $this->form->getInput('id'); ?></div>
 				</div>
 				<?php
+					// Check agency is enabled
+					if ($this->isAgencyEnabled && $this->manage)
+					{
+						echo $this->form->renderField('agency_id'); 
+					}
+
 					if ($this->manage)
 					{
 						echo $this->form->renderField('assigned_user_id');
 					}
-					 echo $this->form->renderField('name'); 
+
+					 echo $this->form->renderField('name');
 					 echo $this->form->renderField('unique_certificate_id');
-					 echo $this->form->renderField('cert_url'); 
-					 echo $this->form->renderField('issuing_org'); 
-					 echo $this->form->renderField('issued_on'); 
-					 echo $this->form->renderField('expired_on'); 
-					 echo $this->form->renderField('status'); 
+					 echo $this->form->renderField('cert_url');
+					 echo $this->form->renderField('issuing_org');
+					 echo $this->form->renderField('issued_on');
+					 echo $this->form->renderField('expired_on');
+					 echo $this->form->renderField('status');
+
+					 if ($this->manage)
+					 {
+						echo $this->form->renderField('state');
+					 }
 					 ?>
 				<div class="control-group">
 					<div class="control-label"><?php echo $this->form->getLabel('cert_file'); ?></div>
 					<div class="controls ">
 						<?php echo $this->form->getInput('cert_file'); ?>
 						 <?php 	
-						 if ($this->item->mediaData[0]) 
+						 if (!empty($this->item->mediaData[0])) 
 						 {
 							$downloadAttachmentLink = Uri::root() . 'index.php?option=com_tjcertificate&task=trainingrecord.downloadAttachment&id=' . $this->item->mediaData[0]->media_id . '&recordId=' . $this->item->id;
 							echo '<input type="hidden" name="oldFiles" value="'. $this->item->mediaData[0]->media_id . '">';
@@ -102,6 +112,7 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 		</div>
 	</div>
 	
+	<input type="hidden" id="assigned_user_id" value="<?php echo $this->item->user_id; ?>" />
 	<input type="hidden" name="jform[id]" id="id" value="<?php echo $this->item->id; ?>" />
 	<input type="hidden" name="option" value="com_tjcertificate"/>
 	<input type="hidden" name="task" value="trainingrecord.save"/>
@@ -112,7 +123,5 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 <script type="text/javascript">
 var allowedAttachments = '<?php echo $this->allowedFileExtensions; ?>';
 var attachmentMaxSize  = '<?php echo $this->uploadLimit; ?>';
-
-
 
 </script>

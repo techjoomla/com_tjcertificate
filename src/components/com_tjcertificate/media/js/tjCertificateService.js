@@ -14,6 +14,8 @@ var tjCertificateService = {
 	loadCustomTemplateUrl: '/index.php?option=com_tjcertificate&task=template.loadCustomTemplate&format=json',
 	deleteAttachmentUrl: '/index.php?option=com_tjcertificate&task=trainingrecord.deleteAttachment&format=json',
 	deleteItemUrl: '/index.php?option=com_tjcertificate&task=trainingrecord.delete&format=json',
+	getAgencyUsersUrl: '/index.php?option=com_tjcertificate&task=agency.getAgencyUsers&format=json',
+	addRecordsUrl: '/index.php?option=com_tjcertificate&task=bulktrainingrecord.save&format=json',
 
 	postData: function(url, formData, params) {
 		if(!params){
@@ -42,5 +44,11 @@ var tjCertificateService = {
 	},
 	deleteItem: function (formData, params) {
 		return this.postData(this.deleteItemUrl, formData, params);
-	}
+	},
+	getAgencyUsers: function (formData, params) {
+		return this.postData(this.getAgencyUsersUrl, formData, params);
+	},
+	addRecords: function (formData, params) {
+		return this.postData(this.addRecordsUrl, formData, params);
+	},
 }

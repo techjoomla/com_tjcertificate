@@ -10,15 +10,15 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
-JLoader::registerPrefix('TjCertificate', JPATH_SITE . '/components/com_tjcertificate/');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\Router\RouterBase;
 
 /**
  * Class TjCertificateRouter
  *
  * @since  1.0.0
  */
-class TjCertificateRouter extends JComponentRouterBase
+class TjCertificateRouter extends RouterBase
 {
 	/**
 	 * Build method for URLs
@@ -33,41 +33,57 @@ class TjCertificateRouter extends JComponentRouterBase
 	 */
 	public function build(&$query)
 	{
+		$menu_views = array('certificates', 'certificate', 'trainingrecord', 'bulktrainingrecord');
+
 		$segments = array();
-		$view     = null;
+
+		$app = Factory::getApplication();
+		$menu = $app->getMenu();
+		$db = Factory::getDbo();
+
+		// We need a menu item.  Either the one specified in the query, or the current active one if none specified
+		if (empty($query['Itemid']))
+		{
+			$menuItem = $menu->getActive();
+			unset($query['Itemid']);
+		}
+		else
+		{
+			$menuItem = $menu->getItem($query['Itemid']);
+		}
+
+		// Check again
+		if (isset($menuItem) && $menuItem->component != 'com_socialads')
+		{
+			unset($query['Itemid']);
+		}
+
+		// Are we dealing with an view for which menu is already created
+		if (($menuItem) && isset($menuItem->query['view']) && isset($query['view']))
+		{
+			if ($menuItem->query['view'] == $query['view'] && in_array($query['view'], $menu_views))
+			{
+				$segments[] = $query['view'];
+				unset($query['view']);
+			}
+		}
 
 		if (isset($query['task']))
 		{
-			$segments[] = 'action';
-			$taskParts  = explode('.', $query['task']);
-			$view       = $taskParts[0];
-			$segments[] = $view;
-			$segments[] = $taskParts[1];
-
-			if ($query['task'] == 'certificate.download')
-			{
-				$segments[] = $query['certificate'];
-				unset($query['certificate']);
-			}
-
+			$segments[] = implode('/', explode('.', $query['task']));
 			unset($query['task']);
 		}
 
 		if (isset($query['view']))
 		{
 			$segments[] = $query['view'];
-			$view = $query['view'];
-
-			if ($view == 'certificate')
-			{
-				if (isset($query['certificate']))
-				{
-					$segments[] = $query['certificate'];
-					unset($query['certificate']);
-				}
-			}
-
 			unset($query['view']);
+		}
+
+		if (isset($query['id']))
+		{
+			$segments[] = $query['id'];
+			unset($query['id']);
 		}
 
 		return $segments;
@@ -91,29 +107,18 @@ class TjCertificateRouter extends JComponentRouterBase
 		// View is always the first element of the array
 		$vars['view'] = array_shift($segments);
 
-		switch ($vars['view'])
+		while (!empty($segments))
 		{
-			case 'action':
+			$segment = array_pop($segments);
 
-				$vars['task'] = $segments[0] . '.' . $segments[1];
-
-				if ($vars['task'] = 'certificate.download')
-				{
-					if (isset($segments[2]))
-					{
-						$vars['certificate'] = $segments[2];
-					}
-				}
-
-			break;
-
-			case 'certificate':
-
-				$vars['certificate'] = $segments[0];
-
-			break;
-
-			default:
+			if (is_numeric($segment))
+			{
+				$vars['id'] = $segment;
+			}
+			else
+			{
+				$vars['task'] = $vars['view'] . '.' . $segment;
+			}
 		}
 
 		return $vars;

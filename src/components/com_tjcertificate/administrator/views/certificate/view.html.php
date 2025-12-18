@@ -11,6 +11,11 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Object\CMSObject;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
@@ -24,9 +29,9 @@ use Joomla\CMS\Router\Route;
 class TjCertificateViewCertificate extends HtmlView
 {
 	/**
-	 * The JForm object
+	 * The Form object
 	 *
-	 * @var  JForm
+	 * @var  Form
 	 */
 	protected $form;
 
@@ -54,7 +59,7 @@ class TjCertificateViewCertificate extends HtmlView
 	/**
 	 * The actions the user is authorised to perform
 	 *
-	 * @var  JObject
+	 * @var  CMSObject
 	 */
 	protected $canDo;
 
@@ -83,7 +88,7 @@ class TjCertificateViewCertificate extends HtmlView
 
 		$this->form  = $this->get('Form');
 		$this->input = Factory::getApplication()->input;
-		$this->canDo = JHelperContent::getActions('com_tjcertificate', 'certificate', $this->item->id);
+		$this->canDo = ContentHelper::getActions('com_tjcertificate', 'certificate', $this->item->id);
 
 		$layout = $this->input->get('layout', 'edit');
 
@@ -110,43 +115,39 @@ class TjCertificateViewCertificate extends HtmlView
 		$user       = Factory::getUser();
 		$userId     = $user->id;
 		$isNew      = empty($this->item->id);
-		JLoader::import('administrator.components.com_tjcertificate.helpers.tjcertificate', JPATH_SITE);
+		require_once JPATH_ADMINISTRATOR . '/components/com_tjcertificate/helpers/tjcertificate.php';
 
 		$this->certificateHelper = new TjCertificateHelper;
 
 		// Built the actions for new and existing records.
 		$canDo = $this->canDo;
-		$layout = Factory::getApplication()->input->get("layout");
+		$app = Factory::getApplication();
+		$layout = $app->getInput()->get("layout");
 
-		JToolbarHelper::title(
+		ToolbarHelper::title(
 			Text::_('COM_TJCERTIFICATE_PAGE_VIEW_CERTIFICATE')
 		);
 
-		$app = Factory::getApplication();
-
-		JLoader::import('administrator.components.com_tjcertificate.helpers.tjcertificate', JPATH_SITE);
+		require_once JPATH_ADMINISTRATOR . '/components/com_tjcertificate/helpers/tjcertificate.php';
 		TjCertificateHelper::addSubmenu('certificates');
 
-		if ($app->isAdmin())
-		{
-			$this->sidebar = JHtmlSidebar::render();
-		}
+		// Sidebar is automatically rendered by the admin template in Joomla 4/6
 
 		// For new records, check the create permission.
 		if ($layout != "default")
 		{
-			Factory::getApplication()->input->set('hidemainmenu', true);
+			$app->getInput()->set('hidemainmenu', true);
 
-			JToolbarHelper::title(
+			ToolbarHelper::title(
 				Text::_('COM_TJCERTIFICATE_PAGE_' . ($isNew ? 'ADD_CERTIFICATE' : 'EDIT_CERTIFICATE')),
 				'pencil-2 certificate-add'
 			);
 
 			if ($isNew)
 			{
-				JToolbarHelper::apply('certificate.apply');
-				JToolbarHelper::save('certificate.save');
-				JToolbarHelper::save2new('certificate.save2new');
+				ToolbarHelper::apply('certificate.apply');
+				ToolbarHelper::save('certificate.save');
+				ToolbarHelper::save2new('certificate.save2new');
 			}
 			else
 			{
@@ -156,19 +157,19 @@ class TjCertificateViewCertificate extends HtmlView
 				$this->canSave($itemEditable);
 			}
 
-			JToolbarHelper::modal('templatePreview', 'icon-eye', 'COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_TOOLBAR_PREVIEW');
+			ToolbarHelper::modal('templatePreview', 'icon-eye', 'COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_TOOLBAR_PREVIEW');
 
 			if (empty($this->item->id))
 			{
-				JToolbarHelper::cancel('certificate.cancel');
+				ToolbarHelper::cancel('certificate.cancel');
 			}
 			else
 			{
-				JToolbarHelper::cancel('certificate.cancel', 'JTOOLBAR_CLOSE');
+				ToolbarHelper::cancel('certificate.cancel', 'JTOOLBAR_CLOSE');
 			}
 		}
 
-		JToolbarHelper::divider();
+		ToolbarHelper::divider();
 	}
 
 	/**
@@ -182,8 +183,8 @@ class TjCertificateViewCertificate extends HtmlView
 	{
 		if ($itemEditable)
 		{
-			JToolbarHelper::apply('certificate.apply');
-			JToolbarHelper::save('certificate.save');
+			ToolbarHelper::apply('certificate.apply');
+			ToolbarHelper::save('certificate.save');
 		}
 	}
 
