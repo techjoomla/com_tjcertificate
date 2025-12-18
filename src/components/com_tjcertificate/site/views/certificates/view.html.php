@@ -11,19 +11,24 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.view');
-
+use Joomla\CMS\Pagination\Pagination;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Object\CMSObject;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Component\ComponentHelper;
 
-JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
+require_once JPATH_ADMINISTRATOR . '/components/com_tjcertificate/includes/tjcertificate.php';
 
 /**
  * Certificates view
  *
  * @since  1.1.0
  */
-class TjCertificateViewCertificates extends JViewLegacy
+class TjCertificateViewCertificates extends HtmlView
 {
 	/**
 	 * An array of items
@@ -35,7 +40,7 @@ class TjCertificateViewCertificates extends JViewLegacy
 	/**
 	 * The pagination object
 	 *
-	 * @var  JPagination
+	 * @var  Pagination
 	 */
 	protected $pagination;
 
@@ -49,14 +54,14 @@ class TjCertificateViewCertificates extends JViewLegacy
 	/**
 	 * Form object for search filters
 	 *
-	 * @var  JForm
+	 * @var  Form
 	 */
 	public $filterForm;
 
 	/**
 	 * Logged in User
 	 *
-	 * @var  JObject
+	 * @var  CMSObject
 	 */
 	public $user;
 
@@ -88,6 +93,18 @@ class TjCertificateViewCertificates extends JViewLegacy
 	 */
 	public $create;
 
+	protected $params;
+
+	public $isAgencyEnabled = false;
+
+	protected $comMultiAgency = 'com_multiagency';
+
+	public $delete;
+
+	public $deleteOwn;
+
+	protected $comTjcertificate = 'com_tjcertificate';
+
 	/**
 	 * Display the  view
 	 *
@@ -97,13 +114,14 @@ class TjCertificateViewCertificates extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$app = Factory::getApplication();
-		$this->user	= Factory::getUser();
+		$app          = Factory::getApplication();
+		$this->user	  = Factory::getUser();
+		$this->params = ComponentHelper::getParams($this->comTjcertificate);
 
 		if (!$this->user->id)
 		{
-			$url      = base64_encode(JUri::getInstance()->toString());
-			$loginUrl = JRoute::_('index.php?option=com_users&view=login&return=' . $url, false);
+			$url      = base64_encode(Uri::getInstance()->toString());
+			$loginUrl = Route::_('index.php?option=com_users&view=login&return=' . $url, false);
 			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_ERROR_LOGIN_MESSAGE'), 'error');
 			$app->redirect($loginUrl);
 
@@ -113,8 +131,8 @@ class TjCertificateViewCertificates extends JViewLegacy
 		// Get state
 		$this->state = $this->get('State');
 
-		$layout       = $app->input->get('layout', "my");
-		$this->manage = $this->user->authorise('certificate.external.manage', 'com_tjcertificate');
+		$layout       = $app->getInput()->get('layout', "my");
+		$this->manage = $this->user->authorise('certificate.external.manage', $this->comTjcertificate);
 
 		if ($layout == 'my' && !$this->manage)
 		{
@@ -130,8 +148,20 @@ class TjCertificateViewCertificates extends JViewLegacy
 
 		$this->filterForm    = $this->get('FilterForm');
 		$this->activeFilters = $this->get('ActiveFilters');
-		$this->manageOwn     = $this->user->authorise('certificate.external.manageown', 'com_tjcertificate');
-		$this->create	     = $this->user->authorise('certificate.external.create', 'com_tjcertificate');
+		$this->manageOwn     = $this->user->authorise('certificate.external.manageown', $this->comTjcertificate);
+		$this->create	     = $this->user->authorise('certificate.external.create', $this->comTjcertificate);
+		$this->delete	     = $this->user->authorise('certificate.external.delete', $this->comTjcertificate);
+		$this->deleteOwn     = $this->user->authorise('certificate.external.deleteown', $this->comTjcertificate);
+
+		if (ComponentHelper::isEnabled($this->comMultiAgency) && $this->params->get('enable_multiagency'))
+		{
+			$this->isAgencyEnabled = true;
+			$this->filterForm->removeField('user_id', 'filter');
+		}
+		else
+		{
+			$this->filterForm->removeField('agency_id', 'filter');
+		}
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

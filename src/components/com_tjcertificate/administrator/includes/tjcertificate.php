@@ -10,14 +10,14 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
+use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
 use Joomla\String\StringHelper;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 
-$language = JFactory::getLanguage();
+$language = Factory::getLanguage();
 $language->load('com_tjcertificate');
 
 /**
@@ -162,7 +162,7 @@ class TJCERT
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getClient()
+	public static function getClient()
 	{
 		return self::$client;
 	}
@@ -174,7 +174,7 @@ class TJCERT
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getMediaPath()
+	public static function getMediaPath()
 	{
 		return self::$mediaPath;
 	}

@@ -34,7 +34,7 @@ class TjCertificateControllerCertificates extends AdminController
 	 *
 	 * @since  __DEPLOY_VERSION__
 	 */
-	public function getModel($name = 'Certificate', $prefix = 'TjCertificateModel')
+	public function getModel($name = 'Certificate', $prefix = 'TjCertificateModel', $config = [])
 	{
 		return parent::getModel($name, $prefix, array('ignore_request' => true));
 	}
@@ -52,19 +52,19 @@ class TjCertificateControllerCertificates extends AdminController
 
 		if (!$user->authorise('certificate.external.manage', 'com_tjcertificate'))
 		{
-			JError::raiseWarning(403, Text::_('JLIB_APPLICATION_ERROR_EDITSTATE_NOT_PERMITTED'));
+			Factory::getApplication()->enqueueMessage(Text::_('JLIB_APPLICATION_ERROR_EDITSTATE_NOT_PERMITTED'), 'warning');
 
 			return false;
 		}
 
-		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->getInput()->get('cid', array(), 'array');
 		$data = array(
 			'publish' => 1,
 			'unpublish' => 0
 		);
 
 		$task = $this->getTask();
-		$value = JArrayHelper::getValue($data, $task, 0, 'int');
+		$value = ArrayHelper::getValue($data, $task, 0, 'int');
 
 		// Get some variables from the request
 		if (empty($cid))
@@ -77,7 +77,7 @@ class TjCertificateControllerCertificates extends AdminController
 			$model = $this->getModel();
 
 			// Make sure the item ids are integers
-			JArrayHelper::toInteger($cid);
+			ArrayHelper::toInteger($cid);
 
 			// Publish the items.
 			try

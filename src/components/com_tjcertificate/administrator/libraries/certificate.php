@@ -10,20 +10,21 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
+use Joomla\Filesystem\File;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Filesystem\Folder;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Router\Route;
-use Joomla\Filesystem\File;
 use Joomla\Registry\Registry;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Menu\SiteMenu;
 
 /**
  * Certificate class.  Handles all application interaction with a Certificate
@@ -79,6 +80,8 @@ class TjCertificateCertificate extends CMSObject
 	public $status = "";
 
 	public $created_by = "";
+
+	public $notify = 1;
 
 	/**
 	 * Constructor activating the default information of the Certificate
@@ -470,10 +473,13 @@ class TjCertificateCertificate extends CMSObject
 			// Check if new record
 			$isNew = empty($this->id);
 
-			if ($isNew)
+			// Set current date if issued_on date is not set
+			if ($isNew && !$table->issued_on)
 			{
 				$table->issued_on = Factory::getDate()->toSql();
 			}
+
+			$table->created_by = !empty($this->created_by) ? $this->created_by : Factory::getUser()->id;
 
 			// If certificate id is not added from the form then add
 			if (empty($this->unique_certificate_id))
@@ -492,20 +498,19 @@ class TjCertificateCertificate extends CMSObject
 
 			$this->id = $table->id;
 
-			$dispatcher = \JEventDispatcher::getInstance();
 
 			if ($table->is_external && $isNew)
 			{
 				/* Send mail on record creation */
-				JLoader::import('components.com_tjcertificate.events.record', JPATH_SITE);
+				require_once JPATH_SITE . '/components/com_tjcertificate/events/record.php';
 				$tjCertificateTriggerRecord = new TjCertificateTriggerRecord;
 				$tjCertificateTriggerRecord->onAfterRecordSave($this, true);
-				$dispatcher->trigger('onTrainingRecordAfterAdded', array($isNew, $this));
+				Factory::getApplication()->triggerEvent('onTrainingRecordAfterAdded', array($isNew, $this));
 			}
 
 			// Fire the onTjCertificateAfterSave event.
 
-			$dispatcher->trigger('onTjCertificateAfterSave', array($isNew, $this));
+			Factory::getApplication()->triggerEvent('onTjCertificateAfterSave', array($isNew, $this));
 		}
 		catch (\Exception $e)
 		{
@@ -559,7 +564,10 @@ class TjCertificateCertificate extends CMSObject
 		// Set private properties
 		foreach ($getPrivateProperties as $key => $value)
 		{
-			$this->{$value->name} = $array[$value->name];
+			if (!empty($array[$value->name]))
+			{
+				$this->{$value->name} = $array[$value->name];
+			}
 		}
 
 		// Make sure its an integer
@@ -635,6 +643,9 @@ class TjCertificateCertificate extends CMSObject
 	 */
 	public function getUrl($options, $showSearchBox = true, $isExternal = false)
 	{
+		$app  = Factory::getApplication();
+		$link = 'index.php?option=com_tjcertificate&view=certificates&layout=my';
+	
 		if ($isExternal)
 		{
 			$url = 'index.php?option=com_tjcertificate&view=trainingrecord&id=' . $this->id;
@@ -653,6 +664,30 @@ class TjCertificateCertificate extends CMSObject
 		if (isset($options['popup']))
 		{
 			$url .= '&tmpl=component';
+		}
+		
+		if ($app->isClient('site'))
+		{
+			// Get the menu instance
+			$menu = new SiteMenu();
+
+			// Get all menu items
+			$menuItems = $menu->getItems('','');
+
+			foreach ($menuItems as $menuItem) 
+			{
+				$menuItemLink = $menuItem->link;
+
+				if (stripos($menuItemLink, $link) !== false) {
+					$menuItemId = $menuItem->id;
+					break;
+				}
+			}
+
+			if (!empty($menuItemId))
+			{
+				$url .= '&Itemid=' . $menuItemId;
+			}
 		}
 
 		if (isset($options['absolute']))
@@ -674,7 +709,7 @@ class TjCertificateCertificate extends CMSObject
 	 */
 	public function getDownloadUrl($options = array())
 	{
-		if (JFile::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
+		if (File::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
 		{
 			$url = 'index.php?option=com_tjcertificate&task=certificate.download&certificate=' . $this->unique_certificate_id;
 
@@ -685,7 +720,7 @@ class TjCertificateCertificate extends CMSObject
 
 			if (isset($options['absolute']))
 			{
-				return JUri::root() . substr(Route::_($url), strlen(JUri::base(true)) + 1);
+				return Uri::root() . substr(Route::_($url), strlen(Uri::base(true)) + 1);
 			}
 
 			return Route::_($url);
@@ -707,10 +742,8 @@ class TjCertificateCertificate extends CMSObject
 	{
 		$app  = Factory::getApplication();
 
-		if (JFile::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
+		if (File::exists(JPATH_SITE . '/libraries/techjoomla/dompdf/autoload.inc.php'))
 		{
-			jimport('joomla.filesystem.file');
-			jimport('joomla.filesystem.folder');
 
 			$html = $this->generated_body;
 
@@ -751,10 +784,7 @@ class TjCertificateCertificate extends CMSObject
 
 			$html = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>' . $style . '</head><body>' . $html . '</body></html>';
 
-			if (get_magic_quotes_gpc())
-			{
-				$html = stripslashes($html);
-			}
+			$html = stripslashes($html);
 
 			// Set font for the pdf download.
 			$options = new Options;
@@ -874,6 +904,19 @@ class TjCertificateCertificate extends CMSObject
 			// Generate unique certificate id replacement
 			$replacements->certificate->cert_id = $this->unique_certificate_id;
 
+			$params = ComponentHelper::getParams('com_tjcertificate');
+
+			// Generate QR code of certificate.
+			$qrCodeWidth  = $params->get('qr_code_width', 130);
+			$qrCodeHeight = $params->get('qr_code_height', 130);
+
+			$qrString = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->unique_certificate_id;
+			$qrString = Uri::root() . substr(Route::_($qrString, false), strlen(Uri::base(true)) + 1);
+			$qrString = urlencode($qrString);
+			$qrUrl    = "https://chart.apis.google.com/chart?cht=qr&chs=";
+			$qrImage  = $qrUrl . $qrCodeWidth . "x" . $qrCodeHeight . "&chl=" . $qrString . "&chld=H|0";
+			$replacements->certificate->qr_code = '<img src="data:image/png;base64,' . base64_encode(file_get_contents($qrImage)) . '" class="qrimg">';
+
 			// Generate certificate body
 			$this->generated_body = $this->generateCertificateBody($template->body, $replacements);
 
@@ -913,14 +956,12 @@ class TjCertificateCertificate extends CMSObject
 				$path = JPATH_SITE . '/media/com_tjcertificate/certificates/';
 				$fileName = $this->unique_certificate_id . '.png';
 
-				if (JFile::exists($path . $fileName))
+				if (File::exists($path . $fileName))
 				{
-					JFile::delete($path . $fileName);
+					File::delete($path . $fileName);
 				}
 
 				// Generate Certificate Image
-				$params = ComponentHelper::getParams('com_tjcertificate');
-
 				if ($params->get('cert_image_gen_type') == 'imagick')
 				{
 					// Generate image from PDF
@@ -1115,9 +1156,8 @@ class TjCertificateCertificate extends CMSObject
 		$orgParam = '&' . $params->get('organization_info') . '=' . $params->get('organization_id_name');
 
 		// Get client data
-		$dispatcher = JDispatcher::getInstance();
 		PluginHelper::importPlugin('content');
-		$result = $dispatcher->trigger('getCertificateClientData', array($this->client_id, $this->client));
+		$result = Factory::getApplication()->triggerEvent('onGetCertificateClientData', array($this->client_id, $this->client));
 		$clientData = $result[0];
 
 		$urlOptions             = array();
@@ -1145,14 +1185,14 @@ class TjCertificateCertificate extends CMSObject
 	{
 		if (extension_loaded('imagick'))
 		{
-			if (!JFolder::exists($this->certImageDir))
+			if (!Folder::exists($this->certImageDir))
 			{
-				JFolder::create($this->certImageDir);
+				Folder::create($this->certImageDir);
 			}
 
-			if (!JFolder::exists($this->certTmpDir))
+			if (!Folder::exists($this->certTmpDir))
 			{
-				JFolder::create($this->certTmpDir);
+				Folder::create($this->certTmpDir);
 			}
 
 			$tmpPDF = $this->certTmpDir . $this->unique_certificate_id . '.pdf';
@@ -1169,9 +1209,9 @@ class TjCertificateCertificate extends CMSObject
 			$im->clear();
 			$im->destroy();
 
-			if (JFile::exists($tmpPDF))
+			if (File::exists($tmpPDF))
 			{
-				JFile::delete($tmpPDF);
+				File::delete($tmpPDF);
 			}
 		}
 	}

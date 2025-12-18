@@ -10,17 +10,17 @@
 
 defined('JPATH_BASE') or die;
 
-JFormHelper::loadFieldClass('list');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Form\Field\ListField;
 
 /**
  * Supports an HTML select list of allocated agencies
  *
  * @since  __DEPLOY_VERSION__
  */
-class JFormFieldUsers extends JFormFieldList
+class JFormFieldUsers extends ListField
 {
 	/**
 	 * The form field type.
@@ -42,17 +42,17 @@ class JFormFieldUsers extends JFormFieldList
 		// Initialize array to store dropdown options
 		$loggedInuser = Factory::getUser();
 
-		$db = Factory::getDBO();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('distinct(ci.user_id), u.name');
 		$query->from($db->quoteName('#__tj_certificate_issue', 'ci'));
-		$query->join('LEFT', '#__users AS u ON ci.user_id = u.id');
-		$query->where($db->qn('u.block') . ' = 0');
-		$query->order($db->escape('u.name' . ' ' . 'asc'));
+		$query->join('LEFT', $db->quoteName('#__users', 'u') . ' ON ' . $db->quoteName('ci.user_id') . ' = ' . $db->quoteName('u.id'));
+		$query->where($db->quoteName('u.block') . ' = 0');
+		$query->order($db->escape($db->quoteName('u.name') . ' ASC'));
 		$db->setQuery($query);
 		$users = $db->loadObjectList();
 
-		$options = array();
+		$options = [];
 
 		if ($loggedInuser->authorise('certificate.external.manage', 'com_tjcertificate'))
 		{

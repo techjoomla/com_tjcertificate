@@ -10,8 +10,7 @@
 var template = {
 
 	previewTemplate: function (id) {
-		jQuery(document).on('click', 'button[data-target="#templatePreview"]', function () {
-			
+		jQuery(document).on('click', 'button[data-bs-target="#templatePreview"]', function () {
 			jQuery('#show-info').hide();
 			var editorId = jQuery('#'+id);
 

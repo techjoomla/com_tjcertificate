@@ -10,25 +10,23 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
-jimport('joomla.application.component.view');
-
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
-use Joomla\CMS\Filesystem\File;
+use Joomla\Filesystem\File;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\MVC\View\HtmlView;
 
-JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
+require_once JPATH_ADMINISTRATOR . '/components/com_tjcertificate/includes/tjcertificate.php';
 
 /**
  * Certificate view
  *
  * @since  1.0.0
  */
-class TjCertificateViewCertificate extends JViewLegacy
+class TjCertificateViewCertificate extends HtmlView
 {
 	public $certificate = null;
 
@@ -70,29 +68,45 @@ class TjCertificateViewCertificate extends JViewLegacy
 		$this->showSearchBox       = $input->getInt('show_search', $this->params->get('show_search_box'));
 		$this->tmpl                = $input->get('tmpl', '', 'STRING');
 
+		include_once  JPATH_SITE . '/components/com_tjcertificate/helpers/common.php';
+
+		$app = Factory::getApplication();
+		$tjcertificatehelper = new TJCertificateHelper();
+		$itemId   = $tjcertificatehelper->getItemId('index.php?option=com_tjcertificate&view=certificates&layout=my');
+		$redirectBackUrl = Route::_('index.php?option=com_tjcertificate&view=certificates&layout=my&Itemid=' . $itemId, false);
+
 		if (!empty($this->uniqueCertificateId))
 		{
 			$certificate = TJCERT::Certificate();
 			$this->certificate = $certificate::validateCertificate($this->uniqueCertificateId);
 		}
 
-		if (!$this->certificate->id)
+		if (!$this->certificate)
 		{
-			JError::raiseWarning(500, Text::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EXPIRED'));
+			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EXPIRED'), 'error');
+
+			$app->redirect($redirectBackUrl);
+		}
+		else if (!$this->certificate->id)
+		{
+			$app->enqueueMessage(Text::_('COM_TJCERTIFICATE_ERROR_CERTIFICATE_EXPIRED'), 'error');
+
+			$app->redirect($redirectBackUrl);
 		}
 		elseif ($this->certificate->id)
 		{
 			// If certificate view is private then view is available only for certificate owner
-			if (!$this->params->get('certificate_scope') && Factory::getUser()->id != $this->certificate->getUserId())
+			if (!$this->params->get('certificate_scope', '1') && Factory::getUser()->id != $this->certificate->getUserId())
 			{
-				JError::raiseWarning(500, Text::_('JERROR_ALERTNOAUTHOR'));
+				$app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'error');
 
-				return false;
+				$app->redirect($redirectBackUrl);
 			}
 
-			$this->fileName  = $this->certificate->unique_certificate_id . '.png';
-			$this->mediaPath = 'media/com_tjcertificate/certificates/';
-			$this->imagePath = Uri::root() . $this->mediaPath . $this->fileName . '?ver=' . md5($this->certificate->issued_on);
+			$this->fileName    = $this->certificate->unique_certificate_id . '.png';
+			$this->mediaPath   = 'media/com_tjcertificate/certificates/';
+			$this->certVersion = md5($this->certificate->issued_on);
+			$this->imagePath   = Uri::root() . $this->mediaPath . $this->fileName . '?ver=' . $this->certVersion;
 
 			$certificateUrl = 'index.php?option=com_tjcertificate&view=certificate&certificate=' . $this->certificate->unique_certificate_id;
 			$this->certificateUrl = Uri::root() . substr(Route::_($certificateUrl), strlen(Uri::base(true)) + 1);
@@ -109,9 +123,8 @@ class TjCertificateViewCertificate extends JViewLegacy
 			$model = TJCERT::model('Certificate', array('ignore_request' => true));
 			$this->contentHtml = $model->getCertificateProviderInfo($clientId, $client);
 
-			$dispatcher = JDispatcher::getInstance();
 			PluginHelper::importPlugin('content');
-			$result = $dispatcher->trigger('getCertificateClientData', array($clientId, $client));
+			$result = Factory::getApplication()->triggerEvent('onGetCertificateClientData', array($clientId, $client));
 			$this->item = $result[0];
 		}
 

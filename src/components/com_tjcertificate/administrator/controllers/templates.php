@@ -29,7 +29,7 @@ class TjCertificateControllerTemplates extends AdminController
 	 *
 	 * @since  1.0.0
 	 */
-	public function getModel($name = 'Template', $prefix = 'TjCertificateModel')
+	public function getModel($name = 'Template', $prefix = 'TjCertificateModel', $config = [])
 	{
 		return parent::getModel($name, $prefix, array('ignore_request' => true));
 	}

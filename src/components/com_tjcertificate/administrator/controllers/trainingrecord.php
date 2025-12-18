@@ -10,19 +10,18 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\MVC\Controller\FormController;
-use Joomla\CMS\Filesystem\Folder;
-use Joomla\CMS\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\File;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Session\Session;
 use Joomla\CMS\Router\Route;
 
-JLoader::import("/techjoomla/media/storage/local", JPATH_LIBRARIES);
+require_once JPATH_LIBRARIES . '/techjoomla/media/storage/local.php';
 
 /**
  * The Tj Certificate Training Record controller
@@ -47,7 +46,7 @@ class TjCertificateControllerTrainingRecord extends FormController
 		$this->checkToken();
 		$app      = Factory::getApplication();
 		$user     = Factory::getUser();
-		$recordId = $app->input->getInt('id');
+		$recordId = $app->getInput()->getInt('id');
 		$params   = ComponentHelper::getParams('com_tjcertificate');
 		$task     = $this->getTask();
 
@@ -56,7 +55,7 @@ class TjCertificateControllerTrainingRecord extends FormController
 			throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 403);
 		}
 
-		$data  = $app->input->get('jform', array(), 'array');
+		$data  = $app->getInput()->get('jform', array(), 'array');
 
 		$model = $this->getModel();
 
@@ -110,15 +109,15 @@ class TjCertificateControllerTrainingRecord extends FormController
 			$validData['user_id'] = $user->id;
 		}
 
-		$validData['client'] = "external";
-		$validData['state'] = $validData['state'] ? $validData['state'] : "-1";
+		$validData['client']      = "external";
+		$validData['state']       = isset($validData['state']) ? $validData['state'] : "-1";
 		$validData['is_external'] = 1;
 
-		$file = $app->input->files->get('jform', array(), 'array');
+		$file = $app->getInput()->files->get('jform', array(), 'array');
 
 		if (!empty($file['cert_file']))
 		{
-			$validData['old_media_ids'] = $app->input->get('oldFiles', 0, 'INT');
+			$validData['old_media_ids'] = $app->getInput()->get('oldFiles', 0, 'INT');
 			$uploadData = $model->uploadMedia($file, $validData);
 			$validData['cert_file'] = $uploadData['source'];
 		}
@@ -152,7 +151,7 @@ class TjCertificateControllerTrainingRecord extends FormController
 		// Save task using to "Save & Close" action which is used only in backend
 		if ($task === "save")
 		{
-			$site = $app->input->get('site', 'f', 'string');
+			$site = $app->getInput()->get('site', 'f', 'string');
 
 			if ($site == 'f')
 			{
@@ -181,13 +180,13 @@ class TjCertificateControllerTrainingRecord extends FormController
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function cancel()
+	public function cancel($key = null)
 	{
 		// Check for request forgeries.
 		$this->checkToken('request');
 
 		// Clear data from session.
-		\JFactory::getApplication()->setUserState('com_tjcertificate.edit.trainingrecord.data', null);
+		Factory::getApplication()->setUserState('com_tjcertificate.edit.trainingrecord.data', null);
 
 		$this->setRedirect(Route::_('index.php?option=com_tjcertificate&view=certificates&layout=my', false));
 	}
@@ -211,8 +210,8 @@ class TjCertificateControllerTrainingRecord extends FormController
 			return false;
 		}
 
-		$clientId = $app->input->get('recordId', '', 'INT');
-		$mediaId  = $app->input->get('id', '', 'INT');
+		$clientId = $app->getInput()->get('recordId', '', 'INT');
+		$mediaId  = $app->getInput()->get('id', '', 'INT');
 
 		$manageOwn = $user->authorise('certificate.external.manageown', 'com_tjcertificate');
 		$manage    = $user->authorise('certificate.external.manage', 'com_tjcertificate');

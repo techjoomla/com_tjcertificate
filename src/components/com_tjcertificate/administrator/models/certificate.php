@@ -11,9 +11,10 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-use Joomla\CMS\Factory;
-use \Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Form\Form;
 use Joomla\CMS\Table\Table;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Registry\Registry;
 
@@ -53,7 +54,7 @@ class TjCertificateModelCertificate extends AdminModel
 	 * @param   array    $data      Data for the form.
 	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
 	 *
-	 * @return  JForm|boolean  A JForm object on success, false on failure
+	 * @return  Form|boolean  A Form object on success, false on failure
 	 *
 	 * @since   1.0.0
 	 */
@@ -72,7 +73,7 @@ class TjCertificateModelCertificate extends AdminModel
 	 * @param   string  $prefix  A prefix for the table class name. Optional.
 	 * @param   array   $config  Configuration array for model. Optional.
 	 *
-	 * @return  JTable    A database object
+	 * @return  Table    A database object
 	 */
 	public function getTable($type = 'Certificates', $prefix = 'TjCertificateTable', $config = array())
 	{
@@ -182,9 +183,8 @@ class TjCertificateModelCertificate extends AdminModel
 	 */
 	public function getCertificateProviderInfo($contentId, $client)
 	{
-		$dispatcher = JDispatcher::getInstance();
 		PluginHelper::importPlugin('content');
-		$html = $dispatcher->trigger('onContentPrepareTjHtml', array($contentId, $client));
+		$html = Factory::getApplication()->triggerEvent('onContentPrepareTjHtml', array($contentId, $client));
 
 		return trim(implode("\n", $html));
 	}
@@ -198,7 +198,7 @@ class TjCertificateModelCertificate extends AdminModel
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function delete($certificateIds)
+	public function delete(&$certificateIds)
 	{
 		$certificateIds  = (array) $certificateIds;
 		$table    = $this->getTable('Certificates');
@@ -211,13 +211,12 @@ class TjCertificateModelCertificate extends AdminModel
 			{
 				if ($table->is_external)
 				{
-					$dispatcher = \JEventDispatcher::getInstance();
-					$dispatcher->trigger('onTrainingRecordAfterDelete', array($table));
+					Factory::getApplication()->triggerEvent('onTrainingRecordAfterDelete', array($table));
 				}
 
 				// Delete media
 				$model = TJCERT::model('TrainingRecord', array('ignore_request' => true));
-				JLoader::import("/techjoomla/media/tables/xref", JPATH_LIBRARIES);
+				require_once JPATH_LIBRARIES . '/techjoomla/media/tables/xref.php';
 				$tableXref = Table::getInstance('Xref', 'TJMediaTable');
 				$tableXref->load(array('client_id' => $table->id));
 				$mediaPath = TJCERT::getMediaPath();
@@ -244,7 +243,7 @@ class TjCertificateModelCertificate extends AdminModel
 	 * 
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function publish($ids, $state = 1)
+	public function publish(&$ids, $state = 1)
 	{
 		$table = $this->getTable();
 
@@ -258,7 +257,7 @@ class TjCertificateModelCertificate extends AdminModel
 			{
 				if ($table->is_external)
 				{
-					JLoader::import('components.com_tjcertificate.events.record', JPATH_SITE);
+					require_once JPATH_SITE . '/components/com_tjcertificate/events/record.php';
 					$tjCertificateTriggerRecord = new TjCertificateTriggerRecord;
 
 					// If record state is pending then only send the approval email
@@ -267,15 +266,14 @@ class TjCertificateModelCertificate extends AdminModel
 						$tjCertificateTriggerRecord->onRecordStateChange($table, $table->state);
 					}
 
-					$dispatcher = \JEventDispatcher::getInstance();
 
 					if ($table->state == 1)
 					{
-						$dispatcher->trigger('onTrainingRecordAfterPublished', array($table));
+						Factory::getApplication()->triggerEvent('onTrainingRecordAfterPublished', array($table));
 					}
 					elseif ($table->state == 0)
 					{
-						$dispatcher->trigger('onTrainingRecordAfterUnpublished', array($table));
+						Factory::getApplication()->triggerEvent('onTrainingRecordAfterUnpublished', array($table));
 					}
 				}
 			}

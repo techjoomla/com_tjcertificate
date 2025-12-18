@@ -21,10 +21,13 @@ use Joomla\CMS\Uri\Uri;
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
 HTMLHelper::_('jquery.token');
+if (JVERSION < '4.0.0')
+{
 HTMLHelper::_('behavior.framework');
+}
 HTMLHelper::_('behavior.formvalidator');
 HTMLHelper::_('behavior.keepalive');
-HTMLHelper::_('formbehavior.chosen', 'select');
+// Joomla 6: formbehavior.chosen removed - using native select
 
 $options['relative'] = true;
 HTMLHelper::_('script', 'com_tjcertificate/tjCertificateService.min.js', $options);
@@ -51,10 +54,19 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 		}
 		?>
 		<div class="form-horizontal">
-
-		<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', Text::_('COM_TJCERTIFICATE_TITLE_CERTIFICATE')); ?>
+		<?php
+			echo HTMLHelper::_('bootstrap.startTabSet', 'myTab', array('active' => 'general'));
+			echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', Text::_('COM_TJCERTIFICATE_TITLE_CERTIFICATE')); ?>
 		<div class="row-fluid">
 			<?php echo $this->form->renderField('id'); ?>
+
+			<?php
+				if ($this->isAgencyEnabled)
+				{
+					echo $this->form->renderField('agency_id');
+				}
+			?>
+
 			<?php echo $this->form->renderField('assigned_user_id'); ?>
 			<?php echo $this->form->renderField('name'); ?>
 			<?php echo $this->form->renderField('unique_certificate_id'); ?>
@@ -68,7 +80,7 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 				<div class="controls ">
 					<?php echo $this->form->getInput('cert_file'); ?>
 					 <?php 	
-					 if ($this->item->mediaData[0]) 
+					 if (!empty($this->item->mediaData[0]))
 					 {
 						$downloadAttachmentLink = Uri::root() . 'index.php?option=com_tjcertificate&task=trainingrecord.downloadAttachment&id=' . $this->item->mediaData[0]->media_id . '&recordId=' . $this->item->id;
 						echo '<input type="hidden" name="oldFiles" value="'. $this->item->mediaData[0]->media_id . '">';
@@ -95,6 +107,7 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 			<?php echo $this->form->renderField('comment'); ?>
 
 		</div>
+		<input type="hidden" id="assigned_user_id" value="<?php echo $this->item->user_id; ?>" />
 		<input type="hidden" name="jform[created_by]" value="<?php echo Factory::getUser()->id;?>" />
 		<input type="hidden" name="task" value="" />
 		<?php echo HTMLHelper::_('form.token'); ?>
@@ -108,4 +121,5 @@ HTMLHelper::_('script', 'com_tjcertificate/certificate.min.js', $options);
 <script type="text/javascript">
 var allowedAttachments = '<?php echo $this->allowedFileExtensions; ?>';
 var attachmentMaxSize  = '<?php echo $this->uploadLimit; ?>';
+
 </script>

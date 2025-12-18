@@ -8,33 +8,37 @@
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-JFormHelper::loadFieldClass('list');
+defined('JPATH_BASE') or die;
+
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Field\ListField;
 
 /**
  * Custom field to list all public and logged-in user's private certificate templates
  *
  * @since  1.0.0
  */
-class JFormFieldGetClientList extends JFormFieldList
+class JFormFieldGetClientList extends ListField
 {
 	/**
 	 * Method to get a list of options for a list input.
 	 *
-	 * @return	array		An array of JHtml options.
+	 * @return	array		An array of HTMLHelper options.
 	 *
 	 * @since   11.4
 	 */
 	protected function getOptions()
 	{
-		$options = array();
+		$options = [];
 
-		$user = JFactory::getUser();
-		$db = JFactory::getDbo();
+		$user = Factory::getUser();
+		$db = Factory::getDbo();
 
 		$clientByUser = $this->getAttribute('clientByUser');
 
-		$options[] = JHtml::_('select.option', '', Text::_('COM_TJCERTIFICATE_CERTIFICATE_FILTER_CERTIFICATE_TYPE_SELECT'));
+		$options[] = HTMLHelper::_('select.option', '', Text::_('COM_TJCERTIFICATE_CERTIFICATE_FILTER_CERTIFICATE_TYPE_SELECT'));
 
 		// Get Private/Created by logged-in user's templates
 		if ($user->id)
@@ -42,8 +46,8 @@ class JFormFieldGetClientList extends JFormFieldList
 			// Create a new query object.
 			$query = $db->getQuery(true);
 
-			$query->select('DISTINCT (`client`)');
-			$query->from('#__tj_certificate_issue');
+			$query->select('DISTINCT ' . $db->quoteName('client'));
+			$query->from($db->quoteName('#__tj_certificate_issue'));
 
 			if (!$user->authorise('certificate.external.manage', 'com_tjcertificate'))
 			{
@@ -65,7 +69,7 @@ class JFormFieldGetClientList extends JFormFieldList
 					{
 						$client    = str_replace(".", "_", $obj->client);
 						$langConst = strtoupper("COM_TJCERTIFICATE_CLIENT_" . $client);
-						$options[] = JHtml::_('select.option', $obj->client, TEXT::_($langConst));
+						$options[] = HTMLHelper::_('select.option', $obj->client, Text::_($langConst));
 					}
 				}
 			}

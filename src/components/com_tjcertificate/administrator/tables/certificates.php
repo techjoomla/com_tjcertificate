@@ -11,17 +11,20 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\Data\DataObject;
+use Joomla\CMS\Table\Table;
+
 /**
  * Certificate table class
  *
  * @since  1.0.0
  */
-class TjCertificateTableCertificates extends JTable
+class TjCertificateTableCertificates extends Table
 {
 	/**
 	 * Constructor
 	 *
-	 * @param   JDatabaseDriver  &$db  Database object
+	 * @param   DataObjectbaseDriver  &$db  Database object
 	 *
 	 * @since  1.0.0
 	 */

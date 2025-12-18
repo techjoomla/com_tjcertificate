@@ -14,7 +14,9 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 
-JLoader::import('components.com_tjcertificate.libraries.mails', JPATH_ADMINISTRATOR);
+require_once JPATH_ADMINISTRATOR . '/components/com_tjcertificate/libraries/mails.php';
+require_once JPATH_LIBRARIES . '/techjoomla/tjnotifications/tjnotifications.php';
+
 /**
  * Tjcertificate triggers class for record.
  *
@@ -52,7 +54,7 @@ class TjCertificateTriggerRecord
 	 */
 	public function onAfterRecordSave($recordDetails, $isNew)
 	{
-		switch ($isNew)
+		switch ($isNew && $recordDetails->notify)
 		{
 			case true:
 					/* Send mail on record create */

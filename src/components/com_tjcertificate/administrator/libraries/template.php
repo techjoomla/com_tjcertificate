@@ -10,7 +10,7 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
+use Joomla\Filesystem\File;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Object\CMSObject;
@@ -181,9 +181,7 @@ class TjCertificateTemplate extends CMSObject
 			$this->id = $table->id;
 
 			// Fire the onTjCertificateTemplateAfterSave event.
-			$dispatcher = \JEventDispatcher::getInstance();
-
-			$dispatcher->trigger('onTjCertificateTemplateAfterSave', array($isNew, $this));
+			Factory::getApplication()->triggerEvent('onTjCertificateTemplateAfterSave', array($isNew, $this));
 		}
 		catch (\Exception $e)
 		{
@@ -238,7 +236,7 @@ class TjCertificateTemplate extends CMSObject
 	 */
 	public function getEmogrify($html, $css)
 	{
-		jimport('techjoomla.emogrifier.tjemogrifier');
+		require_once JPATH_LIBRARIES . '/techjoomla/emogrifier/tjemogrifier.php';
 
 		if (class_exists('InitEmogrifier'))
 		{
@@ -276,8 +274,8 @@ class TjCertificateTemplate extends CMSObject
 		}
 
 		$clientDetails   = explode(".", $client);
-		$component       = $clientDetails[0];
-		$replacementFile = $clientDetails[1];
+		$component       = !empty($clientDetails[0]) ? $clientDetails[0] : '';
+		$replacementFile = !empty($clientDetails[1]) ? $clientDetails[1] : '';
 
 		return TJ_CERTIFICATE_REPLACEMENT_TAG . '/' . $component . '/' . self::$replacementFolder . '/' . $replacementFile . '.json';
 	}
@@ -293,7 +291,7 @@ class TjCertificateTemplate extends CMSObject
 	{
 		$replacementTagPath = $this->getReplacementTagFile($client);
 
-		if (JFile::exists($replacementTagPath))
+		if (File::exists($replacementTagPath))
 		{
 			return file_get_contents($replacementTagPath);
 		}

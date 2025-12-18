@@ -11,9 +11,14 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Object\CMSObject;
+use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Router\Route;
 
 /**
  * View to edit
@@ -23,9 +28,9 @@ use Joomla\CMS\MVC\View\HtmlView;
 class TjCertificateViewTemplate extends HtmlView
 {
 	/**
-	 * The JForm object
+	 * The Form object
 	 *
-	 * @var  JForm
+	 * @var  Form
 	 */
 	protected $form;
 
@@ -53,14 +58,14 @@ class TjCertificateViewTemplate extends HtmlView
 	/**
 	 * The actions the user is authorised to perform
 	 *
-	 * @var  JObject
+	 * @var  CMSObject
 	 */
 	protected $canDo;
 
 	/**
 	 * Replacement tags based on clients
 	 *
-	 * @var  JObject
+	 * @var  CMSObject
 	 */
 	protected $replacementTags;
 
@@ -79,11 +84,12 @@ class TjCertificateViewTemplate extends HtmlView
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
 		$this->input = Factory::getApplication()->input;
-		$this->canDo = JHelperContent::getActions('com_tjcertificate');
+		$this->canDo = ContentHelper::getActions('com_tjcertificate');
 
 		if ($this->item->id && !$this->isEditable($this->canDo, Factory::getUser()->id))
 		{
-			JError::raiseNotice(403, JText::_('COM_TJCERTIFICATE_ERROR_CANNOT_ACCESS_PRIVATE_TEMPLATE'));
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJCERTIFICATE_ERROR_CANNOT_ACCESS_PRIVATE_TEMPLATE'), 'notice');
+			Factory::getApplication()->redirect(Route::_('index.php?option=com_tjcertificate&view=templates', false));
 
 			return false;
 		}
@@ -118,28 +124,28 @@ class TjCertificateViewTemplate extends HtmlView
 		$user   = Factory::getUser();
 		$userId = $user->id;
 		$isNew  = ($this->item->id == 0);
-		JLoader::import('administrator.components.com_tjcertificate.helpers.tjcertificate', JPATH_SITE);
+		require_once JPATH_ADMINISTRATOR . '/components/com_tjcertificate/helpers/tjcertificate.php';
 
 		$this->TjCertificateHelper = new TjCertificateHelper;
 		$checkedOut = $this->isCheckedOut($userId);
 
 		// Built the actions for new and existing records.
 		$canDo = $this->canDo;
-		$layout = $app->input->get("layout");
+		$layout = $app->getInput()->get("layout");
 
-		JToolbarHelper::title(
+		ToolbarHelper::title(
 			Text::_('COM_TJCERTIFICATE_PAGE_VIEW_CERTIFICATE_TEMPLATE')
 		);
 
-		JLoader::import('administrator.components.com_tjcertificate.helpers.tjcertificate', JPATH_SITE);
+		require_once JPATH_ADMINISTRATOR . '/components/com_tjcertificate/helpers/tjcertificate.php';
 		TjCertificateHelper::addSubmenu('templates');
 
 		// For new records, check the create permission.
 		if ($layout != "default")
 		{
-			$app->input->set('hidemainmenu', true);
+			$app->getInput()->set('hidemainmenu', true);
 
-			JToolbarHelper::title(
+			ToolbarHelper::title(
 				Text::_('COM_TJCERTIFICATE_PAGE_' . ($checkedOut ? 'VIEW_CERTIFICATE_TEMPLATE' :
 					($isNew ? 'ADD_CERTIFICATE_TEMPLATE' : 'EDIT_CERTIFICATE_TEMPLATE'))
 			), 'pencil-2 template-add'
@@ -147,9 +153,9 @@ class TjCertificateViewTemplate extends HtmlView
 
 			if ($isNew)
 			{
-				JToolbarHelper::apply('template.apply');
-				JToolbarHelper::save('template.save');
-				JToolbarHelper::save2new('template.save2new');
+				ToolbarHelper::apply('template.apply');
+				ToolbarHelper::save('template.save');
+				ToolbarHelper::save2new('template.save2new');
 			}
 			else
 			{
@@ -160,12 +166,12 @@ class TjCertificateViewTemplate extends HtmlView
 			}
 
 			// Add preview toolbar
-			JToolbarHelper::modal('templatePreview', 'icon-eye', 'COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_TOOLBAR_PREVIEW');
+			ToolbarHelper::modal('templatePreview', 'icon-eye', 'COM_TJCERTIFICATE_CERTIFICATE_TEMPLATE_TOOLBAR_PREVIEW');
 
-			JToolbarHelper::cancel('template.cancel');
+			ToolbarHelper::cancel('template.cancel');
 		}
 
-		JToolbarHelper::divider();
+		ToolbarHelper::divider();
 	}
 
 	/**
@@ -181,10 +187,10 @@ class TjCertificateViewTemplate extends HtmlView
 	{
 		if (!$checkedOut && $itemEditable)
 		{
-			JToolbarHelper::apply('template.apply');
-			JToolbarHelper::save('template.save');
-			JToolbarHelper::save2new('template.save2new');
-			JToolbarHelper::save2copy('template.save2copy');
+			ToolbarHelper::apply('template.apply');
+			ToolbarHelper::save('template.save');
+			ToolbarHelper::save2new('template.save2new');
+			ToolbarHelper::save2copy('template.save2copy');
 		}
 	}
 

@@ -14,11 +14,12 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\BaseController;
 
-JLoader::import('components.com_tjcertificate.includes.tjcertificate', JPATH_ADMINISTRATOR);
+require_once JPATH_ADMINISTRATOR . '/components/com_tjcertificate/includes/tjcertificate.php';
 TJCERT::init('admin');
 
-JLoader::registerPrefix('TjCertificate', JPATH_ADMINISTRATOR);
-JLoader::register('TjCertificateController', JPATH_ADMINISTRATOR . '/controller.php');
+// Register namespace for autoloading
+JLoader::registerNamespace('TjCertificate', JPATH_ADMINISTRATOR . '/components/com_tjcertificate');
+require_once JPATH_ADMINISTRATOR . '/components/com_tjcertificate/controller.php';
 
 define('MEDIA_ROOT', JPATH_ROOT . '/media');
 define('TJ_CERTIFICATE_TEMPLATE_FOLDER', 'certificate-templates');
@@ -27,5 +28,5 @@ define('TJ_CERTIFICATE_REPLACEMENT_TAG', JPATH_ADMINISTRATOR . '/components');
 
 // Execute the task.
 $controller = BaseController::getInstance('TjCertificate');
-$controller->execute(Factory::getApplication()->input->get('task'));
+$controller->execute(Factory::getApplication()->getInput()->get('task'));
 $controller->redirect();

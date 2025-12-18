@@ -11,11 +11,12 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Filter\InputFilter;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\BaseController;
 
-\JLoader::load(JPATH_COMPONENT_ADMINISTRATOR . '/includes/tjcertificate');
-\JLoader::register('TjCertificateHelper', __DIR__ . '/helpers/tjcertificate.php');
+require_once JPATH_ADMINISTRATOR . '/components/com_tjcertificate/includes/tjcertificate.php';
+require_once __DIR__ . '/helpers/tjcertificate.php';
 
 /**
  * Class TjCertificateController
@@ -28,7 +29,7 @@ class TjCertificateController extends BaseController
 	 * Method to display a view.
 	 *
 	 * @param   boolean  $cachable   If true, the view output will be cached
-	 * @param   mixed    $urlparams  An array of safe url parameters and their variable types, for valid values see {@link JFilterInput::clean()}.
+	 * @param   mixed    $urlparams  An array of safe url parameters and their variable types, for valid values see {@link InputFilter::clean()}.
 	 *
 	 * @return  JController   This object to support chaining.
 	 *
@@ -37,8 +38,9 @@ class TjCertificateController extends BaseController
 	public function display($cachable = false, $urlparams = false)
 	{
 		$app  = Factory::getApplication();
-		$view = $app->input->getCmd('view', 'templates');
-		$app->input->set('view', $view);
+		$input = $app->getInput();
+		$view = $input->getCmd('view', 'templates');
+		$input->set('view', $view);
 
 		return parent::display($cachable, $urlparams);
 	}
