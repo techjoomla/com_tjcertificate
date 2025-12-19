@@ -65,6 +65,65 @@ class Com_TjcertificateInstallerScript
 		// Install subextensions
 		$this->_installSubextensions($parent);
 
+		// Fix menu levels to prevent BIGINT UNSIGNED errors
+		$this->fixMenuLevels();
+
+		return true;
+	}
+
+	/**
+	 * Fix menu levels to prevent BIGINT UNSIGNED overflow errors
+	 * This ensures all menu items have valid parent_id and level values
+	 *
+	 * @return boolean
+	 *
+	 * @since 2.0.0
+	 */
+	public function fixMenuLevels()
+	{
+		$db = Factory::getDbo();
+
+		try
+		{
+			// Fix menu items with level 0 that should have parent_id = 1 and level = 1
+			$query = $db->getQuery(true);
+			$query->update($db->quoteName('#__menu'));
+			$query->set($db->quoteName('parent_id') . ' = 1');
+			$query->set($db->quoteName('level') . ' = 1');
+			$query->where($db->quoteName('menutype') . ' = ' . $db->quote('main'));
+			$query->where($db->quoteName('client_id') . ' = 1');
+			$query->where('(' . $db->quoteName('level') . ' = 0 OR ' . $db->quoteName('level') . ' IS NULL)');
+			$query->where($db->quoteName('parent_id') . ' = 0');
+			$db->setQuery($query);
+			$db->execute();
+
+			// Ensure all menu items have valid level (at least 1)
+			$query = $db->getQuery(true);
+			$query->update($db->quoteName('#__menu'));
+			$query->set($db->quoteName('level') . ' = GREATEST(1, COALESCE(' . $db->quoteName('level') . ', 1))');
+			$query->where($db->quoteName('menutype') . ' = ' . $db->quote('main'));
+			$query->where($db->quoteName('client_id') . ' = 1');
+			$query->where('(' . $db->quoteName('level') . ' = 0 OR ' . $db->quoteName('level') . ' IS NULL)');
+			$db->setQuery($query);
+			$db->execute();
+
+			// Fix parent_id for menu items that have invalid parent_id (0 or NULL) but should have 1
+			$query = $db->getQuery(true);
+			$query->update($db->quoteName('#__menu'));
+			$query->set($db->quoteName('parent_id') . ' = 1');
+			$query->where($db->quoteName('menutype') . ' = ' . $db->quote('main'));
+			$query->where($db->quoteName('client_id') . ' = 1');
+			$query->where('(' . $db->quoteName('parent_id') . ' = 0 OR ' . $db->quoteName('parent_id') . ' IS NULL)');
+			$query->where($db->quoteName('level') . ' = 1');
+			$db->setQuery($query);
+			$db->execute();
+		}
+		catch (Exception $e)
+		{
+			// Silently fail - not critical for installation
+			return false;
+		}
+
 		return true;
 	}
 
