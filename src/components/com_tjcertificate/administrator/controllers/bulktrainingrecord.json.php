@@ -91,7 +91,8 @@ class TjCertificateControllerBulkTrainingRecord extends FormController
 			$data['is_external'] = 1;
 
 			unset($data['assigned_user_id']);
-
+			$queueProducer = new TJQueueProduce;
+			
 			foreach ($userIds as $userId)
 			{
 				if (ComponentHelper::isEnabled($this->comMultiAgency) && $params->get('enable_multiagency'))
@@ -132,7 +133,7 @@ class TjCertificateControllerBulkTrainingRecord extends FormController
 				if (ComponentHelper::isEnabled('com_tjqueue') && $params->get('tjqueue_records'))
 				{
 					$recordsModel      = TJCERT::model('BulkTrainingRecord', array('ignore_request' => true));
-					$response          = $recordsModel->addToQueue($data);
+					$response          = $recordsModel->addToQueue($data, $queueProducer);
 					$msg               = $response ? Text::_("COM_TJCERTIFICATE_RECORDS_ADDED_TO_QUEUE_SUCCESSFULLY") : Text::_("COM_TJCERTIFICATE_RECORDS_FAILED");
 					$returnData['msg'] = $msg;
 				}

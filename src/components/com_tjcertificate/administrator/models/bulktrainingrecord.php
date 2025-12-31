@@ -107,14 +107,14 @@ class TjCertificateModelBulkTrainingRecord extends AdminModel
 	 *
 	 * @since __DEPLOY_VERSION__
 	 */
-	public function addToQueue($data)
+	public function addToQueue($data, $queueProducer = null)
 	{
 		$return      = array();
 		$messageBody = (object) $data;
+		$TJQueueProduce = $queueProducer ?: new TJQueueProduce;
 
 		try
 		{
-			$TJQueueProduce = new TJQueueProduce;
 
 			// Set message body
 			$TJQueueProduce->message->setBody(json_encode($messageBody));
