@@ -17,6 +17,7 @@ use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Session\Session;
 use Joomla\CMS\Response\JsonResponse;
 use Joomla\CMS\Component\ComponentHelper;
+use TJQueue\Admin\TJQueueProduce;
 
 /**
  * The Tj Certificate Training Records controller
